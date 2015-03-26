@@ -11,24 +11,26 @@
 #include <string.h>
 #include <list>
 
-//Constants
-#define SPRITE_PARADO = 0;
-#define SPRITE_CAMINAR = 1;
-#define SPRITE_SALTO = 2;
-#define SPRITE_SALTO_DIAGONAL = 3;
-#define SPRITE_PUNCHING = 4;
-#define SPRITE_KICKING = 5;
 
-
-Personaje::Personaje(char* nombre_personaje) {
-	nombre = std::string(nombre_personaje);
+Personaje::Personaje(std::string nombre_personaje) {
+	nombre = nombre_personaje;
 	vida = 100;
 	//COMO ES UN SOLO JUGADOR EN ESTE TP LO HARCODEAMOS, LUEGO LO LEVANTAMOS CON JSON
 	sprites = sprites("../../data/players/subzero/sprites/initial.png");
 }
 
-std::list<char*> Personaje::Sprites(){
+std::list<std::string> Personaje::Sprites(){
 	return sprites;
+}
+
+std::string Personaje::Sprite(int accion){
+	std::string sprite = "";
+	if (sprite.size() > accion)
+	{
+	    std::list<std::string>::iterator it = sprite.begin();
+	    std::advance(sprite, accion);
+	}
+	return sprite;
 }
 
 int Personaje::Vida(){
