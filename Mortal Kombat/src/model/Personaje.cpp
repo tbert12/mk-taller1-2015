@@ -16,7 +16,7 @@ Personaje::Personaje(std::string nombre_personaje) {
 	nombre = nombre_personaje;
 	vida = 100;
 	//COMO ES UN SOLO JUGADOR EN ESTE TP LO HARCODEAMOS, LUEGO LO LEVANTAMOS CON JSON
-	sprites = sprites("../../data/players/subzero/sprites/initial.png");
+	sprites = sprites("data/players/subzero/sprites/initial.png");
 }
 
 std::list<std::string> Personaje::Sprites(){

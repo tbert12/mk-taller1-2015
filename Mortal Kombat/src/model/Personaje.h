@@ -28,6 +28,13 @@ public:
 	std::string Sprite(int accion);
 	int Vida();
 	void QuitarVida(int valor);
+	void Saltar();
+	void Agachar();
+	void CaminarDerecha();
+	void CaminaIzquierda();
+	void SaltarDerecha();
+	void SaltarIzquierda();
+
 
 	virtual ~Personaje();
 };
