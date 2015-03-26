@@ -32,7 +32,7 @@ public:
 	void Saltar();
 	void Agachar();
 	void CaminarDerecha();
-	void CaminaIzquierda();
+	void CaminarIzquierda();
 	void SaltarDerecha();
 	void SaltarIzquierda();
 
