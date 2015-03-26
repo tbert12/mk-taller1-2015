@@ -9,6 +9,7 @@
 #define SRC_CONTROLLER_KEYBOARDCONTROL_H_
 
 #include<SDL2/SDL.h>
+#include "../model/Personaje.h"
 
 class KeyboardControl {
 	Personaje personaje;

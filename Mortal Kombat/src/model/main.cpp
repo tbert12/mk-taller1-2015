@@ -10,8 +10,8 @@
 #include <stdio.h>
 #include <string>
 
-#include <../view/Mundo.h>
-#include <../model/Personaje.h>
+#include "../view/Mundo.h"
+#include "Personaje.h"
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
