@@ -9,11 +9,15 @@
 #define SRC_MODEL_PERSONAJE_H_
 
 class Personaje {
-	char* nombre;
+	std::string nombre;
 	int vida;
+	std::list<char*> sprites;
 
 public:
 	Personaje(char* nombre_personaje);
+	std::list<char*> Sprites();
+	int Vida();
+	void QuitarVida(int valor);
 	virtual ~Personaje();
 };
 
