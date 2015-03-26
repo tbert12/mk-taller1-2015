@@ -6,7 +6,6 @@
  */
 
 #include "KeyboardControl.h"
-#include <src/model/Personaje.h>
 
 KeyboardControl::KeyboardControl(Personaje un_personaje) {
 	personaje = un_personaje;
