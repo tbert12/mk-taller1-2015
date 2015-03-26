@@ -14,7 +14,7 @@
 
 LTexture::LTexture()
 {
-	//Inicializar
+	//Inicializar LTexture
 	mTexture = NULL;
 	mWidth = 0;
 	mHeight = 0;
