@@ -21,7 +21,7 @@ int main( int argc, char* args[] )
 	//Creo el Personaje
 	Personaje luchador = Personaje("Sub Zero");
 	//Iniciar SDL y crear ventana
-	if( !create_window() ) {
+	if( !create_window(SCREEN_WIDTH,SCREEN_HEIGHT) ) {
 		printf( "Error al inicializar!\n" );
 	} else {
 		//Load media

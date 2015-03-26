@@ -50,7 +50,7 @@ class LTexture
 };
 
 //Starts up SDL and creates window
-bool create_window();
+bool create_window(int screenWidth, int screenHeight);
 
 //Loads media
 bool loadMedia(std::string ruta);

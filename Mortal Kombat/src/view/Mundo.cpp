@@ -10,9 +10,11 @@
 #include <stdio.h>
 #include <string>
 
+#include "Mundo.h"
+
 LTexture::LTexture()
 {
-	//Inicializar
+	//Inicializar LTexture
 	mTexture = NULL;
 	mWidth = 0;
 	mHeight = 0;
@@ -121,7 +123,7 @@ int LTexture::getHeight()
 	return mHeight;
 }
 
-bool create_window()
+bool create_window(int screenWidth, int screenHeight)
 {
 	//Booleano de inicializacion
 	bool success = true;
@@ -141,7 +143,7 @@ bool create_window()
 		}
 
 		//Crear Ventana
-		gWindow = SDL_CreateWindow( "World", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+		gWindow = SDL_CreateWindow( "World", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth, screenHeight, SDL_WINDOW_SHOWN );
 		if( gWindow == NULL )
 		{
 			printf( "La ventana no se puede crear! SDL Error: %s\n", SDL_GetError() );
