@@ -25,7 +25,8 @@ public:
 	Personaje(std::string nombre_personaje);
 
 	std::list<std::string> Sprites();
-	std::string Sprite(int accion);
+	std::string Sprite(unsigned int accion);
+
 	int Vida();
 	void QuitarVida(int valor);
 	void Saltar();
