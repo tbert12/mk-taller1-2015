@@ -14,7 +14,7 @@
 class KeyboardControl {
 	Personaje* personaje;
 public:
-	KeyboardControl(Personaje* un_personaje);
+	KeyboardControl(Personaje*);
 	virtual ~KeyboardControl();
 	void KeyPressed(SDL_Event evento);
 };
