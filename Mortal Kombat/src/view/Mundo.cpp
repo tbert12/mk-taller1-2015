@@ -201,13 +201,13 @@ bool loadMedia(std::string ruta)
 	}
 	else
 	{
-		int wSprite = 72;
+		int wSprite = 68;
 		for (int i = 0; i < ANIMATION_IMAGES;i++){
 			//Set Sprite Position (+64)
 			gSpriteClips[i].x = wSprite*i;
 			gSpriteClips[i].y = 0;
 			gSpriteClips[i].w = wSprite;
-			gSpriteClips[i].h = 129;
+			gSpriteClips[i].h = 133;
 		}
 	}
 
@@ -236,7 +236,7 @@ void Refresh(int frame,int SCREEN_WIDTH,int SCREEN_HEIGHT){
 	SDL_RenderClear( gRenderer );
 
 	//Renderizar estado actual
-	SDL_Rect* currentClip = &gSpriteClips[ frame / 9 ];
+	SDL_Rect* currentClip = &gSpriteClips[ frame ];
 	gSpriteSheetTexture.render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
 
 	//Actualizar pantalla

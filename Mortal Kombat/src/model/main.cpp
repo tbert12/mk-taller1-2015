@@ -53,18 +53,19 @@ int main( int argc, char* args[] )
 					}
 				}
 
+				printf("%i\n",frame);
 				Refresh(frame,SCREEN_WIDTH,SCREEN_HEIGHT);
 
 				//Ir al siguiente estado
 				++frame;
 
 				//Ciclo de animacion
-				if( frame/8 >= 8 ){
+				if( frame >= 9 ){
 					frame = 0;
 				}
 
 				//Sleep(Microsegundos)
-				usleep(1000);
+				usleep(100000);
 
 			}
 		}
