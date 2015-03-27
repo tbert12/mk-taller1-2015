@@ -201,12 +201,13 @@ bool loadMedia(std::string ruta)
 	}
 	else
 	{
+		int wSprite = 72;
 		for (int i = 0; i < ANIMATION_IMAGES;i++){
 			//Set Sprite Position (+64)
-			gSpriteClips[i].x = 64*i;
-			gSpriteClips[i].y =    0;
-			gSpriteClips[i].w =   64;
-			gSpriteClips[i].h =  129;
+			gSpriteClips[i].x = wSprite*i;
+			gSpriteClips[i].y = 0;
+			gSpriteClips[i].w = wSprite;
+			gSpriteClips[i].h = 129;
 		}
 	}
 

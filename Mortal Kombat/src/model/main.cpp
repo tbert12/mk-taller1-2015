@@ -9,6 +9,7 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <string>
+#include <unistd.h>
 
 #include "../view/Mundo.h"
 #include "Personaje.h"
@@ -53,9 +54,13 @@ int main( int argc, char* args[] )
 				++frame;
 
 				//Ciclo de animacion
-				if( frame / 9 >= 9 ){
+				if( frame/8 >= 8 ){
 					frame = 0;
 				}
+
+				//Sleep(Microsegundos)
+				usleep(1000);
+
 			}
 		}
 	}
