@@ -12,9 +12,9 @@
 #include "../model/Personaje.h"
 
 class KeyboardControl {
-	Personaje personaje;
+	Personaje* personaje;
 public:
-	KeyboardControl(Personaje un_personaje);
+	KeyboardControl(Personaje* un_personaje);
 	virtual ~KeyboardControl();
 	void KeyPressed(SDL_Event evento);
 };

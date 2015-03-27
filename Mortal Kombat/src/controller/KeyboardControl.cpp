@@ -6,8 +6,9 @@
  */
 
 #include "KeyboardControl.h"
+#include "../model/Personaje.h"
 
-KeyboardControl::KeyboardControl(Personaje un_personaje) {
+KeyboardControl::KeyboardControl(Personaje* un_personaje) {
 	personaje = un_personaje;
 }
 
@@ -19,28 +20,28 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 
 		switch( evento.key.keysym.sym ){
 				case SDLK_UP:
-					personaje.Saltar();
+					personaje->Saltar();
 					break;
 
 				case SDLK_DOWN:
-					personaje.Agachar();
+					personaje->Agachar();
 					break;
 
 				case SDLK_LEFT:
 					if(evento.key.keysym.sym == SDLK_UP){
-						personaje.SaltarIzquierda();
+						personaje->SaltarIzquierda();
 					}
 					else{
-						personaje.CaminarIzquierda();
+						personaje->CaminarIzquierda();
 					}
 					break;
 
 				case SDLK_RIGHT:
 					if(evento.key.keysym.sym == SDLK_UP){
-						personaje.SaltarDerecha();
+						personaje->SaltarDerecha();
 					}
 					else{
-						personaje.CaminarDerecha();
+						personaje->CaminarDerecha();
 					}
 					break;
 
