@@ -20,6 +20,7 @@
 #define SPRITE_KICKING = 5;
 
 class Personaje {
+private:
 	std::string nombre;
 	int vida;
 	//std::list<std::string> sprites;
