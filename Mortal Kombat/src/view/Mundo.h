@@ -55,19 +55,11 @@ bool create_window(int screenWidth, int screenHeight);
 //Loads media
 bool loadMedia(std::string ruta);
 
+//Refrescar el mundo (la pantalla, para cada ciclo)
+void Refresh(int frame,int SCREEN_WIDTH,int SCREEN_HEIGHT);
+
 //Frees media and shuts down SDL
 void close_window();
-
-//The window we'll be rendering to
-SDL_Window* gWindow = NULL;
-
-//The window renderer
-SDL_Renderer* gRenderer = NULL;
-
-//Walking animation
-const int ANIMATION_IMAGES = 9;
-SDL_Rect gSpriteClips[ ANIMATION_IMAGES ];
-LTexture gSpriteSheetTexture;
 
 
 

@@ -12,6 +12,17 @@
 
 #include "Mundo.h"
 
+//The window we'll be rendering to
+SDL_Window* gWindow = NULL;
+
+//The window renderer
+SDL_Renderer* gRenderer = NULL;
+
+//Walking animation
+const int ANIMATION_IMAGES = 9;
+SDL_Rect gSpriteClips[ ANIMATION_IMAGES ];
+LTexture gSpriteSheetTexture;
+
 LTexture::LTexture()
 {
 	//Inicializar LTexture
@@ -216,6 +227,19 @@ void close_window()
 	//Cerrar SDL
 	IMG_Quit();
 	SDL_Quit();
+}
+
+void Refresh(int frame,int SCREEN_WIDTH,int SCREEN_HEIGHT){
+	//Limpiar pantalla
+	SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+	SDL_RenderClear( gRenderer );
+
+	//Renderizar estado actual
+	SDL_Rect* currentClip = &gSpriteClips[ frame / 9 ];
+	gSpriteSheetTexture.render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
+
+	//Actualizar pantalla
+	SDL_RenderPresent( gRenderer );
 }
 
 
