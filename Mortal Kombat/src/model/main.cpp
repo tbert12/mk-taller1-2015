@@ -47,22 +47,13 @@ int main( int argc, char* args[] )
 					}
 				}
 
-				//Limpiar pantalla
-				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-				SDL_RenderClear( gRenderer );
-
-				//Renderizar estado actual
-				SDL_Rect* currentClip = &gSpriteClips[ frame / 9 ];
-				gSpriteSheetTexture.render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
-
-				//Actualizar pantalla
-				SDL_RenderPresent( gRenderer );
+				Refresh(frame,SCREEN_WIDTH,SCREEN_HEIGHT);
 
 				//Ir al siguiente estado
 				++frame;
 
 				//Ciclo de animacion
-				if( frame / 9 >= ANIMATION_IMAGES ){
+				if( frame / 9 >= 9 ){
 					frame = 0;
 				}
 			}
