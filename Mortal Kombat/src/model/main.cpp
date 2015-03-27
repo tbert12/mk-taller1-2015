@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include "../view/Mundo.h"
+#include "../controller/KeyboardControl.h"
 #include "Personaje.h"
 
 const int SCREEN_WIDTH = 640;
@@ -21,6 +22,10 @@ int main( int argc, char* args[] )
 {
 	//Creo el Personaje
 	Personaje luchador = Personaje("Sub Zero");
+
+	//Creo el Controlador
+	KeyboardControl control = KeyboardControl(&luchador);
+
 	//Iniciar SDL y crear ventana
 	if( !create_window(SCREEN_WIDTH,SCREEN_HEIGHT) ) {
 		printf( "Error al inicializar!\n" );
