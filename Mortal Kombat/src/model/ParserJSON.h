@@ -1,9 +1,9 @@
 #ifndef SRC_MODELPARSER_H_
 #define SRC_MODEL_PARSER_H_
 
-#include <stdio>
-#include "json/jsoncpp.cpp"
-#include <SLD2/SDL.h>
+#include <stdio.h>
+#include "../../libs/json/json.h"
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
 using namespace std;
