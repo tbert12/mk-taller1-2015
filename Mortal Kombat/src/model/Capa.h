@@ -10,8 +10,9 @@
 
 class Capa {
 public:
-	Capa();
-	virtual ~Capa();
+	int getZIndex();
+	void Actualizar();
+	void Mover(int y_pos, int velocidad);
 };
 
 #endif /* SRC_MODEL_CAPA_H_ */
