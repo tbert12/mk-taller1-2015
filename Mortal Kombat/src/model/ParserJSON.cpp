@@ -27,7 +27,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	Pelea::Pelea* nueva_pelea = new Pelea();
 
 	// Abro archivo.
-	fopen( archivoConfig, 'r' );
+	fopen( archivoConfig.c_str(), 'r' );
 
 	bool exito = reader.parse( archivoConfig, root, false );
 	if ( ! exito ) {
