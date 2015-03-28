@@ -33,6 +33,15 @@ int Personaje::Vida(){
 	return vida;
 }
 
+void Personaje::Saltar(){
+	return;
+}
+void Personaje::Agachar(){}
+void Personaje::CaminarDerecha(){}
+void Personaje::CaminarIzquierda(){}
+void Personaje::SaltarDerecha(){}
+void Personaje::SaltarIzquierda(){}
+
 void Personaje::QuitarVida(int valor){
 	vida = vida - valor;
 	if(vida < 0){
