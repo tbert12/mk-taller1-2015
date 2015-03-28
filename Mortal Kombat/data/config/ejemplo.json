@@ -1,0 +1,39 @@
+{
+
+	"loglvl": 1,
+	
+	"tiempo": 3.00,
+
+	"ventana": {
+		"ancho-px": 800,
+		"alto-px": 600,
+		"ancho": 200
+	},
+	
+	"escenario": {
+		"ancho": 1000,
+		"alto": 150,
+		"y-piso": 20,
+	},
+	
+	"capas": [
+		{
+			"imagen_fondo": "../background/fondo1.png",
+			"ancho": 1000,
+			"z-index": 2
+		},
+		{
+			"imagen_fondo": "../background/fondo2.png",
+			"ancho": 500,
+			"z-index": 3
+		}
+	],
+	
+	"personaje": {
+		"ancho": 20,
+		"alto": 35,
+		"z-index": 1,
+		"sprites": "../players/subzero/sprites/initial.png"
+	}
+
+}
