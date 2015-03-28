@@ -3,23 +3,22 @@
 
 #include <stdio>
 #include "json/jsoncpp.cpp"
+#include <SLD2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 using namespace std;
 
 class ParserJSON {
 
 private:
-	 string archivoPelea;
+	 string archivoConfig;
 
 public:
 	 ParserJSON(string ruta_archivo);
 
-	 // Devuelve un root que se usara para generar la partida.
-	 Json::Value parsear();
+	 Pelea::Pelea* generarPelea();
 
-	 Pelea::Pelea generarPelea( Json::Value );
-
-	 Pelea::Pelea peleaPorDefecto();
+	 Pelea::Pelea* peleaPorDefecto();
 
 }
 
