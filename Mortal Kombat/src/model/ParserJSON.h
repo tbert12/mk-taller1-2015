@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "../../libs/json/json.h"
+#include "Pelea.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
@@ -20,6 +21,6 @@ public:
 
 	 Pelea::Pelea* peleaPorDefecto();
 
-}
+};
 
 #endif /* SRC_MODEL_PARSER_H_ */
