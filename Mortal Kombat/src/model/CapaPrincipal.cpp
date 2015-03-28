@@ -7,9 +7,19 @@
 
 #include "CapaPrincipal.h"
 
-CapaPrincipal::CapaPrincipal(Personaje* personaje) {
-	// TODO Auto-generated constructor stub
+CapaPrincipal::CapaPrincipal(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal, Personaje* personaje)
+:Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal) //call superclass constructor
+{
 	m_Personaje = personaje;
+}
+
+bool CapaPrincipal::Scrollear(){
+	return false;
+}
+
+
+void Renderizable::Renderizar(){
+
 }
 
 CapaPrincipal::~CapaPrincipal() {
