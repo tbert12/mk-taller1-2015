@@ -92,8 +92,8 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	}
 	int escenario_alto = root["escenario"].get( "alto", ESCENARIO_ALTO_DEFAULT ).asInt();
 	if ( escenario_alto < 0 ) {
-			escenario_alto = ESCENARIO_ALTO_DEFAULT;
-			// Informar al usuario el cambio de alto logico.
+		escenario_alto = ESCENARIO_ALTO_DEFAULT;
+		// Informar al usuario el cambio de alto logico.
 	}
 	int y_piso = root["escenario"].get( "y-piso", Y_PISO_DEFAULT ).asInt();
 
@@ -115,8 +115,11 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 		string background = capas[i].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
 		int capa_ancho = capas[i].get( "ancho", CAPA_ANCHO_DEFAULT ).asInt();
 		if ( capa_ancho < 0 ) {
-					capa_ancho = CAPA_ANCHO_DEFAULT;
-					// Informar al usuario el cambio de ancho logico.
+			capa_ancho = CAPA_ANCHO_DEFAULT;
+			// Informar al usuario el cambio de ancho.
+		} else if ( capa_ancho > escenario_ancho ) {
+			capa_ancho = CAPA_ANCHO_DEFAULT;
+			// Informar al usuario el cambio de ancho.
 		}
 		int capa_z_index = capas[i].get( "z-index", CAPA_Z_INDEX_DEFAULT + i ).asInt();
 
@@ -129,6 +132,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 		// el constructor devuelve false y se usa la imagen por defecto.
 		if ( ! nueva_capa->cargarBackground ) {
 			nueva_capa = Capa(BACKGROUND_DEFAULT);
+			// Informar al usuatio el cambio de fondo.
 		}
 
 		// Agrego capa al mundo.
@@ -167,9 +171,11 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	// la imagen no existe o no se pudo abrir.
 	if ( ! sprites->spriteInicial( personaje_sprite_inicial ) ) {
 		sprites->spriteInicial( PERSONAJE_SPRITE_INICIAL_DEFAULT );
+		// Informar al usuario el cambio de sprite.
 	}
 	if ( ! sprites->spriteCaminata( personaje_sprite_caminata ) ) {
 		sprites->spriteCaminata( PERSONAJE_SPRITE_CAMINATA_DEFAULT );
+		// Informar al usuatio el cambio de sprite.
 	}
 
 
@@ -199,7 +205,6 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	// FALTAN MENSAJES DE LOGEO. HACER LOGLVL VARIABLE GLOBAL.
 	// FALTAN SPRITES POR DEFECTO PARA POSICIONES DE LUCHA, SALTO, ETC.
 	// FALTA CREAR CLASE MOVIMIENTO PARA ABSTRAER Y PARA SIMPLIFICAR CONSTRUCTORES.
-	// FALTA VALIDAR QUE EL ANCHO DE LAS CAPAS NO SEA MAYOR AL DEL ESCENARIO.
 	// NO VA A COMPILAR NUNCA HASTA QUE TENGAMOS LOS CONSTRUCTORES DE MUNDO CAPA PERSONAJE ETC
 
 }
