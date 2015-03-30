@@ -33,7 +33,11 @@
 		"ancho": 20,
 		"alto": 35,
 		"z-index": 1,
-		"sprites": "../players/subzero/sprites/initial.png"
+		"sprites": {
+			"inicial": "../players/subzero/sprites/initial.png",
+			"caminata": "../players/subzero/sprites/walk.png"
+		},
+		"nombre": "Sub-Zero"	
 	}
 
 }

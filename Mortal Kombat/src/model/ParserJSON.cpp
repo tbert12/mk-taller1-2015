@@ -11,6 +11,12 @@
 #define BACKGROUND_DEFAULT = "../../data/backgrounds/default.png"
 #define CAPA_ANCHO_DEFAULT = 1000
 #define CAPA_Z_INDEX_DEFAULT = 2
+#define PERSONAJE_ANCHO_DEFAULT = 20
+#define PERSONAJE_ALTO_DEFAULT = 35
+#define PERSONAJE_Z_INDEX_DEFAULT = 1
+#define PERSONAJE_SPRITE_INICIAL_DEFAULT = "../../data/players/subzero/sprites/initial.png"
+#define PERSONAJE_SPRITE_CAMINATA_DEFAULT = "../../data/players/subzero/sprites/walk.png"
+#define PERSONAJE_NOMBRE_DEFAULT = "Jugador"
 
 using namespace std;
 
@@ -42,17 +48,22 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	// evento del programa.
 	int loglvl = root.get( "loglvl", LOGLVL_DEFAULT ).asInt();
 	if ( loglvl > 2 ) {
-		loglvl = 1;
+		loglvl = LOGLVL_DEFAULT;
 		// Informar al usuario el cambio de nivel.
-
 	}
 
 	// Obtener tiempo limite del combate.
 	float tiempo = root.get( "tiempo", TIEMPO_DEFAULT ).asFloat();
 	if ( tiempo < 0 ) {
-		tiempo = 3.00;
+		tiempo = TIEMPO_DEFAULT;
 		// Informar al usuario el cambio de tiempo de la ronda.
 	}
+
+	// Crear tiempo.
+	Tiempo::Tiempo* tiempo_pelea = new Tiempo( tiempo );
+
+	// Cargar tiempo a la pelea.
+	nueva_pelea->tiempo( tiempo_pelea );
 
 	// Obtener dimensiones de la ventana (camara). Por defecto, 800x600px
 	// y 200 de ancho logico. El alto se seteara luego dependiendo del escenario.
@@ -113,22 +124,82 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 		int capa_alto = escenario_alto;
 
 
-		Capa::Capa* nueva_capa = new Capa(background);
-		nueva_capa->dimensiones(capa_ancho, capa_alto);
-		nueva_capa->zIndex( capa_z_index );
+		Capa::Capa* nueva_capa = new Capa( capa_alto, capa_ancho, capa_z_index);
+		// Cargo imagen. Si no existe o no se pudo abrir,
+		// el constructor devuelve false y se usa la imagen por defecto.
+		if ( ! nueva_capa->cargarBackground ) {
+			nueva_capa = Capa(BACKGROUND_DEFAULT);
+		}
 
-		// Al agregar una capa al mundo se debe copiar el contenido de
-		// la misma en una nueva direccion de memoria.
-		nuevo_mundo->agregar_capa(nueva_capa);
-
-		// Libero memoria de la capa.
-		free(nueva_capa);
+		// Agrego capa al mundo.
+		nuevo_mundo->agregarCapa(nueva_capa);
 
 	}
 
-	// FALTA PERSONAJE.
+	// Obtener el personaje.
+	// Se consideran sprites por defecto.
+	// Por defecto: ancho 20, alto 35, z-index 1.
+	int personaje_ancho = root["personaje"].get( "ancho", PERSONAJE_ANCHO_DEFAULT ).asInt();
+	if ( personaje_ancho < 0 ) {
+		personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
+		// Informar al usuario el cambio de ancho.
+	} else if ( personaje_ancho > escenario_ancho ) {
+		personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
+		// Informar al usuario el cambio de ancho.
+	}
+	int personaje_alto = root["personaje"].get( "alto", PERSONAJE_ALTO_DEFAULT ).asInt();
+	if ( personaje_alto < 0 ) {
+		personaje_alto = PERSONAJE_ALTO_DEFAULT;
+		// Informar al usuario el cambio de alto.
+	} else if ( personaje_alto > escenario_alto ) {
+		personaje_alto = PERSONAJE_ALTO_DEFAULT;
+		//Informar al usuario el cambio de alto.
+	}
+	int personaje_z_index = root["personaje"].get( "z-index", PERSONAJE_Z_INDEX_DEFAULT ).asInt();
+	string personaje_sprite_inicial = root["personaje"]["sprites"].get( "inicial", PERSONAJE_SPRITE_INICIAL_DEFAULT ).asString();
+	string personaje_sprite_caminata = root["personaje"]["sprites"].get ( "caminata", PERSONAJE_SPRITE_CAMINATA_DEFAULT ).asString();
+	string personaje_nombre = root["personaje"].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
+
+
+	// Crear Sprites.
+	Sprites::Sprites* sprites = new Sprites();
+	// Al agregar un sprite, se devuelve false si
+	// la imagen no existe o no se pudo abrir.
+	if ( ! sprites->spriteInicial( personaje_sprite_inicial ) ) {
+		sprites->spriteInicial( PERSONAJE_SPRITE_INICIAL_DEFAULT );
+	}
+	if ( ! sprites->spriteCaminata( personaje_sprite_caminata ) ) {
+		sprites->spriteCaminata( PERSONAJE_SPRITE_CAMINATA_DEFAULT );
+	}
+
+
+	// Crear personaje.
+	Personaje::Personaje* personaje = new Personaje(personaje_nombre, sprites, personaje_alto, personaje_ancho );
+
+	// Crear ventana (capa-camara).
+	// ACA HAY QUE MOSTRAR LA VENTANA CON SDL, YA TENEMOS LOS PIXELES.
+	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index );
+
+
+	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
+	CapaPrincipal::CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index );
+	capa_principal->agregarPersonaje( personaje );
+	capa_principal->camara( camara );
+
+	// Agrego capa principal al mundo.
+	nuevo_mundo->capaPrincipal( capa_principal );
+
+	// Cargar mundo a la pelea.
+	nueva_pelea->mundo( nuevo_mundo );
+
+	return nueva_pelea;
+
+
+
+	// FALTAN MENSAJES DE LOGEO. HACER LOGLVL VARIABLE GLOBAL.
+	// FALTAN SPRITES POR DEFECTO PARA POSICIONES DE LUCHA, SALTO, ETC.
+	// FALTA CREAR CLASE MOVIMIENTO PARA ABSTRAER Y PARA SIMPLIFICAR CONSTRUCTORES.
 	// FALTA VALIDAR QUE EL ANCHO DE LAS CAPAS NO SEA MAYOR AL DEL ESCENARIO.
-	// FALTA CARGAR IMAGEN POR DEFECTO SI NO SE ENCUENTRA LA IMAGEN.
 	// NO VA A COMPILAR NUNCA HASTA QUE TENGAMOS LOS CONSTRUCTORES DE MUNDO CAPA PERSONAJE ETC
 
 }
