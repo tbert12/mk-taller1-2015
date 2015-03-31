@@ -26,8 +26,8 @@ ParserJSON::ParserJSON(string ruta_archivo) {
 
 // Devuelve un root que se usara para generar la partida.
 Pelea::Pelea* ParserJSON::generarPelea() {
-	Json::Value = root;
-	Json::Reader = reader;
+	Json::Value root;
+	Json::Reader reader;
 
 	// Crear Pelea.
 	Pelea::Pelea* nueva_pelea = new Pelea();
