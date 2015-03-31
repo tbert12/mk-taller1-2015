@@ -1,7 +1,7 @@
 #ifndef SRC_MODEL_PARSER_H_
 #define SRC_MODEL_PARSER_H_
 
-#include <stdio>
+#include <stdio.h>
 #include <fstream>
 #include "../../libs/json/json.h"
 #include "logging.h"
@@ -14,7 +14,7 @@ using namespace std;
 class ParserJSON {
 
 private:
-	 string ruta_archivo;
+	 string m_ruta_archivo;
 
 public:
 	 ParserJSON(string ruta_archivo);

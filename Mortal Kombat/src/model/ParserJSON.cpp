@@ -21,7 +21,7 @@
 using namespace std;
 
 ParserJSON::ParserJSON(string ruta_archivo) {
-	ruta_archivo = ruta_archivo;
+	m_ruta_archivo = ruta_archivo;
 }
 
 // Devuelve un root que se usara para generar la partida.
