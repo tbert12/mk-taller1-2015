@@ -25,6 +25,7 @@ private:
 	int vida;
 	//std::list<std::string> sprites;
 	std::string sprites;
+	int m_xActual;
 
 public:
 	Personaje(std::string nombre_personaje);
@@ -33,6 +34,7 @@ public:
 	std::string Sprites();
 	std::string Sprite(unsigned int accion);
 
+	int getX();
 	int Vida();
 	void QuitarVida(int valor);
 	void Saltar();
@@ -41,7 +43,6 @@ public:
 	void CaminarIzquierda();
 	void SaltarDerecha();
 	void SaltarIzquierda();
-
 
 	virtual ~Personaje();
 };

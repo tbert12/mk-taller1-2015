@@ -17,6 +17,7 @@ public:
 	CapaPrincipal(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal, Personaje* personaje);
 	bool Scrollear();
 	virtual ~CapaPrincipal();
+	virtual void Renderizar();
 
 private:
 	Personaje* m_Personaje;

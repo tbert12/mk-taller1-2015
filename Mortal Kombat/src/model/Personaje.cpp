@@ -41,6 +41,10 @@ void Personaje::CaminarDerecha(){}
 void Personaje::CaminarIzquierda(){}
 void Personaje::SaltarDerecha(){}
 void Personaje::SaltarIzquierda(){}
+int Personaje::getX()
+{
+	return m_xActual;
+}
 
 void Personaje::QuitarVida(int valor){
 	vida = vida - valor;

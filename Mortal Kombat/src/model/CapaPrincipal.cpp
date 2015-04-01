@@ -6,6 +6,7 @@
  */
 
 #include "CapaPrincipal.h"
+#include <list>
 
 CapaPrincipal::CapaPrincipal(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal, Personaje* personaje)
 :Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal) //call superclass constructor
@@ -13,13 +14,25 @@ CapaPrincipal::CapaPrincipal(int alto, int ancho, int zIndex, int anchoDeFondo, 
 	m_Personaje = personaje;
 }
 
-bool CapaPrincipal::Scrollear(){
-	return false;
+void CapaPrincipal::Renderizar()
+{
+	if( Scrollear())
+	{
+		printf("hola");
+	}
+	/*
+	std::list<Renderizable*>::iterator it ;
+
+	for(it=m_listaDeRenderizables.begin(); it!=m_listaDeRenderizables.end(); it++)
+	{
+		Renderizable* elemento = dynamic_cast<Renderizable*>(*it); // compile error
+		elemento->Renderizar();
+	}
+	*/
 }
 
-
-void Renderizable::Renderizar(){
-
+bool CapaPrincipal::Scrollear(){
+	return m_Personaje->getX() >= m_ancho* 0.9f || m_Personaje->getX() <= m_ancho* 0.1f;
 }
 
 CapaPrincipal::~CapaPrincipal() {
