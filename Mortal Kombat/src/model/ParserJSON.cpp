@@ -1,7 +1,7 @@
 #include "ParserJSON.h"
 #include "Pelea.h"
 #include "Tiempo.h"
-#include "../view/Mundo.h"
+#include "../view/LTexture.h"
 #include "Capa.h"
 #include "CapaPrincipal.h"
 #include "Personaje.h"

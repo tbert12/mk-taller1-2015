@@ -19,10 +19,7 @@ void Refresh(Sprite* spriteActual,int SCREEN_WIDTH,int SCREEN_HEIGHT);
 //Frees media and shuts down SDL
 void close_window();
 
-//The window we'll be rendering to
-SDL_Window* Window = NULL;
-
-//The window renderer
-SDL_Renderer* Renderer = NULL;
+//Obtener Renderer para los objetos Renderizables
+SDL_Renderer* getRenderer();
 
 #endif /* SRC_VIEW_VENTANA_H_ */

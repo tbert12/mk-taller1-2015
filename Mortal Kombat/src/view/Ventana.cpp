@@ -1,5 +1,16 @@
 #include "Ventana.h"
 
+//The window we'll be rendering to
+SDL_Window* Window = NULL;
+
+//The window renderer
+SDL_Renderer* Renderer = NULL;
+
+SDL_Renderer* getRenderer(){
+	return Renderer;
+}
+
+
 bool create_window(int screenWidth, int screenHeight)
 {
 	//Booleano de inicializacion

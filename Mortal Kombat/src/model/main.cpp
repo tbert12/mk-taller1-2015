@@ -18,7 +18,7 @@
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
-Sprite** LeerSpritesParaProbar(){
+Sprite** LeerSpritesParaProbar(SDL_Renderer* render){
 	Frame** framesCaminar;
 	Frame** framesInitial;
 	int wCaminar = 68,wInitial = 72;
@@ -28,8 +28,8 @@ Sprite** LeerSpritesParaProbar(){
 	}
 	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
 	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
-	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,Renderer);
-	Sprite* Initial = new Sprite(rutaInitial,framesCaminar,Renderer);
+	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,render);
+	Sprite* Initial = new Sprite(rutaInitial,framesCaminar,render);
 	Sprite** sprites;
 	sprites[1] = Caminar;
 	sprites[0] = Initial;
@@ -39,11 +39,6 @@ Sprite** LeerSpritesParaProbar(){
 
 int main( int argc, char* args[] )
 {
-	//Creo el Personaje
-	Personaje luchador = Personaje("Sub Zero",LeerSpritesParaProbar());
-
-	//Creo el Controlador
-	KeyboardControl control = KeyboardControl(&luchador);
 
 	//Iniciar SDL y crear ventana
 	if( !create_window(SCREEN_WIDTH,SCREEN_HEIGHT) ) {
@@ -54,6 +49,12 @@ int main( int argc, char* args[] )
 		//if( !loadMedia( luchador.Sprite(0) ) ){
 		//	printf( "Error al cargar media!\n" );
 		//} else {
+
+			//Creo el Personaje
+			Personaje luchador = Personaje("Sub Zero",LeerSpritesParaProbar(getRenderer()));
+
+			//Creo el Controlador
+			KeyboardControl control = KeyboardControl(&luchador);
 
 			//flag para el Loop Principal
 			bool quit = false;
