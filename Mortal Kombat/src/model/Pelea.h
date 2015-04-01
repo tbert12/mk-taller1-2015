@@ -13,6 +13,7 @@ namespace Pelea {
 class Pelea {
 public:
 	Pelea();
+	void Tiempo(Tiempo* tiempo_pelea);
 	virtual ~Pelea();
 };
 

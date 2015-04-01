@@ -1,4 +1,10 @@
 #include "ParserJSON.h"
+#include "Pelea.h"
+#include "Tiempo.h"
+#include "../view/Mundo.h"
+#include "Capa.h"
+#include "CapaPrincipal.h"
+#include "Personaje.h"
 
 #define LOGLVL_DEFAULT 1
 #define TIEMPO_DEFAULT 3.00
@@ -36,7 +42,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 
 	// Abrir archivo.
 	ifstream archivoConfig;
-	archivoConfig.open(ruta_archivo);
+	archivoConfig.open(m_ruta_archivo.c_str());
 
 	// Si no se pudo abrir archivo, generar pelea por defecto.
 	if ( ! archivoConfig ) {
@@ -83,7 +89,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	Tiempo::Tiempo* tiempo_pelea = new Tiempo( tiempo );
 
 	// Cargar tiempo a la pelea.
-	nueva_pelea->tiempo( tiempo_pelea );
+	nueva_pelea->Tiempo( tiempo_pelea );
 
 	// Obtener dimensiones de la ventana (camara). Por defecto, 640x480px
 	// y 200 de ancho logico. El alto se seteara luego dependiendo del escenario.

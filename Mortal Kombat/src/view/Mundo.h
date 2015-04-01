@@ -9,6 +9,7 @@
 #define SRC_VIEW_MUNDO_H_
 
 #include <string>
+#include "Capa.h"
 
 //Texture wrapper class
 class LTexture
@@ -41,6 +42,8 @@ class LTexture
 		//Gets image dimensions
 		int getWidth();
 		int getHeight();
+
+		bool agregarCapa(Capa* unaCapa);
 
 	private:
 		//The actual hardware texture
