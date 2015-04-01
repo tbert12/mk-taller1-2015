@@ -24,6 +24,7 @@ class Personaje {
 private:
 	std::string nombre;
 	int vida;
+	unsigned int spriteActual;
 	//std::list<std::string> sprites;
 	Sprite* sprites;
 

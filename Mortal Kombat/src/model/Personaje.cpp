@@ -8,8 +8,8 @@
 #include "Personaje.h"
 
 
-
 Personaje::Personaje(std::string nombre_personaje,Sprite Sprites[]) {
+	spriteActual = 0;
 	nombre = nombre_personaje;
 	vida = 100;
 	sprites = Sprites;
@@ -23,10 +23,11 @@ Sprite* Personaje::Sprites(){
 }
 
 Sprite Personaje::Sprite(unsigned int accion){
-	if (sizeof(sprites)/sizeof(*sprites) <= accion){
+	if (sizeof(sprites)/sizeof(*sprites) <= accion or accion == spriteActual){
 		return NULL;
 	}
-	return sprites;
+	spriteActual = accion;
+	return sprites[accion];
 }
 
 int Personaje::Vida(){
