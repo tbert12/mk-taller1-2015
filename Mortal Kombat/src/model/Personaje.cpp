@@ -7,20 +7,20 @@
 
 #include "Personaje.h"
 
-Personaje::Personaje(std::string nombre_personaje) {
+Personaje::Personaje(std::string nombre_personaje,Sprite Sprites[]) {
 	nombre = nombre_personaje;
 	vida = 100;
+	sprites = Sprites;
 	//COMO ES UN SOLO JUGADOR EN ESTE TP LO HARCODEAMOS, LUEGO LO LEVANTAMOS CON JSON
 	//sprites = std::list<std::string> sprites("data/players/subzero/sprites/initial.png");
-	sprites = "data/players/subzero/sprites/walk.png";
+	//sprites = "data/players/subzero/sprites/walk.png";
 }
 
-//std::list<std::string> Personaje::Sprites(){
-std::string Personaje::Sprites(){
+Sprite* Personaje::Sprites(){
 	return sprites;
 }
 
-std::string Personaje::Sprite(unsigned int accion){
+Sprite Personaje::Sprite(unsigned int accion){
 	//std::string sprite = "";
 	//if (sprite.size() > accion){
 	//    std::list::iterator_it = sprite.begin();

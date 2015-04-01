@@ -7,9 +7,10 @@
 
 #ifndef SRC_MODEL_PERSONAJE_H_
 #define SRC_MODEL_PERSONAJE_H_
-#include <list>
+
 #include <stdio.h>
 #include <iostream>
+#include "../view/Sprite.h"
 
 //Constants
 #define SPRITE_PARADO = 0;
@@ -24,14 +25,15 @@ private:
 	std::string nombre;
 	int vida;
 	//std::list<std::string> sprites;
-	std::string sprites;
+	Sprite* sprites;
+
 
 public:
-	Personaje(std::string nombre_personaje);
+	Personaje(std::string nombre_personaje,Sprite Sprites[]);
 
 	//std::list<std::string> Sprites();
-	std::string Sprites();
-	std::string Sprite(unsigned int accion);
+	Sprite* Sprites();
+	Sprite Sprite(unsigned int accion);
 
 	int Vida();
 	void QuitarVida(int valor);
