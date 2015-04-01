@@ -212,7 +212,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	log ( "Se cargo el nombre del personaje." );
 
 	// Crear Sprites.
-	Sprite::Sprite* sprites[8];
+	Sprite::Sprite* sprites[];
 	// Al agregar un sprite, se devuelve false si
 	// la imagen no existe o no se pudo abrir.
 	Sprite::Sprite* spriteInicial = Sprite(personaje_sprite_inicial);

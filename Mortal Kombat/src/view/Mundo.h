@@ -9,7 +9,7 @@
 #define SRC_VIEW_MUNDO_H_
 
 #include <string>
-#include "Capa.h"
+#include "../model/Capa.h"
 
 //Texture wrapper class
 class LTexture

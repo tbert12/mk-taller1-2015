@@ -7,7 +7,7 @@
 
 #include "Tiempo.h"
 
-Tiempo::Tiempo() {
+Tiempo::Tiempo(float tiempo) {
 	// TODO Auto-generated constructor stub
 
 }

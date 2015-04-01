@@ -8,7 +8,7 @@
 #include "Personaje.h"
 
 
-Personaje::Personaje(std::string nombre_personaje,Sprite Sprites[]) {
+Personaje::Personaje(std::string nombre_personaje,Sprite* Sprites[]) {
 	spriteActual = 0;
 	nombre = nombre_personaje;
 	vida = 100;
@@ -18,11 +18,11 @@ Personaje::Personaje(std::string nombre_personaje,Sprite Sprites[]) {
 	//sprites = "data/players/subzero/sprites/walk.png";
 }
 
-Sprite* Personaje::Sprites(){
+Sprite* Personaje::getSprites(){
 	return sprites;
 }
 
-Sprite Personaje::Sprite(unsigned int accion){
+Sprite* Personaje::getSprite(unsigned int accion){
 	if (sizeof(sprites)/sizeof(*sprites) <= accion or accion == spriteActual){
 		return NULL;
 	}

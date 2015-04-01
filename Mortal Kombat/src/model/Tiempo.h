@@ -10,7 +10,7 @@
 
 class Tiempo {
 public:
-	Tiempo();
+	Tiempo(float tiempo);
 	virtual ~Tiempo();
 };
 

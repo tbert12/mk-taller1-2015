@@ -17,7 +17,7 @@ public:
 	void Actualizar();
 	void Mover(int posX);
 	Capa(int alto, int ancho, int zIndex, int anchoDeFondo, int velocidadPrincipal);
-	bool cargarBackground(string background);
+	bool cargarBackground(std::string background);
 
 private:
 	int m_ancho;

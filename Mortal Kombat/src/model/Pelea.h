@@ -7,6 +7,7 @@
 
 #ifndef SRC_MODEL_PELEA_H_
 #define SRC_MODEL_PELEA_H_
+#include "Tiempo.h"
 
 namespace Pelea {
 

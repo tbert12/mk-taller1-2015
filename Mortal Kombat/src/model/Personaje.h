@@ -25,15 +25,14 @@ private:
 	std::string nombre;
 	int vida;
 	unsigned int spriteActual;
-	//std::list<std::string> sprites;
-	Sprite* sprites;
+	Sprite* sprites[];
 
 
 public:
-	Personaje(std::string nombre_personaje,Sprite Sprites[]);
+	Personaje(std::string nombre_personaje,Sprite* Sprites[]);
 
-	Sprite* Sprites();
-	Sprite Sprite(unsigned int accion);
+	Sprite* getSprites();
+	Sprite* getSprite(unsigned int accion);
 
 	int Vida();
 	void QuitarVida(int valor);
