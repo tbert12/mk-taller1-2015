@@ -10,22 +10,24 @@
 //Constants
 #define SPRITE_PARADO 0;
 #define SPRITE_CAMINAR 1;
-#define SPRITE_SALTO 2;
-#define SPRITE_SALTO_DIAGONAL 3;
-#define SPRITE_PUNCHING 4;
-#define SPRITE_KICKING 5;
+#define SPRITE_CAMINAR_ATRAS 2;
+#define SPRITE_SALTO 3;
+#define SPRITE_SALTO_DIAGONAL 4;
+#define SPRITE_PUNCHING 5;
+#define SPRITE_KICKING 6;
 
-Personaje::Personaje(std::string nombre_personaje,Sprite** Sprites) {
+Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites) {
 	spriteActual = 0;
 	nombre = nombre_personaje;
 	vida = 100;
 	sprites = Sprites;
+	m_xActual = 0;
 	//COMO ES UN SOLO JUGADOR EN ESTE TP LO HARCODEAMOS, LUEGO LO LEVANTAMOS CON JSON
 	//sprites = std::list<std::string> sprites("data/players/subzero/sprites/initial.png");
 	//sprites = "data/players/subzero/sprites/walk.png";
 }
 
-Sprite** Personaje::getSprites(){
+std::vector<Sprite*> Personaje::getSprites(){
 	return sprites;
 }
 
@@ -56,7 +58,9 @@ void Personaje::CaminarDerecha(){
 	this->_cambiarSprite(1);
 }
 
-void Personaje::CaminarIzquierda(){}
+void Personaje::CaminarIzquierda(){
+	this->_cambiarSprite(2);
+}
 
 void Personaje::SaltarDerecha(){}
 

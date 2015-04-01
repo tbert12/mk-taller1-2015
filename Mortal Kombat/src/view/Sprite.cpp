@@ -7,7 +7,7 @@
 
 #include "Sprite.h"
 
-Sprite::Sprite(std::string ruta, Frame** frames,SDL_Renderer* Renderer){
+Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer){
 	frameActual = 0;
 	SpriteSheetTexture = new LTexture(Renderer);
 	if( !SpriteSheetTexture->loadFromFile( ruta ) )
@@ -15,7 +15,7 @@ Sprite::Sprite(std::string ruta, Frame** frames,SDL_Renderer* Renderer){
 			printf( "Error en cargar Sprite\n" );
 		}
 	
-	cantidadFrames = 9;
+	cantidadFrames = frames.size();
 	//Como sorete obtengo la cantidad de frames
 	
 	spriteFrames = new SDL_Rect[cantidadFrames];

@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <string>
+#include <vector>
 
 #include "LTexture.h"
 #include "Frame.h"
@@ -22,7 +23,7 @@ class Sprite{
 		SDL_Rect* spriteFrames;
 		LTexture* SpriteSheetTexture;
 	public:
-		Sprite(std::string ruta,Frame** frames,SDL_Renderer* Renderer);
+		Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer);
 		~Sprite();
 
 		void Reset();

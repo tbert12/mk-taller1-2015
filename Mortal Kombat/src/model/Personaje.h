@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <vector>
 #include "../view/Sprite.h"
 
 
@@ -17,18 +18,16 @@ class Personaje {
 private:
 	std::string nombre;
 	int vida;
-	//std::list<std::string> sprites;
-	std::string sprites;
 	int m_xActual;
 	unsigned int spriteActual;
-	Sprite** sprites;
+	std::vector<Sprite*> sprites;
 
 	void _cambiarSprite(unsigned int accion);
 
 public:
-	Personaje(std::string nombre_personaje,Sprite** Sprites);
+	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites);
 
-	Sprite** getSprites();
+	std::vector<Sprite*> getSprites();
 	Sprite* getSpriteActual();
 
 	int getX();

@@ -9,15 +9,42 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
+#include <unistd.h> //usleep
+#include <vector>
+
+#include <algorithm>    // std::reverse (Tranfuguiada para que camine para atras)
 
 #include "../view/Ventana.h"
 #include "../controller/KeyboardControl.h"
 #include "Personaje.h"
 
+
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
+std::vector<Sprite*> CargaDePrueba(){
+	std::vector<Frame*> framesInitial(9);
+	std::vector<Frame*> framesCaminar(9);
+	int wInitial = 72,wCaminar = 68;
+	for (int i=0;i<9;i++){
+		framesInitial[i] = new Frame(wInitial*i,0,133,wInitial);
+		framesCaminar[i] = new Frame(wCaminar*i,0,133,wCaminar);
+	}
+	std::vector<Frame*> framesCaminarAtras (framesCaminar);
+	std::reverse(framesCaminarAtras.begin(),framesCaminarAtras.end());
+
+	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
+	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
+	std::string rutaCaminarAtras = "data/players/subzero/sprites/walk.png";
+	Sprite* Initial = new Sprite(rutaInitial,framesInitial,getRenderer());
+	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,getRenderer());
+	Sprite* CaminarAtras = new Sprite(rutaCaminar,framesCaminarAtras,getRenderer());
+	std::vector<Sprite*> sprites(3);
+	sprites[0] = Initial;
+	sprites[1] = Caminar;
+	sprites[2] = CaminarAtras;
+	return sprites;
+}
 
 int main( int argc, char* args[] )
 {
@@ -25,27 +52,9 @@ int main( int argc, char* args[] )
 	if( !create_window(SCREEN_WIDTH,SCREEN_HEIGHT) ) {
 		printf( "Error al inicializar!\n" );
 	} else {
-	
-		//HAGO LO DEL JSON PARA PROBAR
-		//Creo los Sprite Manualmente
-		Frame* framesCaminar[9];
-		Frame* framesInitial[9];
-		int wCaminar = 68,wInitial = 72;
-		for (int i=0;i<9;i++){
-			framesCaminar[i] = new Frame(wCaminar*i,0,133,wCaminar);
-			framesInitial[i] = new Frame(wInitial*i,0,133,wInitial);
-		}
-		std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
-		std::string rutaInitial = "data/players/subzero/sprites/initial.png";
-		Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,getRenderer());
-		Sprite* Initial = new Sprite(rutaInitial,framesInitial,getRenderer());
-		Sprite* sprites[2];
-		sprites[0] = Initial;
-		sprites[1] = Caminar;
-		//Fin creo Sprite manualmente
 
 		//Creo el Personaje
-		Personaje luchador = Personaje("Sub Zero",sprites);
+		Personaje luchador = Personaje("Sub Zero",CargaDePrueba());
 
 		//Creo el Controlador
 		KeyboardControl control = KeyboardControl(&luchador);
