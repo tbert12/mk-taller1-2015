@@ -31,7 +31,6 @@ private:
 public:
 	Personaje(std::string nombre_personaje,Sprite Sprites[]);
 
-	//std::list<std::string> Sprites();
 	Sprite* Sprites();
 	Sprite Sprite(unsigned int accion);
 

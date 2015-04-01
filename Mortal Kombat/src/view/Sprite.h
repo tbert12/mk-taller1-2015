@@ -22,7 +22,7 @@ class Sprite{
 		SDL_Rect* spriteFrames;
 		LTexture SpriteSheetTexture;
 	public:
-		Sprite(std::string ruta);
+		Sprite(std::string ruta,Frame frames[]);
 		~Sprite();
 
 		SDL_Rect nextFrame();

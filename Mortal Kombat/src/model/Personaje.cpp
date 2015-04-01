@@ -7,6 +7,8 @@
 
 #include "Personaje.h"
 
+
+
 Personaje::Personaje(std::string nombre_personaje,Sprite Sprites[]) {
 	nombre = nombre_personaje;
 	vida = 100;
@@ -21,11 +23,9 @@ Sprite* Personaje::Sprites(){
 }
 
 Sprite Personaje::Sprite(unsigned int accion){
-	//std::string sprite = "";
-	//if (sprite.size() > accion){
-	//    std::list::iterator_it = sprite.begin();
-	//    std::advance(sprite, accion);
-	//}
+	if (sizeof(sprites)/sizeof(*sprites) <= accion){
+		return NULL;
+	}
 	return sprites;
 }
 

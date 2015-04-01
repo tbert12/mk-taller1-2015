@@ -9,7 +9,7 @@
 #include <string>
 #include "Sprite.h"
 
-Sprite::Sprite(std::string ruta){
+Sprite::Sprite(std::string ruta, Frame frames[]){
 	frameActual = 0;
 	if( !SpriteSheetTexture.loadFromFile( ruta ) )
 		{
