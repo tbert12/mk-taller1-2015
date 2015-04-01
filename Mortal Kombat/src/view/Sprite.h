@@ -8,6 +8,7 @@
 #ifndef SRC_VIEW_SPRITE_H_
 #define SRC_VIEW_SPRITE_H_
 
+#include <stdio.h>
 #include <SDL2/SDL.h>
 #include <string>
 
@@ -17,8 +18,8 @@
 class Sprite{
 	private:
 		int frameActual;
-		const int cantidadFrames;
-		SDL_Rect spriteFrames[cantidadFrames];
+		int cantidadFrames;
+		SDL_Rect* spriteFrames;
 		LTexture SpriteSheetTexture;
 	public:
 		Sprite(std::string ruta,Frame frames[]);

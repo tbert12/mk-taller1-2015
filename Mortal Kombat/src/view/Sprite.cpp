@@ -5,26 +5,25 @@
  *      Author: tomi
  */
 
+#include <stdio.h>
 #include <string>
 #include "Sprite.h"
 
-bool Sprite::Sprite(std::string ruta, Frame frames[]){
-
+Sprite::Sprite(std::string ruta, Frame frames[]){
 	frameActual = 0;
 	if( !SpriteSheetTexture.loadFromFile( ruta ) )
 		{
 			printf( "Error en cargar Sprite\n" );
-			return false;
 		}
-	int cantidadFrames = sizeof(frames)/sizeof(*frames);
+	cantidadFrames = sizeof(frames)/sizeof(*frames);
+	spriteFrames = new SDL_Rect[cantidadFrames];
 	for (int i=0;i < cantidadFrames;i++){
 		spriteFrames[i].x = frames[i].X;
 		spriteFrames[i].y = frames[i].Y;
 		spriteFrames[i].h = frames[i].Alto;
 		spriteFrames[i].w = frames[i].Ancho;
-		~frames[i]();
+		//~frames[i](); Nose como si lebera el frames[i], ya no es mas ultil
 	}
-	return true;
 }
 
 Sprite::~Sprite(){
