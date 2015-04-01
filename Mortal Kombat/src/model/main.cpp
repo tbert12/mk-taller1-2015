@@ -11,17 +11,36 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "../view/Mundo.h"
+#include "../view/Ventana.h"
 #include "../controller/KeyboardControl.h"
 #include "Personaje.h"
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
+Sprite** LeerSpritesParaProbar(){
+	Frame** framesCaminar;
+	Frame** framesInitial;
+	int wCaminar = 68,wInitial = 72;
+	for (int i=0;i<9;i++){
+		framesCaminar[i] = new Frame(wCaminar*i,0,133,wCaminar);
+		framesInitial[i] = new Frame(wInitial*i,0,133,wInitial);
+	}
+	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
+	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
+	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,Renderer);
+	Sprite* Initial = new Sprite(rutaInitial,framesCaminar,Renderer);
+	Sprite** sprites;
+	sprites[1] = Caminar;
+	sprites[0] = Initial;
+	return sprites;
+}
+
+
 int main( int argc, char* args[] )
 {
 	//Creo el Personaje
-	Personaje luchador = Personaje("Sub Zero");
+	Personaje luchador = Personaje("Sub Zero",LeerSpritesParaProbar());
 
 	//Creo el Controlador
 	KeyboardControl control = KeyboardControl(&luchador);
@@ -31,9 +50,11 @@ int main( int argc, char* args[] )
 		printf( "Error al inicializar!\n" );
 	} else {
 		//Load media
-		if( !loadMedia( luchador.Sprite(0) ) ){
-			printf( "Error al cargar media!\n" );
-		} else {
+
+		//if( !loadMedia( luchador.Sprite(0) ) ){
+		//	printf( "Error al cargar media!\n" );
+		//} else {
+
 			//flag para el Loop Principal
 			bool quit = false;
 
@@ -41,7 +62,7 @@ int main( int argc, char* args[] )
 			SDL_Event e;
 
 			//Current animation frame
-			int frame = 0;
+			//int frame = 0;
 
 			//While Principal
 			while( !quit ){
@@ -54,21 +75,21 @@ int main( int argc, char* args[] )
 					control.KeyPressed(e);
 				}
 
-				printf("%i\n",frame);
-				Refresh(frame,SCREEN_WIDTH,SCREEN_HEIGHT);
+				//printf("%i\n",frame);
+				Refresh(luchador.getSpriteActual(),SCREEN_WIDTH,SCREEN_HEIGHT);
 
 				//Ir al siguiente estado
-				++frame;
+				//++frame;
 
 				//Ciclo de animacion
-				if( frame >= 9 ){
-					frame = 0;
-				}
+				//if( frame >= 9 ){
+				//	frame = 0;
+				//}
 
 				//Sleep(Microsegundos)
 				usleep(100000);
 
-			}
+			//}
 		}
 	}
 

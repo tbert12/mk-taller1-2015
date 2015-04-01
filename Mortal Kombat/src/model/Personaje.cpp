@@ -7,8 +7,15 @@
 
 #include "Personaje.h"
 
+//Constants
+#define SPRITE_PARADO 0;
+#define SPRITE_CAMINAR 1;
+#define SPRITE_SALTO 2;
+#define SPRITE_SALTO_DIAGONAL 3;
+#define SPRITE_PUNCHING 4;
+#define SPRITE_KICKING 5;
 
-Personaje::Personaje(std::string nombre_personaje,Sprite* Sprites[]) {
+Personaje::Personaje(std::string nombre_personaje,Sprite** Sprites) {
 	spriteActual = 0;
 	nombre = nombre_personaje;
 	vida = 100;
@@ -18,29 +25,41 @@ Personaje::Personaje(std::string nombre_personaje,Sprite* Sprites[]) {
 	//sprites = "data/players/subzero/sprites/walk.png";
 }
 
-Sprite* Personaje::getSprites(){
+Sprite** Personaje::getSprites(){
 	return sprites;
 }
 
-Sprite* Personaje::getSprite(unsigned int accion){
-	if (sizeof(sprites)/sizeof(*sprites) <= accion or accion == spriteActual){
-		return NULL;
-	}
-	spriteActual = accion;
-	return sprites[accion];
+Sprite* Personaje::getSpriteActual(){
+	return sprites[spriteActual];
 }
 
 int Personaje::Vida(){
 	return vida;
 }
 
+void Personaje::_cambiarSprite(unsigned int accion){
+	if (accion != spriteActual){
+		spriteActual = accion;
+	}
+}
+
+void Personaje::Inicial(){
+	this->_cambiarSprite(0);
+}
+
 void Personaje::Saltar(){
 	return;
 }
 void Personaje::Agachar(){}
-void Personaje::CaminarDerecha(){}
+
+void Personaje::CaminarDerecha(){
+	this->_cambiarSprite(1);
+}
+
 void Personaje::CaminarIzquierda(){}
+
 void Personaje::SaltarDerecha(){}
+
 void Personaje::SaltarIzquierda(){}
 
 void Personaje::QuitarVida(int valor){

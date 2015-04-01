@@ -12,7 +12,7 @@
 #include <SDL2/SDL.h>
 #include <string>
 
-#include "Mundo.h"
+#include "LTexture.h"
 #include "Frame.h"
 
 class Sprite{
@@ -20,12 +20,13 @@ class Sprite{
 		int frameActual;
 		int cantidadFrames;
 		SDL_Rect* spriteFrames;
-		LTexture SpriteSheetTexture;
+		LTexture* SpriteSheetTexture;
 	public:
-		Sprite(std::string ruta,Frame frames[]);
+		Sprite(std::string ruta,Frame** frames,SDL_Renderer* Renderer);
 		~Sprite();
 
-		SDL_Rect nextFrame();
+		SDL_Rect* nextFrame();
+		LTexture* getSpriteSheetTexture();
 };
 
 

@@ -5,18 +5,21 @@
  *      Author: tomi
  */
 
-#ifndef SRC_VIEW_MUNDO_H_
-#define SRC_VIEW_MUNDO_H_
+#ifndef SRC_VIEW_LTEXTURE_H_
+#define SRC_VIEW_LTEXTURE_H_
 
 #include <string>
-#include "../model/Capa.h"
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL.h>
+#include <stdio.h>
+
 
 //Texture wrapper class
 class LTexture
 {
 	public:
 		//Initializes variables
-		LTexture();
+		LTexture(SDL_Renderer* Renderer);
 
 		//Deallocates memory
 		~LTexture();
@@ -50,20 +53,10 @@ class LTexture
 		//Image dimensions
 		int mWidth;
 		int mHeight;
+
+		//The window renderer
+		SDL_Renderer* gRenderer;
 };
 
-//Starts up SDL and creates window
-bool create_window(int screenWidth, int screenHeight);
 
-//Loads media
-bool loadMedia(std::string ruta);
-
-//Refrescar el mundo (la pantalla, para cada ciclo)
-void Refresh(int frame,int SCREEN_WIDTH,int SCREEN_HEIGHT);
-
-//Frees media and shuts down SDL
-void close_window();
-
-
-
-#endif /* SRC_VIEW_MUNDO_H_ */
+#endif /* SRC_VIEW_LTEXTURE_H_ */

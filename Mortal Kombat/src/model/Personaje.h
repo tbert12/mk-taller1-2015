@@ -12,30 +12,26 @@
 #include <iostream>
 #include "../view/Sprite.h"
 
-//Constants
-#define SPRITE_PARADO = 0;
-#define SPRITE_CAMINAR = 1;
-#define SPRITE_SALTO = 2;
-#define SPRITE_SALTO_DIAGONAL = 3;
-#define SPRITE_PUNCHING = 4;
-#define SPRITE_KICKING = 5;
 
 class Personaje {
 private:
 	std::string nombre;
 	int vida;
 	unsigned int spriteActual;
-	Sprite* sprites[];
+	Sprite** sprites;
 
+	void _cambiarSprite(unsigned int accion);
 
 public:
-	Personaje(std::string nombre_personaje,Sprite* Sprites[]);
+	Personaje(std::string nombre_personaje,Sprite** Sprites);
 
-	Sprite* getSprites();
-	Sprite* getSprite(unsigned int accion);
+	Sprite** getSprites();
+	Sprite* getSpriteActual();
 
 	int Vida();
 	void QuitarVida(int valor);
+
+	void Inicial();
 	void Saltar();
 	void Agachar();
 	void CaminarDerecha();
