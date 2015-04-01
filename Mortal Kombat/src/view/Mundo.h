@@ -8,6 +8,8 @@
 #ifndef SRC_VIEW_MUNDO_H_
 #define SRC_VIEW_MUNDO_H_
 
+#include <string>
+
 //Texture wrapper class
 class LTexture
 {
