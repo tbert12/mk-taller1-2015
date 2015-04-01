@@ -7,36 +7,38 @@
 
 #ifndef SRC_MODEL_PERSONAJE_H_
 #define SRC_MODEL_PERSONAJE_H_
-#include <list>
+
 #include <stdio.h>
 #include <iostream>
+#include "../view/Sprite.h"
 
-//Constants
-#define SPRITE_PARADO = 0;
-#define SPRITE_CAMINAR = 1;
-#define SPRITE_SALTO = 2;
-#define SPRITE_SALTO_DIAGONAL = 3;
-#define SPRITE_PUNCHING = 4;
-#define SPRITE_KICKING = 5;
 
 class Personaje {
 private:
 	std::string nombre;
 	int vida;
+<<<<<<< HEAD
 	//std::list<std::string> sprites;
 	std::string sprites;
 	int m_xActual;
+=======
+	unsigned int spriteActual;
+	Sprite** sprites;
+
+	void _cambiarSprite(unsigned int accion);
+>>>>>>> b76f3b85e7f4d08d14f518dabad4098d04f42201
 
 public:
-	Personaje(std::string nombre_personaje);
+	Personaje(std::string nombre_personaje,Sprite** Sprites);
 
-	//std::list<std::string> Sprites();
-	std::string Sprites();
-	std::string Sprite(unsigned int accion);
+	Sprite** getSprites();
+	Sprite* getSpriteActual();
 
 	int getX();
 	int Vida();
 	void QuitarVida(int valor);
+
+	void Inicial();
 	void Saltar();
 	void Agachar();
 	void CaminarDerecha();

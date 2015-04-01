@@ -7,12 +7,14 @@
 
 #ifndef SRC_MODEL_PELEA_H_
 #define SRC_MODEL_PELEA_H_
+#include "Tiempo.h"
 
 namespace Pelea {
 
 class Pelea {
 public:
 	Pelea();
+	void Tiempo(Tiempo* tiempo_pelea);
 	virtual ~Pelea();
 };
 

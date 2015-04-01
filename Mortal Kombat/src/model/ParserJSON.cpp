@@ -1,4 +1,12 @@
 #include "ParserJSON.h"
+#include "Pelea.h"
+#include "Tiempo.h"
+#include "../view/LTexture.h"
+#include "Capa.h"
+#include "CapaPrincipal.h"
+#include "Personaje.h"
+#include "../view/Sprite.h"
+#include "../view/Frame.h"
 
 #define LOGLVL_DEFAULT 1
 #define TIEMPO_DEFAULT 3.00
@@ -17,6 +25,8 @@
 #define PERSONAJE_SPRITE_INICIAL_DEFAULT "../../data/players/subzero/sprites/initial.png"
 #define PERSONAJE_SPRITE_CAMINATA_DEFAULT "../../data/players/subzero/sprites/walk.png"
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
+#define PERSONAJE_FACTOR_VELOCIDAD 10
+
 
 using namespace std;
 
@@ -34,7 +44,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 
 	// Abrir archivo.
 	ifstream archivoConfig;
-	archivoConfig.open(ruta_archivo);
+	archivoConfig.open(m_ruta_archivo.c_str());
 
 	// Si no se pudo abrir archivo, generar pelea por defecto.
 	if ( ! archivoConfig ) {
@@ -81,7 +91,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	Tiempo::Tiempo* tiempo_pelea = new Tiempo( tiempo );
 
 	// Cargar tiempo a la pelea.
-	nueva_pelea->tiempo( tiempo_pelea );
+	nueva_pelea->Tiempo( tiempo_pelea );
 
 	// Obtener dimensiones de la ventana (camara). Por defecto, 640x480px
 	// y 200 de ancho logico. El alto se seteara luego dependiendo del escenario.
@@ -124,6 +134,9 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	// Setear alto logico de la ventana de acuerdo al alto del escenario.
 	int ventana_alto = escenario_alto;
 
+	// Setear velocidad del personaje.
+	int personaje_velocidad = escenario_ancho / PERSONAJE_FACTOR_VELOCIDAD;
+
 	// Obtener relaciones entre pixeles y unidades logicas del mundo.
 	float ratio_x = ventana_ancho_px / ventana_ancho;
 	float ratio_y = ventana_alto_px / ventana_alto;
@@ -153,7 +166,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 		int capa_alto = escenario_alto;
 
 
-		Capa::Capa* nueva_capa = new Capa( capa_alto, capa_ancho, capa_z_index);
+		Capa::Capa* nueva_capa = new Capa( capa_alto, capa_ancho, capa_z_index, escenario_ancho, personaje_velocidad );
 		// Cargo imagen. Si no existe o no se pudo abrir,
 		// se devuelve false y se usa la imagen por defecto.
 		if ( ! nueva_capa->cargarBackground(background) ) {
@@ -191,6 +204,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 		log ( "WARNING: El alto del personaje no puede superar el del escenario. Se setea automaticamente en 35." );
 	} else log( "Se cargo correctamente el alto logico del personaje." );
 	int personaje_z_index = root["personaje"].get( "z-index", PERSONAJE_Z_INDEX_DEFAULT ).asInt();
+	log ( "Se cargo correctamente el z-index del personaje." );
 	string personaje_sprite_inicial = root["personaje"]["sprites"].get( "inicial", PERSONAJE_SPRITE_INICIAL_DEFAULT ).asString();
 	string personaje_sprite_caminata = root["personaje"]["sprites"].get ( "caminata", PERSONAJE_SPRITE_CAMINATA_DEFAULT ).asString();
 	log ( "Se cargaron los sprites del personaje." );
@@ -198,32 +212,38 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	log ( "Se cargo el nombre del personaje." );
 
 	// Crear Sprites.
-	Sprites::Sprites* sprites = new Sprites();
+	Sprite::Sprite* sprites[];
 	// Al agregar un sprite, se devuelve false si
 	// la imagen no existe o no se pudo abrir.
-	if ( ! sprites->spriteInicial( personaje_sprite_inicial ) ) {
-		sprites->spriteInicial( PERSONAJE_SPRITE_INICIAL_DEFAULT );
+	Sprite::Sprite* spriteInicial = Sprite(personaje_sprite_inicial);
+	if ( spriteInicial == NULL ) {
+		spriteInicial = Sprite( PERSONAJE_SPRITE_INICIAL_DEFAULT );
 		// Informar al usuario el cambio de sprite.
 		log ( "ERROR: No se pudo cargar el sprite del personaje. Se carga sprite por defecto." );
 	} else log( "Se cargo correctamente el sprite del personaje." );
-	if ( ! sprites->spriteCaminata( personaje_sprite_caminata ) ) {
-		sprites->spriteCaminata( PERSONAJE_SPRITE_CAMINATA_DEFAULT );
+	sprites[0] = spriteInicial;
+	Sprite::Sprite* spriteCaminata = Sprite(personaje_sprite_caminata);
+	if ( spriteCaminata == NULL ) {
+		spriteCaminata = Sprite( PERSONAJE_SPRITE_CAMINATA_DEFAULT );
 		// Informar al usuario el cambio de sprite.
 		log ( "ERROR: No se pudo cargar el sprite del personaje. Se carga sprite por defecto." );
 	} else log( "Se cargo correctamente el sprite del personaje." );
+	sprites[1] = spriteCaminata;
 
 
 	// Crear personaje.
-	Personaje::Personaje* personaje = new Personaje(personaje_nombre, sprites, personaje_alto, personaje_ancho );
+	Personaje::Personaje* personaje = new Personaje(personaje_nombre,sprites);
+	if (personaje == NULL){
+		log ( "ERROR: No se pudo crear el personaje" );
+	}
+	else log ( "Se creo el personaje." );
 
 	// Crear ventana (capa-camara).
 	// ACA HAY QUE MOSTRAR LA VENTANA CON SDL, YA TENEMOS LOS PIXELES!!!!!
-	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index );
-
+	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index,ancho_de_fondo,velocidad_principal );
 
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
-	CapaPrincipal::CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index );
-	capa_principal->agregarPersonaje( personaje );
+	CapaPrincipal::CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index, ancho_de_fondo, velocidad_principal, personaje );
 	capa_principal->camara( camara );
 
 	// Agrego capa principal al mundo.

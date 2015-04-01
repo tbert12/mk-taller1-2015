@@ -9,7 +9,11 @@
 #define SRC_MODEL_CAPA_H_
 
 #include "Renderizable.h"
+<<<<<<< HEAD
 #include <list>
+=======
+#include <string>
+>>>>>>> b76f3b85e7f4d08d14f518dabad4098d04f42201
 
 class Capa : public Renderizable{
 public:
@@ -17,6 +21,7 @@ public:
 	void Actualizar();
 	void Mover(int posX);
 	Capa(int alto, int ancho, int zIndex, int anchoDeFondo, int velocidadPrincipal);
+	bool cargarBackground(std::string background);
 
 private:
 	int m_alto;
