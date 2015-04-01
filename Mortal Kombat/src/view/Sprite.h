@@ -25,6 +25,7 @@ class Sprite{
 		Sprite(std::string ruta,Frame** frames,SDL_Renderer* Renderer);
 		~Sprite();
 
+		void Reset();
 		SDL_Rect* nextFrame();
 		LTexture* getSpriteSheetTexture();
 };

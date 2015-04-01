@@ -40,6 +40,7 @@ int Personaje::Vida(){
 void Personaje::_cambiarSprite(unsigned int accion){
 	if (accion != spriteActual){
 		spriteActual = accion;
+		sprites[spriteActual]->Reset();
 	}
 }
 
@@ -47,9 +48,8 @@ void Personaje::Inicial(){
 	this->_cambiarSprite(0);
 }
 
-void Personaje::Saltar(){
-	return;
-}
+void Personaje::Saltar(){}
+
 void Personaje::Agachar(){}
 
 void Personaje::CaminarDerecha(){

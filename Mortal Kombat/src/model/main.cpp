@@ -18,9 +18,17 @@
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
-Sprite** LeerSpritesParaProbar(SDL_Renderer* render){
-	Frame** framesCaminar;
-	Frame** framesInitial;
+
+int main( int argc, char* args[] )
+{
+	//Iniciar SDL y crear ventana
+	if( !create_window(SCREEN_WIDTH,SCREEN_HEIGHT) ) {
+		printf( "Error al inicializar!\n" );
+	} else {
+	
+	//HAGO LO DEL JSON PARA PROBAR
+	Frame* framesCaminar[9];
+	Frame* framesInitial[9];
 	int wCaminar = 68,wInitial = 72;
 	for (int i=0;i<9;i++){
 		framesCaminar[i] = new Frame(wCaminar*i,0,133,wCaminar);
@@ -28,22 +36,13 @@ Sprite** LeerSpritesParaProbar(SDL_Renderer* render){
 	}
 	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
 	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
-	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,render);
-	Sprite* Initial = new Sprite(rutaInitial,framesCaminar,render);
-	Sprite** sprites;
-	sprites[1] = Caminar;
+	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,getRenderer());
+	Sprite* Initial = new Sprite(rutaInitial,framesInitial,getRenderer());
+	Sprite* sprites[2];
 	sprites[0] = Initial;
-	return sprites;
-}
-
-
-int main( int argc, char* args[] )
-{
-
-	//Iniciar SDL y crear ventana
-	if( !create_window(SCREEN_WIDTH,SCREEN_HEIGHT) ) {
-		printf( "Error al inicializar!\n" );
-	} else {
+	sprites[1] = Caminar;
+	
+	
 		//Load media
 
 		//if( !loadMedia( luchador.Sprite(0) ) ){
@@ -51,7 +50,7 @@ int main( int argc, char* args[] )
 		//} else {
 
 			//Creo el Personaje
-			Personaje luchador = Personaje("Sub Zero",LeerSpritesParaProbar(getRenderer()));
+			Personaje luchador = Personaje("Sub Zero",sprites);
 
 			//Creo el Controlador
 			KeyboardControl control = KeyboardControl(&luchador);
@@ -63,7 +62,7 @@ int main( int argc, char* args[] )
 			SDL_Event e;
 
 			//Current animation frame
-			//int frame = 0;
+			int frame = 0;
 
 			//While Principal
 			while( !quit ){
@@ -76,11 +75,11 @@ int main( int argc, char* args[] )
 					control.KeyPressed(e);
 				}
 
-				//printf("%i\n",frame);
+				printf("%i\n",frame);
 				Refresh(luchador.getSpriteActual(),SCREEN_WIDTH,SCREEN_HEIGHT);
 
 				//Ir al siguiente estado
-				//++frame;
+				++frame;
 
 				//Ciclo de animacion
 				//if( frame >= 9 ){

@@ -14,7 +14,10 @@ Sprite::Sprite(std::string ruta, Frame** frames,SDL_Renderer* Renderer){
 		{
 			printf( "Error en cargar Sprite\n" );
 		}
-	cantidadFrames = sizeof(frames)/sizeof(*frames);
+	
+	cantidadFrames = 9;
+	//Como sorete obtengo la cantidad de frames
+	
 	spriteFrames = new SDL_Rect[cantidadFrames];
 	for (int i=0;i < cantidadFrames;i++){
 		spriteFrames[i].x = frames[i]->X;
@@ -33,6 +36,7 @@ Sprite::~Sprite(){
 
 SDL_Rect* Sprite::nextFrame(){
 	SDL_Rect* frame = &spriteFrames[frameActual];
+	printf("Frame: %d | Cant: %d\n",frameActual,cantidadFrames);
 	frameActual++;
 	if (frameActual >= cantidadFrames){
 		frameActual = 0;
@@ -42,6 +46,10 @@ SDL_Rect* Sprite::nextFrame(){
 
 LTexture* Sprite::getSpriteSheetTexture(){
 	return SpriteSheetTexture;
+}
+
+void Sprite::Reset(){
+	frameActual = 0;
 }
 
 

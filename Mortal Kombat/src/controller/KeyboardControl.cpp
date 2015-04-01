@@ -46,11 +46,12 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 					break;
 
 				default:
+					
 					break;
 			}
 	}
 	else{
-		//ERROR
+		personaje->Inicial();
 	}
 }
 
