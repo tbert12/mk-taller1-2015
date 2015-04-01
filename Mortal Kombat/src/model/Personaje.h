@@ -17,16 +17,13 @@ class Personaje {
 private:
 	std::string nombre;
 	int vida;
-<<<<<<< HEAD
 	//std::list<std::string> sprites;
 	std::string sprites;
 	int m_xActual;
-=======
 	unsigned int spriteActual;
 	Sprite** sprites;
 
 	void _cambiarSprite(unsigned int accion);
->>>>>>> b76f3b85e7f4d08d14f518dabad4098d04f42201
 
 public:
 	Personaje(std::string nombre_personaje,Sprite** Sprites);
