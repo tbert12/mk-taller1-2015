@@ -5,6 +5,8 @@
 #include "Capa.h"
 #include "CapaPrincipal.h"
 #include "Personaje.h"
+#include "../view/Sprite.h"
+#include "../view/Frame.h"
 
 #define LOGLVL_DEFAULT 1
 #define TIEMPO_DEFAULT 3.00
@@ -210,32 +212,38 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	log ( "Se cargo el nombre del personaje." );
 
 	// Crear Sprites.
-	Sprites::Sprites* sprites = new Sprites();
+	Sprite::Sprite* sprites[8];
 	// Al agregar un sprite, se devuelve false si
 	// la imagen no existe o no se pudo abrir.
-	if ( ! sprites->spriteInicial( personaje_sprite_inicial ) ) {
-		sprites->spriteInicial( PERSONAJE_SPRITE_INICIAL_DEFAULT );
+	Sprite::Sprite* spriteInicial = Sprite(personaje_sprite_inicial);
+	if ( spriteInicial == NULL ) {
+		spriteInicial = Sprite( PERSONAJE_SPRITE_INICIAL_DEFAULT );
 		// Informar al usuario el cambio de sprite.
 		log ( "ERROR: No se pudo cargar el sprite del personaje. Se carga sprite por defecto." );
 	} else log( "Se cargo correctamente el sprite del personaje." );
-	if ( ! sprites->spriteCaminata( personaje_sprite_caminata ) ) {
-		sprites->spriteCaminata( PERSONAJE_SPRITE_CAMINATA_DEFAULT );
+	sprites[0] = spriteInicial;
+	Sprite::Sprite* spriteCaminata = Sprite(personaje_sprite_caminata);
+	if ( spriteCaminata == NULL ) {
+		spriteCaminata = Sprite( PERSONAJE_SPRITE_CAMINATA_DEFAULT );
 		// Informar al usuario el cambio de sprite.
 		log ( "ERROR: No se pudo cargar el sprite del personaje. Se carga sprite por defecto." );
 	} else log( "Se cargo correctamente el sprite del personaje." );
+	sprites[1] = spriteCaminata;
 
 
 	// Crear personaje.
-	Personaje::Personaje* personaje = new Personaje(personaje_nombre, sprites, personaje_alto, personaje_ancho );
+	Personaje::Personaje* personaje = new Personaje(personaje_nombre,sprites);
+	if (personaje == NULL){
+		log ( "ERROR: No se pudo crear el personaje" );
+	}
+	else log ( "Se creo el personaje." );
 
 	// Crear ventana (capa-camara).
 	// ACA HAY QUE MOSTRAR LA VENTANA CON SDL, YA TENEMOS LOS PIXELES!!!!!
-	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index );
-
+	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index,ancho_de_fondo,velocidad_principal );
 
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
-	CapaPrincipal::CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index );
-	capa_principal->agregarPersonaje( personaje );
+	CapaPrincipal::CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index, ancho_de_fondo, velocidad_principal, personaje );
 	capa_principal->camara( camara );
 
 	// Agrego capa principal al mundo.

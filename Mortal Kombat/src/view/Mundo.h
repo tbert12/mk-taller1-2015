@@ -43,8 +43,6 @@ class LTexture
 		int getWidth();
 		int getHeight();
 
-		bool agregarCapa(Capa* unaCapa);
-
 	private:
 		//The actual hardware texture
 		SDL_Texture* mTexture;
