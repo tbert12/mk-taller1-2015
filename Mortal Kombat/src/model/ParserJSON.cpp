@@ -17,6 +17,8 @@
 #define PERSONAJE_SPRITE_INICIAL_DEFAULT "../../data/players/subzero/sprites/initial.png"
 #define PERSONAJE_SPRITE_CAMINATA_DEFAULT "../../data/players/subzero/sprites/walk.png"
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
+#define PERSONAJE_FACTOR_VELOCIDAD 10
+
 
 using namespace std;
 
@@ -124,6 +126,9 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	// Setear alto logico de la ventana de acuerdo al alto del escenario.
 	int ventana_alto = escenario_alto;
 
+	// Setear velocidad del personaje.
+	int personaje_velocidad = escenario_ancho / PERSONAJE_FACTOR_VELOCIDAD;
+
 	// Obtener relaciones entre pixeles y unidades logicas del mundo.
 	float ratio_x = ventana_ancho_px / ventana_ancho;
 	float ratio_y = ventana_alto_px / ventana_alto;
@@ -153,7 +158,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 		int capa_alto = escenario_alto;
 
 
-		Capa::Capa* nueva_capa = new Capa( capa_alto, capa_ancho, capa_z_index);
+		Capa::Capa* nueva_capa = new Capa( capa_alto, capa_ancho, capa_z_index, escenario_ancho, personaje_velocidad );
 		// Cargo imagen. Si no existe o no se pudo abrir,
 		// se devuelve false y se usa la imagen por defecto.
 		if ( ! nueva_capa->cargarBackground(background) ) {
@@ -191,6 +196,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 		log ( "WARNING: El alto del personaje no puede superar el del escenario. Se setea automaticamente en 35." );
 	} else log( "Se cargo correctamente el alto logico del personaje." );
 	int personaje_z_index = root["personaje"].get( "z-index", PERSONAJE_Z_INDEX_DEFAULT ).asInt();
+	log ( "Se cargo correctamente el z-index del personaje." );
 	string personaje_sprite_inicial = root["personaje"]["sprites"].get( "inicial", PERSONAJE_SPRITE_INICIAL_DEFAULT ).asString();
 	string personaje_sprite_caminata = root["personaje"]["sprites"].get ( "caminata", PERSONAJE_SPRITE_CAMINATA_DEFAULT ).asString();
 	log ( "Se cargaron los sprites del personaje." );
