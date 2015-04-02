@@ -75,7 +75,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	// Obtener tiempo limite del combate.
 	float tiempo = root.get( "tiempo", TIEMPO_DEFAULT ).asFloat();
 	if ( tiempo < 0 ) {
-		tiempo_pelea = TiempoPorDefault();
+		tiempo_pelea = tiempoPorDefecto();
 		// Informar al usuario el cambio de tiempo de la ronda.
 		log ( "WARNING: El tiempo no puede ser negativo. Se setea automaticamente en 3 minutos." );
 	}
@@ -205,6 +205,8 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	log ( "Se cargaron los sprites del personaje." );
 	string personaje_nombre = root["personaje"].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
 	log ( "Se cargo el nombre del personaje." );
+	*/
+
 
 
 	/* TOCA VOS ESTO TOMI QUE ME PERDIERON CON LOS SPRITES */
@@ -227,7 +229,6 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	} else log( "Se cargo correctamente el sprite del personaje." );
 	sprites[1] = spriteCaminata;
 	/*---------------------------------------------------------*/
-
 
 
 	// Crear personaje.

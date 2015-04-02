@@ -8,7 +8,7 @@
 #include <SDL2/SDL_image.h>
 #include "logging.h"
 #include "Pelea.h"
-#include "Mundo.h"
+//#include "Mundo.h"
 #include "Tiempo.h"
 #include "../view/LTexture.h"
 #include "Capa.h"
