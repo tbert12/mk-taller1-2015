@@ -237,10 +237,6 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 
 	// Crear personaje.
 	Personaje::Personaje* personaje = new Personaje(personaje_nombre, sprites, personaje_velocidad);
-	if (personaje == NULL){
-		log ( "ERROR: No se pudo crear el personaje" );
-	}
-	else log ( "Se creo el personaje." );
 
 	// Crear ventana (capa-camara).
 	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index, escenario_ancho, velocidad_principal );
