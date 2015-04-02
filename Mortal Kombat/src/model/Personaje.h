@@ -9,13 +9,15 @@
 #define SRC_MODEL_PERSONAJE_H_
 
 //Constants
-const int SPRITE_PARADO = 0;
-const int SPRITE_CAMINAR = 1;
-const int SPRITE_CAMINAR_ATRAS = 2;
+const int SPRITE_INICIAL = 0;
+const int SPRITE_CAMINAR_DERECHA = 1;
+const int SPRITE_CAMINAR_IZQUIERDA = 2;
 const int SPRITE_SALTO = 3;
-const int SPRITE_SALTO_DIAGONAL = 4;
-const int SPRITE_PUNCHING = 5;
-const int SPRITE_KICKING = 6;
+const int SPRITE_SALTO_DIAGONAL_DERECHA = 4;
+const int SPRITE_SALTO_DIAGONAL_IZQUIERDA = 5;
+const int SPRITE_AGACHARSE = 6;
+const int SPRITE_PUNCHING = 7;
+const int SPRITE_KICKING = 8;
 
 #include <stdio.h>
 #include <iostream>

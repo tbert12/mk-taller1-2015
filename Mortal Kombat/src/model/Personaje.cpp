@@ -46,17 +46,13 @@ void Personaje::_cambiarSprite(Accion* accion){
 }
 
 void Personaje::Inicial(){
-	this->_cambiarSprite(0);
+	Accion* accion = new Accion(SPRITE_INICIAL,0);
+	this->_cambiarSprite(accion);
 }
-
-void Personaje::Saltar(){
-}
-
-
-void Personaje::Agachar(){}
 
 void Personaje::CaminarDerecha(){
-	this->_cambiarSprite(SPRITE_CAMINAR);
+	Accion* accion = new Accion(SPRITE_CAMINAR_IZQUIERDA,0);
+	this->_cambiarSprite(accion);
 	if (estaScrolleando) {
 		return;
 	}
@@ -64,16 +60,40 @@ void Personaje::CaminarDerecha(){
 }
 
 void Personaje::CaminarIzquierda(){
-	this->_cambiarSprite(SPRITE_CAMINAR_ATRAS);
+	Accion* accion = new Accion(SPRITE_CAMINAR_IZQUIERDA,0);
+	this->_cambiarSprite(accion);
 	if (estaScrolleando) {
 		return;
 	}
 	m_xActual -= m_velocidad;
 }
 
-void Personaje::SaltarDerecha(){}
+void Personaje::Saltar(){
+	Accion* accion = new Accion(SPRITE_SALTO,0);
+	this->_cambiarSprite(accion);
+	if (estaScrolleando) {
+		return;
+	}
+}
 
-void Personaje::SaltarIzquierda(){}
+void Personaje::SaltarDerecha(){
+	Accion* accion = new Accion(SPRITE_SALTO_DIAGONAL_DERECHA,0);
+	this->_cambiarSprite(accion);
+	if (estaScrolleando) {
+		return;
+	}
+}
+
+void Personaje::SaltarIzquierda(){
+	Accion* accion = new Accion(SPRITE_SALTO_DIAGONAL_IZQUIERDA,0);
+	this->_cambiarSprite(accion);
+	if (estaScrolleando) {
+		return;
+	}
+}
+
+
+void Personaje::Agachar(){}
 
 int Personaje::getX()
 {
