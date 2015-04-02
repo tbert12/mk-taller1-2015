@@ -215,6 +215,8 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	string personaje_nombre = root["personaje"].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
 	log ( "Se cargo el nombre del personaje." );
 
+
+	/* TOCA VOS ESTO TOMI QUE ME PERDIERON CON LOS SPRITES */
 	// Crear Sprites.
 	Sprite::Sprite* sprites[];
 	// Al agregar un sprite, se devuelve false si
@@ -233,6 +235,8 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 		log ( "ERROR: No se pudo cargar el sprite del personaje. Se carga sprite por defecto." );
 	} else log( "Se cargo correctamente el sprite del personaje." );
 	sprites[1] = spriteCaminata;
+	/*---------------------------------------------------------*/
+
 
 
 	// Crear personaje.
