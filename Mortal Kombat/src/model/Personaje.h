@@ -39,7 +39,7 @@ private:
 	void _cambiarSprite(Accion* accion);
 
 public:
-	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, int velocidad);
+	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, float velocidad);
 
 	int estaScrolleando;
 	std::vector<Sprite*> getSprites();
