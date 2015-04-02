@@ -49,7 +49,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 
 	// Si no se pudo abrir archivo, generar pelea por defecto.
 	if ( ! archivoConfig ) {
-		return ParserJSON::peleaPorDefecto();
+		return this->peleaPorDefecto();
 		// Informar al usuario la falla y la resolucion tomada.
 		log( "ERROR: No se pudo abrir el archivo de configuracion JSON, se genera una partida por defecto." );
 	}
@@ -60,7 +60,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	if ( ! exito ) {
 	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
 	    log( "ERROR: No se pudo interpretar el JSON, se genera una partida por defecto." + reader.getFormattedErrorMessages() );
-	    return ParserJSON::peleaPorDefecto();
+	    return this->peleaPorDefecto();
 	} else log( "El archivo JSON es valido." );
 
 	// Cerrar archivo.
@@ -255,6 +255,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	return nueva_pelea;
 
 
+	// FALTA HACER COINCIDIR CONSTRUCTOR DEL SPRITE.
 	// FALTAN SPRITES POR DEFECTO PARA POSICIONES DE LUCHA, SALTO, ETC.
 	// FALTA CREAR CLASE MOVIMIENTO PARA ABSTRAER. EL PARSER YA ESTA MUY REBUSCADO, PREFERIBLEMENTE QUE LA CREACION SEA INTERNA A CADA CLASE.
 	// FALTA CONSTRUCTOR DE MUNDO (de hecho, falta toda la clase Mundo.cpp)
