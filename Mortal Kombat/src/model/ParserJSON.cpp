@@ -49,7 +49,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 
 	// Si no se pudo abrir archivo, generar pelea por defecto.
 	if ( ! archivoConfig ) {
-		return peleaPorDefecto();
+		return ParserJSON::peleaPorDefecto();
 		// Informar al usuario la falla y la resolucion tomada.
 		log( "ERROR: No se pudo abrir el archivo de configuracion JSON, se genera una partida por defecto." );
 	}
@@ -60,7 +60,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	if ( ! exito ) {
 	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
 	    log( "ERROR: No se pudo interpretar el JSON, se genera una partida por defecto." + reader.getFormattedErrorMessages() );
-	    return peleaPorDefecto();
+	    return ParserJSON::peleaPorDefecto();
 	} else log( "El archivo JSON es valido." );
 
 	// Cerrar archivo.
