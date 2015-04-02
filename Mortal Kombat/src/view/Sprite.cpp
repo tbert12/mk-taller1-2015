@@ -8,6 +8,8 @@
 #include "Sprite.h"
 
 Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer){
+	// NO SE LE PUEDE SACAR EL VECTOR DE FRAMES Y EL SDL_RENDERER AL CONSTRUCTOR?
+	// SINO SE COMPLICA MUCHISIMO PARA LLAMARLO DESDE EL PARSER.
 	frameActual = 0;
 	SpriteSheetTexture = new LTexture(Renderer);
 	if( !SpriteSheetTexture->loadFromFile( ruta ) )
