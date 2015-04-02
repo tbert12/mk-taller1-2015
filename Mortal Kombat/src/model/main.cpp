@@ -11,6 +11,7 @@
 #include <string.h>
 #include <unistd.h> //usleep
 #include <vector>
+#include "logging.h"
 
 #include <algorithm>    // std::reverse (Tranfuguiada para que camine para atras)
 
@@ -48,6 +49,10 @@ std::vector<Sprite*> CargaDePrueba(){
 
 int main( int argc, char* args[] )
 {
+
+	// Marco inicio de un nuevo run en el .log
+	prepararLog();
+
 	//Iniciar SDL y crear ventana
 	if( !create_window(SCREEN_WIDTH,SCREEN_HEIGHT) ) {
 		printf( "Error al inicializar!\n" );

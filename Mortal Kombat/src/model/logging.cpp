@@ -48,4 +48,11 @@ void log( const string mensaje ) {
 	registrarMensaje("\n");
 }
 
+void prepararLog() {
+	fstream logfile;
+	logfile.open ( ruta_logfile.c_str() );
+	logfile << "---------------------------------------------------------------------------------------------" << endl;
+	logfile.close();
+}
+
 
