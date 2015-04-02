@@ -21,8 +21,6 @@ public:
 
 	 Pelea::Pelea* generarPelea();
 
-	 Pelea::Pelea* peleaPorDefecto();
-
 };
 
 #endif /* SRC_MODEL_PARSER_H_ */
