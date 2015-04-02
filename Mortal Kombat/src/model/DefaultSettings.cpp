@@ -25,7 +25,7 @@
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
 #define PERSONAJE_FACTOR_VELOCIDAD 10
 
-Tiempo* TiempoPorDefault(){
+Tiempo* tiempoPorDefecto(){
 	Tiempo::Tiempo* tiempo = new Tiempo( TIEMPO_DEFAULT );
 	return tiempo;
 }
