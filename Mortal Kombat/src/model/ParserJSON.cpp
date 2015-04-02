@@ -1,13 +1,4 @@
 #include "ParserJSON.h"
-#include "Pelea.h"
-#include "Tiempo.h"
-#include "../view/LTexture.h"
-#include "Capa.h"
-#include "CapaPrincipal.h"
-#include "Personaje.h"
-#include "../view/Sprite.h"
-#include "../view/Frame.h"
-#include "DefaultSettings.cpp"
 
 #define LOGLVL_DEFAULT 1
 #define TIEMPO_DEFAULT 3.00
@@ -243,7 +234,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	Personaje::Personaje* personaje = new Personaje(personaje_nombre, sprites, personaje_velocidad);
 
 	// Crear ventana (capa-camara).
-	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index, escenario_ancho, velocidad_principal );
+	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index, escenario_ancho, personaje_velocidad );
 
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
 	CapaPrincipal::CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index, escenario_ancho, personaje_velocidad, personaje );

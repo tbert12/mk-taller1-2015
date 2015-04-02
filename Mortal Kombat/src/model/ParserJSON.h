@@ -4,10 +4,19 @@
 #include <stdio.h>
 #include <fstream>
 #include "../../libs/json/json.h"
-#include "logging.h"
-#include "Pelea.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "logging.h"
+#include "Pelea.h"
+#include "Mundo.h"
+#include "Tiempo.h"
+#include "../view/LTexture.h"
+#include "Capa.h"
+#include "CapaPrincipal.h"
+#include "Personaje.h"
+#include "../view/Sprite.h"
+#include "../view/Frame.h"
+#include "DefaultSettings.cpp"
 
 using namespace std;
 
