@@ -40,3 +40,4 @@ void Capa::Mover(int posX){
 int Capa::getZIndex(){
 	return m_zIndex;
 }
+

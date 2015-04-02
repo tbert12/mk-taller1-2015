@@ -22,5 +22,6 @@ size_t Accion::getSiguiente(){
 
 Accion::~Accion() {
 	// TODO Auto-generated destructor stub
+	// RE DE CRACK USAR ESTO DEL TODO Y HABLAR EN INGLES
 }
 
