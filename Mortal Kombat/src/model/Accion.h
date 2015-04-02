@@ -11,15 +11,15 @@
 class Accion {
 
 private:
-	size_t m_accion;
-	size_t m_accionSiguiente;
+	unsigned int m_accion;
+	unsigned int m_accionSiguiente;
 
 public:
-	Accion(size_t accion, size_t siguiente);
+	Accion(unsigned int accion, unsigned int siguiente);
 	virtual ~Accion();
 
-	size_t getAccion();
-	size_t getSiguiente();
+	unsigned int getAccion();
+	unsigned int getSiguiente();
 };
 
 #endif /* SRC_MODEL_ACCION_H_ */

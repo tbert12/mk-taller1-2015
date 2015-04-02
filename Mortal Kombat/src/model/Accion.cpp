@@ -7,16 +7,16 @@
 
 #include "Accion.h"
 
-Accion::Accion(size_t accion, size_t siguiente) {
+Accion::Accion(unsigned int accion, unsigned int siguiente) {
 	m_accion = accion;
 	m_accionSiguiente = siguiente;
 }
 
-size_t Accion::getAccion(){
+unsigned int Accion::getAccion(){
 	return m_accion;
 }
 
-size_t Accion::getSiguiente(){
+unsigned int Accion::getSiguiente(){
 	return m_accionSiguiente;
 }
 

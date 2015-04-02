@@ -10,6 +10,7 @@
 
 #include "Capa.h"
 #include "Personaje.h"
+#include <SDL2/SDL.h>
 
 class CapaPrincipal: public Capa {
 

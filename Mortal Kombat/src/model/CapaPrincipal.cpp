@@ -21,7 +21,7 @@ void CapaPrincipal::Renderizar()
 	{
 		//printf("hola");
 	}
-	LTexture* textura = m_Personaje->getSpriteActual()->getFrame();
+	LTexture* textura = m_Personaje->getSpriteActual()->getSpriteSheetTexture();
 	textura->render(m_Personaje->getX(), m_Personaje->getY());
 
 	//m_Texture->render(0,0, Ventana.obtenerClip());
