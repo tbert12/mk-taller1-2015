@@ -5,13 +5,13 @@
 
 #include "Capa.h"
 
-Capa::Capa(int alto, int ancho, int zIndex, int anchoDeFondo, int velocidadPrincipal) {
+Capa::Capa(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal) {
 	// TODO Auto-generated constructor stub
 	m_alto = alto;
 	m_ancho = ancho;
 	m_zIndex = zIndex;
 	m_anchoDeFondo = anchoDeFondo;
-	m_velocidad = ancho/anchoDeFondo * velocidadPrincipal;
+	m_velocidad = velocidadPrincipal;
 	m_XActual = anchoDeFondo *.5f - ancho * .5f;
 }
 

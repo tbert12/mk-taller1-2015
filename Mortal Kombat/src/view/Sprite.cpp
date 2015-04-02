@@ -13,10 +13,12 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Rendere
 	if( !SpriteSheetTexture->loadFromFile( ruta ) )
 		{
 			printf( "Error en cargar Sprite\n" );
+			 // Usemos la funcion log( mensaje ) en logging.h para este tipo de cosas.
+			// Registra en el archivo .log los errores de acuerdo al nivel.
 		}
 	
 	cantidadFrames = frames.size();
-	//Como sorete obtengo la cantidad de frames
+	//Como sorete obtengo la cantidad de frames <--- JAJAJA
 	
 	spriteFrames = new SDL_Rect[cantidadFrames];
 	for (int i=0;i < cantidadFrames;i++){

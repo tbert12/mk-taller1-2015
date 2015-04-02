@@ -135,7 +135,7 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	int ventana_alto = escenario_alto;
 
 	// Setear velocidad del personaje.
-	int personaje_velocidad = escenario_ancho / PERSONAJE_FACTOR_VELOCIDAD;
+	float personaje_velocidad = escenario_ancho / PERSONAJE_FACTOR_VELOCIDAD;
 
 	// Obtener relaciones entre pixeles y unidades logicas del mundo.
 	float ratio_x = ventana_ancho_px / ventana_ancho;
@@ -232,17 +232,17 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 
 
 	// Crear personaje.
-	Personaje::Personaje* personaje = new Personaje(personaje_nombre,sprites);
+	Personaje::Personaje* personaje = new Personaje(personaje_nombre, sprites, personaje_velocidad);
 	if (personaje == NULL){
 		log ( "ERROR: No se pudo crear el personaje" );
 	}
 	else log ( "Se creo el personaje." );
 
 	// Crear ventana (capa-camara).
-	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index,ancho_de_fondo,velocidad_principal );
+	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index, escenario_ancho, velocidad_principal );
 
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
-	CapaPrincipal::CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index, ancho_de_fondo, velocidad_principal, personaje );
+	CapaPrincipal::CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index, escenario_ancho, personaje_velocidad, personaje );
 	capa_principal->camara( camara );
 
 	// Agrego capa principal al mundo.
@@ -257,7 +257,6 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 
 	// FALTAN SPRITES POR DEFECTO PARA POSICIONES DE LUCHA, SALTO, ETC.
 	// FALTA CREAR CLASE MOVIMIENTO PARA ABSTRAER.
-	// NO VA A COMPILAR NUNCA HASTA QUE TENGAMOS LOS CONSTRUCTORES DE MUNDO CAPA PERSONAJE ETC
-
+	// FALTA CONSTRUCTOR DE MUNDO (de hecho, falta toda la clase Mundo.cpp)
 }
 

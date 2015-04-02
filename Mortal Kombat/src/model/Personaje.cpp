@@ -7,7 +7,7 @@
 
 #include "Personaje.h"
 
-Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, int velocidad) {
+Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, float velocidad) {
 	spriteActual = 0;
 	nombre = nombre_personaje;
 	vida = 100;

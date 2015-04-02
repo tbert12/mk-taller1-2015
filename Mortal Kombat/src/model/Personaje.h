@@ -32,7 +32,7 @@ private:
 	int m_yActual;
 	unsigned int spriteActual;
 	std::vector<Sprite*> sprites;
-	int m_velocidad;
+	float m_velocidad;
 
 	void _cambiarSprite(Accion* accion);
 
