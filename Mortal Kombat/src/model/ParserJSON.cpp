@@ -239,7 +239,6 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	else log ( "Se creo el personaje." );
 
 	// Crear ventana (capa-camara).
-	// ACA HAY QUE MOSTRAR LA VENTANA CON SDL, YA TENEMOS LOS PIXELES!!!!!
 	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index,ancho_de_fondo,velocidad_principal );
 
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
@@ -256,7 +255,6 @@ Pelea::Pelea* ParserJSON::generarPelea() {
 	return nueva_pelea;
 
 
-	// FALTA MOSTRAR LA VENTANA CON SDL AL CREAR LA VENTANA (CAPA-CAMARA).
 	// FALTAN SPRITES POR DEFECTO PARA POSICIONES DE LUCHA, SALTO, ETC.
 	// FALTA CREAR CLASE MOVIMIENTO PARA ABSTRAER.
 	// NO VA A COMPILAR NUNCA HASTA QUE TENGAMOS LOS CONSTRUCTORES DE MUNDO CAPA PERSONAJE ETC
