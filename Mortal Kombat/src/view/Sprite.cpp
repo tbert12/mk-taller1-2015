@@ -34,14 +34,19 @@ Sprite::~Sprite(){
 	//SpriteSheetTexture.free();
 }
 
-SDL_Rect* Sprite::nextFrame(){
+SDL_Rect* Sprite::getFrame(){
 	SDL_Rect* frame = &spriteFrames[frameActual];
 	printf("Frame: %d | Cant: %d\n",frameActual,cantidadFrames);
+
+	return frame;
+}
+
+bool Sprite::Advance(){
 	frameActual++;
 	if (frameActual >= cantidadFrames){
 		frameActual = 0;
 	}
-	return frame;
+	return true;
 }
 
 LTexture* Sprite::getSpriteSheetTexture(){

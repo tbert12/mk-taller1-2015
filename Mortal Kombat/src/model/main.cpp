@@ -87,7 +87,7 @@ int main( int argc, char* args[] )
 			++frame;
 
 			//Sleep(Microsegundos)
-			usleep(100000);
+			usleep(50000);
 		}
 	}
 

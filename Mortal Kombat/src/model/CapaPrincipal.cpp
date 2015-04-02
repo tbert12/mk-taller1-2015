@@ -8,6 +8,7 @@
 #include "CapaPrincipal.h"
 #include <list>
 
+
 CapaPrincipal::CapaPrincipal(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal, Personaje* personaje)
 :Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal) //call superclass constructor
 {
@@ -18,8 +19,12 @@ void CapaPrincipal::Renderizar()
 {
 	if( Scrollear())
 	{
-		printf("hola");
+		//printf("hola");
 	}
+	LTexture* textura = m_Personaje->getSpriteActual()->getFrame();
+	textura->render(m_Personaje->getX(), m_Personaje->getY());
+
+	//m_Texture->render(0,0, Ventana.obtenerClip());
 	/*
 	std::list<Renderizable*>::iterator it ;
 

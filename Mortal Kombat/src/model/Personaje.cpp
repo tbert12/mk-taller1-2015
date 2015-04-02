@@ -7,21 +7,16 @@
 
 #include "Personaje.h"
 
-//Constants
-#define SPRITE_PARADO 0;
-#define SPRITE_CAMINAR 1;
-#define SPRITE_CAMINAR_ATRAS 2;
-#define SPRITE_SALTO 3;
-#define SPRITE_SALTO_DIAGONAL 4;
-#define SPRITE_PUNCHING 5;
-#define SPRITE_KICKING 6;
-
-Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites) {
+Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, int velocidad) {
 	spriteActual = 0;
 	nombre = nombre_personaje;
 	vida = 100;
 	sprites = Sprites;
 	m_xActual = 0;
+	m_yActual = 0;
+	m_velocidad = velocidad;
+	estaScrolleando = false;
+
 	//COMO ES UN SOLO JUGADOR EN ESTE TP LO HARCODEAMOS, LUEGO LO LEVANTAMOS CON JSON
 	//sprites = std::list<std::string> sprites("data/players/subzero/sprites/initial.png");
 	//sprites = "data/players/subzero/sprites/walk.png";
@@ -39,9 +34,13 @@ int Personaje::Vida(){
 	return vida;
 }
 
-void Personaje::_cambiarSprite(unsigned int accion){
+void Personaje::_cambiarSprite(Accion* accion){
 	if (accion != spriteActual){
-		spriteActual = accion;
+		if(accion->getSiguiente() != 0){
+			spriteActual = accion->getSiguiente();
+			return;
+		}
+		spriteActual = accion->getAccion();
 		sprites[spriteActual]->Reset();
 	}
 }
@@ -50,24 +49,40 @@ void Personaje::Inicial(){
 	this->_cambiarSprite(0);
 }
 
-void Personaje::Saltar(){}
+void Personaje::Saltar(){
+}
+
 
 void Personaje::Agachar(){}
 
 void Personaje::CaminarDerecha(){
-	this->_cambiarSprite(1);
+	this->_cambiarSprite(SPRITE_CAMINAR);
+	if (estaScrolleando) {
+		return;
+	}
+	m_xActual += m_velocidad;
 }
 
 void Personaje::CaminarIzquierda(){
-	this->_cambiarSprite(2);
+	this->_cambiarSprite(SPRITE_CAMINAR_ATRAS);
+	if (estaScrolleando) {
+		return;
+	}
+	m_xActual -= m_velocidad;
 }
 
 void Personaje::SaltarDerecha(){}
 
 void Personaje::SaltarIzquierda(){}
+
 int Personaje::getX()
 {
 	return m_xActual;
+}
+
+int Personaje::getY()
+{
+	return m_yActual;
 }
 
 void Personaje::QuitarVida(int valor){

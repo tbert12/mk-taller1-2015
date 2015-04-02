@@ -116,7 +116,8 @@ void Refresh(Sprite* spriteActual,int SCREEN_WIDTH,int SCREEN_HEIGHT){
 
 	//Renderizar estado actual
 	//SDL_Rect* currentClip = &gSpriteClips[ frame ];
-	SDL_Rect* currentClip = spriteActual->nextFrame();
+	spriteActual->Advance();
+	SDL_Rect* currentClip = spriteActual->getFrame();
 	LTexture* SpriteSheetTexture = spriteActual->getSpriteSheetTexture();
 	SpriteSheetTexture->render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
 

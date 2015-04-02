@@ -27,7 +27,8 @@ class Sprite{
 		~Sprite();
 
 		void Reset();
-		SDL_Rect* nextFrame();
+		SDL_Rect* getFrame();
+		bool Advance();
 		LTexture* getSpriteSheetTexture();
 };
 
