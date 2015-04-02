@@ -51,7 +51,9 @@ void log( const string mensaje ) {
 void prepararLog() {
 	fstream logfile;
 	logfile.open ( ruta_logfile.c_str() );
+	logfile << "\n";
 	logfile << "---------------------------------------------------------------------------------------------" << endl;
+	logfile << "\n";
 	logfile.close();
 }
 
