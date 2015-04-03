@@ -25,13 +25,14 @@
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
 #define PERSONAJE_FACTOR_VELOCIDAD 10
 
-Tiempo* tiempoPorDefecto(){
-	Tiempo::Tiempo* tiempo = new Tiempo( TIEMPO_DEFAULT );
+
+Tiempo* TiempoPorDefecto(){
+	Tiempo* tiempo = new Tiempo( TIEMPO_DEFAULT );
 	return tiempo;
 }
 
-Pelea::Pelea* peleaPorDefecto(){
-	Pelea::Pelea* pelea = new Pelea();
+Pelea* peleaPorDefecto(){
+	Pelea* pelea = new Pelea();
 
 	Tiempo* tiempo_pelea = TiempoPorDefault();
 	pelea->Tiempo(tiempo_pelea);
@@ -42,4 +43,4 @@ Pelea::Pelea* peleaPorDefecto(){
 	return pelea;
 }
 
-
+;

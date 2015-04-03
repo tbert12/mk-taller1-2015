@@ -7,19 +7,31 @@
 #include "Sprite.h"
 //#include "LTexture.h"
 
-//Starts up SDL and creates window
-bool create_window(int screenWidth, int screenHeight);
+class Ventana
+{
+private:
+	int m_ancho;
+	int m_alto;
 
-//Loads media
-//bool loadMedia(std::string ruta);
+public:
 
-//Refrescar el mundo (la pantalla, para cada ciclo)
-void Refresh(Sprite* spriteActual,int SCREEN_WIDTH,int SCREEN_HEIGHT);
+	Ventana(int screenWidth, int screenHeight);
 
-//Frees media and shuts down SDL
-void close_window();
+	int obtenerAncho();
 
-//Obtener Renderer para los objetos Renderizables
-SDL_Renderer* getRenderer();
+	//Starts up SDL and creates window
+	bool create_window(int screenWidth, int screenHeight);
 
+	//Loads media
+	//bool loadMedia(std::string ruta);
+
+	//Refrescar el mundo (la pantalla, para cada ciclo)
+	void Refresh(Sprite* spriteActual,int SCREEN_WIDTH,int SCREEN_HEIGHT);
+
+	//Frees media and shuts down SDL
+	void close_window();
+
+	//Obtener Renderer para los objetos Renderizables
+	SDL_Renderer* getRenderer();
+};
 #endif /* SRC_VIEW_VENTANA_H_ */

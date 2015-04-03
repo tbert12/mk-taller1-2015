@@ -17,6 +17,7 @@ public:
 	int getZIndex();
 	void Actualizar();
 	void Mover(int posX);
+	int getX();
 	Capa(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal);
 	bool cargarBackground(std::string background);
 

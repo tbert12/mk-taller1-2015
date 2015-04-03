@@ -28,7 +28,8 @@ private:
 public:
 	 ParserJSON(string ruta_archivo);
 
-	 Pelea::Pelea* generarPelea();
+	 Pelea* generarPelea();
+	 Pelea* peleaPorDefecto();
 
 };
 

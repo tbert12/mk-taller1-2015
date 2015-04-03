@@ -10,8 +10,18 @@ SDL_Renderer* getRenderer(){
 	return Renderer;
 }
 
+Ventana::Ventana(int screenWidth, int screenHeight)
+{
+	m_ancho = screenWidth;
+	m_alto = screenHeight;
+}
 
-bool create_window(int screenWidth, int screenHeight)
+int Ventana::obtenerAncho()
+{
+	return m_ancho;
+}
+
+bool Ventana::create_window(int screenWidth, int screenHeight)
 {
 	//Booleano de inicializacion
 	bool success = true;
@@ -65,7 +75,7 @@ bool create_window(int screenWidth, int screenHeight)
 	return success;
 }
 
-void close_window()
+void Ventana::close_window()
 {
 	//Liberar imagenes cargadas
 	//gSpriteSheetTexture.free();
@@ -109,7 +119,7 @@ bool loadMedia(std::string ruta)
 }
 */
 
-void Refresh(Sprite* spriteActual,int SCREEN_WIDTH,int SCREEN_HEIGHT){
+void Ventana::Refresh(Sprite* spriteActual,int SCREEN_WIDTH,int SCREEN_HEIGHT){
 	//Limpiar pantalla
 	SDL_SetRenderDrawColor( Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear( Renderer );

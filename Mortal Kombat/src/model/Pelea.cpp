@@ -14,6 +14,10 @@ Pelea::Pelea() {
 
 }
 
+/*void Pelea::Tiempo(Tiempo* tiempo_pelea){
+
+}*/
+
 Pelea::~Pelea() {
 	// TODO Auto-generated destructor stub
 }

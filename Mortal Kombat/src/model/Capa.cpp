@@ -15,6 +15,11 @@ Capa::Capa(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPri
 	m_XActual = anchoDeFondo *.5f - ancho * .5f;
 }
 
+int Capa::getX()
+{
+	return m_XActual;
+}
+
 void Capa::Mover(int posX){
 
 	if(posX > m_XActual)
