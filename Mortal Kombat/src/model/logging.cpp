@@ -48,6 +48,7 @@ void log( const string mensaje ) {
 	registrarMensaje("\n");
 }
 
+// Indicar comienzo de un nuevo run del programa.
 void prepararLog() {
 	fstream logfile;
 	logfile.open ( ruta_logfile.c_str() );

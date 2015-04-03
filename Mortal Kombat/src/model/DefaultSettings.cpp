@@ -26,7 +26,7 @@
 #define PERSONAJE_FACTOR_VELOCIDAD 10
 
 
-Tiempo* TiempoPorDefecto(){
+Tiempo* tiempoPorDefecto(){
 	Tiempo* tiempo = new Tiempo( TIEMPO_DEFAULT );
 	return tiempo;
 }
