@@ -9,7 +9,6 @@
 #define SRC_MODEL_PELEA_H_
 #include "Tiempo.h"
 
-namespace Pelea {
 
 class Pelea {
 public:
@@ -18,6 +17,5 @@ public:
 	virtual ~Pelea();
 };
 
-} /* namespace Pelea */
 
 #endif /* SRC_MODEL_PELEA_H_ */

@@ -31,10 +31,11 @@ Tiempo* tiempoPorDefecto(){
 	return tiempo;
 }
 
-Pelea* peleaPorDefecto(){
+Pelea* peleaPorDefault(){
+
 	Pelea* pelea = new Pelea();
 
-	Tiempo* tiempo_pelea = TiempoPorDefault();
+	Tiempo* tiempo_pelea = tiempoPorDefecto();
 	pelea->Tiempo(tiempo_pelea);
 
 

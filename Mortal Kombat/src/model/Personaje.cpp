@@ -34,7 +34,12 @@ int Personaje::Vida(){
 	return vida;
 }
 
+void Personaje::SetScroll(bool valor){
+	estaScrolleando = valor;
+}
+
 void Personaje::_cambiarSprite(Accion* accion){
+
 	if (accion != spriteActual){
 		if(accion->getSiguiente() != 0){
 			spriteActual = accion->getSiguiente();
@@ -54,6 +59,7 @@ void Personaje::CaminarDerecha(){
 	Accion* accion = new Accion(SPRITE_CAMINAR_DERECHA,SPRITE_INICIAL);
 	this->_cambiarSprite(accion);
 	if (estaScrolleando) {
+		estaScrolleando = false;
 		return;
 	}
 	m_xActual += m_velocidad;
@@ -71,14 +77,12 @@ void Personaje::CaminarIzquierda(){
 void Personaje::Saltar(){
 	Accion* accion = new Accion(SPRITE_SALTO,SPRITE_INICIAL);
 	this->_cambiarSprite(accion);
-	if (estaScrolleando) {
-		return;
-	}
 }
 
 void Personaje::SaltarDerecha(){
 	Accion* accion = new Accion(SPRITE_SALTO_DIAGONAL_DERECHA,SPRITE_INICIAL);
 	this->_cambiarSprite(accion);
+	//aca saltar
 	if (estaScrolleando) {
 		return;
 	}
@@ -87,6 +91,7 @@ void Personaje::SaltarDerecha(){
 void Personaje::SaltarIzquierda(){
 	Accion* accion = new Accion(SPRITE_SALTO_DIAGONAL_IZQUIERDA,SPRITE_INICIAL);
 	this->_cambiarSprite(accion);
+	//aca saltar
 	if (estaScrolleando) {
 		return;
 	}

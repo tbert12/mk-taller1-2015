@@ -12,6 +12,7 @@ class Renderizable {
 
 public:
 	virtual void Renderizar();
+	virtual ~Renderizable();
 };
 
 #endif /* SRC_MODEL_RENDERIZABLE_H_ */

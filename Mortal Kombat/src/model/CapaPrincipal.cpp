@@ -17,12 +17,15 @@ CapaPrincipal::CapaPrincipal(int alto, int ancho, int zIndex, int anchoDeFondo, 
 
 void CapaPrincipal::Renderizar()
 {
+
 	if( Scrollear())
 	{
-		//printf("hola");
+		m_Personaje->SetScroll(true);
 	}
-	LTexture* textura = m_Personaje->getSpriteActual()->getSpriteSheetTexture();
-	textura->render(m_Personaje->getX(), m_Personaje->getY());
+	Sprite* spriteActual =m_Personaje->getSpriteActual();
+	SDL_Rect* clip = spriteActual->getFrame();
+	LTexture* textura = spriteActual->getSpriteSheetTexture();
+	textura->render(m_Personaje->getX(), m_Personaje->getY(),clip);
 
 	//m_Texture->render(0,0, Ventana.obtenerClip());
 	/*

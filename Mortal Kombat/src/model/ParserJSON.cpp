@@ -75,7 +75,7 @@ Pelea* ParserJSON::generarPelea() {
 	// Setear nivel de logging del programa.
 	nivel = loglvl;
 
-	Tiempo::Tiempo* tiempo_pelea;
+	Tiempo* tiempo_pelea;
 	// Obtener tiempo limite del combate.
 	float tiempo = root.get( "tiempo", TIEMPO_DEFAULT ).asFloat();
 	if ( tiempo < 0 ) {
@@ -141,7 +141,7 @@ Pelea* ParserJSON::generarPelea() {
 	float ratio_y = ventana_alto_px / ventana_alto;
 
 	// Crear Mundo.
-	Mundo::Mundo* nuevo_mundo = new Mundo(ratio_x, ratio_y);
+	Mundo* nuevo_mundo = new Mundo(ratio_x, ratio_y);
 
 	// Obtener las capas del escenario.
 	// Por defecto se considera ancho 1000.
@@ -165,7 +165,7 @@ Pelea* ParserJSON::generarPelea() {
 		int capa_alto = escenario_alto;
 
 
-		Capa::Capa* nueva_capa = new Capa( capa_alto, capa_ancho, capa_z_index, escenario_ancho, personaje_velocidad );
+		Capa* nueva_capa = new Capa( capa_alto, capa_ancho, capa_z_index, escenario_ancho, personaje_velocidad );
 		// Cargo imagen. Si no existe o no se pudo abrir,
 		// se devuelve false y se usa la imagen por defecto.
 		if ( ! nueva_capa->cargarBackground(background) ) {
@@ -209,25 +209,23 @@ Pelea* ParserJSON::generarPelea() {
 	log ( "Se cargaron los sprites del personaje." );
 	string personaje_nombre = root["personaje"].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
 	log ( "Se cargo el nombre del personaje." );
-	*/
-
 
 
 	/* TOCA VOS ESTO TOMI QUE ME PERDIERON CON LOS SPRITES */
 	// Crear Sprites.
-	Sprite::Sprite* sprites[];
+	Sprite** sprites;
 	// Al agregar un sprite, se devuelve false si
 	// la imagen no existe o no se pudo abrir.
-	Sprite::Sprite* spriteInicial = Sprite(personaje_sprite_inicial);
+	Sprite* spriteInicial = new Sprite(personaje_sprite_inicial);
 	if ( spriteInicial == NULL ) {
-		spriteInicial = Sprite( PERSONAJE_SPRITE_INICIAL_DEFAULT );
+		spriteInicial = new Sprite( PERSONAJE_SPRITE_INICIAL_DEFAULT );
 		// Informar al usuario el cambio de sprite.
 		log ( "ERROR: No se pudo cargar el sprite del personaje. Se carga sprite por defecto." );
 	} else log( "Se cargo correctamente el sprite del personaje." );
 	sprites[0] = spriteInicial;
-	Sprite::Sprite* spriteCaminata = Sprite(personaje_sprite_caminata);
+	Sprite* spriteCaminata = new Sprite(personaje_sprite_caminata);
 	if ( spriteCaminata == NULL ) {
-		spriteCaminata = Sprite( PERSONAJE_SPRITE_CAMINATA_DEFAULT );
+		spriteCaminata = new Sprite( PERSONAJE_SPRITE_CAMINATA_DEFAULT );
 		// Informar al usuario el cambio de sprite.
 		log ( "ERROR: No se pudo cargar el sprite del personaje. Se carga sprite por defecto." );
 	} else log( "Se cargo correctamente el sprite del personaje." );

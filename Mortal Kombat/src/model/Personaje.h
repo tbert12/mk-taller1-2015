@@ -58,7 +58,7 @@ public:
 	void CaminarIzquierda();
 	void SaltarDerecha();
 	void SaltarIzquierda();
-
+	void SetScroll(bool valor);
 
 	virtual ~Personaje();
 };
