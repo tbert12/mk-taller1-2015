@@ -141,13 +141,13 @@ Pelea* ParserJSON::generarPelea() {
 	float ratio_y = ventana_alto_px / ventana_alto;
 
 	// Crear Mundo.
-	Mundo* nuevo_mundo = new Mundo(ratio_x, ratio_y);
+	Mundo* nuevo_mundo = MundoPorDefault(ratio_x, ratio_y);
 
 	// Obtener las capas del escenario.
 	// Por defecto se considera ancho 1000.
 	// Si la imagen no existe, se usa una por defecto.
 	const Json::Value capas = root["capas"];
-	for ( int i=0; i < capas.size(); ++i ) {
+	for ( unsigned int i=0; i < capas.size(); ++i ) {
 		string background = capas[i].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
 		int capa_ancho = capas[i].get( "ancho", CAPA_ANCHO_DEFAULT ).asInt();
 		if ( capa_ancho < 0 ) {
