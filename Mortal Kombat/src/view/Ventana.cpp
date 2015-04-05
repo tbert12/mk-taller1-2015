@@ -134,3 +134,4 @@ void Ventana::Refresh(Sprite* spriteActual,int SCREEN_WIDTH,int SCREEN_HEIGHT){
 	//Actualizar pantalla
 	SDL_RenderPresent( Renderer );
 }
+
