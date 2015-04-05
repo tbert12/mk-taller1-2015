@@ -52,14 +52,20 @@ std::vector<Sprite*> CargaDePrueba(){
 int main( int argc, char* args[] )
 {
 
+	Ventana* ventana = new Ventana(SCREEN_WIDTH,SCREEN_HEIGHT);
+
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
 
 	Ventana ventana = new Ventana(SCREEN_WIDTH,SCREEN_HEIGHT);
 
 	//Iniciar SDL y crear ventana
+<<<<<<< HEAD
 	//if( !ventana->create_window(SCREEN_WIDTH,SCREEN_HEIGHT) ) {
 	if(!ventana.create_window(SCREEN_WIDTH,SCREEN_HEIGHT)){
+=======
+	if( !ventana->create_window() ) {
+>>>>>>> 678a75332f497bede532db1bd680ff416f19d19b
 		printf( "Error al inicializar!\n" );
 	} else {
 
@@ -97,8 +103,12 @@ int main( int argc, char* args[] )
 
 			printf("%i\n",frame);
 
+<<<<<<< HEAD
 			ventana.Refresh(luchador.getSpriteActual(),SCREEN_WIDTH,SCREEN_HEIGHT);
 			ventana.Refresh(luchador.getSpriteActual(),SCREEN_WIDTH,SCREEN_HEIGHT);
+=======
+			ventana->Refresh(luchador.getSpriteActual());
+>>>>>>> 678a75332f497bede532db1bd680ff416f19d19b
 
 			//FrameGuia
 			++frame;
@@ -109,7 +119,11 @@ int main( int argc, char* args[] )
 	}
 
 	//Free resources and close SDL
+<<<<<<< HEAD
 	ventana.close_window();
+=======
+	ventana->close_window();
+>>>>>>> 678a75332f497bede532db1bd680ff416f19d19b
 
 	return 0;
 }

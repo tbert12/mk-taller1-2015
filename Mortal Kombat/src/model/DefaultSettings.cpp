@@ -31,17 +31,55 @@ Tiempo* tiempoPorDefecto(){
 	return tiempo;
 }
 
+Mundo* MundoPorDefault(float ratio_x = NULL,float ratio_y = NULL){
+
+	if(ratio_x == NULL){
+		int ventana_ancho = VENTANA_ANCHO_DEFAULT;
+		int ventana_ancho_px = VENTANA_ANCHO_PX_DEFAULT;
+		float ratio_x = ventana_ancho_px / ventana_ancho;
+	}
+	if (ratio_y == NULL){
+		int ventana_alto = ESCENARIO_ALTO_DEFAULT;
+		int ventana_alto_px = VENTANA_ALTO_PX_DEFAULT;
+		float ratio_y = ventana_alto_px / ventana_alto;
+	}
+	Mundo* mundo = new Mundo(ratio_x,ratio_y);
+	return mundo;
+}
+void CapaPorDefault(Mundo* mundo,int cant_capas){
+	for(int i =0;i<=cant_capas;i++){
+		Capa* capa = new Capa( ESCENARIO_ALTO_DEFAULT, CAPA_ANCHO_DEFAULT, CAPA_Z_INDEX_DEFAULT + i, ESCENARIO_ANCHO_DEFAULT, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD );
+		return capa;
+		capa->cargarBackground(BACKGROUND_DEFAULT);
+		mundo->agregarCapa(capa);
+	}
+}
+
 Pelea* peleaPorDefault(){
 
 	Pelea* pelea = new Pelea();
 
 	Tiempo* tiempo_pelea = tiempoPorDefecto();
 	pelea->Tiempo(tiempo_pelea);
+	Mundo* mundo = MundoPorDefault();
+	int Cantidad_de_capas = 2;
+	CapaPorDefault(mundo,Cantidad_de_capas);
 
+	//Crear sprites
+	Personaje::Personaje* personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, sprites, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD);
 
+	// Crear ventana (capa-camara).
+	Capa::Capa* camara = new Capa( ESCENARIO_ALTO_DEFAULT, VENTANA_ANCHO_DEFAULT, PERSONAJE_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD );
 
+	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
+	CapaPrincipal::CapaPrincipal* capa_principal = new CapaPrincipal( ESCENARIO_ALTO_DEFAULT, ESCENARIO_ANCHO_DEFAULT, PERSONAJE_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD, personaje );
+	capa_principal->camara( camara );
+
+	// Agrego capa principal al mundo.
+	nuevo_mundo->capaPrincipal( capa_principal );
+
+	pelea->mundo(mundo);
 
 	return pelea;
 }
-
 ;
