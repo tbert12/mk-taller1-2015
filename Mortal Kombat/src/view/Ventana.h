@@ -20,13 +20,10 @@ public:
 	int obtenerAncho();
 
 	//Starts up SDL and creates window
-	bool create_window(int screenWidth, int screenHeight);
-
-	//Loads media
-	//bool loadMedia(std::string ruta);
+	bool create_window();
 
 	//Refrescar el mundo (la pantalla, para cada ciclo)
-	void Refresh(Sprite* spriteActual,int SCREEN_WIDTH,int SCREEN_HEIGHT);
+	void Refresh(Sprite* spriteActual);
 
 	//Frees media and shuts down SDL
 	void close_window();

@@ -50,11 +50,13 @@ std::vector<Sprite*> CargaDePrueba(){
 int main( int argc, char* args[] )
 {
 
+	Ventana* ventana = new Ventana(SCREEN_WIDTH,SCREEN_HEIGHT);
+
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
 
 	//Iniciar SDL y crear ventana
-	if( !create_window(SCREEN_WIDTH,SCREEN_HEIGHT) ) {
+	if( !ventana->create_window() ) {
 		printf( "Error al inicializar!\n" );
 	} else {
 
@@ -86,7 +88,7 @@ int main( int argc, char* args[] )
 
 			printf("%i\n",frame);
 
-			Refresh(luchador.getSpriteActual(),SCREEN_WIDTH,SCREEN_HEIGHT);
+			ventana->Refresh(luchador.getSpriteActual());
 
 			//FrameGuia
 			++frame;
@@ -97,7 +99,7 @@ int main( int argc, char* args[] )
 	}
 
 	//Free resources and close SDL
-	close_window();
+	ventana->close_window();
 
 	return 0;
 }
