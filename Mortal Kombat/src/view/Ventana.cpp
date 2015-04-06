@@ -6,7 +6,7 @@ SDL_Window* Window = NULL;
 //The window renderer
 SDL_Renderer* Renderer = NULL;
 
-SDL_Renderer* getRenderer(){
+SDL_Renderer* Ventana::getRenderer(){
 	return Renderer;
 }
 

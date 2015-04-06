@@ -42,6 +42,7 @@ private:
 	void _cambiarSprite(int accion);
 	void _parabola();
 	void _actualizarY();
+	int _yDeSalto(int currentY, int currentT);
 
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, float velocidad);

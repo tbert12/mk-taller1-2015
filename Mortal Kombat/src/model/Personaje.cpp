@@ -26,7 +26,9 @@ std::vector<Sprite*> Personaje::getSprites(){
 }
 
 Sprite* Personaje::getSpriteActual(){
-	return spriteActual;
+	Sprite* spriteReturn = spriteActual;
+	spriteActual->Advance();
+	return spriteReturn;
 }
 
 int Personaje::Vida(){
@@ -38,26 +40,35 @@ void Personaje::SetScroll(bool valor){
 }
 
 void Personaje::_cambiarSprite(int accion){
+	printf("Accion: %d\n",accion);
 	//Con la logica del salto tengo que mantener Reseteando el SPRITE_SALTO asi no se pasa
-	if(_estaSaltando > 0){
-		_actualizarY();
-		return;
-	}
+	//if(_estaSaltando > 0){
+	//	printf("_estaSaltando > 0\n");
+	//	_actualizarY();
+	//	return;
+	//}
 	if(_estaSaltando == 0){
 		_actualizarY();
 	}
 	if (sprites[accion] != spriteActual){
+		if (!spriteActual->puedeAvanzar()){
+			spriteActual = spriteActual->getSpriteSiguiente();
+			spriteActual->Reset();
+		}
+		printf("accion != spriteActual\n");
 		spriteActual = sprites[accion];
 		spriteActual->Reset();
 	} else if (!spriteActual->puedeAvanzar()){
+		printf("No puede Avanzar\n");
 		spriteActual = spriteActual->getSpriteSiguiente();
 		spriteActual->Reset();
 	}
 }
 
 void Personaje::Inicial(){
+	printf("Inicial()\n");
 	if (spriteActual == sprites[SPRITE_SALTO]){
-		//Capas que tenga que hacer un booleano para saber si esta saltando
+		printf("Esta Saltando\n");
 		this->_cambiarSprite(SPRITE_SALTO_CAIDA);
 	} else {
 		this->_cambiarSprite(SPRITE_INICIAL);
@@ -81,14 +92,9 @@ void Personaje::CaminarIzquierda(){
 	m_xActual -= m_velocidad;
 }
 
-int yDeSalto(int currentY, int currentT)
-{
-	return -0.1 * currentT * (currentT-100);
-}
-
 void Personaje::_actualizarY(){
 	if(m_yActual > 0){
-		m_yActual = yDeSalto(m_yActual,_tDeSalto);
+		m_yActual = _yDeSalto(m_yActual,_tDeSalto);
 		_tDeSalto++;
 	}
 	if(_tDeSalto > 50 and m_yActual < 20 and m_yActual > 3){
@@ -100,6 +106,10 @@ void Personaje::_actualizarY(){
 	}
 }
 
+int Personaje::_yDeSalto(int currentY, int currentT)
+{
+	return -0.1 * currentT * (currentT-100);
+}
 
 void Personaje::Saltar(){
 	this->_cambiarSprite(SPRITE_SALTO_ANTES);
