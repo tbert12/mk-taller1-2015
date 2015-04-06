@@ -16,7 +16,7 @@
 #include "Personaje.h"
 #include "../view/Sprite.h"
 #include "../view/Frame.h"
-#include "DefaultSettings.cpp"
+#include "DefaultSettings.h"
 #include "Mundo.h"
 
 using namespace std;

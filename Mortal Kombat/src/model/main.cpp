@@ -12,7 +12,7 @@
 #include <unistd.h> //usleep
 #include <vector>
 #include "logging.h"
-#include "DefaultSettings.cpp"
+#include "DefaultSettings.h"
 #include "Mundo.h"
 
 

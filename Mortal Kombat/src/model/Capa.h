@@ -12,7 +12,7 @@
 #include <list>
 #include <string>
 
-class Capa : public Renderizable{
+class Capa{
 public:
 	int getZIndex();
 	void Actualizar();
