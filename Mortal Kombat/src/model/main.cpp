@@ -52,20 +52,13 @@ std::vector<Sprite*> CargaDePrueba(){
 int main( int argc, char* args[] )
 {
 
-	Ventana* ventana = new Ventana(SCREEN_WIDTH,SCREEN_HEIGHT);
-
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
 
-	Ventana ventana = new Ventana(SCREEN_WIDTH,SCREEN_HEIGHT);
+	Ventana* ventana = new Ventana(SCREEN_WIDTH,SCREEN_HEIGHT);
 
 	//Iniciar SDL y crear ventana
-<<<<<<< HEAD
-	//if( !ventana->create_window(SCREEN_WIDTH,SCREEN_HEIGHT) ) {
-	if(!ventana.create_window(SCREEN_WIDTH,SCREEN_HEIGHT)){
-=======
-	if( !ventana->create_window() ) {
->>>>>>> 678a75332f497bede532db1bd680ff416f19d19b
+	if(!ventana->create_window()){
 		printf( "Error al inicializar!\n" );
 	} else {
 
@@ -75,8 +68,8 @@ int main( int argc, char* args[] )
 		std::string rutaFondoAncho = "data/Fondos/largo.png";
 		std::string rutaFondo2 = "data/Fondos/atras.png";
 
-		CapaFondo capaFondo = CapaFondo(SCREEN_HEIGHT,SCREEN_WIDTH, 0, 1068, 10,rutaFondoAncho,ventana.getRenderer(),ventana);
-		CapaFondo capaAtras = CapaFondo(SCREEN_HEIGHT,SCREEN_WIDTH, 1, 1068, 10,rutaFondo2,ventana.getRenderer(),ventana);
+		CapaFondo capaFondo = CapaFondo(SCREEN_HEIGHT,SCREEN_WIDTH, 0, 1068, 10,rutaFondoAncho,ventana->getRenderer(),ventana);
+		CapaFondo capaAtras = CapaFondo(SCREEN_HEIGHT,SCREEN_WIDTH, 1, 1068, 10,rutaFondo2,ventana->getRenderer(),ventana);
 
 		//Creo el Controlador
 		KeyboardControl control = KeyboardControl(&luchador);
@@ -103,12 +96,8 @@ int main( int argc, char* args[] )
 
 			printf("%i\n",frame);
 
-<<<<<<< HEAD
-			ventana.Refresh(luchador.getSpriteActual(),SCREEN_WIDTH,SCREEN_HEIGHT);
-			ventana.Refresh(luchador.getSpriteActual(),SCREEN_WIDTH,SCREEN_HEIGHT);
-=======
 			ventana->Refresh(luchador.getSpriteActual());
->>>>>>> 678a75332f497bede532db1bd680ff416f19d19b
+			ventana->Refresh(luchador.getSpriteActual());
 
 			//FrameGuia
 			++frame;
@@ -119,11 +108,7 @@ int main( int argc, char* args[] )
 	}
 
 	//Free resources and close SDL
-<<<<<<< HEAD
-	ventana.close_window();
-=======
 	ventana->close_window();
->>>>>>> 678a75332f497bede532db1bd680ff416f19d19b
 
 	return 0;
 }
