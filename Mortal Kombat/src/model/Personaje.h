@@ -33,11 +33,15 @@ private:
 	int vida;
 	int m_xActual;
 	int m_yActual;
+	short _estaSaltando;
+	int _tDeSalto;
 	Sprite* spriteActual;
 	std::vector<Sprite*> sprites;
 	float m_velocidad;
 
 	void _cambiarSprite(int accion);
+	void _parabola();
+	void _actualizarY();
 
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, float velocidad);
