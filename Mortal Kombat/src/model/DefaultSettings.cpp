@@ -26,12 +26,12 @@
 #define PERSONAJE_FACTOR_VELOCIDAD 10
 
 
-Tiempo* tiempoPorDefecto(){
+Tiempo* tiempoPorDefault(){
 	Tiempo* tiempo = new Tiempo( TIEMPO_DEFAULT );
 	return tiempo;
 }
 
-Mundo* MundoPorDefault(float ratio_x = NULL,float ratio_y = NULL){
+Mundo* mundoPorDefault(float ratio_x = NULL,float ratio_y = NULL){
 
 	if(ratio_x == NULL){
 		int ventana_ancho = VENTANA_ANCHO_DEFAULT;
@@ -46,7 +46,7 @@ Mundo* MundoPorDefault(float ratio_x = NULL,float ratio_y = NULL){
 	Mundo* mundo = new Mundo(ratio_x,ratio_y);
 	return mundo;
 }
-void CapaPorDefault(Mundo* mundo,int cant_capas){
+void capaPorDefault(Mundo* mundo,int cant_capas){
 	for(int i =0;i<=cant_capas;i++){
 		Capa* capa = new Capa( ESCENARIO_ALTO_DEFAULT, CAPA_ANCHO_DEFAULT, CAPA_Z_INDEX_DEFAULT + i, ESCENARIO_ANCHO_DEFAULT, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD );
 		return capa;
@@ -59,11 +59,11 @@ Pelea* peleaPorDefault(){
 
 	Pelea* pelea = new Pelea();
 
-	Tiempo* tiempo_pelea = tiempoPorDefecto();
+	Tiempo* tiempo_pelea = tiempoPorDefault();
 	pelea->Tiempo(tiempo_pelea);
-	Mundo* mundo = MundoPorDefault();
+	Mundo* mundo = mundoPorDefault();
 	int Cantidad_de_capas = 2;
-	CapaPorDefault(mundo,Cantidad_de_capas);
+	capaPorDefault(mundo,Cantidad_de_capas);
 
 	//Crear sprites
 	Personaje::Personaje* personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, sprites, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD);

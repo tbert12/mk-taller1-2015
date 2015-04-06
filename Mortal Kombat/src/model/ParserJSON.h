@@ -29,7 +29,6 @@ public:
 	 ParserJSON(string ruta_archivo);
 
 	 Pelea* generarPelea();
-	 Pelea* peleaPorDefecto();
 
 };
 
