@@ -81,6 +81,11 @@ void Personaje::CaminarIzquierda(){
 	m_xActual -= m_velocidad;
 }
 
+int yDeSalto(int currentY, int currentT)
+{
+	return -0.1 * currentT * (currentT-100);
+}
+
 void Personaje::_actualizarY(){
 	if(m_yActual > 0){
 		m_yActual = yDeSalto(m_yActual,_tDeSalto);
@@ -95,10 +100,6 @@ void Personaje::_actualizarY(){
 	}
 }
 
-int yDeSalto(int currentY, int currentT)
-{
-	return -0.1 * currentT * (currentT-100);
-}
 
 void Personaje::Saltar(){
 	this->_cambiarSprite(SPRITE_SALTO_ANTES);
