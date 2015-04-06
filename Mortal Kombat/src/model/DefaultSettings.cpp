@@ -61,31 +61,4 @@ Mundo* CrearMundoDefault(){
 
 	return mundo;
 }
-
-<<<<<<< HEAD
-	Tiempo* tiempo_pelea = tiempoPorDefecto();
-	pelea->Tiempo(tiempo_pelea);
-	Mundo* mundo = MundoPorDefault();
-	int Cantidad_de_capas = 2;
-	CapaPorDefault(mundo,Cantidad_de_capas);
-
-	//Crear sprites
-	Personaje* personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, sprites, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD);
-
-	// Crear ventana (capa-camara).
-	Capa* camara = new Capa( ESCENARIO_ALTO_DEFAULT, VENTANA_ANCHO_DEFAULT, PERSONAJE_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD );
-
-	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
-	CapaPrincipal* capa_principal = new CapaPrincipal( ESCENARIO_ALTO_DEFAULT, ESCENARIO_ANCHO_DEFAULT, PERSONAJE_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD, personaje );
-	capa_principal->camara( camara );
-
-	// Agrego capa principal al mundo.
-	nuevo_mundo->capaPrincipal( capa_principal );
-
-	//pelea->mundo(mundo);
-
-	return pelea;
-}
-=======
->>>>>>> 94cbece54992112c505150734949c81e65243481
 ;
