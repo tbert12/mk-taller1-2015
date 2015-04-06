@@ -8,7 +8,10 @@
 #include <SDL2/SDL_image.h>
 #include "logging.h"
 #include "Pelea.h"
-//#include "Mundo.h"
+<<<<<<< HEAD
+=======
+#include "Mundo.h"
+>>>>>>> db67fbc37e75e4e833117e40d72912bb9e139c80
 #include "Tiempo.h"
 #include "../view/LTexture.h"
 #include "Capa.h"
@@ -17,6 +20,7 @@
 #include "../view/Sprite.h"
 #include "../view/Frame.h"
 #include "DefaultSettings.cpp"
+#include "Mundo.h"
 
 using namespace std;
 
@@ -27,9 +31,12 @@ private:
 
 public:
 	 ParserJSON(string ruta_archivo);
+<<<<<<< HEAD
+	 CrearMundo();
+=======
 
 	 Pelea* generarPelea();
-	 Pelea* peleaPorDefecto();
+>>>>>>> db67fbc37e75e4e833117e40d72912bb9e139c80
 
 };
 

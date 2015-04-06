@@ -1,4 +1,3 @@
-#include "Pelea.h"
 #include "Tiempo.h"
 #include "../view/LTexture.h"
 #include "Capa.h"
@@ -25,40 +24,45 @@
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
 #define PERSONAJE_FACTOR_VELOCIDAD 10
 
+std::vector<Sprite*> GenerarSpritesDefault(SDL_Renderer* renderer){
+	std::vector<Frame*> framesInitial(9);
+	std::vector<Frame*> framesCaminar(9);
+	int wInitial = 72,wCaminar = 68;
+	for (int i=0;i<9;i++){
+		framesInitial[i] = new Frame(wInitial*i,0,133,wInitial);
+		framesCaminar[i] = new Frame(wCaminar*i,0,133,wCaminar);
+	}
+	std::vector<Frame*> framesCaminarAtras (framesCaminar);
+	std::reverse(framesCaminarAtras.begin(),framesCaminarAtras.end());
 
-Tiempo* tiempoPorDefecto(){
-	Tiempo* tiempo = new Tiempo( TIEMPO_DEFAULT );
-	return tiempo;
+
+	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
+	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
+	std::string rutaCaminarAtras = "data/players/subzero/sprites/walk.png";
+	Sprite* Initial = new Sprite(rutaInitial,framesInitial,renderer);
+	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,renderer);
+	Sprite* CaminarAtras = new Sprite(rutaCaminar,framesCaminarAtras,renderer);
+	std::vector<Sprite*> sprites(3);
+	sprites[0] = Initial;
+	sprites[1] = Caminar;
+	sprites[2] = CaminarAtras;
+	return sprites;
 }
 
-Mundo* MundoPorDefault(float ratio_x = NULL,float ratio_y = NULL){
+Mundo* CrearMundoDefault(){
+	Mundo* mundo = new Mundo();
+	Ventana* ventana = new Ventana(VENTANA_ANCHO_DEFAULT,ESCENARIO_ALTO_DEFAULT);
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana->getRenderer()), PERSONAJE_FACTOR_VELOCIDAD);
+	mundo->ventana = ventana;
+	mundo->escenario = NULL;
+	mundo->tiempo = NULL;
+	mundo->personajes[0] = personaje_default;
+	mundo->capas[0] = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT, VENTANA_ANCHO_DEFAULT, PERSONAJE_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, PERSONAJE_FACTOR_VELOCIDAD, personaje_default);
 
-	if(ratio_x == NULL){
-		int ventana_ancho = VENTANA_ANCHO_DEFAULT;
-		int ventana_ancho_px = VENTANA_ANCHO_PX_DEFAULT;
-		float ratio_x = ventana_ancho_px / ventana_ancho;
-	}
-	if (ratio_y == NULL){
-		int ventana_alto = ESCENARIO_ALTO_DEFAULT;
-		int ventana_alto_px = VENTANA_ALTO_PX_DEFAULT;
-		float ratio_y = ventana_alto_px / ventana_alto;
-	}
-	Mundo* mundo = new Mundo(ratio_x,ratio_y);
 	return mundo;
 }
-void CapaPorDefault(Mundo* mundo,int cant_capas){
-	for(int i =0;i<=cant_capas;i++){
-		Capa* capa = new Capa( ESCENARIO_ALTO_DEFAULT, CAPA_ANCHO_DEFAULT, CAPA_Z_INDEX_DEFAULT + i, ESCENARIO_ANCHO_DEFAULT, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD );
-		return capa;
-		capa->cargarBackground(BACKGROUND_DEFAULT);
-		mundo->agregarCapa(capa);
-	}
-}
 
-Pelea* peleaPorDefault(){
-
-	Pelea* pelea = new Pelea();
-
+<<<<<<< HEAD
 	Tiempo* tiempo_pelea = tiempoPorDefecto();
 	pelea->Tiempo(tiempo_pelea);
 	Mundo* mundo = MundoPorDefault();
@@ -82,4 +86,6 @@ Pelea* peleaPorDefault(){
 
 	return pelea;
 }
+=======
+>>>>>>> 94cbece54992112c505150734949c81e65243481
 ;
