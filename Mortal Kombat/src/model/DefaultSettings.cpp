@@ -36,7 +36,6 @@ std::vector<Sprite*> GenerarSpritesDefault(SDL_Renderer* renderer){
 	std::reverse(framesCaminarAtras.begin(),framesCaminarAtras.end());
 
 
-<<<<<<< HEAD
 	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
 	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
 	std::string rutaCaminarAtras = "data/players/subzero/sprites/walk.png";
@@ -59,55 +58,8 @@ Mundo* CrearMundoDefault(){
 	mundo->tiempo = NULL;
 	mundo->personajes[0] = personaje_default;
 	mundo->capas[0] = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT, VENTANA_ANCHO_DEFAULT, PERSONAJE_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, PERSONAJE_FACTOR_VELOCIDAD, personaje_default);
-=======
-Tiempo* tiempoPorDefault(){
-	Tiempo* tiempo = new Tiempo( TIEMPO_DEFAULT );
-	return tiempo;
-}
-
-Mundo* mundoPorDefault(float ratio_x = NULL,float ratio_y = NULL){
->>>>>>> db67fbc37e75e4e833117e40d72912bb9e139c80
 
 	return mundo;
 }
-<<<<<<< HEAD
 
-=======
-void capaPorDefault(Mundo* mundo,int cant_capas){
-	for(int i =0;i<=cant_capas;i++){
-		Capa* capa = new Capa( ESCENARIO_ALTO_DEFAULT, CAPA_ANCHO_DEFAULT, CAPA_Z_INDEX_DEFAULT + i, ESCENARIO_ANCHO_DEFAULT, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD );
-		return capa;
-		capa->cargarBackground(BACKGROUND_DEFAULT);
-		mundo->agregarCapa(capa);
-	}
-}
-
-Pelea* peleaPorDefault(){
-
-	Pelea* pelea = new Pelea();
-
-	Tiempo* tiempo_pelea = tiempoPorDefault();
-	pelea->Tiempo(tiempo_pelea);
-	Mundo* mundo = mundoPorDefault();
-	int Cantidad_de_capas = 2;
-	capaPorDefault(mundo,Cantidad_de_capas);
-
-	//Crear sprites
-	Personaje::Personaje* personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, sprites, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD);
-
-	// Crear ventana (capa-camara).
-	Capa::Capa* camara = new Capa( ESCENARIO_ALTO_DEFAULT, VENTANA_ANCHO_DEFAULT, PERSONAJE_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD );
-
-	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
-	CapaPrincipal::CapaPrincipal* capa_principal = new CapaPrincipal( ESCENARIO_ALTO_DEFAULT, ESCENARIO_ANCHO_DEFAULT, PERSONAJE_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, ESCENARIO_ANCHO_DEFAULT/PERSONAJE_FACTOR_VELOCIDAD, personaje );
-	capa_principal->camara( camara );
-
-	// Agrego capa principal al mundo.
-	nuevo_mundo->capaPrincipal( capa_principal );
-
-	pelea->mundo(mundo);
-
-	return pelea;
-}
 ;
->>>>>>> db67fbc37e75e4e833117e40d72912bb9e139c80
