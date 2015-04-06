@@ -16,7 +16,8 @@
 #include "../view/Sprite.h"
 #include "../view/Frame.h"
 #include "Escenario.h"
-#include "Ventana.h"
+#include "../view/Ventana.h"
+#include <vector>
 
 
 class Mundo {
@@ -26,8 +27,8 @@ public:
 
 	float ratio_x;
 	float ratio_y;
-	Capa** capas;
-	Personaje** personajes;
+	std::vector<Capa*> capas;
+	std::vector<Personaje*> personajes;
 	Tiempo* tiempo;
 	Escenario* escenario;
 	Ventana* ventana; //tiene el renderer

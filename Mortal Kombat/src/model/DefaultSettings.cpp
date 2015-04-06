@@ -5,6 +5,11 @@
 #include "Personaje.h"
 #include "../view/Sprite.h"
 #include "../view/Frame.h"
+#include "Mundo.h"
+#include "../view/Sprite.h"
+#include <vector>
+#include <algorithm>
+#include <string>
 
 #define TIEMPO_DEFAULT 3.00
 #define VENTANA_ANCHO_PX_DEFAULT 640
@@ -55,10 +60,9 @@ Mundo* CrearMundoDefault(){
 	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana->getRenderer()), PERSONAJE_FACTOR_VELOCIDAD);
 	mundo->ventana = ventana;
 	mundo->escenario = NULL;
-	mundo->tiempo = NULL;
+	mundo->tiempo = new Tiempo(TIEMPO_DEFAULT);
 	mundo->personajes[0] = personaje_default;
 	mundo->capas[0] = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT, VENTANA_ANCHO_DEFAULT, PERSONAJE_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, PERSONAJE_FACTOR_VELOCIDAD, personaje_default);
 
 	return mundo;
 }
-;

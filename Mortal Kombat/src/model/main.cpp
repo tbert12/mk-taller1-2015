@@ -12,6 +12,9 @@
 #include <unistd.h> //usleep
 #include <vector>
 #include "logging.h"
+#include "DefaultSettings.cpp"
+#include "Mundo.h"
+
 
 #include <algorithm>    // std::reverse (Tranfuguiada para que camine para atras)
 
@@ -23,6 +26,7 @@
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
+/*
 std::vector<Sprite*> CargaDePrueba(){
 	std::vector<Frame*> framesInitial(9);
 	std::vector<Frame*> framesCaminar(9);
@@ -47,7 +51,7 @@ std::vector<Sprite*> CargaDePrueba(){
 	sprites[2] = CaminarAtras;
 	return sprites;
 }
-
+*/
 
 int main( int argc, char* args[] )
 {
@@ -55,7 +59,9 @@ int main( int argc, char* args[] )
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
 
-	Ventana* ventana = new Ventana(SCREEN_WIDTH,SCREEN_HEIGHT);
+	Mundo* mundo = CrearMundoDefault();
+
+	Ventana* ventana = mundo->ventana;
 
 	//Iniciar SDL y crear ventana
 	if(!ventana->create_window()){
@@ -63,16 +69,17 @@ int main( int argc, char* args[] )
 	} else {
 
 		//Creo el Personaje
-		Personaje luchador = Personaje("Sub Zero",CargaDePrueba());
+		//Personaje luchador = Personaje("Sub Zero",CargaDePrueba());
+		Personaje* luchador = mundo->personajes[0];
 
-		std::string rutaFondoAncho = "data/Fondos/largo.png";
-		std::string rutaFondo2 = "data/Fondos/atras.png";
+		//std::string rutaFondoAncho = "data/Fondos/largo.png";
+		//std::strbackgroundsing rutaFondo2 = "data/Fondos/atras.png";
 
-		CapaFondo capaFondo = CapaFondo(SCREEN_HEIGHT,SCREEN_WIDTH, 0, 1068, 10,rutaFondoAncho,ventana->getRenderer(),ventana);
-		CapaFondo capaAtras = CapaFondo(SCREEN_HEIGHT,SCREEN_WIDTH, 1, 1068, 10,rutaFondo2,ventana->getRenderer(),ventana);
+		//CapaFondo capaFondo = CapaFondo(SCREEN_HEIGHT,SCREEN_WIDTH, 0, 1068, 10,rutaFondoAncho,ventana->getRenderer(),ventana);
+		//CapaFondo capaAtras = CapaFondo(SCREEN_HEIGHT,SCREEN_WIDTH, 1, 1068, 10,rutaFondo2,ventana->getRenderer(),ventana);
 
 		//Creo el Controlador
-		KeyboardControl control = KeyboardControl(&luchador);
+		KeyboardControl* control_jugador_1 = new KeyboardControl(luchador);
 
 		//flag para el Loop Principal
 		bool quit = false;
@@ -91,13 +98,13 @@ int main( int argc, char* args[] )
 				if( e.type == SDL_QUIT ){
 					quit = true;
 				}
-				control.KeyPressed(e);
+				control_jugador_1->KeyPressed(e);
 			}
 
 			printf("%i\n",frame);
 
-			ventana->Refresh(luchador.getSpriteActual());
-			ventana->Refresh(luchador.getSpriteActual());
+			ventana->Refresh(luchador->getSpriteActual());
+			ventana->Refresh(luchador->getSpriteActual());
 
 			//FrameGuia
 			++frame;
