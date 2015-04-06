@@ -1,15 +1,14 @@
-#include "Tiempo.h"
-#include "../view/LTexture.h"
-#include "Capa.h"
-#include "CapaPrincipal.h"
-#include "Personaje.h"
-#include "../view/Sprite.h"
-#include "../view/Frame.h"
+//#include "Tiempo.h"
+//#include "../view/LTexture.h"
+//#include "Capa.h"
+//#include "CapaPrincipal.h"
+//#include "Personaje.h"
+//#include "../view/Sprite.h"
+//#include "../view/Frame.h"
 #include "Mundo.h"
-#include "../view/Sprite.h"
-#include <vector>
+//#include <vector>
 #include <algorithm>
-#include <string>
+//#include <string>
 
 #define TIEMPO_DEFAULT 3.00
 #define VENTANA_ANCHO_PX_DEFAULT 640
