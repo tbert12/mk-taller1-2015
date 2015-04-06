@@ -44,7 +44,7 @@ Mundo* ParserJSON::generarPelea() {
 
 	// Si no se pudo abrir archivo, generar pelea por defecto.
 	if ( ! archivoConfig ) {
-		return this->peleaPorDefecto();
+		return peleaPorDefault();
 		// Informar al usuario la falla y la resolucion tomada.
 		log( "ERROR: No se pudo abrir el archivo de configuracion JSON, se genera una partida por defecto." );
 	}
@@ -55,7 +55,7 @@ Mundo* ParserJSON::generarPelea() {
 	if ( ! exito ) {
 	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
 	    log( "ERROR: No se pudo interpretar el JSON, se genera una partida por defecto." + reader.getFormattedErrorMessages() );
-	    return this->peleaPorDefecto();
+	    return peleaPorDefault();
 	} else log( "El archivo JSON es valido." );
 
 	// Cerrar archivo.
@@ -79,7 +79,7 @@ Mundo* ParserJSON::generarPelea() {
 	// Obtener tiempo limite del combate.
 	float tiempo = root.get( "tiempo", TIEMPO_DEFAULT ).asFloat();
 	if ( tiempo < 0 ) {
-		tiempo_pelea = tiempoPorDefecto();
+		tiempo_pelea = tiempoPorDefault();
 		// Informar al usuario el cambio de tiempo de la ronda.
 		log ( "WARNING: El tiempo no puede ser negativo. Se setea automaticamente en 3 minutos." );
 	}
