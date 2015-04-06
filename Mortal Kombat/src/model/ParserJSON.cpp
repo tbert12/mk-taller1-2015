@@ -26,12 +26,12 @@ ParserJSON::ParserJSON(string ruta_archivo) {
 	m_ruta_archivo = ruta_archivo;
 }
 
-Pelea* ParserJSON::peleaPorDefecto(){
+Mundo* ParserJSON::peleaPorDefecto(){
 	return new Pelea();
 }
 
 // Devuelve un root que se usara para generar la partida.
-Pelea* ParserJSON::generarPelea() {
+Mundo* ParserJSON::generarPelea() {
 	Json::Value root;
 	Json::Reader reader;
 
