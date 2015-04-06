@@ -26,7 +26,7 @@ class Sprite: public Renderizable{
 		Sprite* spriteSiguiente;
 
 	public:
-		Sprite(std::string ruta,std::vector<Frame*> frames);
+		Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer);
 		~Sprite();
 
 		virtual void Renderizar();

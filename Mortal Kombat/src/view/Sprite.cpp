@@ -6,10 +6,9 @@
  */
 
 #include "Sprite.h"
+#include "LTexture.h"
 
-Sprite::Sprite(std::string ruta,std::vector<Frame*> frames){
-	// NO SE LE PUEDE SACAR EL VECTOR DE FRAMES Y EL SDL_RENDERER AL CONSTRUCTOR?
-	// SINO SE COMPLICA MUCHISIMO PARA LLAMARLO DESDE EL PARSER.
+Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer){
 	frameActual = 0;
 	spriteSiguiente = NULL;
 	SpriteSheetTexture = new LTexture(Renderer);
@@ -33,9 +32,6 @@ Sprite::~Sprite(){
 	//Los Frames se deben liberar apenas se carga
 	//Elimino Sprite
 	//SpriteSheetTexture.free();
-}
-
-void Sprite::setRender(SDL_Renderer* Renderer){
 }
 
 SDL_Rect* Sprite::getFrame(){
