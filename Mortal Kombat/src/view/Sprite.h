@@ -15,20 +15,28 @@
 
 #include "LTexture.h"
 #include "Frame.h"
+#include "../model/Renderizable.h"
 
-class Sprite{
+class Sprite: public Renderizable{
 	private:
 		int frameActual;
 		int cantidadFrames;
 		SDL_Rect* spriteFrames;
 		LTexture* SpriteSheetTexture;
+		Sprite* spriteSiguiente;
+
 	public:
-		Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer);
+		Sprite(std::string ruta,std::vector<Frame*> frames);
 		~Sprite();
 
+		virtual void Renderizar();
+
 		void Reset();
-		SDL_Rect* getFrame();
+		void setRender(SDL_Renderer* Renderer);
 		bool Advance();
+		bool puedeAvanzar();
+		Sprite* getSpriteSiguiente();
+		SDL_Rect* getFrame();
 		LTexture* getSpriteSheetTexture();
 };
 
