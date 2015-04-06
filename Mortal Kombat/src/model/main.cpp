@@ -47,6 +47,7 @@ std::vector<Sprite*> CargaDePrueba(){
 	return sprites;
 }
 
+
 int main( int argc, char* args[] )
 {
 

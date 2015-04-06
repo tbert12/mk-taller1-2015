@@ -7,7 +7,6 @@
 
 #include "Pelea.h"
 
-namespace Pelea {
 
 Pelea::Pelea() {
 	// TODO Auto-generated constructor stub
@@ -21,5 +20,3 @@ Pelea::Pelea() {
 Pelea::~Pelea() {
 	// TODO Auto-generated destructor stub
 }
-
-} /* namespace Pelea */
