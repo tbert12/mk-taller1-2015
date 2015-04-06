@@ -13,17 +13,18 @@ const int SPRITE_INICIAL = 0;
 const int SPRITE_CAMINAR_DERECHA = 1;
 const int SPRITE_CAMINAR_IZQUIERDA = 2;
 const int SPRITE_SALTO = 3;
-const int SPRITE_SALTO_DIAGONAL_DERECHA = 4;
+const int SPRITE_SALTO_ANTES = 4;
+const int SPRITE_SALTO_CAIDA = 5;
+const int SPRITE_SALTO_DIAGONAL_DERECHA = 6;
 const int SPRITE_SALTO_DIAGONAL_IZQUIERDA = 5;
-const int SPRITE_AGACHARSE = 6;
-const int SPRITE_PUNCHING = 7;
-const int SPRITE_KICKING = 8;
+const int SPRITE_AGACHARSE = 8;
+const int SPRITE_PUNCHING = 9;
+const int SPRITE_KICKING = 10;
 
 #include <stdio.h>
 #include <iostream>
 #include <vector>
 #include "../view/Sprite.h"
-#include "Accion.h"
 
 
 class Personaje {
@@ -32,11 +33,11 @@ private:
 	int vida;
 	int m_xActual;
 	int m_yActual;
-	unsigned int spriteActual;
+	Sprite* spriteActual;
 	std::vector<Sprite*> sprites;
 	float m_velocidad;
 
-	void _cambiarSprite(Accion* accion);
+	void _cambiarSprite(int accion);
 
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, float velocidad);

@@ -8,18 +8,14 @@
 #include "Personaje.h"
 
 Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, float velocidad) {
-	spriteActual = 0;
 	nombre = nombre_personaje;
 	vida = 100;
 	sprites = Sprites;
+	spriteActual = sprites[SPRITE_INICIAL];
 	m_xActual = 0;
 	m_yActual = 0;
 	m_velocidad = velocidad;
 	estaScrolleando = false;
-
-	//COMO ES UN SOLO JUGADOR EN ESTE TP LO HARCODEAMOS, LUEGO LO LEVANTAMOS CON JSON
-	//sprites = std::list<std::string> sprites("data/players/subzero/sprites/initial.png");
-	//sprites = "data/players/subzero/sprites/walk.png";
 }
 
 std::vector<Sprite*> Personaje::getSprites(){
@@ -27,7 +23,7 @@ std::vector<Sprite*> Personaje::getSprites(){
 }
 
 Sprite* Personaje::getSpriteActual(){
-	return sprites[spriteActual];
+	return spriteActual;
 }
 
 int Personaje::Vida(){
@@ -38,26 +34,28 @@ void Personaje::SetScroll(bool valor){
 	estaScrolleando = valor;
 }
 
-void Personaje::_cambiarSprite(Accion* accion){
-
-	if (accion != spriteActual){
-		if(accion->getSiguiente() != 0){
-			spriteActual = accion->getSiguiente();
-			return;
-		}
-		spriteActual = accion->getAccion();
-		sprites[spriteActual]->Reset();
+void Personaje::_cambiarSprite(int accion){
+	//Con la logica del salto tengo que mantener Reseteando el SPRITE_SALTO asi no se pasa
+	if (sprites[accion] != spriteActual){
+		spriteActual = sprites[accion];
+		spriteActual->Reset();
+	} else if (!spriteActual->puedeAvanzar()){
+		spriteActual = spriteActual->getSpriteSiguiente();
+		spriteActual->Reset();
 	}
 }
 
 void Personaje::Inicial(){
-	Accion* accion = new Accion(SPRITE_INICIAL,SPRITE_INICIAL);
-	this->_cambiarSprite(accion);
+	if (spriteActual == sprites[SPRITE_SALTO]){
+		//Capas que tenga que hacer un booleano para saber si esta saltando
+		this->_cambiarSprite(SPRITE_SALTO_CAIDA);
+	} else {
+		this->_cambiarSprite(SPRITE_INICIAL);
+	}
 }
 
 void Personaje::CaminarDerecha(){
-	Accion* accion = new Accion(SPRITE_CAMINAR_DERECHA,SPRITE_INICIAL);
-	this->_cambiarSprite(accion);
+	this->_cambiarSprite(SPRITE_CAMINAR_DERECHA);
 	if (estaScrolleando) {
 		estaScrolleando = false;
 		return;
@@ -66,8 +64,7 @@ void Personaje::CaminarDerecha(){
 }
 
 void Personaje::CaminarIzquierda(){
-	Accion* accion = new Accion(SPRITE_CAMINAR_IZQUIERDA,SPRITE_INICIAL);
-	this->_cambiarSprite(accion);
+	this->_cambiarSprite(SPRITE_CAMINAR_IZQUIERDA);
 	if (estaScrolleando) {
 		return;
 	}
@@ -75,13 +72,12 @@ void Personaje::CaminarIzquierda(){
 }
 
 void Personaje::Saltar(){
-	Accion* accion = new Accion(SPRITE_SALTO,SPRITE_INICIAL);
-	this->_cambiarSprite(accion);
+	this->_cambiarSprite(SPRITE_SALTO_ANTES);
+	//Saltar
 }
 
 void Personaje::SaltarDerecha(){
-	Accion* accion = new Accion(SPRITE_SALTO_DIAGONAL_DERECHA,SPRITE_INICIAL);
-	this->_cambiarSprite(accion);
+	this->_cambiarSprite(SPRITE_SALTO_DIAGONAL_DERECHA);
 	//aca saltar
 	if (estaScrolleando) {
 		return;
@@ -89,8 +85,7 @@ void Personaje::SaltarDerecha(){
 }
 
 void Personaje::SaltarIzquierda(){
-	Accion* accion = new Accion(SPRITE_SALTO_DIAGONAL_IZQUIERDA,SPRITE_INICIAL);
-	this->_cambiarSprite(accion);
+	this->_cambiarSprite(SPRITE_SALTO_DIAGONAL_IZQUIERDA);
 	//aca saltar
 	if (estaScrolleando) {
 		return;
