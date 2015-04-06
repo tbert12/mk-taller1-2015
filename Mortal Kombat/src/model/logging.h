@@ -2,7 +2,7 @@
 #define SRC_MODEL_LOGGING_H_
 
 #include <fstream>
-#include <string>
+#include <cstring>
 #include <stdio.h>
 #include <time.h>
 
