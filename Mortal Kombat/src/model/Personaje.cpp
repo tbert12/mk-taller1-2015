@@ -16,7 +16,10 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 	m_yActual = 0;
 	m_velocidad = velocidad;
 	estaScrolleando = false;
+	_tDeSalto = 0;
+	_estaSaltando = -1;
 }
+
 
 std::vector<Sprite*> Personaje::getSprites(){
 	return sprites;
@@ -36,6 +39,13 @@ void Personaje::SetScroll(bool valor){
 
 void Personaje::_cambiarSprite(int accion){
 	//Con la logica del salto tengo que mantener Reseteando el SPRITE_SALTO asi no se pasa
+	if(_estaSaltando > 0){
+		_actualizarY();
+		return;
+	}
+	if(_estaSaltando == 0){
+		_actualizarY();
+	}
 	if (sprites[accion] != spriteActual){
 		spriteActual = sprites[accion];
 		spriteActual->Reset();
@@ -71,9 +81,29 @@ void Personaje::CaminarIzquierda(){
 	m_xActual -= m_velocidad;
 }
 
+void Personaje::_actualizarY(){
+	if(m_yActual > 0){
+		m_yActual = yDeSalto(m_yActual,_tDeSalto);
+		_tDeSalto++;
+	}
+	if(_tDeSalto > 50 and m_yActual < 20 and m_yActual > 3){
+		_estaSaltando = 0;
+	}
+	if(_tDeSalto > 50 and m_yActual < 3){
+		m_yActual = 0;
+		_estaSaltando = -1;
+	}
+}
+
+int yDeSalto(int currentY, int currentT)
+{
+	return -0.1 * currentT * (currentT-100);
+}
+
 void Personaje::Saltar(){
 	this->_cambiarSprite(SPRITE_SALTO_ANTES);
-	//Saltar
+	_estaSaltando = 1;
+
 }
 
 void Personaje::SaltarDerecha(){

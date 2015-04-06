@@ -39,9 +39,9 @@ std::vector<Sprite*> GenerarSpritesDefault(SDL_Renderer* renderer){
 	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
 	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
 	std::string rutaCaminarAtras = "data/players/subzero/sprites/walk.png";
-	Sprite* Initial = new Sprite(rutaInitial,framesInitial,renderer);
-	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,renderer);
-	Sprite* CaminarAtras = new Sprite(rutaCaminar,framesCaminarAtras,renderer);
+	Sprite* Initial = new Sprite(rutaInitial,framesInitial);
+	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar);
+	Sprite* CaminarAtras = new Sprite(rutaCaminar,framesCaminarAtras);
 	std::vector<Sprite*> sprites(3);
 	sprites[0] = Initial;
 	sprites[1] = Caminar;
