@@ -72,7 +72,7 @@ bool Ventana::create_window()
 		}
 	}
 
-	return success;
+	return success;//Documento sin título
 }
 
 void Ventana::close_window()
@@ -96,7 +96,8 @@ void Ventana::Refresh(Sprite* spriteActual){
 	SDL_SetRenderDrawColor( Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear( Renderer );
 
-	/**Esto lo tiene que hacer el mundo, el mundo es el que se refresca y que refresca
+	/*
+	 * Esto lo tiene que hacer el mundo, el mundo es el que se refresca y que refresca
 	 * refresca ted el contenido.
 	 * Mundo->render(SCREEN_WIDTH,SCREEN_HEIGHT);
 	 * este adentro hace en una de sus partes lo que hago a continuacion con el sprite
