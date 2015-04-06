@@ -21,7 +21,7 @@ int Ventana::obtenerAncho()
 	return m_ancho;
 }
 
-bool Ventana::create_window(int screenWidth, int screenHeight)
+bool Ventana::create_window()
 {
 	//Booleano de inicializacion
 	bool success = true;
@@ -41,7 +41,7 @@ bool Ventana::create_window(int screenWidth, int screenHeight)
 		}
 
 		//Crear Ventana
-		Window = SDL_CreateWindow( "World", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth, screenHeight, SDL_WINDOW_SHOWN );
+		Window = SDL_CreateWindow( "World", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_ancho, m_alto, SDL_WINDOW_SHOWN );
 		if( Window == NULL )
 		{
 			printf( "La ventana no se puede crear! SDL Error: %s\n", SDL_GetError() );
@@ -91,46 +91,22 @@ void Ventana::close_window()
 	SDL_Quit();
 }
 
-/*
-bool loadMedia(std::string ruta)
-{
-	//Booleano a devolver
-	bool OK = true;
-
-	//Cargar Sprite
-	if( !gSpriteSheetTexture.loadFromFile( ruta ) )
-	{
-		printf( "Error en cargar Sprite\n" );
-		OK = false;
-	}
-	else
-	{
-		int wSprite = 68;
-		for (int i = 0; i < ANIMATION_IMAGES;i++){
-			//Set Sprite Position (+64)
-			gSpriteClips[i].x = wSprite*i;
-			gSpriteClips[i].y = 0;
-			gSpriteClips[i].w = wSprite;
-			gSpriteClips[i].h = 133;
-		}
-	}
-
-	return OK;
-}
-*/
-
-void Ventana::Refresh(Sprite* spriteActual,int SCREEN_WIDTH,int SCREEN_HEIGHT){
+void Ventana::Refresh(Sprite* spriteActual){
 	//Limpiar pantalla
 	SDL_SetRenderDrawColor( Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear( Renderer );
 
-	//Renderizar estado actual
-	//SDL_Rect* currentClip = &gSpriteClips[ frame ];
+	/**Esto lo tiene que hacer el mundo, el mundo es el que se refresca y que refresca
+	 * refresca ted el contenido.
+	 * Mundo->render(SCREEN_WIDTH,SCREEN_HEIGHT);
+	 * este adentro hace en una de sus partes lo que hago a continuacion con el sprite
+	 */
 	spriteActual->Advance();
 	SDL_Rect* currentClip = spriteActual->getFrame();
 	LTexture* SpriteSheetTexture = spriteActual->getSpriteSheetTexture();
-	SpriteSheetTexture->render( ( SCREEN_WIDTH - currentClip->w ) / 2, ( SCREEN_HEIGHT - currentClip->h ) / 2, currentClip );
+	SpriteSheetTexture->render( ( m_ancho - currentClip->w ) / 2, ( m_alto - currentClip->h ) / 2, currentClip );
 
 	//Actualizar pantalla
 	SDL_RenderPresent( Renderer );
 }
+

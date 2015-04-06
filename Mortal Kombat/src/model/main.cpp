@@ -34,6 +34,7 @@ std::vector<Sprite*> CargaDePrueba(){
 	std::vector<Frame*> framesCaminarAtras (framesCaminar);
 	std::reverse(framesCaminarAtras.begin(),framesCaminarAtras.end());
 
+
 	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
 	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
 	std::string rutaCaminarAtras = "data/players/subzero/sprites/walk.png";
@@ -47,19 +48,28 @@ std::vector<Sprite*> CargaDePrueba(){
 	return sprites;
 }
 
+
 int main( int argc, char* args[] )
 {
 
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
 
+	Ventana* ventana = new Ventana(SCREEN_WIDTH,SCREEN_HEIGHT);
+
 	//Iniciar SDL y crear ventana
-	if( !create_window(SCREEN_WIDTH,SCREEN_HEIGHT) ) {
+	if(!ventana->create_window()){
 		printf( "Error al inicializar!\n" );
 	} else {
 
 		//Creo el Personaje
 		Personaje luchador = Personaje("Sub Zero",CargaDePrueba());
+
+		std::string rutaFondoAncho = "data/Fondos/largo.png";
+		std::string rutaFondo2 = "data/Fondos/atras.png";
+
+		CapaFondo capaFondo = CapaFondo(SCREEN_HEIGHT,SCREEN_WIDTH, 0, 1068, 10,rutaFondoAncho,ventana->getRenderer(),ventana);
+		CapaFondo capaAtras = CapaFondo(SCREEN_HEIGHT,SCREEN_WIDTH, 1, 1068, 10,rutaFondo2,ventana->getRenderer(),ventana);
 
 		//Creo el Controlador
 		KeyboardControl control = KeyboardControl(&luchador);
@@ -86,18 +96,19 @@ int main( int argc, char* args[] )
 
 			printf("%i\n",frame);
 
-			Refresh(luchador.getSpriteActual(),SCREEN_WIDTH,SCREEN_HEIGHT);
+			ventana->Refresh(luchador.getSpriteActual());
+			ventana->Refresh(luchador.getSpriteActual());
 
 			//FrameGuia
 			++frame;
 
 			//Sleep(Microsegundos)
-			usleep(150000);
+			usleep(15000);
 		}
 	}
 
 	//Free resources and close SDL
-	close_window();
+	ventana->close_window();
 
 	return 0;
 }
