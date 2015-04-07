@@ -7,12 +7,12 @@
 
 #ifndef SRC_MODEL_RENDERIZABLE_H_
 #define SRC_MODEL_RENDERIZABLE_H_
-
+/*
 class Renderizable {
 
 public:
 	virtual void Renderizar();
 	virtual ~Renderizable();
 };
-
+*/
 #endif /* SRC_MODEL_RENDERIZABLE_H_ */
