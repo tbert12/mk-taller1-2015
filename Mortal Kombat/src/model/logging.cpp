@@ -3,7 +3,7 @@
 using namespace std;
 
 int nivel = 3;
-const string ruta_logfile = "data/log/registro.log";
+const string ruta_logfile = "../../data/log/registro.log";
 
 // Obtener la fecha y hora actual. Formato YYYY-MM-DD.HH:mm:ss.
 const string fechaHora() {
