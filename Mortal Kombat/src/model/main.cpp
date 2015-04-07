@@ -109,7 +109,7 @@ int main( int argc, char* args[] )
 			++frame;
 
 			//Sleep(Microsegundos)
-			usleep(15000);
+			usleep(75000);
 		}
 		//Free resources and close SDL
 		ventana->close_window();
