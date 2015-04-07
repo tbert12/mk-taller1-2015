@@ -6,7 +6,7 @@
  */
 
 #include "Sprite.h"
-
+#include "LTexture.h"
 
 Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer){
 	frameActual = 0;
@@ -48,10 +48,6 @@ bool Sprite::Advance(){
 		frameActual = 0;
 	}
 	return true;
-}
-
-void Sprite::spriteSiguiente(Sprite* sprite) {
-	spriteSiguiente = sprite;
 }
 
 Sprite* Sprite::getSpriteSiguiente(){

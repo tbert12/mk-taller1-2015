@@ -45,7 +45,7 @@ private:
 	int _yDeSalto(int currentY, int currentT);
 
 public:
-	Personaje(std::string nombre_personaje,std::vector<Sprite*> sprites, float velocidad);
+	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, float velocidad);
 
 	int estaScrolleando;
 	std::vector<Sprite*> getSprites();

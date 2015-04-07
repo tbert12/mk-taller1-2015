@@ -5,7 +5,6 @@
  *      Author: facu
  */
 #include "Mundo.h"
-#include "../view/Ventana.h"
 
 Mundo* CrearMundoDefault();
 

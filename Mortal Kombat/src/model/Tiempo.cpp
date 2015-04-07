@@ -15,7 +15,7 @@ bool Tiempo::transcurrir(int segundos) {
 		}
 		return true;
 	} else {
-		return false
+		return false;
 	}
 }
 

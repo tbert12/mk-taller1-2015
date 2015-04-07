@@ -61,15 +61,9 @@ int main( int argc, char* args[] )
 
 	Mundo* mundo = CrearMundoDefault();
 
-<<<<<<< HEAD
-	Ventana* ventana = mundo->ventana();
-
-	//Iniciar SDL y crear ventana
-	if(!ventana->create_window()){
-=======
 	if(mundo == NULL){
->>>>>>> branch 'master' of https://bitbucket.org/jmoguilevsky/taller-i
-		printf( "Error al inicializar!\n" );
+		log( "ERROR: No se pudo crear el Mundo" );
+		return 1;
 	} else {
 
 		Ventana* ventana = mundo->ventana;

@@ -2,8 +2,8 @@
 
 using namespace std;
 
-int nivel = 1;
-const string ruta_logfile = "../../data/log/registro.log";
+int nivel = 3;
+const string ruta_logfile = "data/log/registro.log";
 
 // Obtener la fecha y hora actual. Formato YYYY-MM-DD.HH:mm:ss.
 const string fechaHora() {
@@ -19,7 +19,7 @@ const string fechaHora() {
 // Escribir un mensaje en una nueva linea del archivo log.
 void registrarMensaje( const string mensaje ) {
 	fstream logfile;
-	logfile.open ( ruta_logfile.c_str() );
+	logfile.open ( ruta_logfile.c_str(),std::fstream::out );
 	logfile << fechaHora() << mensaje << endl;
 	logfile.close();
 }
@@ -44,6 +44,7 @@ void log( const string mensaje ) {
 			registrarMensaje(mensaje);
 		}
 	}
+	registrarMensaje(mensaje);
 	//Salto de linea despues de cada mensaje
 	registrarMensaje("\n");
 }
