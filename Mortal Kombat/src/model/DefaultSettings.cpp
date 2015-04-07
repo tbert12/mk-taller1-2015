@@ -56,6 +56,7 @@ std::vector<Sprite*> GenerarSpritesDefault(SDL_Renderer* renderer){
 Mundo* CrearMundoDefault(){
 	Mundo* mundo = new Mundo();
 	Ventana* ventana = new Ventana(VENTANA_ANCHO_DEFAULT,ESCENARIO_ALTO_DEFAULT);
+	ventana->create_window();
 	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana->getRenderer()), PERSONAJE_FACTOR_VELOCIDAD);
 	mundo->ventana = ventana;
 	mundo->escenario = NULL;
