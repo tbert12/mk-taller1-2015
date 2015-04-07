@@ -2,8 +2,8 @@
 
 using namespace std;
 
-int nivel = 3;
-const string ruta_logfile = "../../data/log/registro.log";
+int nivel = 1;
+const string ruta_logfile = "data/log/registro.log";
 
 // Obtener la fecha y hora actual. Formato YYYY-MM-DD.HH:mm:ss.
 const string fechaHora() {
@@ -19,8 +19,10 @@ const string fechaHora() {
 // Escribir un mensaje en una nueva linea del archivo log.
 void registrarMensaje( const string mensaje) {
 	fstream logfile;
-	logfile.open ( ruta_logfile.c_str(),std::fstream::out );
-	logfile << fechaHora() << mensaje << endl;
+	logfile.open ( ruta_logfile.c_str(),std::fstream::app );
+	logfile << fechaHora();
+	logfile << mensaje;
+	logfile << endl;
 	logfile.close();
 }
 
@@ -30,29 +32,26 @@ void registrarMensaje( const string mensaje) {
 // 2 = Errores, Warnings
 // 3 = Errores
 void log( const string mensaje) {
-	if ( strstr( mensaje.c_str(), "ERROR:" ) != NULL ) {
+	if ( strstr( mensaje.c_str(), "ERROR:" ) ) {
 		// DETALLO ERROR
 		registrarMensaje(mensaje);
-	} else if ( strstr( mensaje.c_str(), "WARNING:" ) != NULL ) {
+	} else if ( strstr( mensaje.c_str(), "WARNING:" ) ) {
 		if ( nivel < 3 ) {
 			// DETALLO WARNING
 			registrarMensaje(mensaje);
 		}
 	} else {
 		if ( nivel < 2 ) {
-			// DETALLO SUCESO
+			// DETALLO SUCESO (DEBUG)
 			registrarMensaje(mensaje);
 		}
 	}
-	registrarMensaje(mensaje);
-	//Salto de linea despues de cada mensaje
-	registrarMensaje("\n");
 }
 
 // Indicar comienzo de un nuevo run del programa.
 void prepararLog() {
 	fstream logfile;
-	logfile.open ( ruta_logfile.c_str() );
+	logfile.open ( ruta_logfile.c_str(), std::fstream::app );
 	logfile << "\n";
 	logfile << "---------------------------------------------------------------------------------------------" << endl;
 	logfile << "\n";
