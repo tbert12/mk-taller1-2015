@@ -4,7 +4,7 @@
  *  Created on: Mar 28, 2015
  *      Author: root
  */
-
+/*
 #ifndef SRC_MODEL_RENDERIZABLE_H_
 #define SRC_MODEL_RENDERIZABLE_H_
 
@@ -14,5 +14,5 @@ public:
 	virtual void Renderizar();
 	virtual ~Renderizable();
 };
-
+*/
 #endif /* SRC_MODEL_RENDERIZABLE_H_ */
