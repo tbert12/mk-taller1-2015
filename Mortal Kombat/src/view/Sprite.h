@@ -36,6 +36,7 @@ class Sprite: public Renderizable{
 		bool Advance();
 		bool puedeAvanzar();
 		Sprite* getSpriteSiguiente();
+		void spriteSiguiente(Sprite* sprite);
 		SDL_Rect* getFrame();
 		LTexture* getSpriteSheetTexture();
 };

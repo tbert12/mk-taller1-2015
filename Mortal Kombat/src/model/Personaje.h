@@ -44,7 +44,7 @@ private:
 	void _actualizarY();
 
 public:
-	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, float velocidad);
+	Personaje(std::string nombre_personaje,std::vector<Sprite*> sprites, float velocidad);
 
 	int estaScrolleando;
 	std::vector<Sprite*> getSprites();

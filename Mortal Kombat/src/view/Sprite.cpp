@@ -50,6 +50,10 @@ bool Sprite::Advance(){
 	return true;
 }
 
+void Sprite::spriteSiguiente(Sprite* sprite) {
+	spriteSiguiente = sprite;
+}
+
 Sprite* Sprite::getSpriteSiguiente(){
 	return spriteSiguiente;
 }

@@ -30,10 +30,10 @@ void registrarMensaje( const string mensaje ) {
 // 2 = Errores, Warnings
 // 3 = Errores
 void log( const string mensaje ) {
-	if ( strstr( ruta_logfile.c_str(), "ERROR:" ) != nullptr ) {
+	if ( strstr( ruta_logfile.c_str(), "ERROR:" ) != NULL ) {
 		// DETALLO ERROR
 		registrarMensaje(mensaje);
-	} else if ( strstr( ruta_logfile.c_str(), "WARNING:" ) != nullptr ) {
+	} else if ( strstr( ruta_logfile.c_str(), "WARNING:" ) != NULL ) {
 		if ( nivel < 3 ) {
 			// DETALLO WARNING
 			registrarMensaje(mensaje);

@@ -7,7 +7,7 @@
 
 #include "Personaje.h"
 
-Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, float velocidad) {
+Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> sprites, float velocidad) {
 	nombre = nombre_personaje;
 	vida = 100;
 	sprites = Sprites;
@@ -39,6 +39,8 @@ void Personaje::SetScroll(bool valor){
 
 void Personaje::_cambiarSprite(int accion){
 	//Con la logica del salto tengo que mantener Reseteando el SPRITE_SALTO asi no se pasa
+	// Esto no deberia ir dentro de cambiarSprite. Por que el sprite influye sobre la posicion?
+	// Que la posicion se actualice en otra funcion.
 	if(_estaSaltando > 0){
 		_actualizarY();
 		return;

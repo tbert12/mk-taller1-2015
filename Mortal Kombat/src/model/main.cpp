@@ -61,7 +61,7 @@ int main( int argc, char* args[] )
 
 	Mundo* mundo = CrearMundoDefault();
 
-	Ventana* ventana = mundo->ventana;
+	Ventana* ventana = mundo->ventana();
 
 	//Iniciar SDL y crear ventana
 	if(!ventana->create_window()){
