@@ -12,7 +12,7 @@
 #include <unistd.h> //usleep
 #include <vector>
 #include "logging.h"
-#include "DefaultSettings.cpp"
+#include "DefaultSettings.h"
 #include "Mundo.h"
 
 
@@ -61,13 +61,18 @@ int main( int argc, char* args[] )
 
 	Mundo* mundo = CrearMundoDefault();
 
+<<<<<<< HEAD
 	Ventana* ventana = mundo->ventana();
 
 	//Iniciar SDL y crear ventana
 	if(!ventana->create_window()){
+=======
+	if(mundo == NULL){
+>>>>>>> branch 'master' of https://bitbucket.org/jmoguilevsky/taller-i
 		printf( "Error al inicializar!\n" );
 	} else {
 
+		Ventana* ventana = mundo->ventana;
 		//Creo el Personaje
 		//Personaje luchador = Personaje("Sub Zero",CargaDePrueba());
 		Personaje* luchador = mundo->personajes[0];
@@ -112,10 +117,9 @@ int main( int argc, char* args[] )
 			//Sleep(Microsegundos)
 			usleep(15000);
 		}
+		//Free resources and close SDL
+		ventana->close_window();
 	}
-
-	//Free resources and close SDL
-	ventana->close_window();
 
 	return 0;
 }

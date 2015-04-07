@@ -7,8 +7,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "logging.h"
-/*#include "Pelea.h"*/
-#include "Tiempo.h"
 #include "Mundo.h"
 #include "../view/LTexture.h"
 #include "Capa.h"
@@ -16,7 +14,7 @@
 #include "Personaje.h"
 #include "../view/Sprite.h"
 #include "../view/Frame.h"
-#include "DefaultSettings.cpp"
+#include "DefaultSettings.h"
 #include "Mundo.h"
 
 using namespace std;

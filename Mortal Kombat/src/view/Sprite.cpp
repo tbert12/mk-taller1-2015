@@ -6,7 +6,7 @@
  */
 
 #include "Sprite.h"
-#include "LTexture.h"
+
 
 Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer){
 	frameActual = 0;
@@ -59,7 +59,7 @@ Sprite* Sprite::getSpriteSiguiente(){
 }
 
 bool Sprite::puedeAvanzar(){
-	if (frameActual >= cantidadFrames){
+	if (frameActual + 1 > cantidadFrames){
 		if (spriteSiguiente){
 			return false;
 		}
@@ -71,8 +71,8 @@ LTexture* Sprite::getSpriteSheetTexture(){
 	return SpriteSheetTexture;
 }
 
-void Renderizar(){
-
+void Sprite::setSpriteSiguiente(Sprite* nextsprite){
+	spriteSiguiente = nextsprite;
 }
 
 void Sprite::Reset(){

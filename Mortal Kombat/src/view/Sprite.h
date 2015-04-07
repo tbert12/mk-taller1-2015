@@ -15,9 +15,9 @@
 
 #include "LTexture.h"
 #include "Frame.h"
-#include "../model/Renderizable.h"
+//#include "../model/Renderizable.h"
 
-class Sprite: public Renderizable{
+class Sprite {
 	private:
 		int frameActual;
 		int cantidadFrames;
@@ -29,8 +29,7 @@ class Sprite: public Renderizable{
 		Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer);
 		~Sprite();
 
-		virtual void Renderizar();
-
+		void setSpriteSiguiente(Sprite* nextsprite);
 		void Reset();
 		void setRender(SDL_Renderer* Renderer);
 		bool Advance();
