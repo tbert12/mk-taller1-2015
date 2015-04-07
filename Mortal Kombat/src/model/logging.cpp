@@ -17,7 +17,7 @@ const string fechaHora() {
 }
 
 // Escribir un mensaje en una nueva linea del archivo log.
-void registrarMensaje( const string mensaje ) {
+void registrarMensaje( const string mensaje) {
 	fstream logfile;
 	logfile.open ( ruta_logfile.c_str(),std::fstream::out );
 	logfile << fechaHora() << mensaje << endl;
@@ -29,11 +29,11 @@ void registrarMensaje( const string mensaje ) {
 // 1 = Errores, Warnings, Sucesos (DEBUG)
 // 2 = Errores, Warnings
 // 3 = Errores
-void log( const string mensaje ) {
-	if ( strstr( ruta_logfile.c_str(), "ERROR:" ) != NULL ) {
+void log( const string mensaje) {
+	if ( strstr( mensaje.c_str(), "ERROR:" ) != NULL ) {
 		// DETALLO ERROR
 		registrarMensaje(mensaje);
-	} else if ( strstr( ruta_logfile.c_str(), "WARNING:" ) != NULL ) {
+	} else if ( strstr( mensaje.c_str(), "WARNING:" ) != NULL ) {
 		if ( nivel < 3 ) {
 			// DETALLO WARNING
 			registrarMensaje(mensaje);
