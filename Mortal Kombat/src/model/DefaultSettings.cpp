@@ -61,28 +61,36 @@ std::vector<Sprite*> GenerarSpritesDefault(SDL_Renderer* renderer){
 }
 
 Mundo* CrearMundoDefault(){
-	log("DEBUG: Se comienza a crear un Mundo con valores Default");
-	Mundo* mundo = new Mundo();
+	log("Se comienza a crear un Mundo con valores Default",LOG_DEBUG);
+
+	//ESTO ES LO QUE HACIA EL BUBY, no se si está bien!
+	float ratio_x = VENTANA_ANCHO_PX_DEFAULT / ESCENARIO_ANCHO_DEFAULT ;
+	float ratio_y = VENTANA_ALTO_PX_DEFAULT / ESCENARIO_ALTO_DEFAULT ;
+
+	Mundo* mundo = new Mundo(ratio_x,ratio_y);
 	Ventana* ventana = new Ventana(VENTANA_ANCHO_PX_DEFAULT,VENTANA_ALTO_PX_DEFAULT);
 
 	if(!ventana->create_window()){
-		log("ERROR: No se puede inicializar la ventana");
+		log("No se puede inicializar la ventana",LOG_ERROR);
 	}
 
 	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana->getRenderer()), PERSONAJE_FACTOR_VELOCIDAD);
-	log("DEBUG: Creado Personaje Default (SubZero)");
+	log("Creado Personaje Default (SubZero)",LOG_DEBUG);
 
-	mundo->ventana = ventana;
-	mundo->escenario = NULL;
+	mundo->setVentana(ventana);
+	//mundo->escenario = NULL;
 
-	mundo->tiempo = new Tiempo(TIEMPO_DEFAULT);
-	log("DEBUG: Creado el tiempo, la ventana y el escenario. Seteados a Mundo");
+	mundo->setTiempo(new Tiempo(TIEMPO_DEFAULT));
 
-	mundo->personajes[0] = personaje_default;
-	log("DEBUG: Personaje Default agregado al Mundo");
+	log("Creado el tiempo, la ventana y el escenario. Seteados a Mundo",LOG_DEBUG);
+	if (!mundo->addPersonaje(personaje_default)){
+		log("Personaje Default NO agregado al Mundo",LOG_ERROR);
+	}
+	log("Personaje Default agregado al Mundo",LOG_DEBUG);
 
-	mundo->capas[0] = new CapaPrincipal(VENTANA_ALTO_PX_DEFAULT, VENTANA_ANCHO_PX_DEFAULT, PERSONAJE_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, PERSONAJE_FACTOR_VELOCIDAD, personaje_default);
-	log("DEBUG: Capa principal agregada al Mundo");
+	Capa* capa =  new CapaPrincipal(VENTANA_ALTO_PX_DEFAULT, VENTANA_ANCHO_PX_DEFAULT, PERSONAJE_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, PERSONAJE_FACTOR_VELOCIDAD, personaje_default);
+	mundo->addCapa(capa);
+	log("Capa principal agregada al Mundo",LOG_DEBUG);
 
 	return mundo;
 }

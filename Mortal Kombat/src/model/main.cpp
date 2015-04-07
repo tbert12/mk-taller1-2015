@@ -62,14 +62,14 @@ int main( int argc, char* args[] )
 	Mundo* mundo = CrearMundoDefault();
 
 	if(mundo == NULL){
-		log( "ERROR: No se pudo crear el Mundo" );
+		log( "No se pudo crear el Mundo", LOG_ERROR );
 		return 1;
 	} else {
-
-		Ventana* ventana = mundo->ventana;
+		log( "Mundo creado por default", LOG_DEBUG );
+		Ventana* ventana = mundo->getVentana();
 		//Creo el Personaje
 		//Personaje luchador = Personaje("Sub Zero",CargaDePrueba());
-		Personaje* luchador = mundo->personajes[0];
+		Personaje* luchador = mundo->getPersonaje();
 
 		//std::string rutaFondoAncho = "data/Fondos/largo.png";
 		//std::strbackgroundsing rutaFondo2 = "data/Fondos/atras.png";

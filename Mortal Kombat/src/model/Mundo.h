@@ -21,10 +21,7 @@
 
 
 class Mundo {
-public:
-	Mundo();
-	virtual ~Mundo();
-
+private:
 	float ratio_x;
 	float ratio_y;
 	std::vector<Capa*> capas;
@@ -32,6 +29,19 @@ public:
 	Tiempo* tiempo;
 	Escenario* escenario;
 	Ventana* ventana; //tiene el renderer
+
+public:
+	Mundo(float ratioX,float ratioY);
+	bool addPersonaje(Personaje* un_personaje);
+	Personaje* getPersonaje(int indice = 0);
+	bool addCapa(Capa* unaCapa);
+	Capa* getCapa(int indice = 0);
+	void setTiempo(Tiempo* unTiempo);
+	void setVentana(Ventana* unaVentana);
+	Ventana* getVentana();
+	void setEscenario(Escenario* unEscenario);
+	Escenario* getEscenario();
+	virtual ~Mundo();
 };
 
 #endif /* SRC_MODEL_MUNDO_H_ */

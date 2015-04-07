@@ -6,14 +6,18 @@
 #include <stdio.h>
 #include <time.h>
 
+//Constantes de Errores para el log
+const int LOG_ERROR = 0;
+const int LOG_WARNING = 1;
+const int LOG_DEBUG = 2;
+
+
 using namespace std;
 
 extern int nivel;
 extern const string ruta_logfile;
 
-const string fechaHora();
-void registrarMensaje( const string mensaje );
-void log( const string mensaje );
+void log( const string mensaje, int tipo_de_log);
 void prepararLog();
 
 
