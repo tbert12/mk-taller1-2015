@@ -15,11 +15,16 @@ Ventana::Ventana(int screenWidth, int screenHeight)
 {
 	m_ancho = screenWidth;
 	m_alto = screenHeight;
+	m_pixel_a_logico = 1;
 }
 
 int Ventana::obtenerAncho()
 {
 	return m_ancho;
+}
+
+void Ventana::setPixelaLogico(float p_a_l){
+	m_pixel_a_logico = p_a_l;
 }
 
 bool Ventana::create_window()
