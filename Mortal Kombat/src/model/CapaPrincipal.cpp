@@ -22,7 +22,7 @@ void CapaPrincipal::Renderizar()
 	{
 		m_Personaje->SetScroll(true);
 	}
-	m_Personaje->renderizar();
+	m_Personaje->renderizar(0,0);
 }
 
 bool CapaPrincipal::Scrollear(){

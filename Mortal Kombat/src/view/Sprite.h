@@ -15,7 +15,7 @@
 
 #include "LTexture.h"
 #include "Frame.h"
-#include "../model/logging.h"
+#include "../model/Renderizable.h"
 
 class Sprite {
 	private:

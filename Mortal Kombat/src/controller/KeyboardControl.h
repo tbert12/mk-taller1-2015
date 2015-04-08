@@ -2,7 +2,7 @@
  * KeyboardControl.h
  *
  *  Created on: 26/3/2015
- *      Author: facu
+ *      Author: tomi
  */
 
 #ifndef SRC_CONTROLLER_KEYBOARDCONTROL_H_
@@ -13,10 +13,12 @@
 
 class KeyboardControl {
 	Personaje* personaje;
+	bool quit;
 public:
 	KeyboardControl(Personaje*);
 	virtual ~KeyboardControl();
 	void KeyPressed(SDL_Event evento);
+	bool getQuit();
 };
 
 #endif /* SRC_CONTROLLER_KEYBOARDCONTROL_H_ */

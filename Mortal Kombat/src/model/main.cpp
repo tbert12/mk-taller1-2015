@@ -89,15 +89,12 @@ int main( int argc, char* args[] )
 		int frame = 0;
 
 		//While Principal
-		while( !quit ){
+		while( !control_jugador_1->getQuit() ){
 			//Eventos
 			while( SDL_PollEvent( &e ) != 0 ){
-				//Usuario presiona [X]
-				if( e.type == SDL_QUIT ){
-					quit = true;
-				}
 				control_jugador_1->KeyPressed(e);
 			}
+
 
 			printf("%i\n",frame);
 

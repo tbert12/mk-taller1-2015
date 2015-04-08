@@ -29,11 +29,31 @@
 #define PERSONAJE_FACTOR_VELOCIDAD 10
 
 std::vector<Sprite*> GenerarSpritesDefault(SDL_Renderer* renderer){
+
 	std::vector<Frame*> framesInitial(9);
+
 	std::vector<Frame*> framesCaminar(9);
+
 	std::vector<Frame*> framesAntesDeSaltar(1);
 	std::vector<Frame*> framesDeSaltar(1);
 	std::vector<Frame*> framesDespuesDeSaltar(1);
+
+	std::vector<Frame*> framesAntesDeSaltarDiagonal(1);
+	std::vector<Frame*> framesSaltoDiagonal(7);
+	std::vector<Frame*> framesSaltoDiagonalAtras(7);
+	std::vector<int> xSaltoDiagonal = {0,72,127,208,283,335,392,472};
+	std::vector<int> hSaltoDiagonal = {136,82,59,55,81,81,59,62};
+	std::vector<int> wSaltoDiagonal = {72,55,74,74,53,55,75,74};
+
+	std::vector<Frame*> framesAgacharse(2);
+	framesAgacharse[0] = new Frame(0,0,107,60);
+	framesAgacharse[1] = new Frame(60,0,89,62);
+	std::vector<Frame*> framesLevantarse(framesAgacharse);
+	std::reverse(framesLevantarse.begin(),framesLevantarse.end());
+
+	std::vector<Frame*> framesAgachado(1);
+	framesAgachado[0] = new Frame(122,0,71,64);
+
 	int wInitial = 72,wCaminar = 68;
 	for (int i=0;i<9;i++){
 		framesInitial[i] = new Frame(wInitial*i,0,133,wInitial);
@@ -46,26 +66,45 @@ std::vector<Sprite*> GenerarSpritesDefault(SDL_Renderer* renderer){
 	framesDeSaltar[0] = new Frame(71,0,96,70);
 	framesDespuesDeSaltar[0] = new Frame(141,0,107,60);
 
+	framesAntesDeSaltarDiagonal[0] = new Frame(xSaltoDiagonal[0],0,hSaltoDiagonal[0],wSaltoDiagonal[0]);
+
+	for (size_t i = 0; i < framesSaltoDiagonal.size(); i++){
+		framesSaltoDiagonal[i] = new Frame(xSaltoDiagonal[i+1],0,hSaltoDiagonal[i+1],wSaltoDiagonal[i+1]);
+		framesSaltoDiagonalAtras[framesSaltoDiagonal.size()-i-1] = new Frame(xSaltoDiagonal[i+1],0,hSaltoDiagonal[i+1],wSaltoDiagonal[i+1]);
+	}
 	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
 	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
 	std::string rutaCaminarAtras = "data/players/subzero/sprites/walk.png";
 	std::string rutaSalto = "data/players/subzero/sprites/salto.png";
+	std::string rutaSaltoDiagonal = "data/players/subzero/sprites/diag.png";
+	std::string rutaAgacharse = "data/players/subzero/sprites/agachar.png";
+
 	Sprite* Initial = new Sprite(rutaInitial,framesInitial,renderer);
 	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,renderer);
 	Sprite* CaminarAtras = new Sprite(rutaCaminar,framesCaminarAtras,renderer);
 	Sprite* AntesDeSaltar = new Sprite(rutaSalto,framesAntesDeSaltar,renderer);
 	Sprite* Salto = new Sprite(rutaSalto,framesDeSaltar,renderer);
 	Sprite* DespuesDeSaltar = new Sprite(rutaSalto,framesDespuesDeSaltar,renderer);
-
 	AntesDeSaltar->setSpriteSiguiente(Salto);
 	DespuesDeSaltar->setSpriteSiguiente(Initial);
-	std::vector<Sprite*> sprites(6);
-	sprites[0] = Initial;
-	sprites[1] = Caminar;
-	sprites[2] = CaminarAtras;
-	sprites[3] = AntesDeSaltar;
-	sprites[4] = Salto;
-	sprites[5] = DespuesDeSaltar;
+
+	Sprite* AntesSaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesAntesDeSaltarDiagonal,renderer);
+	Sprite* SaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonal,renderer);
+	AntesSaltoDiagonal->setSpriteSiguiente(SaltoDiagonal);
+
+	Sprite* AntesSaltoDiagonalAtras = new Sprite(rutaSaltoDiagonal,framesAntesDeSaltarDiagonal,renderer);
+	Sprite* SaltoDiagonalAtras = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonalAtras,renderer);
+	AntesSaltoDiagonalAtras->setSpriteSiguiente(SaltoDiagonalAtras);
+
+	Sprite* Agacharse = new Sprite(rutaAgacharse,framesAgacharse,renderer);
+	Sprite* Agachado = new Sprite(rutaAgacharse,framesAgachado,renderer);
+	Sprite* Levantarse = new Sprite(rutaAgacharse,framesLevantarse,renderer);
+	Agacharse->setSpriteSiguiente(Agachado);
+	Levantarse->setSpriteSiguiente(Initial);
+
+	//{Initial,Caminar,CaminarAtras,AntesDeSaltar,Salto,DespuesDeSaltar,SaltoDiagonal}
+	std::vector<Sprite*> sprites = {Initial,Caminar,CaminarAtras,Salto,AntesDeSaltar,DespuesDeSaltar,AntesSaltoDiagonal,SaltoDiagonal,AntesSaltoDiagonalAtras,SaltoDiagonalAtras,Agacharse,Agachado,Levantarse};
+	printf("Termine carga sprite\n");
 	return sprites;
 }
 

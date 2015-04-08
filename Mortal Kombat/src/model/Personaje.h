@@ -15,11 +15,18 @@ const int SPRITE_CAMINAR_IZQUIERDA = 2;
 const int SPRITE_SALTO = 3;
 const int SPRITE_SALTO_ANTES = 4;
 const int SPRITE_SALTO_CAIDA = 5;
-const int SPRITE_SALTO_DIAGONAL_DERECHA = 6;
-const int SPRITE_SALTO_DIAGONAL_IZQUIERDA = 5;
-const int SPRITE_AGACHARSE = 8;
-const int SPRITE_PUNCHING = 9;
-const int SPRITE_KICKING = 10;
+const int SPRITE_SALTO_DIAGONAL_ANTES_D = 6;
+const int SPRITE_SALTO_DIAGONAL_DERECHA = 7;
+const int SPRITE_SALTO_DIAGONAL_ANTES_I = 8;
+const int SPRITE_SALTO_DIAGONAL_IZQUIERDA = 9;
+const int SPRITE_AGACHARSE = 10;
+const int SPRITE_AGACHADO = 11;
+const int SPRITE_LEVANTARSE = 12;
+const int SPRITE_PUNCHING = 13;
+const int SPRITE_KICKING = 14;
+
+const int VELOCIDAD_ADELANTE = 8;
+const int VELOCIDAD_ATRAS = -4;
 
 #include <stdio.h>
 #include <iostream>
@@ -40,32 +47,38 @@ private:
 	float m_velocidad;
 
 	void _cambiarSprite(int accion);
+
+	void _SaltarHorizontal();
+	void _SaltarDerecha();
+	void _SaltarIzquierda();
+
 	void _parabola();
 	void _actualizarY();
 	int _yDeSalto(int currentY, int currentT);
 
 public:
-	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, float velocidad);
+	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad);
 
 	int estaScrolleando;
+
 	std::vector<Sprite*> getSprites();
 	Sprite* getSpriteActual();
+	void AvanzarSprite();
+
+	void renderizar(int,int);
 
 	int getX();
 	int getY();
-	int Vida();
+	int getVida();
 	void QuitarVida(int valor);
-
 
 	void Inicial();
 	void Saltar();
 	void Agachar();
+	void Levantarse();
 	void CaminarDerecha();
 	void CaminarIzquierda();
-	void SaltarDerecha();
-	void SaltarIzquierda();
 	void SetScroll(bool valor);
-	void renderizar();
 
 	virtual ~Personaje();
 };

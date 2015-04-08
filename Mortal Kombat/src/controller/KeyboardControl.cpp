@@ -2,7 +2,7 @@
  * keyboardControl.cpp
  *
  *  Created on: 26/3/2015
- *      Author: facu
+ *      Author: tomi
  */
 
 #include "KeyboardControl.h"
@@ -10,13 +10,18 @@
 
 KeyboardControl::KeyboardControl(Personaje* un_personaje) {
 	personaje = un_personaje;
+	quit = false;
+}
+
+bool KeyboardControl::getQuit(){
+	return quit;
 }
 
 void KeyboardControl::KeyPressed(SDL_Event evento){
 	if(evento.type == SDL_QUIT){
-		//QUIT
+		quit = true;
 	}
-	else if(evento.type == SDL_KEYDOWN){
+	else if(evento.type == SDL_KEYDOWN and evento.key.repeat == 0){
 
 		switch( evento.key.keysym.sym ){
 				case SDLK_UP:
@@ -29,7 +34,7 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 
 				case SDLK_LEFT:
 					if(evento.key.keysym.sym == SDLK_UP){
-						personaje->SaltarIzquierda();
+						//personaje->SaltarIzquierda();
 					}
 					else{
 						personaje->CaminarIzquierda();
@@ -38,7 +43,7 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 
 				case SDLK_RIGHT:
 					if(evento.key.keysym.sym == SDLK_UP){
-						personaje->SaltarDerecha();
+						//personaje->SaltarDerecha();
 					}
 					else{
 						personaje->CaminarDerecha();
@@ -50,12 +55,16 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 					break;
 			}
 	}
-	else{
-		personaje->Inicial();
+	else if (evento.type == SDL_KEYUP and evento.type != SDL_MOUSEMOTION){
+		switch( evento.key.keysym.sym ){
+			default:
+				personaje->Inicial();
+				break;
+		}
 	}
+
 }
 
 KeyboardControl::~KeyboardControl() {
 
 }
-
