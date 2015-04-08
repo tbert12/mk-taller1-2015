@@ -128,7 +128,6 @@ void Personaje::_SaltarHorizontal(){
 
 //Funciones Logicas de Salto
 void Personaje::_actualizarY(){
-	printf("SALTO:\n -m_yActual: %i\n -_tDeSalto: %i\n",m_yActual,_tDeSalto);
 	if(m_yActual >= 0){
 		m_yActual = _yDeSalto(m_yActual,_tDeSalto);
 		_tDeSalto++;
@@ -164,7 +163,6 @@ void Personaje::Levantarse(){
 int Personaje::getX()
 {
 	m_xActual += m_velocidad;
-	printf("Me lo pidio\n");
 	return m_xActual + 320;
 }
 
@@ -184,7 +182,6 @@ void Personaje::QuitarVida(int valor){
 }
 
 void Personaje::renderizar(){
-	printf("Personaje:  x: %i  y:%i \n",320+ getX(),480 - getY());
 	spriteActual->render(getX(),480 - getY());
 	AvanzarSprite();
 }

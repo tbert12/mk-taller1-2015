@@ -24,13 +24,11 @@ CapaFondo::CapaFondo(int alto, int ancho, int zIndex, int anchoDeFondo, float ve
 void CapaFondo::Mover(int posX)
 {
 	Capa::Mover(posX);
-	printf("Capa:%i    x:%i\n",this->m_texture->getWidth(),this->getX());
 	m_clip->x = this->getX();
 }
 
 void CapaFondo::Renderizar(){
-	printf("Fondo: x:%i y:%i\n",m_clip->x,m_clip->y);
-	m_texture->render(0,0, m_clip);
+	m_texture->render(m_clip->x,m_clip->y, m_clip);
 }
 
 CapaFondo::~CapaFondo() {

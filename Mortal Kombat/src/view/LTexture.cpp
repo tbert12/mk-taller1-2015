@@ -106,7 +106,9 @@ void LTexture::setAlpha( Uint8 alpha )
 void LTexture::render( int x, int y, SDL_Rect* clip )
 {
 	//Setear espacio de renderizacion
-	SDL_Rect renderQuad = { x*m_relacion_pixel, y*m_relacion_pixel, mWidth, mHeight };
+	printf("x = %i \n",x);
+	printf("y = %i \n",y);
+	SDL_Rect renderQuad = { x*m_relacion_pixel, y*m_relacion_pixel, mWidth*m_relacion_pixel, mHeight*m_relacion_pixel };
 
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
