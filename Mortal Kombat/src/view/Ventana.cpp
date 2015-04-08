@@ -11,16 +11,17 @@ SDL_Renderer* Ventana::getRenderer(){
 	return Renderer;
 }
 
-Ventana::Ventana(int screenWidth, int screenHeight, float relacion_pixel_a_ventana)
+Ventana::Ventana(int screenWidth, int screenHeight, float ratiox,float ratioy)
 {
 	m_ancho = screenWidth;
 	m_alto = screenHeight;
-	m_pixel_a_logico = relacion_pixel_a_ventana;
+	ratio_x = ratiox;
+	ratio_y = ratioy;
 }
 
 LTexture* Ventana::crearTextura(){
 	LTexture* m_texture = new LTexture(Renderer);
-	m_texture->setRelacionPixel(m_pixel_a_logico);
+	m_texture->setRatio(ratio_x,ratio_y);
 	return m_texture;
 }
 

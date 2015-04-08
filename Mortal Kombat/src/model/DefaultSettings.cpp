@@ -7,27 +7,24 @@
 #define VENTANA_ALTO_PX_DEFAULT 384
 #define VENTANA_ANCHO_LOG 200
 #define VENTANA_ALTO_LOG 150
-#define ESCENARIO_ANCHO_DEFAULT 1000
+#define ESCENARIO_ANCHO_DEFAULT 600
 #define ESCENARIO_ALTO_DEFAULT 150
 #define Y_PISO_DEFAULT 120
 #define BACKGROUND_0_DEFAULT "data/img/background/background_0.png"
 #define BACKGROUND_0__ANCHO_DEFAULT 200
-#define BACKGROUND_0__ALTOPX_DEFAULT 150
+#define BACKGROUND_0__ALTO_DEFAULT 150
 #define BACKGROUND_0_Z_INDEX 0
 #define BACKGROUND_1_DEFAULT "data/img/background/background_1.png"
-#define BACKGROUND_1__ANCHOPX_DEFAULT 400
-#define BACKGROUND_1__ALTOPX_DEFAULT 150
+#define BACKGROUND_1__ANCHO_DEFAULT 400
+#define BACKGROUND_1__ALTO_DEFAULT 150
 #define BACKGROUND_1_Z_INDEX 1
 #define BACKGROUND_2_DEFAULT "data/img/background/background_2.png"
-#define BACKGROUND_2__ANCHOPX_DEFAULT 1000
-#define BACKGROUND_2__ALTOPX_DEFAULT 150
+#define BACKGROUND_2__ANCHO_DEFAULT 600
+#define BACKGROUND_2__ALTO_DEFAULT 150
 #define BACKGROUND_2_Z_INDEX 2
-#define PERSONAJE_ANCHO_DEFAULT 20
-#define PERSONAJE_ALTO_DEFAULT 35
 #define PERSONAJE_Z_INDEX_DEFAULT 3
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
 #define PERSONAJE_FACTOR_VELOCIDAD 10
-#define PIXEL_A_LOGICO 0.6510
 
 std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana){
 
@@ -115,8 +112,8 @@ Mundo* CrearMundoDefault(){
 	//ESTO ES LO QUE HACIA EL BUBY, no se si está bien!
 	float ratio_x = VENTANA_ANCHO_PX_DEFAULT/VENTANA_ANCHO_LOG;
 	float ratio_y = VENTANA_ALTO_PX_DEFAULT/VENTANA_ALTO_LOG;
-	Mundo* mundo = new Mundo(ratio_x,ratio_y);
-	Ventana* ventana = new Ventana(VENTANA_ANCHO_PX_DEFAULT,VENTANA_ALTO_PX_DEFAULT,PIXEL_A_LOGICO);
+	Mundo* mundo = new Mundo(ESCENARIO_ANCHO_DEFAULT,ESCENARIO_ALTO_DEFAULT);
+	Ventana* ventana = new Ventana(VENTANA_ANCHO_PX_DEFAULT,VENTANA_ALTO_PX_DEFAULT,ratio_x,ratio_y);
 
 	if(!ventana->create_window()){
 		log("No se puede inicializar la ventana",LOG_ERROR);

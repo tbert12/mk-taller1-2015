@@ -11,11 +11,12 @@ class Ventana
 private:
 	int m_ancho;
 	int m_alto;
-	float m_pixel_a_logico;
+	float ratio_x;
+	float ratio_y;
 
 public:
 
-	Ventana(int screenWidth, int screenHeight,float m_pixel_a_logico);
+	Ventana(int screenWidth, int screenHeight,float ratiox,float ratioy);
 
 	int obtenerAncho();
 

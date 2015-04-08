@@ -46,7 +46,7 @@ class LTexture
 		int getWidth();
 		int getHeight();
 
-		void setRelacionPixel(float p_a_l);
+		void setRatio(float ratiox,float ratioy);
 
 	private:
 		//The actual hardware texture
@@ -55,7 +55,8 @@ class LTexture
 		//Image dimensions
 		int mWidth;
 		int mHeight;
-		float m_relacion_pixel;
+		float ratio_x;
+		float ratio_y;
 
 		//The window renderer
 		SDL_Renderer* gRenderer;
