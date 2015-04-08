@@ -4,8 +4,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL.h>
 #include <string>
-#include "Sprite.h"
-//#include "LTexture.h"
+#include "LTexture.h"
 
 class Ventana
 {
