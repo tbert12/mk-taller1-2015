@@ -30,7 +30,7 @@ bool Ventana::create_window()
 	//Inicializar SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
-		log( ("SDL no puede inicializar! SDL Error: %s\n", SDL_GetError()),LOG_ERROR );
+		log(string("SDL no puede inicializar! SDL Error: %s\n", SDL_GetError()),LOG_ERROR );
 		success = false;
 	}
 	else
@@ -45,7 +45,7 @@ bool Ventana::create_window()
 		Window = SDL_CreateWindow( "World", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_ancho, m_alto, SDL_WINDOW_SHOWN );
 		if( Window == NULL )
 		{
-			log(( "La ventana no se puede crear! SDL Error: %s\n", SDL_GetError() ),LOG_ERROR);
+			log(string( "La ventana no se puede crear! SDL Error: %s\n", SDL_GetError() ),LOG_ERROR);
 			success = false;
 		}
 		else
@@ -54,7 +54,7 @@ bool Ventana::create_window()
 			Renderer = SDL_CreateRenderer( Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 			if( Renderer == NULL )
 			{
-				log(( "No se pudo crear la renderizacion! SDL Error: %s\n", SDL_GetError() ),LOG_ERROR);
+				log(string( "No se pudo crear la renderizacion! SDL Error: %s\n", SDL_GetError() ),LOG_ERROR);
 				success = false;
 			}
 			else
@@ -66,7 +66,7 @@ bool Ventana::create_window()
 				int imgFlags = IMG_INIT_PNG;
 				if( !( IMG_Init( imgFlags ) & imgFlags ) )
 				{
-					log(( "SDL_image no pudo inicializarse! SDL_image Error: %s\n", IMG_GetError() ),LOG_ERROR);
+					log(string( "SDL_image no pudo inicializarse! SDL_image Errors: %s\n", IMG_GetError() ),LOG_ERROR);
 					success = false;
 				}
 			}

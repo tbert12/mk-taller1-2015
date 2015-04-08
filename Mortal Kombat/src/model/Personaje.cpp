@@ -88,6 +88,7 @@ void Personaje::CaminarIzquierda(){
 	if (estaScrolleando) {
 		return;
 	}
+	if (_estaSaltando > 0) return;
 	m_velocidad = VELOCIDAD_ATRAS;
 }
 
@@ -137,7 +138,7 @@ void Personaje::_actualizarY(){
 	if(_tDeSalto > 0 and m_yActual < 100 and m_yActual > 3){
 		_estaSaltando = 1;
 	}
-	if(_tDeSalto > 10 and m_yActual < 50){
+	if(_tDeSalto > 10 and m_yActual < 1){
 		m_yActual = 0;
 		_tDeSalto = 0;
 		_estaSaltando = -1;
@@ -147,7 +148,7 @@ void Personaje::_actualizarY(){
 
 int Personaje::_yDeSalto(int currentY, int currentT)
 {
-	return -2 * currentT * (currentT - 15);
+	return -4 * currentT * (currentT - 13);
 }
 
 void Personaje::Agachar(){

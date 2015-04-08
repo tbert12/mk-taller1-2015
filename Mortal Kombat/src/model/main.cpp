@@ -79,9 +79,6 @@ int main( int argc, char* args[] )
 		//Creo el Controlador
 		KeyboardControl* control_jugador_1 = new KeyboardControl(luchador);
 
-		//flag para el Loop Principal
-		bool quit = false;
-
 		//Manejador de evento
 		SDL_Event e;
 
@@ -104,7 +101,7 @@ int main( int argc, char* args[] )
 			++frame;
 
 			//Sleep(Microsegundos)
-			usleep(120000);
+			usleep(50000);
 		}
 		//Free resources and close SDL
 		mundo->~Mundo();

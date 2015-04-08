@@ -23,7 +23,7 @@ bool Mundo::addPersonaje(Personaje* un_personaje){
 	return true;
 }
 Personaje* Mundo::getPersonaje(int indice){
-	if (indice <= personajes.size()){
+	if ((size_t)indice <= personajes.size()){
 		return personajes[indice];
 	}
 	return NULL;
@@ -37,7 +37,7 @@ bool Mundo::addCapa(Capa* una_capa){
 	return true;
 }
 Capa* Mundo::getCapa(int indice){
-	if (indice <= capas.size()){
+	if ((size_t)indice <= capas.size()){
 		return capas[indice];
 	}
 	return NULL;
@@ -66,7 +66,7 @@ void Mundo::render(){
 	//capaPrincipal->Renderizar();
 
 	//renderizo las capas
-	printf("%i",capas.size());
+	printf("%i\n",capas.size());
 	for (unsigned int i = 0 ; i <= capas.size()-1 ; i++){
 		capas[i]->Renderizar();
 	}

@@ -17,12 +17,11 @@ CapaPrincipal::CapaPrincipal(int alto, int ancho, int zIndex, int anchoDeFondo, 
 
 void CapaPrincipal::Renderizar()
 {
-
 	if( Scrollear())
 	{
-		m_Personaje->SetScroll(true);
+		//m_Personaje->SetScroll(true);
 	}
-	m_Personaje->renderizar(0,0);
+	m_Personaje->renderizar(0,480);
 }
 
 bool CapaPrincipal::Scrollear(){
