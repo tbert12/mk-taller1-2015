@@ -6,12 +6,11 @@
  */
 
 #include "Sprite.h"
-#include "LTexture.h"
 
-Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer){
+Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana){
 	frameActual = 0;
 	spriteSiguiente = NULL;
-	SpriteSheetTexture = new LTexture(Renderer);
+	SpriteSheetTexture = ventana->crearTextura();
 
 	if( !SpriteSheetTexture->loadFromFile( ruta ) ){
 		printf( "Error en cargar Sprite\n" );

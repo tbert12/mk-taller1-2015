@@ -19,12 +19,17 @@ LTexture::LTexture(SDL_Renderer* Renderer)
 	mWidth = 0;
 	mHeight = 0;
 	gRenderer = Renderer;
+	m_relacion_pixel = 1;
 }
 
 LTexture::~LTexture()
 {
 	//Liberar
 	free();
+}
+
+void LTexture::setRelacionPixel(float p_a_l){
+	m_relacion_pixel = p_a_l;
 }
 
 bool LTexture::loadFromFile( std::string ruta )
@@ -101,13 +106,13 @@ void LTexture::setAlpha( Uint8 alpha )
 void LTexture::render( int x, int y, SDL_Rect* clip )
 {
 	//Setear espacio de renderizacion
-	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
+	SDL_Rect renderQuad = { x*m_relacion_pixel, y*m_relacion_pixel, mWidth, mHeight };
 
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
 	{
-		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
+		renderQuad.w = clip->w*m_relacion_pixel;
+		renderQuad.h = clip->h*m_relacion_pixel;
 	}
 
 	//Renderizar a la pantalla

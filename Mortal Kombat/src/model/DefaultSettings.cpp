@@ -27,7 +27,7 @@
 #define PERSONAJE_FACTOR_VELOCIDAD 10
 #define PIXEL_A_LOGICO 0.6510
 
-std::vector<Sprite*> GenerarSpritesDefault(SDL_Renderer* renderer){
+std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana){
 
 	std::vector<Frame*> framesInitial(9);
 
@@ -78,26 +78,26 @@ std::vector<Sprite*> GenerarSpritesDefault(SDL_Renderer* renderer){
 	std::string rutaSaltoDiagonal = "data/players/subzero/sprites/diag.png";
 	std::string rutaAgacharse = "data/players/subzero/sprites/agachar.png";
 
-	Sprite* Initial = new Sprite(rutaInitial,framesInitial,renderer);
-	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,renderer);
-	Sprite* CaminarAtras = new Sprite(rutaCaminar,framesCaminarAtras,renderer);
-	Sprite* AntesDeSaltar = new Sprite(rutaSalto,framesAntesDeSaltar,renderer);
-	Sprite* Salto = new Sprite(rutaSalto,framesDeSaltar,renderer);
-	Sprite* DespuesDeSaltar = new Sprite(rutaSalto,framesDespuesDeSaltar,renderer);
+	Sprite* Initial = new Sprite(rutaInitial,framesInitial,ventana);
+	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,ventana);
+	Sprite* CaminarAtras = new Sprite(rutaCaminar,framesCaminarAtras,ventana);
+	Sprite* AntesDeSaltar = new Sprite(rutaSalto,framesAntesDeSaltar,ventana);
+	Sprite* Salto = new Sprite(rutaSalto,framesDeSaltar,ventana);
+	Sprite* DespuesDeSaltar = new Sprite(rutaSalto,framesDespuesDeSaltar,ventana);
 	AntesDeSaltar->setSpriteSiguiente(Salto);
 	DespuesDeSaltar->setSpriteSiguiente(Initial);
 
-	Sprite* AntesSaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesAntesDeSaltarDiagonal,renderer);
-	Sprite* SaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonal,renderer);
+	Sprite* AntesSaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesAntesDeSaltarDiagonal,ventana);
+	Sprite* SaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonal,ventana);
 	AntesSaltoDiagonal->setSpriteSiguiente(SaltoDiagonal);
 
-	Sprite* AntesSaltoDiagonalAtras = new Sprite(rutaSaltoDiagonal,framesAntesDeSaltarDiagonal,renderer);
-	Sprite* SaltoDiagonalAtras = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonalAtras,renderer);
+	Sprite* AntesSaltoDiagonalAtras = new Sprite(rutaSaltoDiagonal,framesAntesDeSaltarDiagonal,ventana);
+	Sprite* SaltoDiagonalAtras = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonalAtras,ventana);
 	AntesSaltoDiagonalAtras->setSpriteSiguiente(SaltoDiagonalAtras);
 
-	Sprite* Agacharse = new Sprite(rutaAgacharse,framesAgacharse,renderer);
-	Sprite* Agachado = new Sprite(rutaAgacharse,framesAgachado,renderer);
-	Sprite* Levantarse = new Sprite(rutaAgacharse,framesLevantarse,renderer);
+	Sprite* Agacharse = new Sprite(rutaAgacharse,framesAgacharse,ventana);
+	Sprite* Agachado = new Sprite(rutaAgacharse,framesAgachado,ventana);
+	Sprite* Levantarse = new Sprite(rutaAgacharse,framesLevantarse,ventana);
 	Agacharse->setSpriteSiguiente(Agachado);
 	Levantarse->setSpriteSiguiente(Initial);
 
@@ -114,14 +114,13 @@ Mundo* CrearMundoDefault(){
 	float ratio_x = ESCENARIO_ANCHO_DEFAULT;
 	float ratio_y = ESCENARIO_ALTO_DEFAULT;
 	Mundo* mundo = new Mundo(ratio_x,ratio_y);
-	Ventana* ventana = new Ventana(VENTANA_ANCHO_PX_DEFAULT,VENTANA_ALTO_PX_DEFAULT);
-	ventana->setPixelaLogico(PIXEL_A_LOGICO);
+	Ventana* ventana = new Ventana(VENTANA_ANCHO_PX_DEFAULT,VENTANA_ALTO_PX_DEFAULT,PIXEL_A_LOGICO);
 
 	if(!ventana->create_window()){
 		log("No se puede inicializar la ventana",LOG_ERROR);
 	}
 
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana->getRenderer()), PERSONAJE_FACTOR_VELOCIDAD);
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana), PERSONAJE_FACTOR_VELOCIDAD);
 	log("Creado Personaje Default (SubZero)",LOG_DEBUG);
 
 	mundo->setVentana(ventana);

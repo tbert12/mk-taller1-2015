@@ -11,21 +11,25 @@ SDL_Renderer* Ventana::getRenderer(){
 	return Renderer;
 }
 
-Ventana::Ventana(int screenWidth, int screenHeight)
+Ventana::Ventana(int screenWidth, int screenHeight, float relacion_pixel_a_ventana)
 {
 	m_ancho = screenWidth;
 	m_alto = screenHeight;
-	m_pixel_a_logico = 1;
+	m_pixel_a_logico = relacion_pixel_a_ventana;
 }
+
+LTexture* Ventana::crearTextura(){
+	LTexture* m_texture = new LTexture(Renderer);
+	m_texture->setRelacionPixel(m_pixel_a_logico);
+	return m_texture;
+}
+
 
 int Ventana::obtenerAncho()
 {
 	return m_ancho;
 }
 
-void Ventana::setPixelaLogico(float p_a_l){
-	m_pixel_a_logico = p_a_l;
-}
 
 bool Ventana::create_window()
 {

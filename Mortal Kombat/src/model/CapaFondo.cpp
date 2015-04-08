@@ -12,7 +12,7 @@ CapaFondo::CapaFondo(int alto, int ancho, int zIndex, int anchoDeFondo, float ve
 		std::string ruta, Ventana* ventana)
 :Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal) //call superclass constructor
 {
-	m_texture = new LTexture(ventana->getRenderer());
+	m_texture = ventana->crearTextura();
 	m_texture->loadFromFile(ruta);
 	m_clip = new SDL_Rect();
 	m_clip->h = alto;

@@ -14,8 +14,8 @@
 #include <vector>
 
 #include "LTexture.h"
+#include "Ventana.h"
 #include "Frame.h"
-#include "../model/Renderizable.h"
 
 class Sprite {
 	private:
@@ -26,7 +26,7 @@ class Sprite {
 		Sprite* spriteSiguiente;
 
 	public:
-		Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer);
+		Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana);
 		~Sprite();
 
 		void setSpriteSiguiente(Sprite* nextsprite);

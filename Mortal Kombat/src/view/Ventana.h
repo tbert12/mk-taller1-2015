@@ -16,9 +16,7 @@ private:
 
 public:
 
-	Ventana(int screenWidth, int screenHeight);
-
-	void setPixelaLogico(float p_a_l);
+	Ventana(int screenWidth, int screenHeight,float m_pixel_a_logico);
 
 	int obtenerAncho();
 
@@ -33,6 +31,8 @@ public:
 
 	//Obtener Renderer para los objetos Renderizables
 	SDL_Renderer* getRenderer();
+
+	LTexture* crearTextura();
 
 	//limpia la pantalla
 	void clear();
