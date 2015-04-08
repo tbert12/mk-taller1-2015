@@ -11,6 +11,7 @@
 KeyboardControl::KeyboardControl(Personaje* un_personaje) {
 	personaje = un_personaje;
 	quit = false;
+	keydown = false;
 }
 
 bool KeyboardControl::getQuit(){
@@ -21,20 +22,23 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 	if(evento.type == SDL_QUIT){
 		quit = true;
 	}
-	else if(evento.type == SDL_KEYDOWN and evento.key.repeat == 0){
+	else if(evento.type == SDL_KEYDOWN){
 
 		switch( evento.key.keysym.sym ){
 				case SDLK_UP:
+					if (keydown) break;
 					personaje->Saltar();
 					break;
 
 				case SDLK_DOWN:
+					if (keydown) break;
 					personaje->Agachar();
+					keydown = true;
 					break;
 
 				case SDLK_LEFT:
-					if(evento.key.keysym.sym == SDLK_UP){
-						//personaje->SaltarIzquierda();
+					if(keydown){
+						break;
 					}
 					else{
 						personaje->CaminarIzquierda();
@@ -42,8 +46,8 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 					break;
 
 				case SDLK_RIGHT:
-					if(evento.key.keysym.sym == SDLK_UP){
-						//personaje->SaltarDerecha();
+					if(keydown){
+						break;
 					}
 					else{
 						personaje->CaminarDerecha();
@@ -51,12 +55,23 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 					break;
 
 				default:
-					
+					personaje->Inicial();
 					break;
 			}
-	}
-	else if (evento.type == SDL_KEYUP and evento.type != SDL_MOUSEMOTION){
+	} else if (evento.type == SDL_KEYUP and evento.type != SDL_MOUSEMOTION){
 		switch( evento.key.keysym.sym ){
+			case SDLK_DOWN:
+				keydown = false;
+				personaje->Levantarse();
+				break;
+			case SDLK_LEFT:
+				if(keydown) break;
+				personaje->Inicial();
+				break;
+			case SDLK_RIGHT:
+				if(keydown) break;
+				personaje->Inicial();
+				break;
 			default:
 				personaje->Inicial();
 				break;
