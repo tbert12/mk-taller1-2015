@@ -103,13 +103,12 @@ int main( int argc, char* args[] )
 			printf("%i\n",frame);
 
 			ventana->Refresh(luchador->getSpriteActual());
-			ventana->Refresh(luchador->getSpriteActual());
 
 			//FrameGuia
 			++frame;
 
 			//Sleep(Microsegundos)
-			usleep(75000);
+			usleep(120000);
 		}
 		//Free resources and close SDL
 		ventana->close_window();

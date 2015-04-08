@@ -102,7 +102,7 @@ void Ventana::Refresh(Sprite* spriteActual){
 	 * Mundo->render(SCREEN_WIDTH,SCREEN_HEIGHT);
 	 * este adentro hace en una de sus partes lo que hago a continuacion con el sprite
 	 */
-	spriteActual->Advance();
+	//spriteActual->Advance();
 	SDL_Rect* currentClip = spriteActual->getFrame();
 	LTexture* SpriteSheetTexture = spriteActual->getSpriteSheetTexture();
 	SpriteSheetTexture->render( ( m_ancho - currentClip->w ) / 2, ( m_alto - currentClip->h ) / 2, currentClip );
