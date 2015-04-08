@@ -62,13 +62,12 @@ void Mundo::render(){
 	//limpio pantalla
 	ventana->clear();
 
-	//renderizo todos los personajes
-	for (int i = 0 ; i < personajes.size() ; i++){
-			personajes[i]->renderizar();
-	}
+	//CapaPrincipal* capaPrincipal = (CapaPrincipal*)capas[3];
+	//capaPrincipal->Renderizar();
 
 	//renderizo las capas
-	for (int i = 0 ; i < capas.size() ; i++){
+	printf("%i",capas.size());
+	for (int i = 0 ; i <= capas.size()-1 ; i++){
 		capas[i]->Renderizar();
 	}
 

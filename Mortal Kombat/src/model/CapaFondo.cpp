@@ -17,7 +17,7 @@ CapaFondo::CapaFondo(int alto, int ancho, int zIndex, int anchoDeFondo, float ve
 	m_clip = new SDL_Rect();
 	m_clip->h = alto;
 	m_clip->w = ventana->obtenerAncho();
-	m_clip->x = (ancho - m_clip->w) *5;
+	m_clip->x = ancho/2 - (m_clip->w)/2; //La mitad de la capa al centro de la ventana
 	m_clip->y = 0;
 }
 
@@ -28,7 +28,7 @@ void CapaFondo::Mover(int posX)
 }
 
 void CapaFondo::Renderizar(){
-	m_texture->render(0,0, m_clip);
+	m_texture->render(m_clip->x,m_clip->y, m_clip);
 }
 
 CapaFondo::~CapaFondo() {

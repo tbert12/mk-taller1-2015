@@ -69,8 +69,8 @@ void Sprite::setSpriteSiguiente(Sprite* nextsprite){
 	spriteSiguiente = nextsprite;
 }
 
-void Sprite::render(){
-	SpriteSheetTexture->render(spriteFrames[frameActual].w,spriteFrames[frameActual].h,&spriteFrames[frameActual]);
+void Sprite::render(int x, int y){
+	SpriteSheetTexture->render(x,y,&spriteFrames[frameActual]);
 	this->Advance(); // hay que ver, no siempre hay que avnzar el sprite!
 }
 

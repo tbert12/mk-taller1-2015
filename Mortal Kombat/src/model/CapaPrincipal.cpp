@@ -22,21 +22,7 @@ void CapaPrincipal::Renderizar()
 	{
 		m_Personaje->SetScroll(true);
 	}
-	Sprite* spriteActual =m_Personaje->getSpriteActual();
-	SDL_Rect* clip = spriteActual->getFrame();
-	LTexture* textura = spriteActual->getSpriteSheetTexture();
-	textura->render(m_Personaje->getX(), m_Personaje->getY(),clip);
-
-	//m_Texture->render(0,0, Ventana.obtenerClip());
-	/*
-	std::list<Renderizable*>::iterator it ;
-
-	for(it=m_listaDeRenderizables.begin(); it!=m_listaDeRenderizables.end(); it++)
-	{
-		Renderizable* elemento = dynamic_cast<Renderizable*>(*it); // compile error
-		elemento->Renderizar();
-	}
-	*/
+	m_Personaje->renderizar();
 }
 
 bool CapaPrincipal::Scrollear(){

@@ -39,10 +39,6 @@ void Capa::Mover(int posX){
 	m_XActual -= m_velocidad;
 }
 
-void Capa::Renderizar(){
-
-}
-
 int Capa::getZIndex(){
 	return m_zIndex;
 }

@@ -154,7 +154,7 @@ void Personaje::QuitarVida(int valor){
 }
 
 void Personaje::renderizar(){
-	spriteActual->render();
+	spriteActual->render(m_xActual,m_yActual);
 }
 
 Personaje::~Personaje() {

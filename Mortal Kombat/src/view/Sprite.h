@@ -34,7 +34,7 @@ class Sprite {
 		void setRender(SDL_Renderer* Renderer);
 		bool Advance();
 		bool puedeAvanzar();
-		void render();
+		void render(int x,int y);
 		Sprite* getSpriteSiguiente();
 		SDL_Rect* getFrame();
 		LTexture* getSpriteSheetTexture();

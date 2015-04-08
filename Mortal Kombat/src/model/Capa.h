@@ -18,7 +18,7 @@ public:
 	void Actualizar();
 	void Mover(int posX);
 	int getX();
-	void Renderizar();
+	virtual void Renderizar();
 	Capa(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal);
 
 private:
