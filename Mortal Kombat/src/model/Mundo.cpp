@@ -58,9 +58,28 @@ Escenario* Mundo::getEscenario(){
 	return escenario;
 }
 
+void Mundo::render(){
+	Personaje* personaje = personajes[0];//HARCODEADO POR QUE HAY UNO SOLO
+	ventana->Refresh(personaje->getSpriteActual());
+
+	//renderizo las capas
+	for (int i = 0 ; i < capas.size() ; i++){
+		capas[i]->Renderizar();
+	}
+
+}
+
 Mundo::~Mundo() {
 	//fijar si hay que liberar cada uno de los contenidos de los vectores
+	for (int i = 0 ; i < capas.size() ; i++){
+	      capas[i]->~Capa();
+	}
 	capas.clear();
+	for (int i = 0 ; i < personajes.size() ; i++){
+	      personajes[i]->~Personaje();
+	}
 	personajes.clear();
+	ventana->close_window();
+	tiempo->~Tiempo();
 }
 

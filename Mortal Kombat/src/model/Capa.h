@@ -18,8 +18,8 @@ public:
 	void Actualizar();
 	void Mover(int posX);
 	int getX();
+	void Renderizar();
 	Capa(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal);
-	bool cargarBackground(std::string background);
 
 private:
 	int m_alto;

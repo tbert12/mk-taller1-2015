@@ -23,7 +23,7 @@ private:
 
 public:
 	CapaFondo(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal,
-			std::string ruta,SDL_Renderer* Renderer, Ventana* ventana);
+			std::string ruta, Ventana* ventana);
 	virtual void Mover(int posX);
 	virtual void Renderizar();
 	virtual ~CapaFondo();

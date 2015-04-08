@@ -12,6 +12,7 @@
 #include "../view/LTexture.h"
 #include "Capa.h"
 #include "CapaPrincipal.h"
+#include "CapaFondo.h"
 #include "Personaje.h"
 #include "../view/Sprite.h"
 #include "../view/Frame.h"
@@ -41,6 +42,7 @@ public:
 	Ventana* getVentana();
 	void setEscenario(Escenario* unEscenario);
 	Escenario* getEscenario();
+	void render();
 	virtual ~Mundo();
 };
 

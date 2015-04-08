@@ -66,7 +66,6 @@ int main( int argc, char* args[] )
 		return 1;
 	} else {
 		log( "Mundo creado por default", LOG_DEBUG );
-		Ventana* ventana = mundo->getVentana();
 		//Creo el Personaje
 		//Personaje luchador = Personaje("Sub Zero",CargaDePrueba());
 		Personaje* luchador = mundo->getPersonaje();
@@ -102,7 +101,7 @@ int main( int argc, char* args[] )
 
 			printf("%i\n",frame);
 
-			ventana->Refresh(luchador->getSpriteActual());
+			mundo->render();
 
 			//FrameGuia
 			++frame;
@@ -111,7 +110,7 @@ int main( int argc, char* args[] )
 			usleep(120000);
 		}
 		//Free resources and close SDL
-		ventana->close_window();
+		mundo->~Mundo();
 	}
 
 	return 0;
