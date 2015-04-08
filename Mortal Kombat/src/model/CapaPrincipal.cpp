@@ -20,16 +20,13 @@ void CapaPrincipal::Renderizar()
 	if( Scrollear())
 	{
 		printf("Is Scrolling \n");
+		m_Personaje->SetScroll(true);
 		Mover(m_Personaje->getSentidoDeMovimiento());
-		return;
 	}
 	m_Personaje->renderizar();
 }
 
 bool CapaPrincipal::Scrollear(){
-	printf("ancho*.9: %f  ancho*.1:%f \n",m_ancho* 0.9f,m_ancho* 0.1f);
-	int x = m_Personaje->getX();
-	printf("x del personaje: %f \n ", x);
 	return m_Personaje->getX() >= m_ancho* 0.9f || m_Personaje->getX() <= m_ancho* 0.1f;
 }
 

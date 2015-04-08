@@ -21,9 +21,9 @@ CapaFondo::CapaFondo(int alto, int ancho, int zIndex, int anchoDeFondo, float ve
 	m_clip->y = 0;
 }
 
-void CapaFondo::Mover(int posX)
+void CapaFondo::Mover(bool right)
 {
-	Capa::Mover(posX);
+	Capa::Mover(right);
 	printf("Capa:%i    x:%i\n",this->m_texture->getWidth(),this->getX());
 	m_clip->x = this->getX();
 }

@@ -112,13 +112,13 @@ void Personaje::Saltar(){
 void Personaje::_SaltarDerecha(){
 	this->_cambiarSprite(SPRITE_SALTO_DIAGONAL_ANTES_D);
 	_estaSaltando = 1;
-	//m_velocidad = m_velocidad*2; Salta mas larog
+	m_velocidad = m_velocidad*2.5f;
 }
 
 void Personaje::_SaltarIzquierda(){
 	this->_cambiarSprite(SPRITE_SALTO_DIAGONAL_ANTES_I);
 	_estaSaltando = 1;
-	//m_velocidad = m_velocidad*2; Salta mas Largo
+	m_velocidad = m_velocidad*2.5f;
 }
 
 void Personaje::_SaltarHorizontal(){
