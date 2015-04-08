@@ -67,7 +67,7 @@ void Mundo::render(){
 
 	//renderizo las capas
 	printf("%i",capas.size());
-	for (int i = 0 ; i <= capas.size()-1 ; i++){
+	for (unsigned int i = 0 ; i <= capas.size()-1 ; i++){
 		capas[i]->Renderizar();
 	}
 
@@ -77,11 +77,11 @@ void Mundo::render(){
 
 Mundo::~Mundo() {
 	//fijar si hay que liberar cada uno de los contenidos de los vectores
-	for (int i = 0 ; i < capas.size() ; i++){
+	for (unsigned int i = 0 ; i < capas.size() ; i++){
 	      capas[i]->~Capa();
 	}
 	capas.clear();
-	for (int i = 0 ; i < personajes.size() ; i++){
+	for (unsigned int i = 0 ; i < personajes.size() ; i++){
 	      personajes[i]->~Personaje();
 	}
 	personajes.clear();

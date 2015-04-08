@@ -43,3 +43,8 @@ int Capa::getZIndex(){
 	return m_zIndex;
 }
 
+void Capa::Renderizar()
+{
+
+}
+

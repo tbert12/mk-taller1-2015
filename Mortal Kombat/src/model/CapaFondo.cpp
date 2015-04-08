@@ -28,6 +28,7 @@ void CapaFondo::Mover(int posX)
 }
 
 void CapaFondo::Renderizar(){
+	printf("x:%i y:%i\n",m_clip->x,m_clip->y);
 	m_texture->render(m_clip->x,m_clip->y, m_clip);
 }
 
