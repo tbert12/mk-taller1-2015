@@ -60,11 +60,9 @@ void Personaje::_cambiarSprite(int accion){
 void Personaje::Inicial(){
 	if (_estaSaltando > 0) return;
 	m_velocidad = 0;
-	if (spriteActual == sprites[SPRITE_SALTO]){
-		this->_cambiarSprite(SPRITE_SALTO_CAIDA);
-	} else if (spriteActual == sprites[SPRITE_SALTO_DIAGONAL_DERECHA]){
-		this->_cambiarSprite(SPRITE_SALTO_CAIDA);
-	} else if (spriteActual == sprites[SPRITE_SALTO_DIAGONAL_IZQUIERDA]){
+	if (spriteActual == sprites[SPRITE_SALTO] or
+		spriteActual == sprites[SPRITE_SALTO_DIAGONAL_DERECHA] or
+		spriteActual == sprites[SPRITE_SALTO_DIAGONAL_IZQUIERDA]){
 		this->_cambiarSprite(SPRITE_SALTO_CAIDA);
 	} else if (spriteActual == sprites[SPRITE_AGACHADO]){
 		this->_cambiarSprite(SPRITE_LEVANTARSE);
@@ -166,7 +164,8 @@ void Personaje::Levantarse(){
 int Personaje::getX()
 {
 	m_xActual += m_velocidad;
-	return m_xActual;
+	printf("Me lo pidio\n");
+	return m_xActual + 320;
 }
 
 int Personaje::getY()
@@ -184,9 +183,17 @@ void Personaje::QuitarVida(int valor){
 	}
 }
 
-void Personaje::renderizar(int x, int y){
-	spriteActual->render(x + getX(),y - getY());
+void Personaje::renderizar(){
+	printf("Personaje:  x: %i  y:%i \n",320+ getX(),480 - getY());
+	spriteActual->render(getX(),480 - getY());
 	AvanzarSprite();
+}
+
+bool Personaje::IsScrolling(){
+	return this->estaScrolleando;
+}
+bool Personaje::getSentidoDeMovimiento(){
+	return m_velocidad > 0;
 }
 
 Personaje::~Personaje() {

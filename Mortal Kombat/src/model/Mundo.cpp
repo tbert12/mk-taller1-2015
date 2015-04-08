@@ -68,6 +68,7 @@ void Mundo::render(){
 	//renderizo las capas
 	printf("%i\n",capas.size());
 	for (unsigned int i = 0 ; i <= capas.size()-1 ; i++){
+		//capas[i]->Mover();
 		capas[i]->Renderizar();
 	}
 

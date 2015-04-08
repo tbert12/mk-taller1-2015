@@ -25,8 +25,8 @@ const int SPRITE_LEVANTARSE = 12;
 const int SPRITE_PUNCHING = 13;
 const int SPRITE_KICKING = 14;
 
-const int VELOCIDAD_ADELANTE = 8;
-const int VELOCIDAD_ATRAS = -4;
+const int VELOCIDAD_ADELANTE = 2.5;
+const int VELOCIDAD_ATRAS = -2;
 
 #include <stdio.h>
 #include <iostream>
@@ -65,11 +65,13 @@ public:
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
 
-	void renderizar(int,int);
+	void renderizar();
 
 	int getX();
 	int getY();
 	int getVida();
+	bool IsScrolling();
+	bool getSentidoDeMovimiento();
 	void QuitarVida(int valor);
 
 	void Inicial();
