@@ -153,6 +153,10 @@ void Personaje::QuitarVida(int valor){
 	}
 }
 
+void Personaje::renderizar(){
+	spriteActual->render();
+}
+
 Personaje::~Personaje() {
 	//~sprites();
 	//~nombre();

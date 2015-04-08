@@ -23,12 +23,15 @@ public:
 	bool create_window();
 
 	//Refrescar el mundo (la pantalla, para cada ciclo)
-	void Refresh(Sprite* spriteActual);
+	void Refresh();
 
 	//Frees media and shuts down SDL
 	void close_window();
 
 	//Obtener Renderer para los objetos Renderizables
 	SDL_Renderer* getRenderer();
+
+	//limpia la pantalla
+	void clear();
 };
 #endif /* SRC_VIEW_VENTANA_H_ */

@@ -6,7 +6,6 @@
  */
 
 #include "Sprite.h"
-#include "LTexture.h"
 
 Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Renderer){
 	frameActual = 0;
@@ -14,8 +13,7 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,SDL_Renderer* Rendere
 	SpriteSheetTexture = new LTexture(Renderer);
 
 	if( !SpriteSheetTexture->loadFromFile( ruta ) ){
-		printf( "Error en cargar Sprite\n" );
-		//Usemos la funcion log( mensaje ) en logging.h para este tipo de cosas.
+		log( "Error en cargar Sprite\n",LOG_ERROR);
 	}
 	cantidadFrames = frames.size();
 	
@@ -69,6 +67,11 @@ LTexture* Sprite::getSpriteSheetTexture(){
 
 void Sprite::setSpriteSiguiente(Sprite* nextsprite){
 	spriteSiguiente = nextsprite;
+}
+
+void Sprite::render(){
+	SpriteSheetTexture->render(spriteFrames[frameActual].w,spriteFrames[frameActual].h,&spriteFrames[frameActual]);
+	this->Advance(); // hay que ver, no siempre hay que avnzar el sprite!
 }
 
 void Sprite::Reset(){

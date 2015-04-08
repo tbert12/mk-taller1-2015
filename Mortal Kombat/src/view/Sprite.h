@@ -15,7 +15,7 @@
 
 #include "LTexture.h"
 #include "Frame.h"
-#include "../model/Renderizable.h"
+#include "../model/logging.h"
 
 class Sprite {
 	private:
@@ -34,6 +34,7 @@ class Sprite {
 		void setRender(SDL_Renderer* Renderer);
 		bool Advance();
 		bool puedeAvanzar();
+		void render();
 		Sprite* getSpriteSiguiente();
 		SDL_Rect* getFrame();
 		LTexture* getSpriteSheetTexture();

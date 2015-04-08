@@ -111,6 +111,7 @@ int main( int argc, char* args[] )
 		}
 		//Free resources and close SDL
 		mundo->~Mundo();
+		log("Se cierra y libera el mundo",LOG_DEBUG);
 	}
 
 	return 0;

@@ -59,14 +59,21 @@ Escenario* Mundo::getEscenario(){
 }
 
 void Mundo::render(){
-	Personaje* personaje = personajes[0];//HARCODEADO POR QUE HAY UNO SOLO
-	ventana->Refresh(personaje->getSpriteActual());
+	//limpio pantalla
+	ventana->clear();
+
+	//renderizo todos los personajes
+	for (int i = 0 ; i < personajes.size() ; i++){
+			personajes[i]->renderizar();
+	}
 
 	//renderizo las capas
 	for (int i = 0 ; i < capas.size() ; i++){
 		capas[i]->Renderizar();
 	}
 
+	//actualizo pantalla -> SDL_RenderPresent( Renderer );
+	ventana->Refresh();
 }
 
 Mundo::~Mundo() {

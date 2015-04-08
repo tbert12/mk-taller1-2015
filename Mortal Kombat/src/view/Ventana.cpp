@@ -1,4 +1,5 @@
 #include "Ventana.h"
+#include "../model/logging.h"
 
 //The window we'll be rendering to
 SDL_Window* Window = NULL;
@@ -29,7 +30,7 @@ bool Ventana::create_window()
 	//Inicializar SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
-		printf( "SDL no puede inicializar! SDL Error: %s\n", SDL_GetError() );
+		log( ("SDL no puede inicializar! SDL Error: %s\n", SDL_GetError()),LOG_ERROR );
 		success = false;
 	}
 	else
@@ -37,14 +38,14 @@ bool Ventana::create_window()
 		//Filtrado lineal de textura
 		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
 		{
-			printf( "Warning: filtrado lineal de textura no esta habilitado!" );
+			log("Filtrado lineal de textura no esta habilitado!" ,LOG_WARNING);
 		}
 
 		//Crear Ventana
 		Window = SDL_CreateWindow( "World", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_ancho, m_alto, SDL_WINDOW_SHOWN );
 		if( Window == NULL )
 		{
-			printf( "La ventana no se puede crear! SDL Error: %s\n", SDL_GetError() );
+			log(( "La ventana no se puede crear! SDL Error: %s\n", SDL_GetError() ),LOG_ERROR);
 			success = false;
 		}
 		else
@@ -53,7 +54,7 @@ bool Ventana::create_window()
 			Renderer = SDL_CreateRenderer( Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 			if( Renderer == NULL )
 			{
-				printf( "No se pudo crear la renderizacion! SDL Error: %s\n", SDL_GetError() );
+				log(( "No se pudo crear la renderizacion! SDL Error: %s\n", SDL_GetError() ),LOG_ERROR);
 				success = false;
 			}
 			else
@@ -65,7 +66,7 @@ bool Ventana::create_window()
 				int imgFlags = IMG_INIT_PNG;
 				if( !( IMG_Init( imgFlags ) & imgFlags ) )
 				{
-					printf( "SDL_image no pudo inicializarse! SDL_image Error: %s\n", IMG_GetError() );
+					log(( "SDL_image no pudo inicializarse! SDL_image Error: %s\n", IMG_GetError() ),LOG_ERROR);
 					success = false;
 				}
 			}
@@ -91,11 +92,13 @@ void Ventana::close_window()
 	SDL_Quit();
 }
 
-void Ventana::Refresh(Sprite* spriteActual){
+void Ventana::clear(){
 	//Limpiar pantalla
 	SDL_SetRenderDrawColor( Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear( Renderer );
+}
 
+void Ventana::Refresh(){
 	/*
 	 * Esto lo tiene que hacer el mundo, el mundo es el que se refresca y que refresca
 	 * refresca ted el contenido.
@@ -103,9 +106,11 @@ void Ventana::Refresh(Sprite* spriteActual){
 	 * este adentro hace en una de sus partes lo que hago a continuacion con el sprite
 	 */
 	//spriteActual->Advance();
-	SDL_Rect* currentClip = spriteActual->getFrame();
-	LTexture* SpriteSheetTexture = spriteActual->getSpriteSheetTexture();
-	SpriteSheetTexture->render( ( m_ancho - currentClip->w ) / 2, ( m_alto - currentClip->h ) / 2, currentClip );
+	//SDL_Rect* currentClip = spriteActual->getFrame();
+	//LTexture* SpriteSheetTexture = spriteActual->getSpriteSheetTexture();
+	//SpriteSheetTexture->render( ( m_ancho - currentClip->w ) / 2, ( m_alto - currentClip->h ) / 2, currentClip );
+
+	//spriteActual->render(); LO HACE EL PERSONAJE
 
 	//Actualizar pantalla
 	SDL_RenderPresent( Renderer );
