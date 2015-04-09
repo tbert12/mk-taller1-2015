@@ -9,8 +9,8 @@
 #include <list>
 
 
-CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal, Personaje* personaje)
-:Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal) //call superclass constructor
+CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal, Personaje* personaje, Ventana* ventana)
+:Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal, ventana) //call superclass constructor
 {
 	m_Personaje = personaje;
 }

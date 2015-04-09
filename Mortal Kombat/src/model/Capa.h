@@ -19,13 +19,14 @@ public:
 	virtual void Mover(bool right);
 	int getX();
 	virtual void Renderizar();
-	Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal);
+	Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal, Ventana* ventana);
 
 private:
 	float m_alto;
 	int m_zIndex;
 	float m_XActual;
 	float m_anchoDeFondo;
+	float m_anchoDeVentana;
 	float m_velocidad;
 protected:
 	float m_ancho;

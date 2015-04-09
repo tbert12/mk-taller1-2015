@@ -5,13 +5,14 @@
 
 #include "Capa.h"
 
-Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float factorVelocidad) {
+Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float factorVelocidad, Ventana* ventana) {
 	m_alto = alto;
 	m_ancho = ancho;
 	m_zIndex = zIndex;
 	m_anchoDeFondo = anchoDeFondo;
 	m_velocidad = (m_ancho/m_anchoDeFondo)*factorVelocidad;
 	m_XActual = m_ancho*0.5f;
+	m_anchoDeVentana = ventana->obtenerAncho();
 }
 
 int Capa::getX()
@@ -22,13 +23,15 @@ int Capa::getX()
 void Capa::Mover(bool right){
 
 
-	if(right > true)
+	if(right)
 	{
+		printf("ancho %f \n", m_ancho);
 		if( m_XActual+m_ancho >= m_anchoDeFondo)
 		{
 			m_XActual = m_anchoDeFondo - m_ancho;
 			return;
 		}
+
 		m_XActual += m_velocidad;
 		return;
 	}
