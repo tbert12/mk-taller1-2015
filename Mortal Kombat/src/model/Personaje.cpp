@@ -58,9 +58,6 @@ float Personaje::getVida(){
 	return vida;
 }
 
-void Personaje::SetScroll(bool valor){
-	estaScrolleando = valor;
-}
 
 void Personaje::_cambiarSprite(int accion){
 	if(_estaSaltando > 0) return;

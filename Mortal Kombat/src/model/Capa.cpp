@@ -23,9 +23,11 @@ void Capa::Mover(bool right){
 
 	if(right)
 	{
+		printf("xActual: %f , mueve:+ %f ",m_XActual,m_velocidad);
 		m_XActual += m_velocidad;
 
 	}else{
+		printf("xActual: %f , mueve:- %f ",m_XActual,m_velocidad);
 		m_XActual -=m_velocidad;
 	}
 	if( m_XActual <= 0){

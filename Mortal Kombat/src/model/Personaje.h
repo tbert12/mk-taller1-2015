@@ -90,7 +90,6 @@ public:
 	void Levantarse();
 	void CaminarDerecha();
 	void CaminarIzquierda();
-	void SetScroll(bool valor);
 
 	virtual ~Personaje();
 };

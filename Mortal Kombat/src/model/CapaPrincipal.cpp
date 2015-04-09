@@ -13,6 +13,7 @@ CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeF
 :Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal) //call superclass constructor
 {
 	m_Personaje = personaje;
+	personaje->setDimensiones(alto,ancho);
 	m_ancho_ventana = ancho_ventana;
 	_actualizarX();
 }
@@ -30,7 +31,6 @@ void CapaPrincipal::Renderizar()
 }
 
 int CapaPrincipal::Scrollear(){
-	//printf("x personaje: %f\n x + .1ventana:%f\n x + .9ventana:%f\n",m_Personaje->getX(),(getX() + m_ancho_ventana*0.1f),(getX() + m_ancho_ventana*0.9f));
 	if (m_Personaje->getX() <= (getX() + m_ancho_ventana*0.1f)) return -1;
 	if (m_Personaje->getX() >= (getX() + m_ancho_ventana*0.9f)) return 1;
 	return 0;
