@@ -26,7 +26,7 @@
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
 #define PERSONAJE_FACTOR_VELOCIDAD 10
 
-std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana){
+std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
 
 	std::vector<Frame*> framesInitial(9);
 
@@ -44,31 +44,31 @@ std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana){
 	std::vector<int> wSaltoDiagonal = {72,55,74,74,53,55,75,74};
 
 	std::vector<Frame*> framesAgacharse(2);
-	framesAgacharse[0] = new Frame(0,0,107,60);
-	framesAgacharse[1] = new Frame(60,0,89,62);
+	framesAgacharse[0] = new Frame(0,0,107/ry,60/rx);
+	framesAgacharse[1] = new Frame(60/rx,0,89/ry,62/rx);
 	std::vector<Frame*> framesLevantarse(framesAgacharse);
 	std::reverse(framesLevantarse.begin(),framesLevantarse.end());
 
 	std::vector<Frame*> framesAgachado(1);
-	framesAgachado[0] = new Frame(122,0,71,64);
+	framesAgachado[0] = new Frame(122/rx,0,71/ry,64/rx);
 
 	int wInitial = 72,wCaminar = 68;
 	for (int i=0;i<9;i++){
-		framesInitial[i] = new Frame(wInitial*i,0,133,wInitial);
-		framesCaminar[i] = new Frame(wCaminar*i,0,133,wCaminar);
+		framesInitial[i] = new Frame(wInitial*i/rx,0,133/ry,wInitial/rx);
+		framesCaminar[i] = new Frame(wCaminar*i/rx,0,133/ry,wCaminar/rx);
 	}
 	std::vector<Frame*> framesCaminarAtras (framesCaminar);
 	std::reverse(framesCaminarAtras.begin(),framesCaminarAtras.end());
 
-	framesAntesDeSaltar[0] = new Frame(0,0,139,69);
-	framesDeSaltar[0] = new Frame(71,0,96,70);
-	framesDespuesDeSaltar[0] = new Frame(141,0,107,60);
+	framesAntesDeSaltar[0] = new Frame(0,0,139/ry,69/rx);
+	framesDeSaltar[0] = new Frame(71/rx,0,96/ry,70/rx);
+	framesDespuesDeSaltar[0] = new Frame(141/rx,0,107/ry,60/rx);
 
-	framesAntesDeSaltarDiagonal[0] = new Frame(xSaltoDiagonal[0],0,hSaltoDiagonal[0],wSaltoDiagonal[0]);
+	framesAntesDeSaltarDiagonal[0] = new Frame(xSaltoDiagonal[0]/rx,0,hSaltoDiagonal[0]/ry,wSaltoDiagonal[0]/ry);
 
 	for (size_t i = 0; i < framesSaltoDiagonal.size(); i++){
-		framesSaltoDiagonal[i] = new Frame(xSaltoDiagonal[i+1],0,hSaltoDiagonal[i+1],wSaltoDiagonal[i+1]);
-		framesSaltoDiagonalAtras[framesSaltoDiagonal.size()-i-1] = new Frame(xSaltoDiagonal[i+1],0,hSaltoDiagonal[i+1],wSaltoDiagonal[i+1]);
+		framesSaltoDiagonal[i] = new Frame(xSaltoDiagonal[i+1]/rx,0,hSaltoDiagonal[i+1]/ry,wSaltoDiagonal[i+1]/rx);
+		framesSaltoDiagonalAtras[framesSaltoDiagonal.size()-i-1] = new Frame(xSaltoDiagonal[i+1]/rx,0,hSaltoDiagonal[i+1]/ry,wSaltoDiagonal[i+1]/rx);
 	}
 	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
 	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
@@ -118,7 +118,7 @@ Mundo* CrearMundoDefault(){
 		log("No se puede inicializar la ventana",LOG_ERROR);
 	}
 
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana), PERSONAJE_FACTOR_VELOCIDAD);
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD);
 	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2)*1.0f,Y_PISO_DEFAULT*1.0f);
 	log("Creado Personaje Default (SubZero)",LOG_DEBUG);
 
