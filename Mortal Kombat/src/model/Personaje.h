@@ -47,6 +47,8 @@ private:
 	Sprite* spriteActual;
 	std::vector<Sprite*> sprites;
 	float m_velocidad;
+	float velocidadAdelante;
+	float velocidadAtras;
 
 	void _cambiarSprite(int accion);
 

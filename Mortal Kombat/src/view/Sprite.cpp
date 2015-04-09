@@ -24,19 +24,16 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana){
 		spriteFrames[i].y = frames[i]->Y;
 		spriteFrames[i].h = frames[i]->Alto;
 		spriteFrames[i].w = frames[i]->Ancho;
+		//frames[i]->~Frame();
 	}
 }
 
 Sprite::~Sprite(){
-	//Los Frames se deben liberar apenas se carga
-	//Elimino Sprite
-	//SpriteSheetTexture.free();
+	SpriteSheetTexture->free();
 }
 
 Rect_Logico* Sprite::getFrame(){
 	Rect_Logico* frame = &spriteFrames[frameActual];
-	printf("Frame: %d | Cant: %d\n",frameActual,cantidadFrames);
-
 	return frame;
 }
 
@@ -46,7 +43,6 @@ bool Sprite::Advance(){
 	if (frameActual >= cantidadFrames){
 		frameActual = 0;
 	}
-	printf("Frame: %d | TotalFrame: %d\n",frameActual,cantidadFrames);
 	return true;
 }
 

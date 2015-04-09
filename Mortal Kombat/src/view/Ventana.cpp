@@ -1,15 +1,6 @@
 #include "Ventana.h"
 #include "../model/logging.h"
 
-//The window we'll be rendering to
-SDL_Window* Window = NULL;
-
-//The window renderer
-SDL_Renderer* Renderer = NULL;
-
-SDL_Renderer* Ventana::getRenderer(){
-	return Renderer;
-}
 
 Ventana::Ventana(int screenWidth, int screenHeight, float ratiox,float ratioy)
 {
@@ -17,6 +8,8 @@ Ventana::Ventana(int screenWidth, int screenHeight, float ratiox,float ratioy)
 	m_alto_px = screenHeight;
 	ratio_x = ratiox;
 	ratio_y = ratioy;
+	Window = NULL;
+	Renderer = NULL;
 }
 
 LTexture* Ventana::crearTextura(){
@@ -26,6 +19,9 @@ LTexture* Ventana::crearTextura(){
 	return m_texture;
 }
 
+SDL_Renderer* Ventana::getRenderer(){
+	return Renderer;
+}
 
 float Ventana::obtenerAncho()
 {

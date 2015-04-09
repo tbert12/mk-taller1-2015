@@ -13,6 +13,8 @@ private:
 	int m_alto_px;
 	float ratio_x;
 	float ratio_y;
+	SDL_Window* Window;
+	SDL_Renderer* Renderer;
 
 public:
 

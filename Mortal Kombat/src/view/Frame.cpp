@@ -16,5 +16,4 @@ Frame::Frame(float x,float y,float alto,float ancho){
 }
 
 Frame::~Frame(){
-	//Liberar
 }

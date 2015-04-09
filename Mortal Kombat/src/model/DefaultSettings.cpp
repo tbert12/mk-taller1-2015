@@ -54,6 +54,7 @@ std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
 
 	int wInitial = 72,wCaminar = 68;
 	for (int i=0;i<9;i++){
+
 		framesInitial[i] = new Frame(wInitial*i/rx,0,133/ry,wInitial/rx);
 		framesCaminar[i] = new Frame(wCaminar*i/rx,0,133/ry,wCaminar/rx);
 	}
