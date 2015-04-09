@@ -75,7 +75,7 @@ void Sprite::Reset(){
 	frameActual = 0;
 }
 
-void Sprite::render(int x, int y){
+void Sprite::render(float x, float y){
 	SDL_Rect* currentClip = &spriteFrames[frameActual];
 	SpriteSheetTexture->render(x ,y - currentClip->h , currentClip);
 }

@@ -9,8 +9,8 @@
 class Ventana
 {
 private:
-	int m_ancho;
-	int m_alto;
+	int m_ancho_px;
+	int m_alto_px;
 	float ratio_x;
 	float ratio_y;
 
@@ -18,7 +18,7 @@ public:
 
 	Ventana(int screenWidth, int screenHeight,float ratiox,float ratioy);
 
-	int obtenerAncho();
+	float obtenerAncho();
 
 	//Starts up SDL and creates window
 	bool create_window();

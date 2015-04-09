@@ -23,8 +23,8 @@
 
 class Mundo {
 private:
-	float ratio_x;
-	float ratio_y;
+	float ancho_mundo;
+	float alto_mundo;
 	std::vector<Capa*> capas;
 	std::vector<Personaje*> personajes;
 	Tiempo* tiempo;
@@ -32,7 +32,7 @@ private:
 	Ventana* ventana; //tiene el renderer
 
 public:
-	Mundo(float ratioX,float ratioY);
+	Mundo(float AnchoMundo,float AltoMundo);
 	bool addPersonaje(Personaje* un_personaje);
 	Personaje* getPersonaje(int indice = 0);
 	bool addCapa(Capa* unaCapa);
