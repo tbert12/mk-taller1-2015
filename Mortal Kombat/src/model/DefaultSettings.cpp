@@ -9,7 +9,7 @@
 #define VENTANA_ALTO_LOG 150.0
 #define ESCENARIO_ANCHO_DEFAULT 600.0
 #define ESCENARIO_ALTO_DEFAULT 150.0
-#define Y_PISO_DEFAULT 85.0
+#define Y_PISO_DEFAULT 135.0
 #define BACKGROUND_0_DEFAULT "data/img/background/background_0.png"
 #define BACKGROUND_0__ANCHO_DEFAULT 200.0
 #define BACKGROUND_0__ALTO_DEFAULT 150.0
@@ -44,13 +44,13 @@ std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
 	std::vector<int> wSaltoDiagonal = {72,55,74,74,53,55,75,74};
 
 	std::vector<Frame*> framesAgacharse(2);
-	framesAgacharse[0] = new Frame(0,0,107/ry,60/rx);
-	framesAgacharse[1] = new Frame(60/rx,0,89/ry,62/rx);
+	framesAgacharse[0] = new Frame(.0f,.0f,107/ry,60/rx);
+	framesAgacharse[1] = new Frame(60/rx,.0f,89/ry,62/rx);
 	std::vector<Frame*> framesLevantarse(framesAgacharse);
 	std::reverse(framesLevantarse.begin(),framesLevantarse.end());
 
 	std::vector<Frame*> framesAgachado(1);
-	framesAgachado[0] = new Frame(122/rx,0,71/ry,64/rx);
+	framesAgachado[0] = new Frame(122/rx,.0f,71/ry,64/rx);
 
 	int wInitial = 72,wCaminar = 68;
 	for (int i=0;i<9;i++){

@@ -112,27 +112,31 @@ void LTexture::setAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void LTexture::renderObjeto( SDL_Rect* clip,float x, float y)
+void LTexture::renderObjeto( Rect_Logico* clip,float x, float y)
 {
-	int x_px = (int)x*ratio_x;
-	int y_px = (int)y*ratio_y;
+	int x_px = (int)(x*ratio_x);
+	int y_px = (int)(y*ratio_y);
 
-	SDL_Rect camera = { x_px,y_px, mWidth, mHeight};
+	SDL_Rect Object = { x_px,y_px, mWidth, mHeight};
 	SDL_Rect clip_px;
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
 	{
-		clip_px = {clip->x*ratio_x, //posicion horizontal de la capa
-				clip->y*ratio_y, //posicion vertical de la capa
-				clip->w*ratio_x, // ancho del objeto
-				clip->h*ratio_y }; //alto del objeto
+		//El + 0.5 es el casteo que usa en C++
+		//Si se usa la librea std::round. HACE LO MISMO!. (StackOverFlow)
+		clip_px = {(int)(clip->x*ratio_x + 0.5), //posicion horizontal del objeto
+				(int)(clip->y*ratio_y + 0.5), //posicion vertical del objeto
+				(int)(clip->w*ratio_x + 0.5), // ancho del objeto
+				(int)(clip->h*ratio_y + 0.5) }; //alto del objeto
 
-		camera.w = clip_px.w;//Siempre el tamaño de la ventana
-		camera.h = clip_px.h;
+		Object.w = clip_px.w;//Siempre el tamaño de la ventana
+		Object.h = clip_px.h;
 	}
 
+	printf("Object.x: %f\nObject.y; %d\nObject.h: %d\nObject.w; %d\n",clip->x*ratio_x,Object.y,Object.h,Object.w);
+
 	//Renderizar a la pantalla
-	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &camera );
+	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &Object );
 }
 
 

@@ -21,7 +21,7 @@ class Sprite {
 	private:
 		int frameActual;
 		int cantidadFrames;
-		SDL_Rect* spriteFrames;
+		Rect_Logico* spriteFrames;
 		LTexture* SpriteSheetTexture;
 		Sprite* spriteSiguiente;
 
@@ -36,7 +36,7 @@ class Sprite {
 		bool puedeAvanzar();
 		void render(float x,float y);
 		Sprite* getSpriteSiguiente();
-		SDL_Rect* getFrame();
+		Rect_Logico* getFrame();
 		LTexture* getSpriteSheetTexture();
 };
 

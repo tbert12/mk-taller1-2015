@@ -18,7 +18,7 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana){
 	}
 	cantidadFrames = frames.size();
 	
-	spriteFrames = new SDL_Rect[cantidadFrames];
+	spriteFrames = new Rect_Logico[cantidadFrames];
 	for (int i=0;i < cantidadFrames;i++){
 		spriteFrames[i].x = frames[i]->X;
 		spriteFrames[i].y = frames[i]->Y;
@@ -33,8 +33,8 @@ Sprite::~Sprite(){
 	//SpriteSheetTexture.free();
 }
 
-SDL_Rect* Sprite::getFrame(){
-	SDL_Rect* frame = &spriteFrames[frameActual];
+Rect_Logico* Sprite::getFrame(){
+	Rect_Logico* frame = &spriteFrames[frameActual];
 	printf("Frame: %d | Cant: %d\n",frameActual,cantidadFrames);
 
 	return frame;
@@ -76,7 +76,7 @@ void Sprite::Reset(){
 }
 
 void Sprite::render(float x, float y){
-	SDL_Rect* currentClip = &spriteFrames[frameActual];
-	SpriteSheetTexture->renderObjeto(currentClip,x ,y);
+	Rect_Logico* currentClip = &spriteFrames[frameActual];
+	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h);
 }
 
