@@ -21,6 +21,8 @@ LTexture::LTexture(SDL_Renderer* Renderer)
 	gRenderer = Renderer;
 	ratio_x = 1;
 	ratio_y = 1;
+	w_ventana = 0;
+	h_ventana = 0;
 }
 
 LTexture::~LTexture()
@@ -32,6 +34,11 @@ LTexture::~LTexture()
 void LTexture::setRatio(float ratiox , float ratioy){
 	ratio_x = ratiox;
 	ratio_y = ratioy;
+}
+
+void LTexture::setDimensionesVentana(int w,int h){
+	w_ventana = w;
+	h_ventana = h;
 }
 
 bool LTexture::loadFromFile( std::string ruta )
@@ -105,9 +112,8 @@ void LTexture::setAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void LTexture::render( float x, float y, SDL_Rect* clip )
+void LTexture::renderObjeto( SDL_Rect* clip,float x, float y)
 {
-	//Setear espacio de renderizacion
 	int x_px = (int)x*ratio_x;
 	int y_px = (int)y*ratio_y;
 
@@ -116,14 +122,40 @@ void LTexture::render( float x, float y, SDL_Rect* clip )
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
 	{
-		clip_px = {clip->x*ratio_x, clip->y*ratio_y, clip->w*ratio_x , clip->h*ratio_y };
+		clip_px = {clip->x*ratio_x, //posicion horizontal de la capa
+				clip->y*ratio_y, //posicion vertical de la capa
+				clip->w*ratio_x, // ancho del objeto
+				clip->h*ratio_y }; //alto del objeto
 
-		printf("Clip_px x:%i \n",int(clip_px.x));
-		printf("Clip_px y:%i \n",int(clip_px.y));
-		printf("Clip_px w:%i \n",int(clip_px.w));
-		printf("Clip_px h:%i \n",int(clip_px.h));
-		camera.w = int((clip->w)*ratio_x);
-		camera.h = int((clip->h)*ratio_y);
+		camera.w = clip_px.w;//Siempre el tamaño de la ventana
+		camera.h = clip_px.h;
+	}
+
+	//Renderizar a la pantalla
+	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &camera );
+}
+
+
+
+void LTexture::renderFondo( SDL_Rect* clip)
+{
+
+	SDL_Rect camera = { 0,0, mWidth, mHeight};
+	SDL_Rect clip_px;
+	//Setear tamanio de renderizacion
+	if( clip != NULL )
+	{
+		clip_px = {0, //posicion horizontal de la capa
+							clip->y*ratio_y, //posicion vertical de la capa
+							w_ventana , // ancho de la ventana
+							h_ventana }; //alto de la ventana
+		if(clip->x*ratio_x > w_ventana/2)
+			clip_px.x = clip->x*ratio_x - w_ventana/2;
+		else
+			clip_px.x = 0;
+		printf("X de cli_px : %i \n", clip_px.x);
+		camera.w = w_ventana;//Siempre el tamaño de la ventana
+		camera.h = h_ventana;
 	}
 
 	//Renderizar a la pantalla

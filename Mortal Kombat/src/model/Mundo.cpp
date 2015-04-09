@@ -64,6 +64,7 @@ void Mundo::render(){
 
 	//renderizo las capas
 	for (unsigned int i = 0 ; i <= capas.size()-1 ; i++){
+		capas[i]->Mover(true);
 		capas[i]->Renderizar();
 	}
 

@@ -16,19 +16,19 @@ class Capa{
 public:
 	int getZIndex();
 	void Actualizar();
-	void Mover(bool right);
+	virtual void Mover(bool right);
 	int getX();
 	virtual void Renderizar();
-	Capa(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal);
+	Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal);
 
 private:
-	int m_alto;
+	float m_alto;
 	int m_zIndex;
-	int m_XActual;
-	int m_anchoDeFondo;
+	float m_XActual;
+	float m_anchoDeFondo;
 	float m_velocidad;
 protected:
-	int m_ancho;
+	float m_ancho;
 };
 
 #endif /* SRC_MODEL_CAPA_H_ */

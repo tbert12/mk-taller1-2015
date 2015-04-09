@@ -22,6 +22,7 @@ Ventana::Ventana(int screenWidth, int screenHeight, float ratiox,float ratioy)
 LTexture* Ventana::crearTextura(){
 	LTexture* m_texture = new LTexture(Renderer);
 	m_texture->setRatio(ratio_x,ratio_y);
+	m_texture->setDimensionesVentana(m_ancho_px,m_alto_px);
 	return m_texture;
 }
 

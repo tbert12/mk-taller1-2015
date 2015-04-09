@@ -46,7 +46,7 @@ bool Sprite::Advance(){
 	if (frameActual >= cantidadFrames){
 		frameActual = 0;
 	}
-	printf("Frame: %d | TotalFrame: %d\n",frameActual,cantidadFrames);
+	//printf("Frame: %d | TotalFrame: %d\n",frameActual,cantidadFrames);
 	return true;
 }
 
@@ -77,6 +77,6 @@ void Sprite::Reset(){
 
 void Sprite::render(float x, float y){
 	SDL_Rect* currentClip = &spriteFrames[frameActual];
-	SpriteSheetTexture->render(x ,y - currentClip->h , currentClip);
+	SpriteSheetTexture->renderObjeto(currentClip,x ,y);
 }
 
