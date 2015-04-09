@@ -37,9 +37,9 @@ const int VELOCIDAD_ATRAS = -2;
 class Personaje {
 private:
 	std::string nombre;
-	int vida;
-	int m_xActual;
-	int m_yActual;
+	float vida;
+	float m_xActual;
+	float m_yActual;
 	short _estaSaltando;
 	int _tDeSalto;
 	Sprite* spriteActual;
@@ -67,9 +67,10 @@ public:
 
 	void renderizar();
 
-	int getX();
-	int getY();
-	int getVida();
+	void setPosition(float x, float y);
+	float getX();
+	float getY();
+	float getVida();
 	bool IsScrolling();
 	bool getSentidoDeMovimiento();
 	void QuitarVida(int valor);

@@ -13,8 +13,8 @@ SDL_Renderer* Ventana::getRenderer(){
 
 Ventana::Ventana(int screenWidth, int screenHeight, float ratiox,float ratioy)
 {
-	m_ancho = screenWidth;
-	m_alto = screenHeight;
+	m_ancho_px = screenWidth;
+	m_alto_px = screenHeight;
 	ratio_x = ratiox;
 	ratio_y = ratioy;
 }
@@ -26,9 +26,9 @@ LTexture* Ventana::crearTextura(){
 }
 
 
-int Ventana::obtenerAncho()
+float Ventana::obtenerAncho()
 {
-	return m_ancho;
+	return m_ancho_px/ratio_x;
 }
 
 
@@ -52,7 +52,7 @@ bool Ventana::create_window()
 		}
 
 		//Crear Ventana
-		Window = SDL_CreateWindow( "World", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_ancho, m_alto, SDL_WINDOW_SHOWN );
+		Window = SDL_CreateWindow( "World", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_ancho_px, m_alto_px, SDL_WINDOW_SHOWN );
 		if( Window == NULL )
 		{
 			log(string( "La ventana no se puede crear! SDL Error: %s\n", SDL_GetError() ),LOG_ERROR);
@@ -83,7 +83,7 @@ bool Ventana::create_window()
 		}
 	}
 
-	return success;//Documento sin título
+	return success;
 }
 
 void Ventana::close_window()

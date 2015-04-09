@@ -29,6 +29,11 @@ Sprite* Personaje::getSpriteActual(){;
 	return spriteActual;
 }
 
+void Personaje::setPosition(float x, float y){
+	m_xActual = x;
+	m_yActual = y;
+}
+
 void Personaje::AvanzarSprite(){
 	if (spriteActual->puedeAvanzar()){
 		spriteActual->Advance();
@@ -38,7 +43,7 @@ void Personaje::AvanzarSprite(){
 	}
 }
 
-int Personaje::getVida(){
+float Personaje::getVida(){
 	return vida;
 }
 
@@ -160,13 +165,13 @@ void Personaje::Levantarse(){
 	m_velocidad = 0;
 }
 
-int Personaje::getX()
+float Personaje::getX()
 {
 	m_xActual += m_velocidad;
-	return m_xActual + 320;
+	return m_xActual;
 }
 
-int Personaje::getY()
+float Personaje::getY()
 {
 	if(_estaSaltando > 0){
 		_actualizarY();
@@ -182,7 +187,7 @@ void Personaje::QuitarVida(int valor){
 }
 
 void Personaje::renderizar(){
-	spriteActual->render(getX(),480 - getY());
+	spriteActual->render(getX(),getY());
 	AvanzarSprite();
 }
 

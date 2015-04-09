@@ -40,7 +40,7 @@ class LTexture
 		void setAlpha( Uint8 alpha );
 
 		//Renders texture at given point
-		void render( int x, int y, SDL_Rect* clip = NULL );
+		void render( float x, float y, SDL_Rect* clip = NULL );
 
 		//Gets image dimensions
 		int getWidth();
