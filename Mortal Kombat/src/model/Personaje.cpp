@@ -187,6 +187,7 @@ void Personaje::QuitarVida(int valor){
 }
 
 void Personaje::renderizar(){
+	printf("se esta renderizando en: x: %f y: %f\n",getX(),getY());
 	spriteActual->render(getX(),getY());
 	AvanzarSprite();
 }

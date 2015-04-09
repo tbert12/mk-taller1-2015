@@ -72,10 +72,12 @@ int main( int argc, char* args[] )
 
 		}
 		*/
-		Capa* capa = mundo->getCapa();
-		capa->Renderizar();
-		//Free resources and close SDL
-		usleep(1222220000);
+		for (int var = 0; var < 200; ++var) {
+			mundo->render();
+			//Free resources and close SDL
+			usleep(50000);
+		}
+		printf("Listo");
 		mundo->~Mundo();
 		log("Se cierra y libera el mundo",LOG_DEBUG);
 	}

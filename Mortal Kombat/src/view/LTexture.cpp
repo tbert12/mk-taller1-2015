@@ -108,8 +108,7 @@ void LTexture::setAlpha( Uint8 alpha )
 void LTexture::render( float x, float y, SDL_Rect* clip )
 {
 	//Setear espacio de renderizacion
-	printf("EN LTexture x = %f \n",x);
-	printf("EN LTexture y = %f \n",y);
+	//printf("EN LTexture y = %f \n",y);
 	int x_px = (int)x*ratio_x;
 	int y_px = (int)y*ratio_y;
 
@@ -118,16 +117,18 @@ void LTexture::render( float x, float y, SDL_Rect* clip )
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
 	{
-		clip_px = {clip->x*ratio_x, clip->y*ratio_y, clip->w*ratio_x , clip->x*ratio_y };
+		clip_px = {clip->x*ratio_x, clip->y*ratio_y, clip->w*ratio_x , clip->h*ratio_y };
 
-		printf("Clip w:%i \n",int(clip->w));
-		printf("Clip h:%i \n",int(clip->h));
+		printf("Clip_px x:%i \n",int(clip_px.x));
+		printf("Clip_px y:%i \n",int(clip_px.y));
+		printf("Clip_px w:%i \n",int(clip_px.w));
+		printf("Clip_px h:%i \n",int(clip_px.h));
 		printf("Ratio x:%f \n",ratio_x);
 		printf("Ratio y:%f \n",ratio_y);
 		camera.w = int((clip->w)*ratio_x);
 		camera.h = int((clip->h)*ratio_y);
-		printf("Render h:%i \n",camera.h);
-		printf("Render w:%i \n",camera.w);
+		/*printf("Render h:%i \n",camera.h);
+		printf("Render w:%i \n",camera.w);*/
 
 	}
 
