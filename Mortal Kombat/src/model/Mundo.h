@@ -30,6 +30,7 @@ private:
 	Tiempo* tiempo;
 	Escenario* escenario;
 	Ventana* ventana; //tiene el renderer
+	int _verificarScroll();
 
 public:
 	Mundo(float AnchoMundo,float AltoMundo);

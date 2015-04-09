@@ -24,11 +24,11 @@ public:
 private:
 	float m_alto;
 	int m_zIndex;
-	float m_XActual;
 	float m_anchoDeFondo;
 	float m_velocidad;
 protected:
 	float m_ancho;
+	float m_XActual;
 };
 
 #endif /* SRC_MODEL_CAPA_H_ */

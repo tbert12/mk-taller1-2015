@@ -133,8 +133,6 @@ void LTexture::renderObjeto( Rect_Logico* clip,float x, float y)
 		Object.h = clip_px.h;
 	}
 
-	printf("Object.x: %f\nObject.y; %d\nObject.h: %d\nObject.w; %d\n",clip->x*ratio_x,Object.y,Object.h,Object.w);
-
 	//Renderizar a la pantalla
 	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &Object );
 }

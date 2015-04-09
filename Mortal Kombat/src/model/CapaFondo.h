@@ -23,9 +23,7 @@ private:
 	float m_ventana_ancho;
 
 public:
-	CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal,
-			std::string ruta, Ventana* ventana);
-	virtual void Mover(bool right);
+	CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal,std::string ruta, Ventana* ventana);
 	virtual void Renderizar();
 	virtual ~CapaFondo();
 };

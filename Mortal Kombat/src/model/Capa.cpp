@@ -21,22 +21,19 @@ int Capa::getX()
 
 void Capa::Mover(bool right){
 
-	if(right > true)
+	if(right)
 	{
-		if( m_XActual+m_ancho >= m_anchoDeFondo)
-		{
-			m_XActual = m_anchoDeFondo - m_ancho;
-			return;
-		}
 		m_XActual += m_velocidad;
-		return;
+
+	}else{
+		m_XActual -=m_velocidad;
 	}
-	if( m_XActual <= 0)
-	{
+	if( m_XActual <= 0){
 		m_XActual = 0;
-		return;
 	}
-	m_XActual -= m_velocidad;
+	if( m_XActual > m_ancho){
+		m_XActual =m_ancho;
+	}
 }
 
 int Capa::getZIndex(){
