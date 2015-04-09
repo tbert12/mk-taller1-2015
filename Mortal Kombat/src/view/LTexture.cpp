@@ -105,22 +105,29 @@ void LTexture::setAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void LTexture::render( int x, int y, SDL_Rect* clip )
+void LTexture::render( float x, float y, SDL_Rect* clip )
 {
 	//Setear espacio de renderizacion
-	printf("x = %i \n",x);
-	printf("y = %i \n",y);
-	SDL_Rect renderQuad = { x*ratio_x, y*ratio_y, mWidth, mHeight};
+	int x_px = (int)x*ratio_x;
+	int y_px = (int)y*ratio_y;
 
+	SDL_Rect camera = { x_px,y_px, mWidth, mHeight};
+	SDL_Rect clip_px;
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
 	{
-		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
+		clip_px = {clip->x*ratio_x, clip->y*ratio_y, clip->w*ratio_x , clip->h*ratio_y };
+
+		printf("Clip_px x:%i \n",int(clip_px.x));
+		printf("Clip_px y:%i \n",int(clip_px.y));
+		printf("Clip_px w:%i \n",int(clip_px.w));
+		printf("Clip_px h:%i \n",int(clip_px.h));
+		camera.w = int((clip->w)*ratio_x);
+		camera.h = int((clip->h)*ratio_y);
 	}
 
 	//Renderizar a la pantalla
-	SDL_RenderCopy( gRenderer, mTexture, clip, &renderQuad );
+	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &camera );
 }
 
 int LTexture::getWidth()

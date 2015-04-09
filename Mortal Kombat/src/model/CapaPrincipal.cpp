@@ -17,16 +17,16 @@ CapaPrincipal::CapaPrincipal(int alto, int ancho, int zIndex, int anchoDeFondo, 
 
 void CapaPrincipal::Renderizar()
 {
-	if( Scrollear())
+	printf("Principal \n");
+	/*if( Scrollear())
 	{
+		m_Personaje->SetScroll(true);
 		Mover(m_Personaje->getSentidoDeMovimiento());
-		return;
-	}
+	}*/
 	m_Personaje->renderizar();
 }
 
 bool CapaPrincipal::Scrollear(){
-	int x = m_Personaje->getX();
 	return m_Personaje->getX() >= m_ancho* 0.9f || m_Personaje->getX() <= m_ancho* 0.1f;
 }
 

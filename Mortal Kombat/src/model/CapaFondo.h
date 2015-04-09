@@ -24,7 +24,7 @@ private:
 public:
 	CapaFondo(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal,
 			std::string ruta, Ventana* ventana);
-	virtual void Mover(int posX);
+	virtual void Mover(bool right);
 	virtual void Renderizar();
 	virtual ~CapaFondo();
 };

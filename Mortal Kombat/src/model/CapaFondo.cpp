@@ -17,18 +17,20 @@ CapaFondo::CapaFondo(int alto, int ancho, int zIndex, int anchoDeFondo, float ve
 	m_clip = new SDL_Rect();
 	m_clip->h = alto;
 	m_clip->w = ventana->obtenerAncho();
-	m_clip->x = ancho/2 - (m_clip->w)/2; //La mitad de la capa al centro de la ventana
+	m_clip->x = ancho/2 - (ventana->obtenerAncho())/2; //La mitad de la capa al centro de la ventana
 	m_clip->y = 0;
 }
 
-void CapaFondo::Mover(int posX)
+void CapaFondo::Mover(bool right)
 {
-	Capa::Mover(posX);
+	Capa::Mover(right);
+	printf("Capa:%i    x:%i\n",this->m_texture->getWidth(),this->getX());
 	m_clip->x = this->getX();
 }
 
 void CapaFondo::Renderizar(){
-	m_texture->render(m_clip->x,m_clip->y, m_clip);
+	printf("Fondo \n");
+	m_texture->render(0.0f,0.0f,m_clip);
 }
 
 CapaFondo::~CapaFondo() {

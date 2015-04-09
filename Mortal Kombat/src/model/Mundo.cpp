@@ -7,9 +7,9 @@
 
 #include "Mundo.h"
 
-Mundo::Mundo(float ratioX,float ratioY) {
-	ratio_x = ratioX;
-	ratio_y = ratioY;
+Mundo::Mundo(float ancho,float alto) {
+	ancho_mundo = ancho;
+	alto_mundo = alto;
 	tiempo = NULL;
 	escenario = NULL;
 	ventana = NULL;
@@ -62,13 +62,8 @@ void Mundo::render(){
 	//limpio pantalla
 	ventana->clear();
 
-	//CapaPrincipal* capaPrincipal = (CapaPrincipal*)capas[3];
-	//capaPrincipal->Renderizar();
-
 	//renderizo las capas
-	printf("%i\n",capas.size());
 	for (unsigned int i = 0 ; i <= capas.size()-1 ; i++){
-		//capas[i]->Mover();
 		capas[i]->Renderizar();
 	}
 
