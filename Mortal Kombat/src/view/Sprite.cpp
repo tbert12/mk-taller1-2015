@@ -46,7 +46,7 @@ bool Sprite::Advance(){
 	if (frameActual >= cantidadFrames){
 		frameActual = 0;
 	}
-	printf("Frame: %d | TotalFrame: %d\n",frameActual,cantidadFrames);
+	//printf("Frame: %d | TotalFrame: %d\n",frameActual,cantidadFrames);
 	return true;
 }
 

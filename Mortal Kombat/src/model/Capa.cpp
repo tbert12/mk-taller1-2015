@@ -21,6 +21,7 @@ int Capa::getX()
 
 void Capa::Mover(bool right){
 
+
 	if(right > true)
 	{
 		if( m_XActual+m_ancho >= m_anchoDeFondo)
