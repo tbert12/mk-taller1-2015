@@ -12,6 +12,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include "../model/logging.h"
 
 
 //Texture wrapper class
