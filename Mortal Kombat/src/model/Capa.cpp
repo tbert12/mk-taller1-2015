@@ -5,13 +5,13 @@
 
 #include "Capa.h"
 
-Capa::Capa(int alto, int ancho, int zIndex, int anchoDeFondo, float factorVelocidad) {
+Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float factorVelocidad) {
 	m_alto = alto;
 	m_ancho = ancho;
 	m_zIndex = zIndex;
 	m_anchoDeFondo = anchoDeFondo;
 	m_velocidad = (m_ancho/m_anchoDeFondo)*factorVelocidad;
-	m_XActual = anchoDeFondo *.5f - ancho * .5f;
+	m_XActual = m_ancho*0.5f;
 }
 
 int Capa::getX()

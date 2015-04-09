@@ -9,7 +9,7 @@
 #include <list>
 
 
-CapaPrincipal::CapaPrincipal(int alto, int ancho, int zIndex, int anchoDeFondo, float velocidadPrincipal, Personaje* personaje)
+CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal, Personaje* personaje)
 :Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal) //call superclass constructor
 {
 	m_Personaje = personaje;
@@ -17,13 +17,12 @@ CapaPrincipal::CapaPrincipal(int alto, int ancho, int zIndex, int anchoDeFondo, 
 
 void CapaPrincipal::Renderizar()
 {
-	printf("Principal \n");
-	/*if( Scrollear())
+	if( Scrollear())
 	{
 		m_Personaje->SetScroll(true);
 		Mover(m_Personaje->getSentidoDeMovimiento());
-	}*/
-	m_Personaje->renderizar();
+	}
+	m_Personaje->renderizar(getX());
 }
 
 bool CapaPrincipal::Scrollear(){

@@ -40,6 +40,8 @@ private:
 	float vida;
 	float m_xActual;
 	float m_yActual;
+	float m_xInicial;
+	float m_yInicial;
 	short _estaSaltando;
 	int _tDeSalto;
 	Sprite* spriteActual;
@@ -54,7 +56,7 @@ private:
 
 	void _parabola();
 	void _actualizarY();
-	int _yDeSalto(int currentY, int currentT);
+	float _yDeSalto(float currentY, float currentT);
 
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad);
@@ -65,7 +67,7 @@ public:
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
 
-	void renderizar();
+	void renderizar(float ancho);
 
 	void setPosition(float x, float y);
 	float getX();

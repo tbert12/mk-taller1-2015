@@ -40,14 +40,19 @@ class LTexture
 		//Set alpha modulation
 		void setAlpha( Uint8 alpha );
 
+		//renderiza solo fondos
+		void renderFondo(SDL_Rect* clip);
+
 		//Renders texture at given point
-		void render( float x, float y, SDL_Rect* clip = NULL );
+		void renderObjeto(SDL_Rect* clip, float x = 0, float y = 0);
 
 		//Gets image dimensions
 		int getWidth();
 		int getHeight();
 
 		void setRatio(float ratiox,float ratioy);
+
+		void setDimensionesVentana(int w,int h);
 
 	private:
 		//The actual hardware texture
@@ -58,6 +63,8 @@ class LTexture
 		int mHeight;
 		float ratio_x;
 		float ratio_y;
+		int w_ventana;
+		int h_ventana;
 
 		//The window renderer
 		SDL_Renderer* gRenderer;
