@@ -15,10 +15,153 @@
 #define PERSONAJE_CARPETA_SPRITES_DEFAULT "data/img/default/sprites/"
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
 
+#define SPRITESHEET_PARADO_DEFAULT "data/img/default/sprites/initial.png"
+#define SPRITESHEET_CAMINAR_DEFAULT "data/img/default/sprites/walk.png"
+#define SPRITESHEET_SALTAR_DEFAULT "data/img/default/sprites/salto.png"
+#define SPRITESHEET_SALTAR_DIAGONAL_DEFAULT "data/img/default/sprites/diag.png"
+#define SPRITESHEET_AGACHAR_DEFAULT "data/img/default/sprites/agachar.png"
+
 using namespace std;
 
 ParserJSON::ParserJSON(string ruta_archivo) {
 	m_ruta_archivo = ruta_archivo;
+}
+
+vector<Sprite*> cargarSprites(string ruta_carpeta, Ventana* ventana, float ratio_x, float ratio_y) {
+
+	vector<Sprite*> sprites;
+
+	Json::Value root;
+	Json::Reader reader;
+
+	// Abrir archivo.
+	ifstream archivoConfig;
+	archivoConfig.open(ruta_carpeta.c_str() + "sprites.json");
+
+	// Si no se pudo abrir archivo, generar mundo por defecto.
+	if ( ! archivoConfig ) {
+		// Informar al usuario la falla y la resolucion tomada.
+		log( "No se pudo abrir el archivo de sprites JSON, se generan sprites por defecto.", LOG_ERROR );
+		return GenerarSpritesDefault(ventana, ratio_x, ratio_y);
+	}
+	log ( "Se abrio el archivo JSON.", LOG_DEBUG );
+
+	// Si no se pudo parsear archivo, generar mundo por defecto.
+	bool exito = reader.parse( archivoConfig, root, false );
+	if ( ! exito ) {
+	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
+	    log( "No se pudo interpretar el JSON, se generan sprites por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
+	    return GenerarSpritesDefault(ventana, ratio_x, ratio_y);
+	} else log( "El archivo JSON es valido.", LOG_DEBUG );
+
+	// Cerrar archivo.
+	archivoConfig.close();
+	log ( "Se cerro el archivo JSON.", LOG_DEBUG );
+
+	// Creo Sprite para personaje parado.
+	Sprite* sprite_parado;
+	bool sprite_parado_ok = true;
+	if ( ! root.get( "parado", NULL ) ) {
+		log( "No se encontro el sprite correspondiente al personaje parado. Se genera el sprite inicial por defecto.", LOG_ERROR );
+		sprite_parado = crearSpriteParadoDefault();
+		sprite_parado_ok = false;
+	} else {
+		string spritesheet_parado = root["parado"].get( "ruta", SPRITESHEET_PARADO_DEFAULT ).asString();
+		const Json::Value frames_parado = root["frames"];
+		vector<Frame*> framesParado( frames_parado.size() );
+		for ( unsigned int i=0; i < frames_parado.size(); i++ ) {
+			int x = frames_parado[i].get( "x", NULL ).asInt();
+			if ( x == NULL ) {
+				log( "No se especifico la posicion X del frame. Se genera el sprite inicial por defecto.", LOG_ERROR );
+				sprite_parado = crearSpriteParadoDefault();
+				sprite_parado_ok = false;
+				break;
+			}
+			int y = frames_parado[i].get( "y", NULL ).asInt();
+			if ( y == NULL ) {
+				log( "No se especifico la posicion Y del frame. Se genera el sprite inicial por defecto", LOG_ERROR );
+				sprite_parado = crearSpriteParadoDefault();
+				sprite_parado_ok = false;
+				break;
+			}
+			int alto = frames_parado[i].get( "Alto", NULL ).asInt();
+			if ( alto == NULL ) {
+				log( "No se especifico el alto del frame. Se genera el sprite inicial por defecto.", LOG_ERROR );
+				sprite_parado = crearSpriteParadoDefault();
+				sprite_parado_ok = false;
+				break;
+			}
+			int ancho = frames_parado[i].get( "Ancho", NULL ).asInt();
+			if ( ancho == NULL ) {
+				log( "No se especifico el ancho del frame. Se genera el sprite inicial por defecto.", LOG_ERROR );
+				sprite_parado = crearSpriteParadoDefault();
+				sprite_parado_ok = false;
+				break;
+			}
+			framesParado[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
+			log( "Se creo correctamente un frame del spritesheet del personaje parado.", LOG_DEBUG );
+		}
+		if ( sprite_parado_ok ) {
+			sprite_parado = new Sprite(spritesheet_parado, framesParado, ventana);
+			log( "Se creo correctamente el sprite para el personaje parado.", LOG_DEBUG );
+			sprites[0] = sprite_parado;
+		}
+	}
+
+	// Creo Sprite para personaje caminando.
+	Sprite* sprite_caminar;
+	bool sprite_caminar_ok = true;
+	if ( ! root.get( "caminar", NULL ) ) {
+		log( "No se encontro el sprite correspondiente al personaje caminando. Se genera el sprite de caminata por defecto.", LOG_ERROR );
+		sprite_caminar = crearSpriteCaminarDefault();
+		sprite_caminar_ok = false;
+	} else {
+		string spritesheet_caminar = root["caminar"].get( "ruta", SPRITESHEET_CAMINAR_DEFAULT ).asString();
+		const Json::Value frames_caminar = root["frames"];
+		vector<Frame*> framesCaminar( frames_caminar.size() );
+		for ( unsigned int i=0; i < frames_caminar.size(); i++ ) {
+			int x = frames_caminar[i].get( "x", NULL ).asInt();
+			if ( x == NULL ) {
+				log( "No se especifico la posicion X del frame. Se genera el sprite de caminata por defecto.", LOG_ERROR );
+				sprite_caminar = crearSpriteCaminarDefault();
+				sprite_caminar_ok = false;
+				break;
+			}
+			int y = frames_caminar[i].get( "y", NULL ).asInt();
+			if ( y == NULL ) {
+				log( "No se especifico la posicion Y del frame. Se genera el sprite de caminata por defecto", LOG_ERROR );
+				sprite_caminar = crearSpriteCaminarDefault();
+				sprite_caminar_ok = false;
+				break;
+			}
+			int alto = frames_caminar[i].get( "Alto", NULL ).asInt();
+			if ( alto == NULL ) {
+				log( "No se especifico el alto del frame. Se genera el sprite de caminata por defecto.", LOG_ERROR );
+				sprite_caminar = crearSpriteCaminarDefault();
+				sprite_caminar_ok = false;
+				break;
+			}
+			int ancho = frames_caminar[i].get( "Ancho", NULL ).asInt();
+			if ( ancho == NULL ) {
+				log( "No se especifico el ancho del frame. Se genera el sprite de caminata por defecto.", LOG_ERROR );
+				sprite_caminar = crearSpriteCaminarDefault();
+				sprite_caminar_ok = false;
+				break;
+			}
+			framesCaminar[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
+			log( "Se creo correctamente un frame del spritesheet del personaje caminando.", LOG_DEBUG );
+		}
+		if ( sprite_caminar_ok ) {
+			sprite_caminar = new Sprite(spritesheet_caminar, framesCaminar, ventana);
+			log( "Se creo correctamente el sprite para el personaje caminando.", LOG_DEBUG );
+		}
+	}
+
+
+
+
+
+
 }
 
 Mundo* ParserJSON::cargarMundo() {
@@ -32,9 +175,9 @@ Mundo* ParserJSON::cargarMundo() {
 
 	// Si no se pudo abrir archivo, generar mundo por defecto.
 	if ( ! archivoConfig ) {
-		return CrearMundoDefault();
 		// Informar al usuario la falla y la resolucion tomada.
 		log( "No se pudo abrir el archivo de configuracion JSON, se genera una partida por defecto.", LOG_ERROR );
+		return CrearMundoDefault();
 	}
 	log ( "Se abrio el archivo JSON.", LOG_DEBUG );
 
@@ -194,7 +337,7 @@ Mundo* ParserJSON::cargarMundo() {
 	int personaje_z_index = root["personaje"].get( "z-index", PERSONAJE_Z_INDEX_DEFAULT ).asInt();
 	log ( "Se cargo correctamente el z-index del personaje.", LOG_DEBUG );
 	string personaje_carpeta_sprites = root["personaje"].get( "sprites", PERSONAJE_CARPETA_SPRITES_DEFAULT ).asString();
-	vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites);
+	vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, ratio_x, ratio_y);
 	string personaje_nombre = root["personaje"].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
 	log ( "Se cargo el nombre del personaje.", LOG_DEBUG );
 
@@ -217,11 +360,13 @@ Mundo* ParserJSON::cargarMundo() {
 
 	return nuevo_mundo;
 
+
 	// PERSONAJE SE LE PASA VELOCIDAD_PERSONAJE POR CONSTRUCTOR PERO NUNCA LO USA.
 	// PREGUNTAR SI LAS DIMENSIONES DE LAS CAPAS SE PASAN EN INT O SI LES FALTO PUSHEAR.
 	// HACER QUE SI NO SE PUEDE CARGAR IMAGEN DE CAPA SE DEVUELVA NULL.
 	// CAPA PRINCIPAL RECIBE DOS VECES EL MISMO PARAMETRO, EL ANCHO DEL ESCENARIO!!!
 	// EL MUNDO NO TIENE PARA AGREGAR CAPA PRINCIPAL, TRATA TODAS LAS CAPAS COMO IGUALES.
+	// QUE SPRITE DEVUELVA NULL SI NO PUEDE CARGAR EL SPRITESHEET
 
 }
 
