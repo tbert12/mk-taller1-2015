@@ -3,19 +3,10 @@
 
 #include <stdio.h>
 #include <fstream>
-#include "../../libs/json/json.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include "../libs/json/json.h"
 #include "logging.h"
 #include "Mundo.h"
-#include "../view/LTexture.h"
-#include "Capa.h"
-#include "CapaPrincipal.h"
-#include "Personaje.h"
-#include "../view/Sprite.h"
-#include "../view/Frame.h"
 #include "DefaultSettings.h"
-#include "Mundo.h"
 
 using namespace std;
 
@@ -26,9 +17,7 @@ private:
 
 public:
 	 ParserJSON(string ruta_archivo);
-//CrearMundo();
-
-//	 Pelea* generarPelea();
+	 Mundo* cargarMundo();
 
 };
 
