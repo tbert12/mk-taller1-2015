@@ -108,7 +108,6 @@ void LTexture::setAlpha( Uint8 alpha )
 void LTexture::render( float x, float y, SDL_Rect* clip )
 {
 	//Setear espacio de renderizacion
-	//printf("EN LTexture y = %f \n",y);
 	int x_px = (int)x*ratio_x;
 	int y_px = (int)y*ratio_y;
 
@@ -123,13 +122,8 @@ void LTexture::render( float x, float y, SDL_Rect* clip )
 		printf("Clip_px y:%i \n",int(clip_px.y));
 		printf("Clip_px w:%i \n",int(clip_px.w));
 		printf("Clip_px h:%i \n",int(clip_px.h));
-		printf("Ratio x:%f \n",ratio_x);
-		printf("Ratio y:%f \n",ratio_y);
 		camera.w = int((clip->w)*ratio_x);
 		camera.h = int((clip->h)*ratio_y);
-		/*printf("Render h:%i \n",camera.h);
-		printf("Render w:%i \n",camera.w);*/
-
 	}
 
 	//Renderizar a la pantalla

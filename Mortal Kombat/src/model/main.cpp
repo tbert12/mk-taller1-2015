@@ -39,7 +39,7 @@ int main( int argc, char* args[] )
 		return 1;
 	} else {
 		log( "Mundo creado por default", LOG_DEBUG );
-		/*
+
 		//Creo el Personaje
 		Personaje* luchador = mundo->getPersonaje();
 
@@ -49,9 +49,6 @@ int main( int argc, char* args[] )
 		//Manejador de evento
 		SDL_Event e;
 
-		//Current animation frame
-		int frame = 0;
-
 		//While Principal
 		while( !control_jugador_1->getQuit() ){
 			//Eventos
@@ -59,25 +56,13 @@ int main( int argc, char* args[] )
 				control_jugador_1->KeyPressed(e);
 			}
 
-
-			printf("%i\n",frame);
-
 			mundo->render();
-
-			//FrameGuia
-			++frame;
 
 			//Sleep(Microsegundos)
 			usleep(50000);
 
 		}
-		*/
-		for (int var = 0; var < 200; ++var) {
-			mundo->render();
-			//Free resources and close SDL
-			usleep(50000);
-		}
-		printf("Listo");
+
 		mundo->~Mundo();
 		log("Se cierra y libera el mundo",LOG_DEBUG);
 	}

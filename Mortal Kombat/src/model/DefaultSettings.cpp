@@ -123,7 +123,6 @@ Mundo* CrearMundoDefault(){
 	log("Creado Personaje Default (SubZero)",LOG_DEBUG);
 
 	mundo->setVentana(ventana);
-	/*
 	mundo->setTiempo(new Tiempo(TIEMPO_DEFAULT));
 
 	log("Creado el tiempo, la ventana y el escenario. Seteados a Mundo",LOG_DEBUG);
@@ -134,7 +133,7 @@ Mundo* CrearMundoDefault(){
 
 	// CREO LAS CAPAS, SON 3 NIVELES
 	// La relacion entre el las medidas logicas y los pixeles es la divicion
-	*/
+
 
 	//capa 0, es la ultima. de la misma medida que la ventana
 	CapaFondo* capa_0 =new CapaFondo(BACKGROUND_0__ALTO_DEFAULT,BACKGROUND_0__ANCHO_DEFAULT,BACKGROUND_0_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_0_DEFAULT,ventana);
@@ -149,10 +148,10 @@ Mundo* CrearMundoDefault(){
 	mundo->addCapa(capa_2);
 
 	//la que contiene el escenario
-	/*
+
 	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,personaje_default);
 	mundo->addCapa(capa_principal);
-	*/
+
 	//log("Capas agregadas al Mundo",LOG_DEBUG);
 	return mundo;
 }
