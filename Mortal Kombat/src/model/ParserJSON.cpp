@@ -8,7 +8,7 @@
 #define ESCENARIO_ANCHO_DEFAULT 600
 #define ESCENARIO_ALTO_DEFAULT 150
 #define Y_PISO_DEFAULT 120
-#define BACKGROUND_DEFAULT "../data/img/default/background.png"
+#define BACKGROUND_DEFAULT "/data/img/default/background.png"
 #define CAPA_ANCHO_DEFAULT 600
 #define CAPA_Z_INDEX_DEFAULT 0
 #define PERSONAJE_Z_INDEX_DEFAULT 3
@@ -23,6 +23,7 @@ ParserJSON::ParserJSON(string ruta_archivo) {
 }
 
 Mundo* ParserJSON::cargarMundo() {
+
 	Json::Value root;
 	Json::Reader reader;
 
@@ -43,7 +44,7 @@ Mundo* ParserJSON::cargarMundo() {
 	if ( ! exito ) {
 	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
 	    log( "No se pudo interpretar el JSON, se genera una partida por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
-	    return peleaPorDefault();
+	    return CrearMundoDefault();
 	} else log( "El archivo JSON es valido.", LOG_DEBUG );
 
 	// Cerrar archivo.
@@ -122,50 +123,57 @@ Mundo* ParserJSON::cargarMundo() {
 
 	// Setear alto logico de la ventana de acuerdo al alto del escenario.
 	int ventana_alto = escenario_alto;
-
-	// Setear velocidad del personaje.
-	float personaje_velocidad = escenario_ancho / PERSONAJE_FACTOR_VELOCIDAD;
+	log ( "Se fijo el alto logico de la ventana.", LOG_DEBUG );
 
 	// Obtener relaciones entre pixeles y unidades logicas del mundo.
 	float ratio_x = ventana_ancho_px / ventana_ancho;
 	float ratio_y = ventana_alto_px / ventana_alto;
+	log ( "Se calcularon las relaciones para el ancho y el alto entre los pixeles y las unidades logicas del mundo.", LOG_DEBUG );
 
 	// Crear Mundo.
-	Mundo* nuevo_mundo = MundoPorDefault(ratio_x, ratio_y);
+	Mundo* nuevo_mundo = new Mundo(escenario_ancho, escenario_alto);
+	log ( "Se creo correctamente un mundo vacio", LOG_DEBUG );
 
-	// Obtener las capas del escenario.
-	// Por defecto se considera ancho 1000.
+	// Crear Ventana.
+	Ventana* ventana = new Ventana( ventana_ancho, ventana_alto, ratio_x, ratio_y );
+	log ( "Se creo correctamente la ventana (camara)", LOG_DEBUG );
+
+	// Obtener las capas del escenario. La primera capa es el fondo del escenario.
+	// Se setea por defecto el ancho en caso de error.
 	// Si la imagen no existe, se usa una por defecto.
 	const Json::Value capas = root["capas"];
-	for ( unsigned int i=0; i < capas.size(); ++i ) {
+	for ( unsigned int i=0; i < capas.size(); i++ ) {
 		string background = capas[i].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
 		int capa_ancho = capas[i].get( "ancho", CAPA_ANCHO_DEFAULT ).asInt();
 		if ( capa_ancho < 0 ) {
 			capa_ancho = CAPA_ANCHO_DEFAULT;
 			// Informar al usuario el cambio de ancho.
-			log( "WARNING: El ancho de la capa no puede ser negativo. Se setea automaticamente en 1000." );
+			log( "El ancho de la capa no puede ser negativo. Se setea automaticamente en 600.", LOG_WARNING );
 		} else if ( capa_ancho > escenario_ancho ) {
 			capa_ancho = CAPA_ANCHO_DEFAULT;
 			// Informar al usuario el cambio de ancho.
-			log ( "WARNING: El ancho de la capa no puede superar el del escenario. Se setea automaticamente en 1000." );
-		} else log( "Se cargo correctamente el ancho logico de la capa." );
+			log ( "El ancho de la capa no puede superar el del escenario. Se setea automaticamente en 600.", LOG_WARNING );
+		} else log( "Se cargo correctamente el ancho logico de la capa.", LOG_DEBUG );
 		int capa_z_index = capas[i].get( "z-index", CAPA_Z_INDEX_DEFAULT + i ).asInt();
+		log ( "Se cargo el z-index de la capa.", LOG_DEBUG );
 
 		// Setear alto logico de la capa de acuerdo al alto del escenario.
 		int capa_alto = escenario_alto;
+		log ( "Se fijo el alto logico de la ventana.", LOG_DEBUG );
 
-
-		Capa* nueva_capa = new Capa( capa_alto, capa_ancho, capa_z_index, escenario_ancho, personaje_velocidad );
-		// Cargo imagen. Si no existe o no se pudo abrir,
-		// se devuelve false y se usa la imagen por defecto.
-		if ( ! nueva_capa->cargarBackground(background) ) {
-			nueva_capa->cargarBackground(BACKGROUND_DEFAULT);
-			// Informar al usuario el cambio de fondo.
-			log( "ERROR: No se pudo cargar la imagen de la capa. Se carga imagen por defecto." );
-		} else log( "Se cargo correctamente la imagen de la capa." );
+		// Creo capas de fondo.
+		CapaFondo* capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, background, ventana );
+		if ( capa_fondo == NULL ) {
+			delete capa_fondo;
+			capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, BACKGROUND_DEFAULT, ventana );
+			log( "No se pudo cargar la imagen de la capa. Se carga imagen por defecto.", LOG_ERROR );
+		} else {
+			log( "Se creo correctamente la capa.", LOG_DEBUG );
+		}
 
 		// Agrego capa al mundo.
-		nuevo_mundo->agregarCapa(nueva_capa);
+		nuevo_mundo->addCapa(capa_fondo);
+
 
 	}
 
@@ -201,7 +209,10 @@ Mundo* ParserJSON::cargarMundo() {
 	log ( "Se cargo el nombre del personaje." );
 
 
-// Crear Sprites.
+
+
+
+	// Crear Sprites.
 	Sprite** sprites;
 	// Al agregar un sprite, se devuelve false si
 	// la imagen no existe o no se pudo abrir.
@@ -239,6 +250,10 @@ Mundo* ParserJSON::cargarMundo() {
 
 	log( "Se creo una nueva pelea." );
 	return nueva_pelea;
+
+	// PERSONAJE SE LE PASA VELOCIDAD_PERSONAJE POR CONSTRUCTOR PERO NUNCA LO USA.
+	// PREGUNTAR SI LAS DIMENSIONES DE LAS CAPAS SE PASAN EN INT O SI LES FALTO PUSHEAR.
+	// HACER QUE SI NO SE PUEDE CARGAR IMAGEN DE CAPA SE DEVUELVA NULL.
 
 }
 

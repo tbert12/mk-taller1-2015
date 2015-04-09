@@ -35,7 +35,7 @@ void registrarMensaje( const string mensaje, const string inicio_mensaje) {
 void log( const string mensaje, int tipo_de_log = nivel) {
 	if ( tipo_de_log == LOG_DEBUG && nivel == 2 ) {
 		// DETALLO SUCESO (DEBUG)
-		registrarMensaje(mensaje,"DEBUG: ");
+		registrarMensaje(mensaje,"");
 	} else if ( tipo_de_log == LOG_WARNING && nivel >= 1 ) {
 		// DETALLO WARNING
 		registrarMensaje(mensaje,"WARNING: ");

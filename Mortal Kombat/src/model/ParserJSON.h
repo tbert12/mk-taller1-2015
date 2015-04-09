@@ -3,10 +3,12 @@
 
 #include <stdio.h>
 #include <fstream>
-#include "../libs/json/json.h"
+#include "../../libs/json/json.h"
 #include "logging.h"
 #include "Mundo.h"
 #include "DefaultSettings.h"
+
+const float PERSONAJE_VELOCIDAD = 10.0;
 
 using namespace std;
 
