@@ -50,6 +50,9 @@ private:
 	float velocidadAdelante;
 	float velocidadAtras;
 
+	float m_AltoMundo;
+	float m_AnchoMundo;
+
 	void _cambiarSprite(int accion);
 
 	void _SaltarHorizontal();
@@ -72,6 +75,7 @@ public:
 	void renderizar(float ancho);
 
 	void setPosition(float x, float y);
+	void setDimensiones(float h, float w);
 	float getX();
 	float getY();
 	float getVida();
@@ -80,6 +84,7 @@ public:
 	void QuitarVida(int valor);
 
 	void Inicial();
+	void Frenar();
 	void Saltar();
 	void Agachar();
 	void Levantarse();
