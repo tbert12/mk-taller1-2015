@@ -9,24 +9,31 @@
 #include <list>
 
 
-CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal, Personaje* personaje)
+CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personaje)
 :Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal) //call superclass constructor
 {
 	m_Personaje = personaje;
+	m_ancho_ventana = ancho_ventana;
+	_actualizarX();
+}
+
+void CapaPrincipal::_actualizarX(){
+	m_XActual = m_Personaje->getX() - m_ancho_ventana/2;
+	if (m_XActual < 0) m_XActual = 0;
+	if (m_XActual > m_ancho) m_XActual = m_ancho;
 }
 
 void CapaPrincipal::Renderizar()
 {
-	if( Scrollear())
-	{
-		m_Personaje->SetScroll(true);
-		Mover(m_Personaje->getSentidoDeMovimiento());
-	}
+	_actualizarX();
 	m_Personaje->renderizar(getX());
 }
 
-bool CapaPrincipal::Scrollear(){
-	return m_Personaje->getX() >= m_ancho* 0.9f || m_Personaje->getX() <= m_ancho* 0.1f;
+int CapaPrincipal::Scrollear(){
+	//printf("x personaje: %f\n x + .1ventana:%f\n x + .9ventana:%f\n",m_Personaje->getX(),(getX() + m_ancho_ventana*0.1f),(getX() + m_ancho_ventana*0.9f));
+	if (m_Personaje->getX() <= (getX() + m_ancho_ventana*0.1f)) return -1;
+	if (m_Personaje->getX() >= (getX() + m_ancho_ventana*0.9f)) return 1;
+	return 0;
 }
 
 CapaPrincipal::~CapaPrincipal() {

@@ -120,7 +120,7 @@ Mundo* CrearMundoDefault(){
 	}
 
 	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD);
-	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2)*1.0f,Y_PISO_DEFAULT*1.0f);
+	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2 - VENTANA_ANCHO_LOG/2),Y_PISO_DEFAULT);
 	log("Creado Personaje Default (SubZero)",LOG_DEBUG);
 
 	mundo->setVentana(ventana);
@@ -150,7 +150,7 @@ Mundo* CrearMundoDefault(){
 
 	//la que contiene el escenario
 
-	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,personaje_default);
+	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,VENTANA_ANCHO_LOG,PERSONAJE_FACTOR_VELOCIDAD,personaje_default);
 	mundo->addCapa(capa_principal);
 
 	//log("Capas agregadas al Mundo",LOG_DEBUG);
