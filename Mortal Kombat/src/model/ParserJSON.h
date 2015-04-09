@@ -20,6 +20,7 @@ private:
 public:
 	 ParserJSON(string ruta_archivo);
 	 Mundo* cargarMundo();
+	 vector<Sprite*> cargarSprites(string ruta_carpeta);
 
 };
 

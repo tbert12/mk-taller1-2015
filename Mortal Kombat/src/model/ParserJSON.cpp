@@ -8,12 +8,11 @@
 #define ESCENARIO_ANCHO_DEFAULT 600
 #define ESCENARIO_ALTO_DEFAULT 150
 #define Y_PISO_DEFAULT 120
-#define BACKGROUND_DEFAULT "/data/img/default/background.png"
+#define BACKGROUND_DEFAULT "data/img/default/backgrounds/background.png"
 #define CAPA_ANCHO_DEFAULT 600
 #define CAPA_Z_INDEX_DEFAULT 0
 #define PERSONAJE_Z_INDEX_DEFAULT 3
-#define PERSONAJE_SPRITE_INICIAL_DEFAULT "../data/players/subzero/sprites/initial.png"
-#define PERSONAJE_SPRITE_CAMINATA_DEFAULT "../data/players/subzero/sprites/walk.png"
+#define PERSONAJE_CARPETA_SPRITES_DEFAULT "data/img/default/sprites/"
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
 
 using namespace std;
@@ -134,9 +133,21 @@ Mundo* ParserJSON::cargarMundo() {
 	Mundo* nuevo_mundo = new Mundo(escenario_ancho, escenario_alto);
 	log ( "Se creo correctamente un mundo vacio", LOG_DEBUG );
 
-	// Crear Ventana.
+	/************ NO SE USA ESCENARIO
+	// Crear Escenario.
+	Escenario* escenario = new Escenario();
+	*********************************/
+
+	// Crear Ventana y abrirla.
 	Ventana* ventana = new Ventana( ventana_ancho, ventana_alto, ratio_x, ratio_y );
 	log ( "Se creo correctamente la ventana (camara)", LOG_DEBUG );
+	if( ! ventana->create_window() ) {
+		log( "No se puede inicializar la ventana. El programa no puede continuar.", LOG_ERROR );
+		return NULL;
+	}
+
+	// Asigno Ventana al Mundo.
+	nuevo_mundo->setVentana(ventana);
 
 	// Obtener las capas del escenario. La primera capa es el fondo del escenario.
 	// Se setea por defecto el ancho en caso de error.
@@ -159,7 +170,7 @@ Mundo* ParserJSON::cargarMundo() {
 
 		// Setear alto logico de la capa de acuerdo al alto del escenario.
 		int capa_alto = escenario_alto;
-		log ( "Se fijo el alto logico de la ventana.", LOG_DEBUG );
+		log ( "Se fijo el alto logico de la capa.", LOG_DEBUG );
 
 		// Creo capas de fondo.
 		CapaFondo* capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, background, ventana );
@@ -173,87 +184,44 @@ Mundo* ParserJSON::cargarMundo() {
 
 		// Agrego capa al mundo.
 		nuevo_mundo->addCapa(capa_fondo);
-
+		log( "Se agrego la capa al mundo.", LOG_DEBUG );
 
 	}
 
 	// Obtener el personaje.
-	// Se consideran sprites por defecto.
-	// Por defecto: ancho 20, alto 35, z-index 1.
-	int personaje_ancho = root["personaje"].get( "ancho", PERSONAJE_ANCHO_DEFAULT ).asInt();
-	if ( personaje_ancho < 0 ) {
-		personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
-		// Informar al usuario el cambio de ancho.
-		log ( "WARNING: El ancho del personaje no puede ser negativo. Se setea automaticamente en 20." );
-	} else if ( personaje_ancho > escenario_ancho ) {
-		personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
-		// Informar al usuario el cambio de ancho.
-		log ( "WARNING: El ancho del personaje no puede superar el del escenario. Se setea automaticamente en 20." );
-	} else log( "Se cargo correctamente el ancho logico del personaje." );
-	int personaje_alto = root["personaje"].get( "alto", PERSONAJE_ALTO_DEFAULT ).asInt();
-	if ( personaje_alto < 0 ) {
-		personaje_alto = PERSONAJE_ALTO_DEFAULT;
-		// Informar al usuario el cambio de alto.
-		log( "WARNING: El alto del pesonaje no puede ser negativo. Se setea automaticamente en 35." );
-	} else if ( personaje_alto > escenario_alto ) {
-		personaje_alto = PERSONAJE_ALTO_DEFAULT;
-		//Informar al usuario el cambio de alto.
-		log ( "WARNING: El alto del personaje no puede superar el del escenario. Se setea automaticamente en 35." );
-	} else log( "Se cargo correctamente el alto logico del personaje." );
+	// Si no se especifica o no se encuentra la carpeta de sprites del personaje, se usa una por defecto.
+	// Si no se especifica el z-index se fija uno por defecto.
 	int personaje_z_index = root["personaje"].get( "z-index", PERSONAJE_Z_INDEX_DEFAULT ).asInt();
-	log ( "Se cargo correctamente el z-index del personaje." );
-	string personaje_sprite_inicial = root["personaje"]["sprites"].get( "inicial", PERSONAJE_SPRITE_INICIAL_DEFAULT ).asString();
-	string personaje_sprite_caminata = root["personaje"]["sprites"].get ( "caminata", PERSONAJE_SPRITE_CAMINATA_DEFAULT ).asString();
-	log ( "Se cargaron los sprites del personaje." );
+	log ( "Se cargo correctamente el z-index del personaje.", LOG_DEBUG );
+	string personaje_carpeta_sprites = root["personaje"].get( "sprites", PERSONAJE_CARPETA_SPRITES_DEFAULT ).asString();
+	vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites);
 	string personaje_nombre = root["personaje"].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
-	log ( "Se cargo el nombre del personaje." );
-
-
-
-
-
-	// Crear Sprites.
-	Sprite** sprites;
-	// Al agregar un sprite, se devuelve false si
-	// la imagen no existe o no se pudo abrir.
-	Sprite* spriteInicial = new Sprite(personaje_sprite_inicial);
-	if ( spriteInicial == NULL ) {
-		spriteInicial = new Sprite( PERSONAJE_SPRITE_INICIAL_DEFAULT );
-		// Informar al usuario el cambio de sprite.
-		log ( "ERROR: No se pudo cargar el sprite del personaje. Se carga sprite por defecto." );
-	} else log( "Se cargo correctamente el sprite del personaje." );
-	sprites[0] = spriteInicial;
-	Sprite* spriteCaminata = new Sprite(personaje_sprite_caminata);
-	if ( spriteCaminata == NULL ) {
-		spriteCaminata = new Sprite( PERSONAJE_SPRITE_CAMINATA_DEFAULT );
-		// Informar al usuario el cambio de sprite.
-		log ( "ERROR: No se pudo cargar el sprite del personaje. Se carga sprite por defecto." );
-	} else log( "Se cargo correctamente el sprite del personaje." );
-	sprites[1] = spriteCaminata;
+	log ( "Se cargo el nombre del personaje.", LOG_DEBUG );
 
 
 	// Crear personaje.
-	Personaje::Personaje* personaje = new Personaje(personaje_nombre, sprites, personaje_velocidad);
+	Personaje* personaje = new Personaje(personaje_nombre, sprites, PERSONAJE_VELOCIDAD);
+	log( "Se creo correctamente el personaje.", LOG_DEBUG );
 
-	// Crear ventana (capa-camara).
-	Capa::Capa* camara = new Capa( ventana_alto, ventana_ancho, personaje_z_index, escenario_ancho, personaje_velocidad );
+	// Agrego Personaje al mundo.
+	nuevo_mundo->addPersonaje(personaje);
+	log( "Se agrego el personaje al mundo", LOG_DEBUG );
 
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
-	CapaPrincipal::CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index, escenario_ancho, personaje_velocidad, personaje );
-	capa_principal->camara( camara );
+	CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, personaje );
+	log( "Se creo correctamente la capa principal.", LOG_DEBUG );
 
 	// Agrego capa principal al mundo.
-	nuevo_mundo->capaPrincipal( capa_principal );
+	nuevo_mundo->addCapa( capa_principal );
+	log( "Se agrego la capa principal al mundo.", LOG_DEBUG );
 
-	// Cargar mundo a la pelea.
-	nueva_pelea->mundo( nuevo_mundo );
-
-	log( "Se creo una nueva pelea." );
-	return nueva_pelea;
+	return nuevo_mundo;
 
 	// PERSONAJE SE LE PASA VELOCIDAD_PERSONAJE POR CONSTRUCTOR PERO NUNCA LO USA.
 	// PREGUNTAR SI LAS DIMENSIONES DE LAS CAPAS SE PASAN EN INT O SI LES FALTO PUSHEAR.
 	// HACER QUE SI NO SE PUEDE CARGAR IMAGEN DE CAPA SE DEVUELVA NULL.
+	// CAPA PRINCIPAL RECIBE DOS VECES EL MISMO PARAMETRO, EL ANCHO DEL ESCENARIO!!!
+	// EL MUNDO NO TIENE PARA AGREGAR CAPA PRINCIPAL, TRATA TODAS LAS CAPAS COMO IGUALES.
 
 }
 
