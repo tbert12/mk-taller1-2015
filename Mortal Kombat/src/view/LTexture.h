@@ -14,6 +14,11 @@
 #include <stdio.h>
 #include "../model/logging.h"
 
+typedef struct Rect_Logico
+{
+    float x, y;
+    float w, h;
+} Rect_Logico;
 
 //Texture wrapper class
 class LTexture
@@ -44,7 +49,7 @@ class LTexture
 		void renderFondo(SDL_Rect* clip);
 
 		//Renders texture at given point
-		void renderObjeto(SDL_Rect* clip, float x = 0, float y = 0);
+		void renderObjeto(Rect_Logico* clip, float x = 0, float y = 0);
 
 		//Gets image dimensions
 		int getWidth();

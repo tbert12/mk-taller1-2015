@@ -47,6 +47,11 @@ private:
 	Sprite* spriteActual;
 	std::vector<Sprite*> sprites;
 	float m_velocidad;
+	float velocidadAdelante;
+	float velocidadAtras;
+
+	float m_AltoMundo;
+	float m_AnchoMundo;
 
 	void _cambiarSprite(int accion);
 
@@ -70,6 +75,7 @@ public:
 	void renderizar(float ancho);
 
 	void setPosition(float x, float y);
+	void setDimensiones(float h, float w);
 	float getX();
 	float getY();
 	float getVida();
@@ -78,12 +84,12 @@ public:
 	void QuitarVida(int valor);
 
 	void Inicial();
+	void Frenar();
 	void Saltar();
 	void Agachar();
 	void Levantarse();
 	void CaminarDerecha();
 	void CaminarIzquierda();
-	void SetScroll(bool valor);
 
 	virtual ~Personaje();
 };

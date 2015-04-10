@@ -10,11 +10,11 @@
 
 class Frame{
 	public:
-		int Alto;
-		int Ancho;
-		int X;
-		int Y;
-		Frame(int x,int y,int alto,int ancho);
+		float Alto;
+		float Ancho;
+		float X;
+		float Y;
+		Frame(float x,float y,float alto,float ancho);
 		~Frame();
 
 		//Accede a Frame.x, Frame.y, Frame.Alto, Frame.Ancho

@@ -112,27 +112,29 @@ void LTexture::setAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void LTexture::renderObjeto( SDL_Rect* clip,float x, float y)
+void LTexture::renderObjeto( Rect_Logico* clip,float x, float y)
 {
-	int x_px = (int)x*ratio_x;
-	int y_px = (int)y*ratio_y;
+	int x_px = (int)(x*ratio_x);
+	int y_px = (int)(y*ratio_y);
 
-	SDL_Rect camera = { x_px,y_px, mWidth, mHeight};
+	SDL_Rect Object = { x_px,y_px, mWidth, mHeight};
 	SDL_Rect clip_px;
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
 	{
-		clip_px = {clip->x*ratio_x, //posicion horizontal de la capa
-				clip->y*ratio_y, //posicion vertical de la capa
-				clip->w*ratio_x, // ancho del objeto
-				clip->h*ratio_y }; //alto del objeto
+		//El + 0.5 es el casteo que usa en C++
+		//Si se usa la librea std::round. HACE LO MISMO!. (StackOverFlow)
+		clip_px = {(int)(clip->x*ratio_x + 0.5), //posicion horizontal del objeto
+				(int)(clip->y*ratio_y + 0.5), //posicion vertical del objeto
+				(int)(clip->w*ratio_x + 0.5), // ancho del objeto
+				(int)(clip->h*ratio_y + 0.5) }; //alto del objeto
 
-		camera.w = clip_px.w;//Siempre el tamaño de la ventana
-		camera.h = clip_px.h;
+		Object.w = clip_px.w;//Siempre el tamaño de la ventana
+		Object.h = clip_px.h;
 	}
 
 	//Renderizar a la pantalla
-	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &camera );
+	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &Object );
 }
 
 
@@ -145,6 +147,7 @@ void LTexture::renderFondo( SDL_Rect* clip)
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
 	{
+<<<<<<< HEAD
 		clip_px = {0, //posicion horizontal de la capa
 							clip->y*ratio_y, //posicion vertical de la capa
 							w_ventana , // ancho de la ventana
@@ -154,6 +157,18 @@ void LTexture::renderFondo( SDL_Rect* clip)
 		else
 			clip_px.x = 0;
 		printf("X de cli_px : %i \n", clip_px.x);
+=======
+		clip_px = {(int)(clip->x*ratio_x - w_ventana/2 + 0.5), //posicion horizontal de la capa
+				(int)(clip->y*ratio_y + 0.5), //posicion vertical de la capa
+				w_ventana , // ancho de la ventana
+				h_ventana }; //alto de la ventana
+
+		if(clip_px.x <0)clip_px.x = 0;
+
+		int ancho = (int)(clip->w*ratio_x + 0.5);
+		if(clip_px.x > (ancho - w_ventana))clip_px.x = ancho - w_ventana;
+
+>>>>>>> 85bd7a198744ff541d20009763ef9ffefbdd3060
 		camera.w = w_ventana;//Siempre el tamaño de la ventana
 		camera.h = h_ventana;
 	}
