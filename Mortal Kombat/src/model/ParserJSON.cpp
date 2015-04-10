@@ -103,10 +103,15 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 			log( "Se creo correctamente un frame del spritesheet del personaje parado.", LOG_DEBUG );
 		}
 		if ( sprite_parado_ok ) {
-			sprite_parado = new Sprite(spritesheet_parado, framesParado, ventana);
-			log( "Se creo correctamente el sprite para el personaje parado.", LOG_DEBUG );
-			sprites[0] = sprite_parado;
+			try {
+				sprite_parado = new Sprite(spritesheet_parado, framesParado, ventana);
+				log( "Se creo correctamente el sprite para el personaje parado.", LOG_DEBUG );
+			} catch ( CargarImagenException &e ) {
+				//sprite_parado = crearSpriteParadoDefault();
+				log( "No se pudo abrir el spritesheet del personaje parado. Se genera el sprite por defecto.", LOG_ERROR );
+			}
 		}
+		sprites[0] = sprite_parado;
 	}
 
 	// Creo Sprite para personaje caminando.
@@ -153,10 +158,15 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 			log( "Se creo correctamente un frame del spritesheet del personaje caminando.", LOG_DEBUG );
 		}
 		if ( sprite_caminar_ok ) {
-			sprite_caminar = new Sprite(spritesheet_caminar, framesCaminar, ventana);
-			log( "Se creo correctamente el sprite para el personaje caminando.", LOG_DEBUG );
-			sprites[1] = sprite_caminar;
+			try {
+				sprite_caminar = new Sprite(spritesheet_caminar, framesCaminar, ventana);
+				log( "Se creo correctamente el sprite para el personaje caminando.", LOG_DEBUG );
+			} catch ( CargarImagenException &e ) {
+				//sprite_caminar = crearSpriteCaminarDefault();
+				log( "No se pudo abrir el spritesheet del personaje caminando. Se genera el sprite por defecto.", LOG_ERROR );
+			}
 		}
+		sprites[1] = sprite_caminar;
 	}
 
 	// Creo Sprite para personaje saltando.
@@ -203,10 +213,15 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 			log( "Se creo correctamente un frame del spritesheet del personaje saltando.", LOG_DEBUG );
 		}
 		if ( sprite_saltar_ok ) {
-			sprite_saltar = new Sprite(spritesheet_saltar, framesSaltar, ventana);
-			log( "Se creo correctamente el sprite para el personaje saltando.", LOG_DEBUG );
-			sprites[2] = sprite_saltar;
+			try {
+				sprite_saltar = new Sprite(spritesheet_saltar, framesSaltar, ventana);
+				log( "Se creo correctamente el sprite para el personaje saltando.", LOG_DEBUG );
+			} catch ( CargarImagenException &e ) {
+				//sprite_saltar = crearSpriteSaltarDefault();
+				log( "No se pudo abrir el spritesheet del personaje saltando. Se genera el sprite por defecto.", LOG_ERROR );
+			}
 		}
+		sprites[2] = sprite_saltar;
 	}
 
 	// Creo Sprite para personaje saltando en diagonal.
@@ -253,10 +268,15 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 			log( "Se creo correctamente un frame del spritesheet del personaje saltando en diagonal.", LOG_DEBUG );
 		}
 		if ( sprite_saltar_diagonal_ok ) {
-			sprite_saltar_diagonal = new Sprite(spritesheet_saltar_diagonal, framesSaltarDiagonal, ventana);
-			log( "Se creo correctamente el sprite para el personaje saltando en diagonal.", LOG_DEBUG );
-			sprites[3] = sprite_saltar_diagonal;
+			try {
+				sprite_saltar_diagonal = new Sprite(spritesheet_saltar_diagonal, framesSaltarDiagonal, ventana);
+				log( "Se creo correctamente el sprite para el personaje saltando en diagonal.", LOG_DEBUG );
+			} catch ( CargarImagenException &e ) {
+				//sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault();
+				log( "No se pudo abrir el spritesheet del personaje saltando en diagonal. Se genera el sprite por defecto.", LOG_ERROR );
+			}
 		}
+		sprites[3] = sprite_saltar_diagonal;
 	}
 
 	// Creo Sprite para personaje agachado.
@@ -303,10 +323,15 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 			log( "Se creo correctamente un frame del spritesheet del personaje agachandose.", LOG_DEBUG );
 		}
 		if ( sprite_agachar_ok ) {
-			sprite_agachar = new Sprite(spritesheet_agachar, framesAgachar, ventana);
-			log( "Se creo correctamente el sprite para el personaje agachado.", LOG_DEBUG );
-			sprites[4] = sprite_agachar;
+			try {
+				sprite_agachar = new Sprite(spritesheet_agachar, framesAgachar, ventana);
+				log( "Se creo correctamente el sprite para el personaje agachado.", LOG_DEBUG );
+			} catch ( CargarImagenException &e ) {
+				//sprite_agachar = crearSpriteAgacharDefault();
+				log( "No se pudo abrir el spritesheet del personaje agachandose. Se genera el sprite por defecto.", LOG_ERROR );
+			}
 		}
+		sprites[4] = sprite_agachar;
 	}
 
 	log( "Se crearon todos los sprites del personaje.", LOG_DEBUG );
@@ -513,7 +538,6 @@ Mundo* ParserJSON::cargarMundo() {
 
 
 	// PERSONAJE SE LE PASA VELOCIDAD_PERSONAJE POR CONSTRUCTOR PERO NUNCA LO USA.
-	// PREGUNTAR SI LAS DIMENSIONES DE LAS CAPAS SE PASAN EN INT O SI LES FALTO PUSHEAR.
 	// HACER QUE SI NO SE PUEDE CARGAR IMAGEN DE CAPA SE DEVUELVA NULL.
 	// CAPA PRINCIPAL RECIBE DOS VECES EL MISMO PARAMETRO, EL ANCHO DEL ESCENARIO!!!
 	// EL MUNDO NO TIENE PARA AGREGAR CAPA PRINCIPAL, TRATA TODAS LAS CAPAS COMO IGUALES.
