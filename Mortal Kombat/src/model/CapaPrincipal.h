@@ -15,13 +15,15 @@
 class CapaPrincipal: public Capa {
 
 public:
-	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal, Personaje* personaje);
-	bool Scrollear();
+	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personaje);
+	int Scrollear(); //0 no scrollea , 1 para la derecha -1 para la izquierda!
 	virtual ~CapaPrincipal();
 	virtual void Renderizar();
 
 private:
 	Personaje* m_Personaje;
+	float m_ancho_ventana;
+	void _actualizarX();
 };
 
 

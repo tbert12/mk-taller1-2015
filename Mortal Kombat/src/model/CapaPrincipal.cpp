@@ -25,6 +25,17 @@ void CapaPrincipal::Renderizar()
 	m_Personaje->renderizar(getX());
 }
 
+void CapaPrincipal::Renderizar()
+{
+	if( Scrollear())
+	{
+		m_Personaje->SetScroll(true);
+		Mover(m_Personaje->getSentidoDeMovimiento());
+	}
+	m_Personaje->renderizar(getX());
+}
+
+
 bool CapaPrincipal::Scrollear(){
 	return m_Personaje->getX() >= m_ancho* 0.9f || m_Personaje->getX() <= m_ancho* 0.1f;
 }

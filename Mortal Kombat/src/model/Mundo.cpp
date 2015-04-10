@@ -57,14 +57,28 @@ void Mundo::setEscenario(Escenario* unEscenario){
 Escenario* Mundo::getEscenario(){
 	return escenario;
 }
+int Mundo::_verificarScroll(){
+	CapaPrincipal* capa_principal = (CapaPrincipal*)capas[capas.size()-1];
+	return capa_principal->Scrollear();
+}
 
 void Mundo::render(){
 	//limpio pantalla
 	ventana->clear();
 
+	//verifico scroll
+	int scroll = _verificarScroll();
 	//renderizo las capas
 	for (unsigned int i = 0 ; i <= capas.size()-1 ; i++){
 		capas[i]->Mover(true);
+		if(scroll > 0) {
+			capas[i]->Mover(true);
+			printf("mover derecha \n");
+		}
+		if(scroll < 0) {
+			capas[i]->Mover(false);
+			printf("mover izquierda \n");
+		}
 		capas[i]->Renderizar();
 	}
 

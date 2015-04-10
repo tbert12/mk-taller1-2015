@@ -18,19 +18,18 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana){
 	}
 	cantidadFrames = frames.size();
 	
-	spriteFrames = new SDL_Rect[cantidadFrames];
+	spriteFrames = new Rect_Logico[cantidadFrames];
 	for (int i=0;i < cantidadFrames;i++){
 		spriteFrames[i].x = frames[i]->X;
 		spriteFrames[i].y = frames[i]->Y;
 		spriteFrames[i].h = frames[i]->Alto;
 		spriteFrames[i].w = frames[i]->Ancho;
+		//frames[i]->~Frame();
 	}
 }
 
 Sprite::~Sprite(){
-	//Los Frames se deben liberar apenas se carga
-	//Elimino Sprite
-	//SpriteSheetTexture.free();
+	SpriteSheetTexture->free();
 }
 
 SDL_Rect* Sprite::getFrame(){
@@ -76,7 +75,7 @@ void Sprite::Reset(){
 }
 
 void Sprite::render(float x, float y){
-	SDL_Rect* currentClip = &spriteFrames[frameActual];
-	SpriteSheetTexture->renderObjeto(currentClip,x ,y);
+	Rect_Logico* currentClip = &spriteFrames[frameActual];
+	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h);
 }
 
