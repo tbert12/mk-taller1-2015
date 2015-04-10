@@ -32,10 +32,8 @@ Sprite::~Sprite(){
 	SpriteSheetTexture->free();
 }
 
-SDL_Rect* Sprite::getFrame(){
-	SDL_Rect* frame = &spriteFrames[frameActual];
-	printf("Frame: %d | Cant: %d\n",frameActual,cantidadFrames);
-
+Rect_Logico* Sprite::getFrame() {
+	Rect_Logico* frame = &spriteFrames[frameActual];
 	return frame;
 }
 

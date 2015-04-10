@@ -474,7 +474,7 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 
 		// Agrego capa al mundo.
-		nuevo_mundo->addCapa(capa_fondo);
+		nuevo_mundo->addCapa(capa_fondo, capa_z_index);
 		log( "Se agrego la capa al mundo.", LOG_DEBUG );
 
 	}
@@ -506,7 +506,7 @@ Mundo* ParserJSON::cargarMundo() {
 	log( "Se creo correctamente la capa principal.", LOG_DEBUG );
 
 	// Agrego capa principal al mundo.
-	nuevo_mundo->addCapa( capa_principal );
+	nuevo_mundo->addCapa( capa_principal, personaje_z_index );
 	log( "Se agrego la capa principal al mundo.", LOG_DEBUG );
 
 	return nuevo_mundo;

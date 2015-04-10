@@ -35,11 +35,13 @@ Personaje* Mundo::getPersonaje(int indice){
 	return NULL;
 }
 
-bool Mundo::addCapa(Capa* una_capa){
-	//if (capas == NULL){
-	//		return false;
-	//}
-	capas.push_back(una_capa);
+bool Mundo::addCapa(Capa* una_capa,int index){
+	if (std::find(indices.begin(), indices.end(), index)!= indices.end()){
+		log(string("No se pudo agregar la capa con z_index:%i",index),LOG_ERROR);
+		return false;
+	}
+	capas[index] = una_capa;
+	indices.push_back(index);
 	return true;
 }
 Capa* Mundo::getCapa(int indice){
@@ -64,7 +66,7 @@ Escenario* Mundo::getEscenario(){
 	return escenario;
 }
 int Mundo::_verificarScroll(){
-	CapaPrincipal* capa_principal = (CapaPrincipal*)capas[capas.size()-1];
+	CapaPrincipal* capa_principal = (CapaPrincipal*)capas[personaje_z_index];
 	return capa_principal->Scrollear();
 }
 
@@ -77,13 +79,12 @@ void Mundo::render(){
 
 	//renderizo las capas
 	for (unsigned int i = 0 ; i <= indices.size() -1 ; i++){
-		capas[i]->Mover(true);
 		if(scroll > 0) {
 			capas[indices[i]]->Mover(true);
 			printf("mover derecha \n");
 		}
 		if(scroll < 0) {
-			capas[i]->Mover(false);
+			capas[indices[i]]->Mover(false);
 			printf("mover izquierda \n");
 		}
 

@@ -22,9 +22,7 @@ CapaFondo::CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, fl
 	m_clip->y = 0;
 }
 
-void CapaFondo::Mover(bool right)
-{
-	Capa::Mover(right);
+void CapaFondo::_actualizarX() {
 	m_clip->x = this->getX();
 }
 void CapaFondo::Renderizar(){
