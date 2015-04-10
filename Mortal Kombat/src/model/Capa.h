@@ -9,6 +9,7 @@
 #define SRC_MODEL_CAPA_H_
 
 #include "Renderizable.h"
+#include "Ventana.h"
 #include <list>
 #include <string>
 

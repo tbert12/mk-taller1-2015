@@ -12,7 +12,7 @@ Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float factor
 	m_anchoDeFondo = anchoDeFondo;
 	m_velocidad = (m_ancho/m_anchoDeFondo)*factorVelocidad;
 	m_XActual = m_ancho*0.5f;
-	m_anchoDeVentana = ventana->obtenerAncho();
+	m_anchoDeVentana = 8.0f;
 }
 
 int Capa::getX()
