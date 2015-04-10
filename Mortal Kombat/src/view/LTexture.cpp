@@ -152,6 +152,11 @@ void LTexture::renderFondo( SDL_Rect* clip)
 				w_ventana , // ancho de la ventana
 				h_ventana }; //alto de la ventana
 
+		if(clip_px.x <0)clip_px.x = 0;
+
+		int ancho = (int)(clip->w*ratio_x + 0.5);
+		if(clip_px.x > (ancho - w_ventana))clip_px.x = ancho - w_ventana;
+
 		camera.w = w_ventana;//Siempre el tamaño de la ventana
 		camera.h = h_ventana;
 	}
