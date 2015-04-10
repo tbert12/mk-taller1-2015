@@ -19,7 +19,7 @@ const string fechaHora() {
 // Escribir un mensaje en una nueva linea del archivo log.
 void registrarMensaje( const string mensaje, const string inicio_mensaje) {
 	fstream logfile;
-	logfile.open ( ruta_logfile.c_str(),std::fstream::app );
+	logfile.open ( ruta_logfile.c_str(),std::fstream::app|fstream::out );
 	logfile << fechaHora();
 	logfile << inicio_mensaje;
 	logfile << mensaje;
@@ -47,11 +47,12 @@ void log( const string mensaje, int tipo_de_log = nivel) {
 
 // Indicar comienzo de un nuevo run del programa.
 void prepararLog() {
+	vector<string> modos { "ERROR", "WARNING", "DEBUG" };
 	fstream logfile;
-	logfile.open ( ruta_logfile.c_str(), std::fstream::app );
+	logfile.open ( ruta_logfile.c_str(), std::fstream::app|fstream::out );
 	logfile << "\n";
-	logfile << "MODO " << nivel << "\n";
-	logfile << "---------------------------------------------------------------------------------------------" << endl;
+	logfile << "MODO " << modos[nivel];
+	logfile << "-----------------------------------------------------------------------------------" << endl;
 	logfile << "\n";
 	logfile.close();
 }

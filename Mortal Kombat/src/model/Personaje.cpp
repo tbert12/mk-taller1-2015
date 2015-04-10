@@ -216,6 +216,7 @@ bool Personaje::getSentidoDeMovimiento(){
 	return m_velocidad > 0;
 }
 
+
 Personaje::~Personaje() {
 	spriteActual = NULL;
 	for (size_t i=0; i < sprites.size() ; i++){

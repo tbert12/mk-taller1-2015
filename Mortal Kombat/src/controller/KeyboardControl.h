@@ -14,7 +14,7 @@
 class KeyboardControl {
 	Personaje* personaje;
 	bool quit;
-	bool keydown;
+	bool agachado;
 public:
 	KeyboardControl(Personaje*);
 	virtual ~KeyboardControl();
