@@ -1,3 +1,44 @@
-BITACORA DEL MORTAL KOMBAT
-REGISTRO DE ERRORES, WARNINGS Y SUCESOS
---------------------------------------------------------------------------------
+[2015-04-10.05:55:24]-Se comienza a crear un Mundo con valores Default
+[2015-04-10.05:55:24]-Creado Personaje Default (SubZero)
+[2015-04-10.05:55:24]-Creado el tiempo, la ventana y el escenario. Seteados a Mundo
+[2015-04-10.05:55:24]-Personaje Default agregado al Mundo
+[2015-04-10.05:55:24]-Mundo creado por default
+[2015-04-10.05:55:34]-Se cierra y libera el mundo
+
+MODO 2
+---------------------------------------------------------------------------------------------
+
+[2015-04-10.05:56:21]-Se comienza a crear un Mundo con valores Default
+[2015-04-10.05:56:21]-Creado Personaje Default (SubZero)
+[2015-04-10.05:56:21]-Creado el tiempo, la ventana y el escenario. Seteados a Mundo
+[2015-04-10.05:56:21]-Personaje Default agregado al Mundo
+[2015-04-10.05:56:21]-Mundo creado por default
+[2015-04-10.05:56:24]-Se cierra y libera el mundo
+
+MODO DEBUG
+---------------------------------------------------------------------------------------------
+
+[2015-04-10.06:05:11]-Se comienza a crear un Mundo con valores Default
+[2015-04-10.06:05:12]-Creado Personaje Default (SubZero)
+[2015-04-10.06:05:12]-Creado el tiempo, la ventana y el escenario. Seteados a Mundo
+[2015-04-10.06:05:12]-Personaje Default agregado al Mundo
+[2015-04-10.06:05:12]-Mundo creado por default
+[2015-04-10.06:05:15]-Se cierra y libera el mundo
+
+MODO DEBUG-----------------------------------------------------------------------------------
+
+[2015-04-10.06:06:05]-Se comienza a crear un Mundo con valores Default
+[2015-04-10.06:06:05]-Creado Personaje Default (SubZero)
+[2015-04-10.06:06:05]-Creado el tiempo, la ventana y el escenario. Seteados a Mundo
+[2015-04-10.06:06:05]-Personaje Default agregado al Mundo
+[2015-04-10.06:06:05]-Mundo creado por default
+[2015-04-10.06:06:08]-Se cierra y libera el mundo
+
+MODO DEBUG   -----------------------------------------------------------------------------------
+
+[2015-04-10.06:06:33]-Se comienza a crear un Mundo con valores Default
+[2015-04-10.06:06:33]-Creado Personaje Default (SubZero)
+[2015-04-10.06:06:33]-Creado el tiempo, la ventana y el escenario. Seteados a Mundo
+[2015-04-10.06:06:33]-Personaje Default agregado al Mundo
+[2015-04-10.06:06:33]-Mundo creado por default
+[2015-04-10.06:06:34]-Se cierra y libera el mundo
