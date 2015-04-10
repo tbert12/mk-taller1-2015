@@ -13,6 +13,12 @@ Mundo::Mundo(float ancho,float alto) {
 	tiempo = NULL;
 	escenario = NULL;
 	ventana = NULL;
+	personaje_z_index = 0;
+	capas = std::vector<Capa*>(6);
+}
+
+void Mundo::setZindexCapaPrincipal(int index){
+	personaje_z_index = index;
 }
 
 bool Mundo::addPersonaje(Personaje* un_personaje){
@@ -68,18 +74,20 @@ void Mundo::render(){
 
 	//verifico scroll
 	int scroll = _verificarScroll();
+
 	//renderizo las capas
-	for (unsigned int i = 0 ; i <= capas.size()-1 ; i++){
+	for (unsigned int i = 0 ; i <= indices.size() -1 ; i++){
 		capas[i]->Mover(true);
 		if(scroll > 0) {
-			capas[i]->Mover(true);
+			capas[indices[i]]->Mover(true);
 			printf("mover derecha \n");
 		}
 		if(scroll < 0) {
 			capas[i]->Mover(false);
 			printf("mover izquierda \n");
 		}
-		capas[i]->Renderizar();
+
+		capas[indices[i]]->Renderizar();
 	}
 
 	//actualizo pantalla -> SDL_RenderPresent( Renderer );
@@ -88,8 +96,8 @@ void Mundo::render(){
 
 Mundo::~Mundo() {
 	//fijar si hay que liberar cada uno de los contenidos de los vectores
-	for (unsigned int i = 0 ; i < capas.size() ; i++){
-	      capas[i]->~Capa();
+	for (unsigned int i = 0 ; i < indices.size() -1 ; i++){
+	      capas[indices[i]]->~Capa();
 	}
 	capas.clear();
 	for (unsigned int i = 0 ; i < personajes.size() ; i++){

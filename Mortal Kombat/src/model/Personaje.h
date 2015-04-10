@@ -44,11 +44,13 @@ private:
 	float m_yInicial;
 	short _estaSaltando;
 	int _tDeSalto;
-	Sprite* spriteActual;
-	std::vector<Sprite*> sprites;
-	float m_velocidad;
+
 	float velocidadAdelante;
 	float velocidadAtras;
+	float m_velocidad;
+
+	Sprite* spriteActual;
+	std::vector<Sprite*> sprites;
 
 	float m_AltoMundo;
 	float m_AnchoMundo;
@@ -58,6 +60,8 @@ private:
 	void _SaltarHorizontal();
 	void _SaltarDerecha();
 	void _SaltarIzquierda();
+
+	bool _estaAgachado();
 
 	void _parabola();
 	void _actualizarY();
@@ -79,7 +83,6 @@ public:
 	float getX();
 	float getY();
 	float getVida();
-	bool IsScrolling();
 	bool getSentidoDeMovimiento();
 	void QuitarVida(int valor);
 

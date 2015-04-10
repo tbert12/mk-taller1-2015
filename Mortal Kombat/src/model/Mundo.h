@@ -19,6 +19,8 @@
 #include "Escenario.h"
 #include "../view/Ventana.h"
 #include <vector>
+#include <algorithm>
+#include "logging.h"
 
 
 class Mundo {
@@ -29,14 +31,16 @@ private:
 	std::vector<Personaje*> personajes;
 	Tiempo* tiempo;
 	Escenario* escenario;
-	Ventana* ventana; //tiene el renderer
+	Ventana* ventana;
+	int personaje_z_index;
 	int _verificarScroll();
+	std::vector<int> indices;
 
 public:
 	Mundo(float AnchoMundo,float AltoMundo);
 	bool addPersonaje(Personaje* un_personaje);
 	Personaje* getPersonaje(int indice = 0);
-	bool addCapa(Capa* unaCapa);
+	bool addCapa(Capa* unaCapa,int indice);
 	Capa* getCapa(int indice = 0);
 	void setTiempo(Tiempo* unTiempo);
 	void setVentana(Ventana* unaVentana);
@@ -45,6 +49,7 @@ public:
 	Escenario* getEscenario();
 	void render();
 	virtual ~Mundo();
+	void setZindexCapaPrincipal(int index);
 };
 
 #endif /* SRC_MODEL_MUNDO_H_ */
