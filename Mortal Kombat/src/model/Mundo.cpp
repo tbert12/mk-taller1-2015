@@ -78,9 +78,8 @@ void Mundo::render(){
 	int scroll = _verificarScroll();
 
 	//renderizo las capas
-	for (unsigned int i = 0 ; i <= capas.size()-1 ; i++){
-		capas[i]->Mover(true);
 	for (unsigned int i = 0 ; i <= indices.size() -1 ; i++){
+		//capas[indices[i]]->Mover(true);
 		if(scroll > 0) {
 			capas[indices[i]]->Mover(true);
 			printf("mover derecha \n");
@@ -89,13 +88,14 @@ void Mundo::render(){
 			capas[indices[i]]->Mover(false);
 			printf("mover izquierda \n");
 		}
-		capas[i]->Renderizar();
+
 		capas[indices[i]]->Renderizar();
 	}
 
 	//actualizo pantalla -> SDL_RenderPresent( Renderer );
 	ventana->Refresh();
 }
+
 
 Mundo::~Mundo() {
 	//fijar si hay que liberar cada uno de los contenidos de los vectores

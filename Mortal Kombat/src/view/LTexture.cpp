@@ -138,7 +138,6 @@ void LTexture::renderObjeto( Rect_Logico* clip,float x, float y)
 }
 
 
-
 void LTexture::renderFondo( SDL_Rect* clip)
 {
 
@@ -173,6 +172,7 @@ void LTexture::renderFondo( SDL_Rect* clip)
 	//Renderizar a la pantalla
 	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &camera );
 }
+
 
 int LTexture::getWidth()
 {

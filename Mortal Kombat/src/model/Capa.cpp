@@ -5,7 +5,7 @@
 
 #include "Capa.h"
 
-Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float factorVelocidad, Ventana* ventana) {
+Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float factorVelocidad) {
 	m_alto = alto;
 	m_ancho = ancho;
 	m_zIndex = zIndex;
@@ -22,7 +22,7 @@ int Capa::getX()
 
 void Capa::Mover(bool right){
 
-	if(right > true)
+	if(right == true)
 	{
 		printf("xActual: %f , mueve:+ %f ",m_XActual,m_velocidad);
 		m_XActual += m_velocidad;

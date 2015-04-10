@@ -9,7 +9,6 @@
 #define SRC_MODEL_CAPA_H_
 
 #include "Renderizable.h"
-#include "Ventana.h"
 #include <list>
 #include <string>
 
@@ -20,7 +19,7 @@ public:
 	void Mover(bool right);
 	int getX();
 	virtual void Renderizar();
-	Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal, Ventana* ventana);
+	Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal);
 
 private:
 	float m_alto;

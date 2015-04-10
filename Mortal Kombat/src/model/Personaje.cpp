@@ -201,11 +201,15 @@ bool Personaje::_estaAgachado(){
 void Personaje::renderizar(float ancho){
 	float renderX = m_xActual + m_velocidad;
 	if (renderX <= m_AnchoMundo and renderX >= 0){
-		if (!_estaAgachado()) m_xActual += m_velocidad;
-		printf("Avanzar\n -X=%f\n -V=%f\n -Ancho=%f\n",m_xActual,m_velocidad,m_AnchoMundo);
+		if (!_estaAgachado())
+		{
+			m_xActual += m_velocidad;
+			printf("ESTA CAMINANDO\n");
+		}
+		//printf("Avanzar\n -X=%f\n -V=%f\n -Ancho=%f\n",m_xActual,m_velocidad,m_AnchoMundo);
 	}
 	if(_estaSaltando > 0){
-			_actualizarY();
+		_actualizarY();
 	}
 	spriteActual->render(m_xActual- ancho,m_yActual);
 	AvanzarSprite();

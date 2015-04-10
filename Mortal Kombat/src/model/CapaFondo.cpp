@@ -10,7 +10,7 @@
 
 CapaFondo::CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal,
 		std::string ruta, Ventana* ventana)
-:Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal,ventana) //call superclass constructor
+:Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal) //call superclass constructor
 {
 	m_texture = ventana->crearTextura();
 	m_texture->loadFromFile(ruta);

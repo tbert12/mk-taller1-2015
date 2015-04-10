@@ -9,13 +9,9 @@
 #include <list>
 
 
-<<<<<<< HEAD
-CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal, Personaje* personaje, Ventana* ventana)
-:Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal, ventana) //call superclass constructor
-=======
 CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personaje)
 :Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal) //call superclass constructor
->>>>>>> 85bd7a198744ff541d20009763ef9ffefbdd3060
+
 {
 	m_Personaje = personaje;
 	personaje->setDimensiones(alto,ancho);
@@ -36,8 +32,14 @@ void CapaPrincipal::Renderizar()
 }
 
 int CapaPrincipal::Scrollear(){
-	if (m_Personaje->getX() <= (getX() + m_ancho_ventana*0.1f)) return -1;
-	if (m_Personaje->getX() >= (getX() + m_ancho_ventana*0.9f)) return 1;
+	if (m_Personaje->getX() <= (getX() + m_ancho_ventana*0.1f)){
+		printf("ESTA SCROLLEANDO IZQUIERDA\n");
+		return -1;
+	}
+	if (m_Personaje->getX() >= (getX() + m_ancho_ventana*0.9f)){
+		printf("ESTA SCROLLEANDO Derecha\n");
+		return 1;
+	}
 	return 0;
 }
 
