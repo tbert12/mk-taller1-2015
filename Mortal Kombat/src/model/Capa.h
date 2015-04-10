@@ -17,7 +17,7 @@ class Capa{
 public:
 	int getZIndex();
 	void Actualizar();
-	virtual void Mover(bool right);
+	void Mover(bool right);
 	int getX();
 	virtual void Renderizar();
 	Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal, Ventana* ventana);

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int nivel = 1;
+int nivel = LOG_DEBUG;
 const string ruta_logfile = "data/log/registro.log";
 
 // Obtener la fecha y hora actual. Formato YYYY-MM-DD.HH:mm:ss.
@@ -29,19 +29,19 @@ void registrarMensaje( const string mensaje, const string inicio_mensaje) {
 
 // Bitacora del programa.
 // Niveles de registro:
-// 1 = Errores, Warnings, Sucesos (DEBUG)
-// 2 = Errores, Warnings
-// 3 = Errores
-void log( const string mensaje,int tipo_de_log = LOG_DEBUG) {
-	if ( tipo_de_log == LOG_ERROR ) {
-		// DETALLO ERROR
-		registrarMensaje(mensaje,"ERROR: ");
-	} else if ( (tipo_de_log == LOG_WARNING) and (nivel < 3) ) {
+// 2 = Errores, Warnings, Sucesos (DEBUG)
+// 1 = Errores, Warnings
+// 0 = Errores
+void log( const string mensaje, int tipo_de_log = nivel) {
+	if ( tipo_de_log == LOG_DEBUG && nivel == 2 ) {
+		// DETALLO SUCESO (DEBUG)
+		registrarMensaje(mensaje,"");
+	} else if ( tipo_de_log == LOG_WARNING && nivel >= 1 ) {
 		// DETALLO WARNING
 		registrarMensaje(mensaje,"WARNING: ");
-	} else if (nivel < 2 ){
-		// DETALLO SUCESO (DEBUG)
-		registrarMensaje(mensaje,"DEBUG: ");
+	} else if ( tipo_de_log == LOG_ERROR ) {
+		// DETALLO ERROR
+		registrarMensaje(mensaje,"ERROR: ");
 	}
 }
 
@@ -50,6 +50,7 @@ void prepararLog() {
 	fstream logfile;
 	logfile.open ( ruta_logfile.c_str(), std::fstream::app );
 	logfile << "\n";
+	logfile << "MODO " << nivel << "\n";
 	logfile << "---------------------------------------------------------------------------------------------" << endl;
 	logfile << "\n";
 	logfile.close();

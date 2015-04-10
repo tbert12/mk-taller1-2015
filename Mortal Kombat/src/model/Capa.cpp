@@ -22,22 +22,9 @@ int Capa::getX()
 
 void Capa::Mover(bool right){
 
-<<<<<<< HEAD
-
-	if(right)
-	{
-		printf("ancho %f \n", m_ancho);
-		if( m_XActual+m_ancho >= m_anchoDeFondo)
-		{
-			m_XActual = m_anchoDeFondo - m_ancho;
-			return;
-		}
-
-=======
-	if(right)
+	if(right > true)
 	{
 		printf("xActual: %f , mueve:+ %f ",m_XActual,m_velocidad);
->>>>>>> 85bd7a198744ff541d20009763ef9ffefbdd3060
 		m_XActual += m_velocidad;
 
 	}else{
@@ -51,6 +38,7 @@ void Capa::Mover(bool right){
 		m_XActual =m_ancho;
 	}
 }
+
 
 int Capa::getZIndex(){
 	return m_zIndex;

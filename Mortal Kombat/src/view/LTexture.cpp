@@ -147,7 +147,6 @@ void LTexture::renderFondo( SDL_Rect* clip)
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
 	{
-<<<<<<< HEAD
 		clip_px = {0, //posicion horizontal de la capa
 							clip->y*ratio_y, //posicion vertical de la capa
 							w_ventana , // ancho de la ventana
@@ -157,7 +156,6 @@ void LTexture::renderFondo( SDL_Rect* clip)
 		else
 			clip_px.x = 0;
 		printf("X de cli_px : %i \n", clip_px.x);
-=======
 		clip_px = {(int)(clip->x*ratio_x - w_ventana/2 + 0.5), //posicion horizontal de la capa
 				(int)(clip->y*ratio_y + 0.5), //posicion vertical de la capa
 				w_ventana , // ancho de la ventana
@@ -168,7 +166,6 @@ void LTexture::renderFondo( SDL_Rect* clip)
 		int ancho = (int)(clip->w*ratio_x + 0.5);
 		if(clip_px.x > (ancho - w_ventana))clip_px.x = ancho - w_ventana;
 
->>>>>>> 85bd7a198744ff541d20009763ef9ffefbdd3060
 		camera.w = w_ventana;//Siempre el tamaño de la ventana
 		camera.h = h_ventana;
 	}

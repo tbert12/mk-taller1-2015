@@ -20,16 +20,10 @@ class CapaFondo: public Capa {
 private:
 	LTexture* m_texture;
 	SDL_Rect* m_clip;
-<<<<<<< HEAD
-	//float m_ventana_ancho;
-=======
-	float m_ventana_ancho;
 	void _actualizarX();
-
->>>>>>> 85bd7a198744ff541d20009763ef9ffefbdd3060
-
 public:
-	CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal,std::string ruta, Ventana* ventana);
+	CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal,
+			std::string ruta, Ventana* ventana);
 	virtual void Renderizar();
 	virtual ~CapaFondo();
 };

@@ -44,4 +44,3 @@ int CapaPrincipal::Scrollear(){
 CapaPrincipal::~CapaPrincipal() {
 	// TODO Auto-generated destructor stub
 }
-

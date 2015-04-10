@@ -78,14 +78,9 @@ void Mundo::render(){
 	int scroll = _verificarScroll();
 
 	//renderizo las capas
-<<<<<<< HEAD
 	for (unsigned int i = 0 ; i <= capas.size()-1 ; i++){
-<<<<<<< HEAD
 		capas[i]->Mover(true);
-=======
-=======
 	for (unsigned int i = 0 ; i <= indices.size() -1 ; i++){
->>>>>>> 7488e443b65ec6f738d246cb9c2687dee3ddfe95
 		if(scroll > 0) {
 			capas[indices[i]]->Mover(true);
 			printf("mover derecha \n");
@@ -94,13 +89,8 @@ void Mundo::render(){
 			capas[indices[i]]->Mover(false);
 			printf("mover izquierda \n");
 		}
-<<<<<<< HEAD
->>>>>>> 85bd7a198744ff541d20009763ef9ffefbdd3060
 		capas[i]->Renderizar();
-=======
-
 		capas[indices[i]]->Renderizar();
->>>>>>> 7488e443b65ec6f738d246cb9c2687dee3ddfe95
 	}
 
 	//actualizo pantalla -> SDL_RenderPresent( Renderer );

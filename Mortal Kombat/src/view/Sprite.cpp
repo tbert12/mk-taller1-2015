@@ -32,7 +32,7 @@ Sprite::~Sprite(){
 	SpriteSheetTexture->free();
 }
 
-Rect_Logico* Sprite::getFrame(){
+Rect_Logico* Sprite::getFrame() {
 	Rect_Logico* frame = &spriteFrames[frameActual];
 	return frame;
 }
@@ -44,9 +44,13 @@ bool Sprite::Advance(){
 		frameActual = 0;
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	//printf("Frame: %d | TotalFrame: %d\n",frameActual,cantidadFrames);
 =======
 >>>>>>> 85bd7a198744ff541d20009763ef9ffefbdd3060
+=======
+	//printf("Frame: %d | TotalFrame: %d\n",frameActual,cantidadFrames);
+>>>>>>> 681dc3d792734f4f43374f18646978992de41ee4
 	return true;
 }
 
