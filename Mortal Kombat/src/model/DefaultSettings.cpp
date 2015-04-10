@@ -24,7 +24,7 @@
 #define BACKGROUND_2_Z_INDEX 2
 #define PERSONAJE_Z_INDEX_DEFAULT 3
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
-#define PERSONAJE_FACTOR_VELOCIDAD 10
+#define PERSONAJE_FACTOR_VELOCIDAD 5
 
 std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
 
