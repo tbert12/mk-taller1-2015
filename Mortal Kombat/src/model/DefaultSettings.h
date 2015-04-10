@@ -7,5 +7,5 @@
 #include "Mundo.h"
 
 Mundo* CrearMundoDefault();
-
+std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry);
 
