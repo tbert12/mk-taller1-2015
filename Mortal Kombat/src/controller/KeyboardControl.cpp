@@ -19,11 +19,9 @@ bool KeyboardControl::getQuit(){
 }
 
 void KeyboardControl::KeyPressed(SDL_Event evento){
-	printf("KeyPressed\n");
 	if(evento.type == SDL_QUIT){
 		quit = true;
 	} else if(evento.type == SDL_KEYDOWN and !keydown){
-		printf("1er IF\n");
 		switch( evento.key.keysym.sym ){
 				case SDLK_UP:
 					personaje->Saltar();
@@ -46,33 +44,29 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 					personaje->Inicial();
 					break;
 			}
-	} else if (evento.type == SDL_KEYUP){
-		printf("2do IF\n");
+	} else if (evento.type == SDL_KEYUP and evento.type != SDL_MOUSEMOTION){
 		switch( evento.key.keysym.sym ){
 			case SDLK_DOWN:
-				printf(" -Levantarse\n");
 				keydown = false;
 				personaje->Levantarse();
 				break;
 			case SDLK_LEFT:
-				printf(" -Izquierda\n");
+				personaje->Frenar();
+				if (!keydown)personaje->Inicial();
 				break;
 			case SDLK_RIGHT:
-				printf("-Derecha\n");
-				break;
-			case SDLK_UP:
-				printf(" -Arriba\n");
+				personaje->Frenar();
+				if (!keydown)personaje->Inicial();
 				break;
 			default:
-				printf(" -Inicial\n");
-				if (!keydown) personaje->Inicial();
+				if (!keydown) {
+					printf("Frena!\n");
+					personaje->Inicial();
+				}
 				break;
 		}
-	} else {
-		printf("3er IF (Frenar)\n");
-		if (!keydown){
-			personaje->Frenar();
-		}
+	} else if (keydown){
+		personaje->Agachar();
 	}
 
 }
