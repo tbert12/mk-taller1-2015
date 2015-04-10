@@ -35,10 +35,13 @@ void Capa::Mover(bool right){
 		m_XActual = 0;
 	}
 	if( m_XActual > m_ancho){
-		m_XActual =m_ancho;
+		m_XActual = m_ancho;
 	}
 }
 
+float Capa::getVelocidad(){
+	return m_velocidad;
+}
 
 int Capa::getZIndex(){
 	return m_zIndex;

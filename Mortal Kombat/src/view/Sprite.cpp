@@ -14,7 +14,7 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana){
 
 	if( !SpriteSheetTexture->loadFromFile( ruta ) ){
 		log( "Error al intentar abrir la imagen del sprite.", LOG_ERROR );
-		throw CargarImagenException( ruta );
+		//throw CargarImagenException( ruta );
 	}
 	cantidadFrames = frames.size();
 	
