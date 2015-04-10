@@ -11,7 +11,11 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	nombre = nombre_personaje;
 	vida = 100;
 	sprites = Sprites;
+
 	spriteActual = sprites[SPRITE_INICIAL];
+	//Cambiar lo del Sprite get Siguiente NULL, lo tiene que manejar personaje
+	//que Sprite quiere, facilita el controlador tambien
+
 	m_xActual = 0;
 	m_yActual = 0;
 	m_xInicial = 0;

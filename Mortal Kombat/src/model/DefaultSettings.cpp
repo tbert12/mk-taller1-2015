@@ -24,7 +24,7 @@
 #define BACKGROUND_2_Z_INDEX 2
 #define PERSONAJE_Z_INDEX_DEFAULT 3
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
-#define PERSONAJE_FACTOR_VELOCIDAD 10
+#define PERSONAJE_FACTOR_VELOCIDAD 5
 
 std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
 
@@ -118,8 +118,11 @@ Mundo* CrearMundoDefault(){
 	if(!ventana->create_window()){
 		log("No se puede inicializar la ventana",LOG_ERROR);
 	}
-
 	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD);
+	if(personaje_default == NULL){
+		log("No se pudo crear el personaje default",LOG_ERROR);
+	}
+
 	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2 - VENTANA_ANCHO_LOG/2),Y_PISO_DEFAULT);
 	log("Creado Personaje Default (SubZero)",LOG_DEBUG);
 
@@ -135,23 +138,23 @@ Mundo* CrearMundoDefault(){
 	// CREO LAS CAPAS, SON 3 NIVELES
 	// La relacion entre el las medidas logicas y los pixeles es la divicion
 
-
 	//capa 0, es la ultima. de la misma medida que la ventana
 	CapaFondo* capa_0 =new CapaFondo(BACKGROUND_0__ALTO_DEFAULT,BACKGROUND_0__ANCHO_DEFAULT,BACKGROUND_0_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_0_DEFAULT,ventana);
-	mundo->addCapa(capa_0);
+	mundo->addCapa(capa_0,BACKGROUND_0_Z_INDEX);
 
 	//capa 1 ,es la del medio. del doble que la ventana
 	CapaFondo* capa_1 =new CapaFondo(BACKGROUND_1__ALTO_DEFAULT,BACKGROUND_1__ANCHO_DEFAULT,BACKGROUND_1_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_1_DEFAULT,ventana);
-	mundo->addCapa(capa_1);
+	mundo->addCapa(capa_1,BACKGROUND_1_Z_INDEX);
 
 	//capa 2 es la mas grande, la del escenario
 	CapaFondo* capa_2 = new CapaFondo(BACKGROUND_2__ALTO_DEFAULT,BACKGROUND_2__ANCHO_DEFAULT,BACKGROUND_2_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_2_DEFAULT,ventana);
-	mundo->addCapa(capa_2);
+	mundo->addCapa(capa_2,BACKGROUND_2_Z_INDEX);
 
 	//la que contiene el escenario
 
 	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,VENTANA_ANCHO_LOG,PERSONAJE_FACTOR_VELOCIDAD,personaje_default);
-	mundo->addCapa(capa_principal);
+	mundo->addCapa(capa_principal,PERSONAJE_Z_INDEX_DEFAULT);
+	mundo->setZindexCapaPrincipal(PERSONAJE_Z_INDEX_DEFAULT);
 
 	//log("Capas agregadas al Mundo",LOG_DEBUG);
 	return mundo;

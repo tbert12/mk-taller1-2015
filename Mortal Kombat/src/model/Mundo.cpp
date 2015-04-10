@@ -13,6 +13,12 @@ Mundo::Mundo(float ancho,float alto) {
 	tiempo = NULL;
 	escenario = NULL;
 	ventana = NULL;
+	personaje_z_index = 0;
+	capas = std::vector<Capa*>(6);
+}
+
+void Mundo::setZindexCapaPrincipal(int index){
+	personaje_z_index = index;
 }
 
 bool Mundo::addPersonaje(Personaje* un_personaje){
@@ -29,11 +35,13 @@ Personaje* Mundo::getPersonaje(int indice){
 	return NULL;
 }
 
-bool Mundo::addCapa(Capa* una_capa){
-	//if (capas == NULL){
-	//		return false;
-	//}
-	capas.push_back(una_capa);
+bool Mundo::addCapa(Capa* una_capa,int index){
+	if (std::find(indices.begin(), indices.end(), index)!= indices.end()){
+		log(string("No se pudo agregar la capa con z_index:%i",index),LOG_ERROR);
+		return false;
+	}
+	capas[index] = una_capa;
+	indices.push_back(index);
 	return true;
 }
 Capa* Mundo::getCapa(int indice){
@@ -58,7 +66,7 @@ Escenario* Mundo::getEscenario(){
 	return escenario;
 }
 int Mundo::_verificarScroll(){
-	CapaPrincipal* capa_principal = (CapaPrincipal*)capas[capas.size()-1];
+	CapaPrincipal* capa_principal = (CapaPrincipal*)capas[personaje_z_index];
 	return capa_principal->Scrollear();
 }
 
@@ -68,21 +76,31 @@ void Mundo::render(){
 
 	//verifico scroll
 	int scroll = _verificarScroll();
+
 	//renderizo las capas
+<<<<<<< HEAD
 	for (unsigned int i = 0 ; i <= capas.size()-1 ; i++){
 <<<<<<< HEAD
 		capas[i]->Mover(true);
 =======
+=======
+	for (unsigned int i = 0 ; i <= indices.size() -1 ; i++){
+>>>>>>> 7488e443b65ec6f738d246cb9c2687dee3ddfe95
 		if(scroll > 0) {
-			capas[i]->Mover(true);
+			capas[indices[i]]->Mover(true);
 			printf("mover derecha \n");
 		}
 		if(scroll < 0) {
-			capas[i]->Mover(false);
+			capas[indices[i]]->Mover(false);
 			printf("mover izquierda \n");
 		}
+<<<<<<< HEAD
 >>>>>>> 85bd7a198744ff541d20009763ef9ffefbdd3060
 		capas[i]->Renderizar();
+=======
+
+		capas[indices[i]]->Renderizar();
+>>>>>>> 7488e443b65ec6f738d246cb9c2687dee3ddfe95
 	}
 
 	//actualizo pantalla -> SDL_RenderPresent( Renderer );
@@ -91,8 +109,8 @@ void Mundo::render(){
 
 Mundo::~Mundo() {
 	//fijar si hay que liberar cada uno de los contenidos de los vectores
-	for (unsigned int i = 0 ; i < capas.size() ; i++){
-	      capas[i]->~Capa();
+	for (unsigned int i = 0 ; i < indices.size() -1 ; i++){
+	      capas[indices[i]]->~Capa();
 	}
 	capas.clear();
 	for (unsigned int i = 0 ; i < personajes.size() ; i++){
