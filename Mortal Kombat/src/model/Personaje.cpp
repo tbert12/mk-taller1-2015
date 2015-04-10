@@ -22,6 +22,8 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	estaScrolleando = false;
 	_tDeSalto = 0;
 	_estaSaltando = -1;
+	m_AltoMundo = 0;
+	m_AnchoMundo = 0;
 }
 
 
