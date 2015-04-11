@@ -22,6 +22,10 @@
 #define BACKGROUND_2__ANCHO_DEFAULT 600.0
 #define BACKGROUND_2__ALTO_DEFAULT 150.0
 #define BACKGROUND_2_Z_INDEX 2
+#define BACKGROUND_4_DEFAULT "data/img/background/Ventana.png"
+#define BACKGROUND_4__ANCHO_DEFAULT 200
+#define BACKGROUND_4__ALTO_DEFAULT 150.0
+#define BACKGROUND_4_Z_INDEX 4
 #define PERSONAJE_Z_INDEX_DEFAULT 3
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
 #define PERSONAJE_FACTOR_VELOCIDAD 5
@@ -145,9 +149,9 @@ Mundo* CrearMundoDefault(){
 	if(!ventana->create_window()){
 		log("No se puede inicializar la ventana",LOG_ERROR);
 	}
-	//Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD);
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD);
 	//si flipeado, descomentar la siguiente linea
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD,true);
+	//Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD,true);
 	if(personaje_default == NULL){
 		log("No se pudo crear el personaje default",LOG_ERROR);
 	}
@@ -186,6 +190,9 @@ Mundo* CrearMundoDefault(){
 	mundo->addCapa(capa_principal,PERSONAJE_Z_INDEX_DEFAULT);
 	mundo->setZindexCapaPrincipal(PERSONAJE_Z_INDEX_DEFAULT);
 
+	//capa 2 es la mas grande, la del escenario
+	CapaFondo* capa_4 = new CapaFondo(BACKGROUND_4__ALTO_DEFAULT,BACKGROUND_4__ANCHO_DEFAULT,BACKGROUND_4_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_4_DEFAULT,ventana);
+	mundo->addCapa(capa_4,BACKGROUND_4_Z_INDEX);
 	//log("Capas agregadas al Mundo",LOG_DEBUG);
 	return mundo;
 }
