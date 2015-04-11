@@ -43,6 +43,13 @@ int main( int argc, char* args[] )
 		//Creo el Personaje
 		Personaje* luchador = mundo->getPersonaje();
 
+		/*
+		//mostrar imagen inicio
+		if(mundo->mostrarImagen("data/img/background/inicio.png")){
+			//3 segundos
+			usleep(3000000);
+		}
+		*/
 		//Creo el Controlador
 		KeyboardControl* control_jugador_1 = new KeyboardControl(luchador);
 

@@ -36,6 +36,8 @@ public:
 
 	LTexture* crearTextura();
 
+	bool mostrarImagen(string ruta);
+
 	//limpia la pantalla
 	void clear();
 };

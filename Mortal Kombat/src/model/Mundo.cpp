@@ -71,6 +71,15 @@ int Mundo::_verificarScroll(){
 	return capa_principal->Scrollear();
 }
 
+bool Mundo::mostrarImagen(string ruta){
+	if(!ventana->mostrarImagen(ruta)){
+		log("No se pudo mostrar la imagen",LOG_ERROR);
+		return false;
+	}
+	log("Se muestra imagen de inicio",LOG_DEBUG);
+	return true;
+}
+
 void Mundo::render(){
 	//limpio pantalla
 	ventana->clear();

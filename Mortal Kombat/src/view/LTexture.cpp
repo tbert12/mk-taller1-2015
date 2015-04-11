@@ -141,8 +141,6 @@ void LTexture::renderObjeto( Rect_Logico* clip,float x, float y, bool flip)
 	SDL_RenderCopyEx( gRenderer, mTexture, &clip_px, &Object,  0 , 0, flipType);
 }
 
-
-
 void LTexture::renderFondo( Rect_Logico* clip)
 {
 
@@ -167,6 +165,12 @@ void LTexture::renderFondo( Rect_Logico* clip)
 
 	//Renderizar a la pantalla
 	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &camera );
+}
+
+void LTexture::renderImagen(){
+	SDL_Rect camera = { 0,0, w_ventana, h_ventana};
+	SDL_Rect clip = {0,0,w_ventana,h_ventana};
+	SDL_RenderCopy( gRenderer, mTexture, &clip, &camera);
 }
 
 int LTexture::getWidth()
