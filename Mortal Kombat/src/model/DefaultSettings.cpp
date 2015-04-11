@@ -84,26 +84,53 @@ std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
 	Sprite* AntesDeSaltar = new Sprite(rutaSalto,framesAntesDeSaltar,ventana);
 	Sprite* Salto = new Sprite(rutaSalto,framesDeSaltar,ventana);
 	Sprite* DespuesDeSaltar = new Sprite(rutaSalto,framesDespuesDeSaltar,ventana);
+
 	AntesDeSaltar->setSpriteSiguiente(Salto);
 	DespuesDeSaltar->setSpriteSiguiente(Initial);
 
 	Sprite* AntesSaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesAntesDeSaltarDiagonal,ventana);
 	Sprite* SaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonal,ventana);
+
 	AntesSaltoDiagonal->setSpriteSiguiente(SaltoDiagonal);
 
 	Sprite* AntesSaltoDiagonalAtras = new Sprite(rutaSaltoDiagonal,framesAntesDeSaltarDiagonal,ventana);
 	Sprite* SaltoDiagonalAtras = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonalAtras,ventana);
+
 	AntesSaltoDiagonalAtras->setSpriteSiguiente(SaltoDiagonalAtras);
 
 	Sprite* Agacharse = new Sprite(rutaAgacharse,framesAgacharse,ventana);
 	Sprite* Agachado = new Sprite(rutaAgacharse,framesAgachado,ventana);
 	Sprite* Levantarse = new Sprite(rutaAgacharse,framesLevantarse,ventana);
+
 	Agacharse->setSpriteSiguiente(Agachado);
 	Levantarse->setSpriteSiguiente(Initial);
 
-	//{Initial,Caminar,CaminarAtras,AntesDeSaltar,Salto,DespuesDeSaltar,SaltoDiagonal}
-	std::vector<Sprite*> sprites = {Initial,Caminar,CaminarAtras,Salto,AntesDeSaltar,DespuesDeSaltar,AntesSaltoDiagonal,SaltoDiagonal,AntesSaltoDiagonalAtras,SaltoDiagonalAtras,Agacharse,Agachado,Levantarse};
-	printf("Termine carga sprite\n");
+	/* PARA ELIMINAR SPRITE->SIGUIENTE
+	 * La onda es hacer esto y que se le diga al Sprite en Personaje que tiene que hacer
+	 * Hay que implementar Sprite->Reverse (Para reproducir en reversa saltar y caminar)
+	 * Hay que implementar Sprite->Loop y Sprite->SetLoop (Viene del JSON), para cuando este saltando o agachado
+	 * ...(No se me ocurre nada mas)
+	 * std::vector<Sprite*> sprites = {Initial,
+	 *								   Caminar,
+	 *								   Salto,
+	 *								   SaltoDiagonal
+	 *								   Agacharse};
+	 */
+
+	std::vector<Sprite*> sprites = {Initial,
+									Caminar,
+									CaminarAtras,
+									Salto,
+									AntesDeSaltar,
+									DespuesDeSaltar,
+									AntesSaltoDiagonal,
+									SaltoDiagonal,
+									AntesSaltoDiagonalAtras,
+									SaltoDiagonalAtras,
+									Agacharse,
+									Agachado,
+									Levantarse};
+
 	return sprites;
 }
 
