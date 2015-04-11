@@ -49,7 +49,7 @@ bool Ventana::create_window()
 		}
 
 		//Crear Ventana
-		Window = SDL_CreateWindow( "World", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_ancho_px, m_alto_px, SDL_WINDOW_SHOWN );
+		Window = SDL_CreateWindow( "MK - FIUBA", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_ancho_px, m_alto_px, SDL_WINDOW_SHOWN );
 		if( Window == NULL )
 		{
 			log(string( "La ventana no se puede crear! SDL Error: %s\n", SDL_GetError() ),LOG_ERROR);
@@ -103,6 +103,18 @@ void Ventana::clear(){
 	//Limpiar pantalla
 	SDL_SetRenderDrawColor( Renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear( Renderer );
+}
+
+bool Ventana::mostrarImagen(string ruta){
+	LTexture* textura = crearTextura();
+	if(!textura->loadFromFile(ruta)){
+		log(string("No se pudo cargar la ruta de la imagen a mostrar, %s:",ruta.c_str()),LOG_ERROR);
+		return false;
+	}
+	textura->renderImagen();
+	Refresh();
+	textura->~LTexture();
+	return true;
 }
 
 void Ventana::Refresh(){

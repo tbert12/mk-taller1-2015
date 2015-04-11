@@ -58,6 +58,7 @@ class LTexture
 		void setRatio(float ratiox,float ratioy);
 
 		void setDimensionesVentana(int w,int h);
+		void renderImagen();
 
 	private:
 		//The actual hardware texture

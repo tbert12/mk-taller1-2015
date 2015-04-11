@@ -8,6 +8,7 @@
 #ifndef SRC_MODEL_MUNDO_H_
 #define SRC_MODEL_MUNDO_H_
 
+
 #include "Tiempo.h"
 #include "../view/LTexture.h"
 #include "Capa.h"
@@ -50,6 +51,7 @@ public:
 	void render();
 	virtual ~Mundo();
 	void setZindexCapaPrincipal(int index);
+	bool mostrarImagen(string ruta);
 };
 
 #endif /* SRC_MODEL_MUNDO_H_ */
