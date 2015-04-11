@@ -123,7 +123,7 @@ Mundo* CrearMundoDefault(){
 		log("No se pudo crear el personaje default",LOG_ERROR);
 	}
 
-	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2 - VENTANA_ANCHO_LOG/2),Y_PISO_DEFAULT);
+	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2),Y_PISO_DEFAULT);
 	log("Creado Personaje Default (SubZero)",LOG_DEBUG);
 
 	mundo->setVentana(ventana);

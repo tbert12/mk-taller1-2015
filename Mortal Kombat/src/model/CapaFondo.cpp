@@ -19,29 +19,9 @@ CapaFondo::CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, fl
 
 void CapaFondo::_actualizarX(){
 }
-/*
-void CapaFondo::Mover(bool right){
-	if(right)
-	{
-		printf("xActual: %f , mueve:+ %f ",rect->x,m_velocidad);
-		rect->x += m_velocidad;
-
-	}else{
-		printf("xActual: %f , mueve:- %f ",rect->x,m_velocidad);
-		rect->x -=m_velocidad;
-	}
-	if( rect->x < 0){
-		rect->x = 0;
-	}
-	if( rect->x > rect->w - m_ancho_ventana){
-		rect->x = rect->w - m_ancho_ventana;
-	}
-}
-*/
 
 void CapaFondo::Renderizar(){
-	//_actualizarX();
-	printf("CAPA:%f x:%f \n",rect->w,rect->x);
+
 	m_texture->renderFondo(rect);
 }
 

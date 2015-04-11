@@ -25,11 +25,9 @@ float Capa::getX()
 void Capa::Mover(bool right){
 	if(right)
 	{
-		printf("xActual: %f , mueve:+ %f ",rect->x,m_velocidad);
 		rect->x += m_velocidad;
 
 	}else{
-		printf("xActual: %f , mueve:- %f ",rect->x,m_velocidad);
 		rect->x -=m_velocidad;
 	}
 	if( rect->x < 0){

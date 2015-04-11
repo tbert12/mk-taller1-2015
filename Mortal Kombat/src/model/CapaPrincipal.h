@@ -24,6 +24,8 @@ public:
 private:
 	Personaje* m_Personaje;
 	void _actualizarX();
+	float m_velocidad_derecha;
+	float m_velocidad_izquierda;
 };
 
 

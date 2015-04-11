@@ -198,16 +198,15 @@ bool Personaje::_estaAgachado(){
 	return (spriteActual == sprites[SPRITE_AGACHARSE] or spriteActual == sprites[SPRITE_AGACHADO]);
 }
 
-void Personaje::renderizar(){
+void Personaje::renderizar(float x_dist_ventana){
 	float renderX = m_xActual + m_velocidad;
 	if (renderX <= (m_AnchoMundo- spriteActual->getAncho()) and renderX >= 0){
 		if (!_estaAgachado()) m_xActual += m_velocidad;
-		printf("Avanzar\n -X=%f\n -V=%f\n -Ancho=%f\n",m_xActual,m_velocidad,m_AnchoMundo);
 	}
 	if(_estaSaltando > 0){
 			_actualizarY();
 	}
-	spriteActual->render(m_xActual,m_yActual);
+	spriteActual->render(m_xActual-x_dist_ventana,m_yActual);
 	AvanzarSprite();
 }
 
@@ -216,6 +215,9 @@ bool Personaje::enMovimiento(){
 	return false;
 }
 
+float Personaje::getAncho(){
+	return spriteActual->getAncho();
+}
 
 int Personaje::getSentidoDeMovimiento(){
 	if (m_velocidad > 0) return 1;

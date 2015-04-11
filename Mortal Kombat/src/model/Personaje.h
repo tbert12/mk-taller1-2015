@@ -74,7 +74,7 @@ public:
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
 	bool enMovimiento();
-	void renderizar();
+	void renderizar(float x_dist_ventana);
 
 	void setPosition(float x, float y);
 	void setDimensiones(float h, float w);
@@ -85,6 +85,7 @@ public:
 	float getVelocidadDerecha();
 	float getVelocidadIzquierda();
 	void QuitarVida(int valor);
+	float getAncho();
 
 	void Inicial();
 	void Frenar();
