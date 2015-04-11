@@ -42,6 +42,7 @@ bool Mundo::addCapa(Capa* una_capa,int index){
 	}
 	capas[index] = una_capa;
 	indices.push_back(index);
+	std::sort(indices.begin(),indices.end());
 	return true;
 }
 Capa* Mundo::getCapa(int indice){

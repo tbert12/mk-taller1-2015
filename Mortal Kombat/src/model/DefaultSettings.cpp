@@ -180,6 +180,10 @@ Mundo* CrearMundoDefault(){
 	CapaFondo* capa_1 =new CapaFondo(BACKGROUND_1__ALTO_DEFAULT,BACKGROUND_1__ANCHO_DEFAULT,BACKGROUND_1_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_1_DEFAULT,ventana);
 	mundo->addCapa(capa_1,BACKGROUND_1_Z_INDEX);
 
+	//capa 4 es la ventana que tapa el escenario!
+	CapaFondo* capa_4 = new CapaFondo(BACKGROUND_4__ALTO_DEFAULT,BACKGROUND_4__ANCHO_DEFAULT,BACKGROUND_4_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_4_DEFAULT,ventana);
+	mundo->addCapa(capa_4,BACKGROUND_4_Z_INDEX);
+
 	//capa 2 es la mas grande, la del escenario
 	CapaFondo* capa_2 = new CapaFondo(BACKGROUND_2__ALTO_DEFAULT,BACKGROUND_2__ANCHO_DEFAULT,BACKGROUND_2_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_2_DEFAULT,ventana);
 	mundo->addCapa(capa_2,BACKGROUND_2_Z_INDEX);
@@ -190,9 +194,6 @@ Mundo* CrearMundoDefault(){
 	mundo->addCapa(capa_principal,PERSONAJE_Z_INDEX_DEFAULT);
 	mundo->setZindexCapaPrincipal(PERSONAJE_Z_INDEX_DEFAULT);
 
-	//capa 4 es la ventana que tapa el escenario!
-	CapaFondo* capa_4 = new CapaFondo(BACKGROUND_4__ALTO_DEFAULT,BACKGROUND_4__ANCHO_DEFAULT,BACKGROUND_4_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_4_DEFAULT,ventana);
-	mundo->addCapa(capa_4,BACKGROUND_4_Z_INDEX);
 	//log("Capas agregadas al Mundo",LOG_DEBUG);
 	return mundo;
 }
