@@ -20,3 +20,6 @@
 /logging.gcno
 /main.gcno
 /Release/
+.project
+.cproject
+.autotools
