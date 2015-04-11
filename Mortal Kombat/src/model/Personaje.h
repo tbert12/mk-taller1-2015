@@ -42,8 +42,8 @@ private:
 	float m_yActual;
 	float m_xInicial;
 	float m_yInicial;
-	short _estaSaltando;
 	int _tDeSalto;
+	short _estaSaltando;
 
 	float velocidadAdelante;
 	float velocidadAtras;
@@ -70,20 +70,20 @@ private:
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad);
 
-	int estaScrolleando;
-
 	std::vector<Sprite*> getSprites();
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
-
-	void renderizar(float ancho);
+	bool enMovimiento();
+	void renderizar();
 
 	void setPosition(float x, float y);
 	void setDimensiones(float h, float w);
 	float getX();
 	float getY();
 	float getVida();
-	bool getSentidoDeMovimiento();
+	int getSentidoDeMovimiento();
+	float getVelocidadDerecha();
+	float getVelocidadIzquierda();
 	void QuitarVida(int valor);
 
 	void Inicial();

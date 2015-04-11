@@ -198,22 +198,36 @@ bool Personaje::_estaAgachado(){
 	return (spriteActual == sprites[SPRITE_AGACHARSE] or spriteActual == sprites[SPRITE_AGACHADO]);
 }
 
-void Personaje::renderizar(float ancho){
+void Personaje::renderizar(){
 	float renderX = m_xActual + m_velocidad;
-	if (renderX <= m_AnchoMundo and renderX >= 0){
+	if (renderX <= (m_AnchoMundo- spriteActual->getAncho()) and renderX >= 0){
 		if (!_estaAgachado()) m_xActual += m_velocidad;
 		printf("Avanzar\n -X=%f\n -V=%f\n -Ancho=%f\n",m_xActual,m_velocidad,m_AnchoMundo);
 	}
 	if(_estaSaltando > 0){
 			_actualizarY();
 	}
-	spriteActual->render(m_xActual- ancho,m_yActual);
+	spriteActual->render(m_xActual,m_yActual);
 	AvanzarSprite();
 }
 
+bool Personaje::enMovimiento(){
+	if (m_velocidad != 0) return true;
+	return false;
+}
 
-bool Personaje::getSentidoDeMovimiento(){
-	return m_velocidad > 0;
+
+int Personaje::getSentidoDeMovimiento(){
+	if (m_velocidad > 0) return 1;
+	else if (m_velocidad < 0) return -1;
+	return 0;
+}
+
+float Personaje::getVelocidadDerecha(){
+	return velocidadAdelante;
+}
+float Personaje::getVelocidadIzquierda(){
+	return velocidadAtras;
 }
 
 Personaje::~Personaje() {
@@ -222,4 +236,6 @@ Personaje::~Personaje() {
 		sprites[i]->~Sprite();
 	}
 }
+
+
 

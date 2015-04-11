@@ -139,7 +139,7 @@ void LTexture::renderObjeto( Rect_Logico* clip,float x, float y)
 
 
 
-void LTexture::renderFondo( SDL_Rect* clip)
+void LTexture::renderFondo( Rect_Logico* clip)
 {
 
 	SDL_Rect camera = { 0,0, mWidth, mHeight};
@@ -147,7 +147,7 @@ void LTexture::renderFondo( SDL_Rect* clip)
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
 	{
-		clip_px = {(int)(clip->x*ratio_x - w_ventana/2 + 0.5), //posicion horizontal de la capa
+		clip_px = {(int)(clip->x*ratio_x  + 0.5), //posicion horizontal de la capa
 				(int)(clip->y*ratio_y + 0.5), //posicion vertical de la capa
 				w_ventana , // ancho de la ventana
 				h_ventana }; //alto de la ventana

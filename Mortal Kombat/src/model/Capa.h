@@ -9,6 +9,7 @@
 #define SRC_MODEL_CAPA_H_
 
 #include "Renderizable.h"
+#include "../view/LTexture.h"
 #include <list>
 #include <string>
 
@@ -17,18 +18,16 @@ public:
 	int getZIndex();
 	void Actualizar();
 	void Mover(bool right);
-	int getX();
+	float getX();
 	virtual void Renderizar();
-	Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal);
+	Capa(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal);
 
-private:
-	float m_alto;
+protected:
 	int m_zIndex;
 	float m_anchoDeFondo;
 	float m_velocidad;
-protected:
-	float m_ancho;
-	float m_XActual;
+	Rect_Logico* rect;
+	float m_ancho_ventana;
 };
 
 #endif /* SRC_MODEL_CAPA_H_ */

@@ -19,10 +19,10 @@ public:
 	int Scrollear(); //0 no scrollea , 1 para la derecha -1 para la izquierda!
 	virtual ~CapaPrincipal();
 	virtual void Renderizar();
+	//virtual void Mover(bool right);
 
 private:
 	Personaje* m_Personaje;
-	float m_ancho_ventana;
 	void _actualizarX();
 };
 
