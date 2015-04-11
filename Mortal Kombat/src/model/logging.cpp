@@ -32,7 +32,7 @@ void registrarMensaje( const string mensaje, const string inicio_mensaje) {
 // 2 = Errores, Warnings, Sucesos (DEBUG)
 // 1 = Errores, Warnings
 // 0 = Errores
-void log( const string mensaje, int tipo_de_log = nivel) {
+void log( const string mensaje, int tipo_de_log ) {
 	if ( tipo_de_log == LOG_DEBUG && nivel == 2 ) {
 		// DETALLO SUCESO (DEBUG)
 		registrarMensaje(mensaje,"");

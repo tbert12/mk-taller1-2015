@@ -40,6 +40,10 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 					personaje->CaminarDerecha();
 					break;
 
+				case SDLK_r:
+					throw std::runtime_error( "Hay que recargar el archivo JSON." );
+					break;
+
 			}
 	} else if (evento.type == SDL_KEYUP and evento.type != SDL_MOUSEMOTION){
 		switch( evento.key.keysym.sym ){

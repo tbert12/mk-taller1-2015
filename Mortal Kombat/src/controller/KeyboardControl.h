@@ -10,6 +10,7 @@
 
 #include<SDL2/SDL.h>
 #include "../model/Personaje.h"
+#include <exception>
 
 class KeyboardControl {
 	Personaje* personaje;
@@ -20,6 +21,7 @@ public:
 	virtual ~KeyboardControl();
 	void KeyPressed(SDL_Event evento);
 	bool getQuit();
+	bool recargar();
 };
 
 #endif /* SRC_CONTROLLER_KEYBOARDCONTROL_H_ */

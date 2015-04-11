@@ -18,7 +18,7 @@ using namespace std;
 extern int nivel;
 extern const string ruta_logfile;
 
-void log( const string mensaje, int tipo_de_log);
+void log( const string mensaje, int tipo_de_log = nivel);
 void prepararLog();
 
 

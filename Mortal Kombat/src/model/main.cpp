@@ -37,7 +37,7 @@ int main( int argc, char* args[] )
 		//mundo = parser->cargarMundo();
 		mundo = CrearMundoDefault();
 		log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
-	} catch ( const std::exception &e ) {
+	} catch ( std::exception &e ) {
 		log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
 		return 1;
 	}
@@ -62,7 +62,42 @@ int main( int argc, char* args[] )
 	while( !control_jugador_1->getQuit() ){
 		//Eventos
 		while( SDL_PollEvent( &e ) != 0 ){
-			control_jugador_1->KeyPressed(e);
+			try {
+				control_jugador_1->KeyPressed(e);
+			// RELOAD
+			// ESTA HECHO A LO VILLA PORQUE TOTAL DESPUES ESTO VUELA A LA MIERDA.
+			} catch ( std::exception &e ) {
+				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_DEBUG );
+				try {
+					delete control_jugador_1;
+					delete mundo;
+					//mundo = parser->cargarMundo();
+					mundo = CrearMundoDefault();
+					log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
+					//Creo el Personaje
+					luchador = mundo->getPersonaje();
+					//Creo el Controlador
+					control_jugador_1 = new KeyboardControl(luchador);
+				} catch ( std::runtime_error &e ) {
+					log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
+					return 1;
+				}
+			}
+
+			// Reload. Despues de la primera entrega esto vuelta.
+			/*
+			if ( control_jugador_1->recargar() ) {
+				delete mundo;
+				try {
+					//mundo = parser->cargarMundo();
+					mundo = CrearMundoDefault();
+					log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
+				} catch ( const std::exception &e ) {
+					log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
+					return 1;
+				}
+			}
+			*/
 		}
 
 		mundo->render();
