@@ -44,6 +44,7 @@ private:
 	float m_yInicial;
 	int _tDeSalto;
 	short _estaSaltando;
+	bool m_fliped;
 
 	float velocidadAdelante;
 	float velocidadAtras;
@@ -63,12 +64,13 @@ private:
 
 	bool _estaAgachado();
 
+
 	void _parabola();
 	void _actualizarY();
 	float _yDeSalto(float currentY, float currentT);
 
 public:
-	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad);
+	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad, bool fliped = false);
 
 	std::vector<Sprite*> getSprites();
 	Sprite* getSpriteActual();

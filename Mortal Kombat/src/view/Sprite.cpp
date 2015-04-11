@@ -76,8 +76,8 @@ void Sprite::Reset(){
 	frameActual = 0;
 }
 
-void Sprite::render(float x, float y){
+void Sprite::render(float x, float y, bool fliped){
 	Rect_Logico* currentClip = &spriteFrames[frameActual];
-	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h);
+	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h, fliped);
 }
 

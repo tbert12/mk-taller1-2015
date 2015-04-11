@@ -37,7 +37,7 @@ class Sprite {
 		void setRender(SDL_Renderer* Renderer);
 		bool Advance();
 		bool puedeAvanzar();
-		void render(float x,float y);
+		void render(float x,float y, bool fliped);
 		float getAncho();
 		Sprite* getSpriteSiguiente();
 		Rect_Logico* getFrame();

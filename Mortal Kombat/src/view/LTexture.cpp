@@ -112,7 +112,7 @@ void LTexture::setAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void LTexture::renderObjeto( Rect_Logico* clip,float x, float y)
+void LTexture::renderObjeto( Rect_Logico* clip,float x, float y, bool flip)
 {
 	int x_px = (int)(x*ratio_x);
 	int y_px = (int)(y*ratio_y);
@@ -134,7 +134,11 @@ void LTexture::renderObjeto( Rect_Logico* clip,float x, float y)
 	}
 
 	//Renderizar a la pantalla
-	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &Object );
+	SDL_RendererFlip flipType = SDL_FLIP_NONE;
+	if(flip)
+		flipType = SDL_FLIP_HORIZONTAL;
+
+	SDL_RenderCopyEx( gRenderer, mTexture, &clip_px, &Object,  0 , 0, flipType);
 }
 
 

@@ -118,7 +118,9 @@ Mundo* CrearMundoDefault(){
 	if(!ventana->create_window()){
 		log("No se puede inicializar la ventana",LOG_ERROR);
 	}
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD);
+	//Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD);
+	//si flipeado, descomentar la siguiente linea
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD,true);
 	if(personaje_default == NULL){
 		log("No se pudo crear el personaje default",LOG_ERROR);
 	}
@@ -139,6 +141,7 @@ Mundo* CrearMundoDefault(){
 	// La relacion entre el las medidas logicas y los pixeles es la divicion
 
 	//capa 0, es la ultima. de la misma medida que la ventana
+
 	CapaFondo* capa_0 =new CapaFondo(BACKGROUND_0__ALTO_DEFAULT,BACKGROUND_0__ANCHO_DEFAULT,BACKGROUND_0_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_0_DEFAULT,ventana);
 	mundo->addCapa(capa_0,BACKGROUND_0_Z_INDEX);
 

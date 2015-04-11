@@ -49,7 +49,7 @@ class LTexture
 		void renderFondo(Rect_Logico* clip);
 
 		//Renders texture at given point
-		void renderObjeto(Rect_Logico* clip, float x = 0, float y = 0);
+		void renderObjeto(Rect_Logico* clip, float x = 0, float y = 0, bool flip = false);
 
 		//Gets image dimensions
 		int getWidth();

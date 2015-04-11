@@ -7,7 +7,7 @@
 
 #include "Personaje.h"
 
-Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad) {
+Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad, bool fliped) {
 	nombre = nombre_personaje;
 	vida = 100;
 	sprites = Sprites;
@@ -23,8 +23,9 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	m_velocidad = 0;
 	m_AltoMundo = 0;
 	m_AnchoMundo = 0;
+	m_fliped = fliped;
 	velocidadAdelante = velocidad;
-	velocidadAtras = -velocidad/2;
+	velocidadAtras = -velocidad;
 	_tDeSalto = 0;
 	_estaSaltando = -1;
 }
@@ -56,10 +57,12 @@ void Personaje::AvanzarSprite(){
 	} else if (_estaAgachado() or _estaSaltando > 0){
 		spriteActual = spriteActual->getSpriteSiguiente();
 	} else {
-		if (m_velocidad > 0)
+		if (m_velocidad > 0){
 			spriteActual = sprites[SPRITE_CAMINAR_DERECHA];
-		else if (m_velocidad < 0)
+		}
+		else if (m_velocidad < 0){
 			spriteActual = sprites[SPRITE_CAMINAR_IZQUIERDA];
+		}
 		else
 			spriteActual = sprites[SPRITE_INICIAL];
 		spriteActual->Reset();
@@ -98,13 +101,22 @@ void Personaje::Frenar(){
 }
 
 void Personaje::CaminarDerecha(){
-	this->_cambiarSprite(SPRITE_CAMINAR_DERECHA);
+	if(m_fliped){
+		this->_cambiarSprite(SPRITE_CAMINAR_IZQUIERDA);
+	}
+	else
+		this->_cambiarSprite(SPRITE_CAMINAR_DERECHA);
 	if (_estaSaltando > 0) return;
 	m_velocidad = velocidadAdelante;
 }
 
 void Personaje::CaminarIzquierda(){
-	this->_cambiarSprite(SPRITE_CAMINAR_IZQUIERDA);
+	if(m_fliped){
+		this->_cambiarSprite(SPRITE_CAMINAR_DERECHA);
+	}
+	else
+		this->_cambiarSprite(SPRITE_CAMINAR_IZQUIERDA);
+
 	if (_estaSaltando > 0) return;
 	m_velocidad = velocidadAtras;
 }
@@ -128,13 +140,13 @@ void Personaje::Saltar(){
 void Personaje::_SaltarDerecha(){
 	this->_cambiarSprite(SPRITE_SALTO_DIAGONAL_ANTES_D);
 	_estaSaltando = 1;
-	m_velocidad = velocidadAdelante*1.5f;
+	m_velocidad = velocidadAdelante;
 }
 
 void Personaje::_SaltarIzquierda(){
 	this->_cambiarSprite(SPRITE_SALTO_DIAGONAL_ANTES_I);
 	_estaSaltando = 1;
-	m_velocidad = -velocidadAdelante*1.5f;
+	m_velocidad = -velocidadAdelante;
 }
 
 void Personaje::_SaltarHorizontal(){
@@ -206,7 +218,7 @@ void Personaje::renderizar(float x_dist_ventana){
 	if(_estaSaltando > 0){
 			_actualizarY();
 	}
-	spriteActual->render(m_xActual-x_dist_ventana,m_yActual);
+	spriteActual->render(m_xActual-x_dist_ventana,m_yActual,m_fliped);
 	AvanzarSprite();
 }
 
