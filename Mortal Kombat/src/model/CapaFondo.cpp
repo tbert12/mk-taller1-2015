@@ -21,7 +21,6 @@ void CapaFondo::_actualizarX(){
 }
 
 void CapaFondo::Renderizar(){
-
 	m_texture->renderFondo(rect);
 }
 

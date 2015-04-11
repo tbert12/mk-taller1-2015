@@ -82,11 +82,9 @@ void Mundo::render(){
 		//capas[indices[i]]->Mover(true);
 		if(scroll > 0) {
 			capas[indices[i]]->Mover(true);
-			printf("\n\n\nmover derecha \n\n\n");
 		}
 		if(scroll < 0) {
 			capas[indices[i]]->Mover(false);
-			printf("\n\n\nmover izquierda \n\n\n");
 		}
 
 		capas[indices[i]]->Renderizar();

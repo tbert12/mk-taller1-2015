@@ -190,7 +190,7 @@ Mundo* CrearMundoDefault(){
 	mundo->addCapa(capa_principal,PERSONAJE_Z_INDEX_DEFAULT);
 	mundo->setZindexCapaPrincipal(PERSONAJE_Z_INDEX_DEFAULT);
 
-	//capa 2 es la mas grande, la del escenario
+	//capa 4 es la ventana que tapa el escenario!
 	CapaFondo* capa_4 = new CapaFondo(BACKGROUND_4__ALTO_DEFAULT,BACKGROUND_4__ANCHO_DEFAULT,BACKGROUND_4_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_4_DEFAULT,ventana);
 	mundo->addCapa(capa_4,BACKGROUND_4_Z_INDEX);
 	//log("Capas agregadas al Mundo",LOG_DEBUG);
