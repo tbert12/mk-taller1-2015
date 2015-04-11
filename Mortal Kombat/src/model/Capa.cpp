@@ -23,7 +23,7 @@ float Capa::getX()
 }
 
 void Capa::Mover(bool right){
-	if(right == true)
+	if(right)
 	{
 		printf("xActual: %f , mueve:+ %f ",rect->x,m_velocidad);
 		rect->x += m_velocidad;
@@ -35,15 +35,9 @@ void Capa::Mover(bool right){
 	if( rect->x < 0){
 		rect->x = 0;
 	}
-	if( m_XActual > m_ancho){
-		m_XActual = m_ancho;
 	if( rect->x > rect->w - m_ancho_ventana){
 		rect->x = rect->w - m_ancho_ventana;
 	}
-}
-
-float Capa::getVelocidad(){
-	return m_velocidad;
 }
 
 
@@ -55,4 +49,3 @@ void Capa::Renderizar()
 {
 
 }
-

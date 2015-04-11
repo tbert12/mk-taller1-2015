@@ -14,15 +14,10 @@ CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeF
 {
 	m_Personaje = personaje;
 	personaje->setDimensiones(alto,ancho);
-	m_ancho_ventana = ancho_ventana;
-	_actualizarX();
+	rect->x = rect->x - ancho_ventana/2;//Inicia al medio
 }
 
 void CapaPrincipal::_actualizarX(){
-	//m_XActual = m_Personaje->getX() - m_ancho_ventana/2;
-
-	if (m_XActual < 0) m_XActual = 0;
-	if (m_XActual > m_ancho) m_XActual = m_ancho;
 	if (rect->x < 0) rect->x = 0;
 	if (rect->x > rect->w) rect->x = rect->w;
 }
@@ -34,16 +29,6 @@ void CapaPrincipal::Renderizar()
 }
 
 int CapaPrincipal::Scrollear(){
-
-	if (m_Personaje->getX() <= (getX() + m_ancho_ventana*0.05f)){
-		printf("ESTA SCROLLEANDO IZQUIERDA\n");
-		return -1;
-	}
-	if (m_Personaje->getX() >= (getX() + m_ancho_ventana*0.85f)){
-		printf("ESTA SCROLLEANDO Derecha\n");
-		return 1;
-	}
-	//printf("NoScrollea\n");
 	printf("xPers:%f , x:%f , ancho:%f \n",m_Personaje->getX(),getX(),rect->w);
 	if(getX() == 0 and (m_Personaje->getSentidoDeMovimiento() < 0))return 0;
 	if(getX() == rect->w and (m_Personaje->getSentidoDeMovimiento() > 0)) return 0;
@@ -76,4 +61,3 @@ void CapaPrincipal::Mover(bool right){
 CapaPrincipal::~CapaPrincipal() {
 	// TODO Auto-generated destructor stub
 }
-
