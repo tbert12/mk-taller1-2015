@@ -83,21 +83,6 @@ int main( int argc, char* args[] )
 					return 1;
 				}
 			}
-
-			// Reload. Despues de la primera entrega esto vuelta.
-			/*
-			if ( control_jugador_1->recargar() ) {
-				delete mundo;
-				try {
-					//mundo = parser->cargarMundo();
-					mundo = CrearMundoDefault();
-					log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
-				} catch ( const std::exception &e ) {
-					log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
-					return 1;
-				}
-			}
-			*/
 		}
 
 		mundo->render();
