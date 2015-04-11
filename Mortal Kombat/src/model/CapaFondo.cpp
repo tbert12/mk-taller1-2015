@@ -28,4 +28,3 @@ void CapaFondo::Renderizar(){
 CapaFondo::~CapaFondo() {
 	return;
 }
-

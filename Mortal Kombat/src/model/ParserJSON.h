@@ -4,18 +4,11 @@
 #include <stdio.h>
 #include <fstream>
 #include "../../libs/json/json.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include "logging.h"
 #include "Mundo.h"
-#include "../view/LTexture.h"
-#include "Capa.h"
-#include "CapaPrincipal.h"
-#include "Personaje.h"
-#include "../view/Sprite.h"
-#include "../view/Frame.h"
 #include "DefaultSettings.h"
-#include "Mundo.h"
+
+const float PERSONAJE_VELOCIDAD = 10.0;
 
 using namespace std;
 
@@ -26,9 +19,8 @@ private:
 
 public:
 	 ParserJSON(string ruta_archivo);
-//CrearMundo();
-
-//	 Pelea* generarPelea();
+	 Mundo* cargarMundo();
+	 vector<Sprite*> cargarSprites(string ruta_carpeta, Ventana* ventana, float ratio_x, float ratio_y);
 
 };
 

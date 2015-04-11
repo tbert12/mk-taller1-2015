@@ -12,10 +12,13 @@
 #include <SDL2/SDL.h>
 #include <string>
 #include <vector>
+#include <stdexcept>
+#include <exception>
 
 #include "LTexture.h"
 #include "Ventana.h"
 #include "Frame.h"
+#include "../model/CargarImagenException.h"
 
 class Sprite {
 	private:

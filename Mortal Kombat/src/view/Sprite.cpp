@@ -13,8 +13,8 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana){
 	SpriteSheetTexture = ventana->crearTextura();
 
 	if( !SpriteSheetTexture->loadFromFile( ruta ) ){
-		printf( "Error en cargar Sprite\n" );
-		//Usemos la funcion log( mensaje ) en logging.h para este tipo de cosas.
+		log( "Error al intentar abrir la imagen del sprite.", LOG_ERROR );
+		//throw CargarImagenException( ruta );
 	}
 	cantidadFrames = frames.size();
 	
@@ -32,7 +32,7 @@ Sprite::~Sprite(){
 	SpriteSheetTexture->free();
 }
 
-Rect_Logico* Sprite::getFrame(){
+Rect_Logico* Sprite::getFrame() {
 	Rect_Logico* frame = &spriteFrames[frameActual];
 	return frame;
 }
@@ -47,6 +47,7 @@ bool Sprite::Advance(){
 	if (frameActual >= cantidadFrames){
 		frameActual = 0;
 	}
+
 	return true;
 }
 
