@@ -37,6 +37,10 @@ Rect_Logico* Sprite::getFrame() {
 	return frame;
 }
 
+float Sprite::getAncho(){
+	return spriteFrames[frameActual].w;
+}
+
 bool Sprite::Advance(){
 	//Es necesario el bool?
 	frameActual++;

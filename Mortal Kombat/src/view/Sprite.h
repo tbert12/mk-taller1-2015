@@ -38,6 +38,7 @@ class Sprite {
 		bool Advance();
 		bool puedeAvanzar();
 		void render(float x,float y);
+		float getAncho();
 		Sprite* getSpriteSiguiente();
 		Rect_Logico* getFrame();
 		LTexture* getSpriteSheetTexture();

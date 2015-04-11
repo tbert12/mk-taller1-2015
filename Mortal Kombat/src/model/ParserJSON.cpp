@@ -169,59 +169,162 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 		sprites[1] = sprite_caminar;
 	}
 
-	// Creo Sprite para personaje saltando.
-	Sprite* sprite_saltar;
+	// Creo Sprites para personaje saltando.
+	Sprite* sprite_saltar_antes;
+	Sprite* sprite_saltar_durante;
+	Sprite* sprite_saltar_despues;
 	bool sprite_saltar_ok = true;
+	bool sprite_saltar_antes_ok = true;
+	bool sprite_saltar_durante_ok = true;
+	bool sprite_saltar_despues_ok = true;
 	if ( root.get( "saltar", "" ) == "" ) {
 		log( "No se encontro el sprite correspondiente al personaje saltando. Se genera el sprite de salto por defecto.", LOG_ERROR );
-		//sprite_saltar = crearSpriteSaltarDefault();
+		//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
+		//sprite_saltar_durante = crearSpriteSaltarDefault();
+		//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
 		sprite_saltar_ok = false;
+
 	} else {
 		string spritesheet_saltar = root["saltar"].get( "ruta", SPRITESHEET_SALTAR_DEFAULT ).asString();
-		const Json::Value frames_saltar = root["frames"];
-		vector<Frame*> framesSaltar( frames_saltar.size() );
-		for ( unsigned int i=0; i < frames_saltar.size(); i++ ) {
-			int x = frames_saltar[i].get( "x", -100 ).asInt();
+		//const Json::Value frames_saltar = root["frames"];
+		//vector<Frame*> framesSaltar( frames_saltar.size() );
+		const Json::Value frames_saltar_antes = root["frames"]["antes"];
+		vector<Frame*> framesSaltarAntes( frames_saltar_antes.size() );
+		for ( unsigned int i=0; i < frames_saltar_antes.size(); i++ ) {
+			int x = frames_saltar_antes[i].get( "x", -100 ).asInt();
 			if ( x < 0 ) {
-				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite de salto por defecto.", LOG_ERROR );
-				//sprite_saltar = crearSpriteSaltarDefault();
-				sprite_saltar_ok = false;
+				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite de antes del salto por defecto.", LOG_ERROR );
+				//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
+				sprite_saltar_antes_ok = false;
 				break;
 			}
-			int y = frames_saltar[i].get( "y", -100 ).asInt();
+			int y = frames_saltar_antes[i].get( "y", -100 ).asInt();
 			if ( y < 0 ) {
-				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite de salto por defecto", LOG_ERROR );
-				//sprite_saltar = crearSpriteSaltarDefault();
-				sprite_saltar_ok = false;
+				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite de antes del salto por defecto", LOG_ERROR );
+				//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
+				sprite_saltar_antes_ok = false;
 				break;
 			}
-			int alto = frames_saltar[i].get( "Alto", -100 ).asInt();
+			int alto = frames_saltar_antes[i].get( "Alto", -100 ).asInt();
 			if ( alto < 0 ) {
-				log( "No se especifico el alto del frame o es negativo. Se genera el sprite de salto por defecto.", LOG_ERROR );
-				//sprite_saltar = crearSpriteSaltarDefault();
-				sprite_saltar_ok = false;
+				log( "No se especifico el alto del frame o es negativo. Se genera el sprite de antes del salto por defecto.", LOG_ERROR );
+				//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
+				sprite_saltar_antes_ok = false;
 				break;
 			}
-			int ancho = frames_saltar[i].get( "Ancho", -100 ).asInt();
+			int ancho = frames_saltar_antes[i].get( "Ancho", -100 ).asInt();
 			if ( ancho < 0 ) {
-				log( "No se especifico el ancho del frame o es negativo. Se genera el sprite de salto por defecto.", LOG_ERROR );
-				//sprite_saltar = crearSpriteSaltarDefault();
-				sprite_saltar_ok = false;
+				log( "No se especifico el ancho del frame o es negativo. Se genera el sprite de antes del salto por defecto.", LOG_ERROR );
+				//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
+				sprite_saltar_antes_ok = false;
 				break;
 			}
-			framesSaltar[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
+			framesSaltarAntes[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
+			log( "Se creo correctamente un frame del spritesheet del personaje antes de saltar.", LOG_DEBUG );
+		}
+
+		const Json::Value frames_saltar_durante = root["frames"]["durante"];
+		vector<Frame*> framesSaltarDurante( frames_saltar_durante.size() );
+		for ( unsigned int i=0; i < frames_saltar_durante.size(); i++ ) {
+			int x = frames_saltar_durante[i].get( "x", -100 ).asInt();
+			if ( x < 0 ) {
+				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite del salto por defecto.", LOG_ERROR );
+				//sprite_saltar_durante = crearSpriteSaltarDefault();
+				sprite_saltar_durante_ok = false;
+				break;
+			}
+			int y = frames_saltar_durante[i].get( "y", -100 ).asInt();
+			if ( y < 0 ) {
+				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite del salto por defecto", LOG_ERROR );
+				//sprite_saltar_durante = crearSpriteSaltarDefault();
+				sprite_saltar_durante_ok = false;
+				break;
+			}
+			int alto = frames_saltar_durante[i].get( "Alto", -100 ).asInt();
+			if ( alto < 0 ) {
+				log( "No se especifico el alto del frame o es negativo. Se genera el sprite del salto por defecto.", LOG_ERROR );
+				//sprite_saltar_durante = crearSpriteSaltarDefault();
+				sprite_saltar_durante_ok = false;
+				break;
+			}
+			int ancho = frames_saltar_durante[i].get( "Ancho", -100 ).asInt();
+			if ( ancho < 0 ) {
+				log( "No se especifico el ancho del frame o es negativo. Se genera el sprite del salto por defecto.", LOG_ERROR );
+				//sprite_saltar_durante = crearSpriteSaltarDefault();
+				sprite_saltar_durante_ok = false;
+				break;
+			}
+			framesSaltarDurante[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
 			log( "Se creo correctamente un frame del spritesheet del personaje saltando.", LOG_DEBUG );
 		}
+
+		const Json::Value frames_saltar_despues = root["frames"]["despues"];
+		vector<Frame*> framesSaltarDespues( frames_saltar_despues.size() );
+		for ( unsigned int i=0; i < frames_saltar_despues.size(); i++ ) {
+			int x = frames_saltar_despues[i].get( "x", -100 ).asInt();
+			if ( x < 0 ) {
+				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite posterior al salto por defecto.", LOG_ERROR );
+				//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
+				sprite_saltar_despues_ok = false;
+				break;
+			}
+			int y = frames_saltar_despues[i].get( "y", -100 ).asInt();
+			if ( y < 0 ) {
+				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite posterior al salto por defecto", LOG_ERROR );
+				//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
+				sprite_saltar_despues_ok = false;
+				break;
+			}
+			int alto = frames_saltar_despues[i].get( "Alto", -100 ).asInt();
+			if ( alto < 0 ) {
+				log( "No se especifico el alto del frame o es negativo. Se genera el sprite posterior al salto por defecto.", LOG_ERROR );
+				//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
+				sprite_saltar_despues_ok = false;
+				break;
+			}
+			int ancho = frames_saltar_despues[i].get( "Ancho", -100 ).asInt();
+			if ( ancho < 0 ) {
+				log( "No se especifico el ancho del frame o es negativo. Se genera el sprite posterior al salto por defecto.", LOG_ERROR );
+				//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
+				sprite_saltar_despues_ok = false;
+				break;
+			}
+			framesSaltarDespues[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
+			log( "Se creo correctamente un frame del spritesheet del personaje despues de saltar.", LOG_DEBUG );
+		}
+
 		if ( sprite_saltar_ok ) {
-			try {
-				sprite_saltar = new Sprite(spritesheet_saltar, framesSaltar, ventana);
-				log( "Se creo correctamente el sprite para el personaje saltando.", LOG_DEBUG );
-			} catch ( CargarImagenException &e ) {
-				//sprite_saltar = crearSpriteSaltarDefault();
-				log( "No se pudo abrir el spritesheet del personaje saltando. Se genera el sprite por defecto.", LOG_ERROR );
+			if ( sprite_saltar_antes_ok ) {
+				try {
+					sprite_saltar_antes = new Sprite(spritesheet_saltar, framesSaltarAntes, ventana);
+					log( "Se creo correctamente el sprite para el personaje antes de saltar.", LOG_DEBUG );
+				} catch ( CargarImagenException &e ) {
+					//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
+					log( "No se pudo abrir el spritesheet del personaje antes de saltar. Se genera el sprite por defecto.", LOG_ERROR );
+				}
+			}
+			if ( sprite_saltar_durante_ok ) {
+				try {
+					sprite_saltar_durante = new Sprite(spritesheet_saltar, framesSaltarDurante, ventana);
+					log( "Se creo correctamente el sprite para el personaje durante el salto.", LOG_DEBUG );
+				} catch ( CargarImagenException &e ) {
+					//sprite_saltar_durante = crearSpriteSaltarDefault();
+					log( "No se pudo abrir el spritesheet del personaje durante el salto. Se genera el sprite por defecto.", LOG_ERROR );
+				}
+			}
+			if ( sprite_saltar_despues_ok ) {
+				try {
+					sprite_saltar_despues = new Sprite(spritesheet_saltar, framesSaltarDespues, ventana);
+					log( "Se creo correctamente el sprite para el personaje despues del salto.", LOG_DEBUG );
+				} catch ( CargarImagenException &e ) {
+					//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
+					log( "No se pudo abrir el spritesheet del personaje despues del salto. Se genera el sprite por defecto.", LOG_ERROR );
+				}
 			}
 		}
-		sprites[2] = sprite_saltar;
+		sprites[2] = sprite_saltar_antes;
+		sprites[3] = sprite_saltar_durante;
+		sprites[4] = sprite_saltar_despues;
 	}
 
 	// Creo Sprite para personaje saltando en diagonal.

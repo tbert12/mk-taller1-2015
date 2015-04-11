@@ -5,43 +5,47 @@
 
 #include "Capa.h"
 
-Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo, float factorVelocidad) {
-	m_alto = alto;
-	m_ancho = ancho;
+Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float factorVelocidad) {
+	rect = new Rect_Logico;
+	rect->x = ancho*0.5f;
+	rect->y = 0;
+	rect->w = ancho;
+	rect->h = alto;
 	m_zIndex = zIndex;
 	m_anchoDeFondo = anchoDeFondo;
-	m_velocidad = (m_ancho/m_anchoDeFondo)*factorVelocidad;
-	m_XActual = m_ancho*0.5f;
-	m_anchoDeVentana = 8.0f;
+	m_ancho_ventana = ancho_ventana;
+	m_velocidad = (ancho/m_anchoDeFondo)*factorVelocidad;
 }
 
-int Capa::getX()
+float Capa::getX()
 {
-	return m_XActual;
+	return rect->x;
 }
 
 void Capa::Mover(bool right){
-
 	if(right == true)
 	{
-		printf("xActual: %f , mueve:+ %f ",m_XActual,m_velocidad);
-		m_XActual += m_velocidad;
+		printf("xActual: %f , mueve:+ %f ",rect->x,m_velocidad);
+		rect->x += m_velocidad;
 
 	}else{
-		printf("xActual: %f , mueve:- %f ",m_XActual,m_velocidad);
-		m_XActual -=m_velocidad;
+		printf("xActual: %f , mueve:- %f ",rect->x,m_velocidad);
+		rect->x -=m_velocidad;
 	}
-	if( m_XActual <= 0){
-		m_XActual = 0;
+	if( rect->x < 0){
+		rect->x = 0;
 	}
 	if( m_XActual > m_ancho){
 		m_XActual = m_ancho;
+	if( rect->x > rect->w - m_ancho_ventana){
+		rect->x = rect->w - m_ancho_ventana;
 	}
 }
 
 float Capa::getVelocidad(){
 	return m_velocidad;
 }
+
 
 int Capa::getZIndex(){
 	return m_zIndex;

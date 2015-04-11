@@ -46,7 +46,7 @@ class LTexture
 		void setAlpha( Uint8 alpha );
 
 		//renderiza solo fondos
-		void renderFondo(SDL_Rect* clip);
+		void renderFondo(Rect_Logico* clip);
 
 		//Renders texture at given point
 		void renderObjeto(Rect_Logico* clip, float x = 0, float y = 0);

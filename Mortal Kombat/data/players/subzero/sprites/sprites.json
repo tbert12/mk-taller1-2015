@@ -120,35 +120,43 @@
 	"saltar":{
 		"ruta": "salto.png",
 		"frames":[
+			"antes": [
 			{	
 				"x": 0,
 				"y": 0,
 				"Alto": 139,
 				"Ancho": 69
-			},
-			{	
+			}
+			],
+			"durante": [	
 				"x": 71,
 				"y": 0,
 				"Alto": 96,
 				"Ancho": 70
-			},
+			}
+			],
+			"despues": [
 			{	
 				"x": 141,
 				"y": 0,
 				"Alto": 107,
 				"Ancho": 60
 			}
+			]
 		]
 	},
 	"saltardiagonal":{
 		"ruta": "diag.png",
 		"frames":[
+			"antes": [
 			{	
 				"x": 0,
 				"y": 0,
 				"Alto": 136,
 				"Ancho": 72
-			},
+			}
+			],
+			"durante": [
 			{	
 				"x": 72,
 				"y": 0,
@@ -191,11 +199,13 @@
 				"Alto": 62,
 				"Ancho": 74
 			}
+			]
 		]
 	},
 	"agachar":{
 		"ruta": "agachar.png",
 		"frames":[
+			"antes": [
 			{	
 				"x": 0,
 				"y": 0,
@@ -207,13 +217,16 @@
 				"y": 0,
 				"Alto": 89,
 				"Ancho": 62
-			},
+			}
+			],
+			"durante": [
 			{	
 				"x": 122,
 				"y": 0,
 				"Alto": 71,
 				"Ancho": 64
 			}
+			]
 		]
 	}
 }

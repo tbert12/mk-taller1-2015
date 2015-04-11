@@ -10,7 +10,7 @@
 
 CapaFondo::CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal,
 		std::string ruta, Ventana* ventana)
-:Capa(alto,ancho,zIndex, anchoDeFondo,velocidadPrincipal) //call superclass constructor
+:Capa(alto,ancho,zIndex, anchoDeFondo,ventana->obtenerAncho(),velocidadPrincipal) //call superclass constructor
 {
 	m_texture = ventana->crearTextura();
 	m_texture->loadFromFile(ruta);
@@ -20,14 +20,35 @@ CapaFondo::CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, fl
 	m_clip->w = ancho;
 	m_clip->x = getX(); //La mitad de la capa al centro de la ventana
 	m_clip->y = 0;
+	rect->x = rect->x - ventana->obtenerAncho()/2;//Inicia al medio
 }
 
 void CapaFondo::_actualizarX(){
-	m_clip->x = this->getX();
 }
+/*
+void CapaFondo::Mover(bool right){
+	if(right)
+	{
+		printf("xActual: %f , mueve:+ %f ",rect->x,m_velocidad);
+		rect->x += m_velocidad;
+
+	}else{
+		printf("xActual: %f , mueve:- %f ",rect->x,m_velocidad);
+		rect->x -=m_velocidad;
+	}
+	if( rect->x < 0){
+		rect->x = 0;
+	}
+	if( rect->x > rect->w - m_ancho_ventana){
+		rect->x = rect->w - m_ancho_ventana;
+	}
+}
+*/
+
 void CapaFondo::Renderizar(){
-	_actualizarX();
-	m_texture->renderFondo(m_clip);
+	//_actualizarX();
+	printf("CAPA:%f x:%f \n",rect->w,rect->x);
+	m_texture->renderFondo(rect);
 }
 
 CapaFondo::~CapaFondo() {
