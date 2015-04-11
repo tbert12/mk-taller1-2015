@@ -2,7 +2,7 @@
 #define SRC_MODEL_PARSER_H_
 
 #include <stdio.h>
-#include <fstream>
+#include <string>
 #include "../../libs/json/json.h"
 #include "logging.h"
 #include "Mundo.h"

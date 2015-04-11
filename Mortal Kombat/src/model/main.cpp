@@ -14,6 +14,7 @@
 #include "logging.h"
 #include "DefaultSettings.h"
 #include "Mundo.h"
+#include "ParserJSON.h"
 
 
 #include <algorithm>    // std::reverse (Tranfuguiada para que camine para atras)
@@ -32,7 +33,9 @@ int main( int argc, char* args[] )
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
 
-	Mundo* mundo = CrearMundoDefault();
+	ParserJSON* parser = new ParserJSON( "data/config/ejemplo.json" );
+	Mundo* mundo = parser->cargarMundo();
+	//Mundo* mundo = CrearMundoDefault();
 
 	if(mundo == NULL){
 		log( "No se pudo crear el Mundo", LOG_ERROR );

@@ -1,6 +1,6 @@
 {
 	"parado": {
-		"ruta": "initial.png",
+		"nombre": "initial.png",
 		"frames":[
 			{	
 				"x": 0,
@@ -55,11 +55,11 @@
 				"y": 0,
 				"Alto": 133,
 				"Ancho": 72
-			},
+			}
 		]
 	},
 	"caminar":{
-		"ruta": "walk.png",
+		"nombre": "walk.png",
 		"frames":[
 			{	
 				"x": 0,
@@ -118,7 +118,7 @@
 		]
 	},
 	"saltar":{
-		"ruta": "salto.png",
+		"nombre": "salto.png",
 		"frames":[
 			{	
 				"x": 0,
@@ -142,7 +142,7 @@
 		]
 	},
 	"saltardiagonal":{
-		"ruta": "diag.png",
+		"nombre": "diag.png",
 		"frames":[
 			{	
 				"x": 0,
@@ -195,7 +195,7 @@
 		]
 	},
 	"agachar":{
-		"ruta": "agachar.png",
+		"nombre": "agachar.png",
 		"frames":[
 			{	
 				"x": 0,
