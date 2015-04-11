@@ -81,3 +81,7 @@ void Sprite::render(float x, float y, bool fliped){
 	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h, fliped);
 }
 
+void Sprite::setLoop(int num_frame) {
+
+}
+

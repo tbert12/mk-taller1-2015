@@ -38,6 +38,7 @@ class Sprite {
 		bool Advance();
 		bool puedeAvanzar();
 		void render(float x,float y, bool fliped);
+		void setLoop(int num_frame);
 		float getAncho();
 		Sprite* getSpriteSiguiente();
 		Rect_Logico* getFrame();

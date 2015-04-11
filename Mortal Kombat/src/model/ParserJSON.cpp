@@ -27,6 +27,77 @@ ParserJSON::ParserJSON(string ruta_archivo) {
 	m_ruta_archivo = ruta_archivo;
 }
 
+Sprite* ParserJSON::crearSpriteParadoDefault(Ventana* ventana, float ratio_x, float ratio_y) {
+	vector<Frame*> framesParado(9);
+
+	int wParado = 72;
+	for ( int i=0; i < 9; i++ ){
+		framesParado[i] = new Frame( wParado*i/ratio_x, 0, 133/ratio_y, wParado/ratio_x );
+	}
+
+	Sprite* spriteParado = new Sprite( SPRITESHEET_PARADO_DEFAULT, framesParado, ventana );
+	return spriteParado;
+}
+
+Sprite* ParserJSON::crearSpriteCaminarDefault(Ventana* ventana, float ratio_x, float ratio_y) {
+	vector<Frame*> framesCaminar(9);
+
+	int wParado = 68;
+	for ( int i=0; i < 9; i++ ){
+		framesCaminar[i] = new Frame( wParado*i/ratio_x, 0, 133/ratio_y, wParado/ratio_x );
+	}
+
+	Sprite* spriteCaminar = new Sprite( SPRITESHEET_CAMINAR_DEFAULT, framesCaminar, ventana );
+	return spriteCaminar;
+}
+
+Sprite* ParserJSON::crearSpriteSaltarDefault(Ventana* ventana, float ratio_x, float ratio_y) {
+	vector<Frame*> framesSaltar(3);
+
+	vector<int> xSaltar = { 0, 71, 141 };
+	vector<int> hSaltar = { 139, 96, 107 };
+	vector<int> wSaltar = { 69, 70, 60 };
+
+	for ( int i=0; i < 3; i++ ) {
+		framesSaltar[i] = new Frame( xSaltar[i]/ratio_x, 0, hSaltar[i]/ratio_y, wSaltar[i]/ratio_x );
+	}
+
+	Sprite* spriteSaltar = new Sprite( SPRITESHEET_SALTAR_DEFAULT, framesSaltar, ventana );
+	spriteSaltar->setLoop(1);
+	return spriteSaltar;
+}
+
+Sprite* ParserJSON::crearSpriteSaltarDiagonalDefault(Ventana* ventana, float ratio_x, float ratio_y) {
+	vector<Frame*> framesSaltarDiagonal(8);
+
+	vector<int> xSaltarDiagonal = { 0, 72, 127, 208, 283, 335, 392, 472 };
+	vector<int> hSaltarDiagonal = { 136, 82, 59, 55, 81, 81, 59, 62 };
+	vector<int> wSaltarDiagonal = { 72, 55, 74, 74, 53, 55, 75, 74 };
+
+	for ( int i=0; i < 8; i++ ) {
+		framesSaltarDiagonal[i] = new Frame( xSaltarDiagonal[i]/ratio_x, 0, hSaltarDiagonal[i]/ratio_y, wSaltarDiagonal[i]/ratio_x );
+	}
+
+	Sprite* spriteSaltarDiagonal = new Sprite( SPRITESHEET_SALTAR_DIAGONAL_DEFAULT, framesSaltarDiagonal, ventana );
+	return spriteSaltarDiagonal;
+}
+
+Sprite* ParserJSON::crearSpriteAgacharDefault(Ventana* ventana, float ratio_x, float ratio_y) {
+	vector<Frame*> framesAgachar(3);
+
+	vector<int> xAgachar = { 0, 60, 122 };
+	vector<int> hAgachar = { 107, 89, 71 };
+	vector<int> wAgachar = { 69, 62, 64 };
+
+	for ( int i=0; i < 3; i++ ) {
+		framesAgachar[i] = new Frame( xAgachar[i]/ratio_x, 0, hAgachar[i]/ratio_y, wAgachar[i]/ratio_x );
+	}
+
+	Sprite* spriteAgachar = new Sprite( SPRITESHEET_SALTAR_DEFAULT, framesAgachar, ventana );
+	spriteAgachar->setLoop(2);
+	return spriteAgachar;
+}
+
 vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana, float ratio_x, float ratio_y) {
 
 	vector<Sprite*> sprites;
@@ -64,40 +135,45 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	bool sprite_parado_ok = true;
 	if ( root.get( "parado", "" ) == "" ) {
 		log( "No se encontro el sprite correspondiente al personaje parado. Se genera el sprite inicial por defecto.", LOG_ERROR );
-		//sprite_parado = crearSpriteParadoDefault();
+		sprite_parado = crearSpriteParadoDefault(ventana, ratio_x, ratio_y);
 		sprite_parado_ok = false;
 	} else {
 		string spritesheet_parado = root["parado"].get( "ruta", SPRITESHEET_PARADO_DEFAULT ).asString();
 		const Json::Value frames_parado = root["frames"];
 		vector<Frame*> framesParado( frames_parado.size() );
+		vector<bool> loop_parado(framesParado.size(), false);
 		for ( unsigned int i=0; i < frames_parado.size(); i++ ) {
 			int x = frames_parado[i].get( "x", -100 ).asInt();
 			if ( x < 0 ) {
 				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite inicial por defecto.", LOG_ERROR );
-				//sprite_parado = crearSpriteParadoDefault();
+				sprite_parado = crearSpriteParadoDefault(ventana, ratio_x, ratio_y);
 				sprite_parado_ok = false;
 				break;
 			}
 			int y = frames_parado[i].get( "y", -100 ).asInt();
 			if ( y < 0 ) {
 				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite inicial por defecto", LOG_ERROR );
-				//sprite_parado = crearSpriteParadoDefault();
+				sprite_parado = crearSpriteParadoDefault(ventana, ratio_x, ratio_y);
 				sprite_parado_ok = false;
 				break;
 			}
 			int alto = frames_parado[i].get( "Alto", -100 ).asInt();
 			if ( alto < 0 ) {
 				log( "No se especifico el alto del frame o es negativo. Se genera el sprite inicial por defecto.", LOG_ERROR );
-				//sprite_parado = crearSpriteParadoDefault();
+				sprite_parado = crearSpriteParadoDefault(ventana, ratio_x, ratio_y);
 				sprite_parado_ok = false;
 				break;
 			}
 			int ancho = frames_parado[i].get( "Ancho", -100 ).asInt();
 			if ( ancho < 0 ) {
 				log( "No se especifico el ancho del frame o es negativo. Se genera el sprite inicial por defecto.", LOG_ERROR );
-				//sprite_parado = crearSpriteParadoDefault();
+				sprite_parado = crearSpriteParadoDefault(ventana, ratio_x, ratio_y);
 				sprite_parado_ok = false;
 				break;
+			}
+			bool loop = frames_parado[i].get( "loop", false ).asBool();
+			if ( loop ) {
+				loop_parado[i] = true;
 			}
 			framesParado[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
 			log( "Se creo correctamente un frame del spritesheet del personaje parado.", LOG_DEBUG );
@@ -105,9 +181,12 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 		if ( sprite_parado_ok ) {
 			try {
 				sprite_parado = new Sprite(spritesheet_parado, framesParado, ventana);
+				for ( unsigned int j=0; j < framesParado.size(); j++ ) {
+					if ( loop_parado[j] ) sprite_parado->setLoop(j);
+				}
 				log( "Se creo correctamente el sprite para el personaje parado.", LOG_DEBUG );
 			} catch ( CargarImagenException &e ) {
-				//sprite_parado = crearSpriteParadoDefault();
+				sprite_parado = crearSpriteParadoDefault(ventana, ratio_x, ratio_y);
 				log( "No se pudo abrir el spritesheet del personaje parado. Se genera el sprite por defecto.", LOG_ERROR );
 			}
 		}
@@ -119,50 +198,58 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	bool sprite_caminar_ok = true;
 	if ( root.get( "caminar", "" ) == "" ) {
 		log( "No se encontro el sprite correspondiente al personaje caminando. Se genera el sprite de caminata por defecto.", LOG_ERROR );
-		//sprite_caminar = crearSpriteCaminarDefault();
+		sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x, ratio_y);
 		sprite_caminar_ok = false;
 	} else {
 		string spritesheet_caminar = root["caminar"].get( "ruta", SPRITESHEET_CAMINAR_DEFAULT ).asString();
 		const Json::Value frames_caminar = root["frames"];
 		vector<Frame*> framesCaminar( frames_caminar.size() );
+		vector<bool> loop_caminar(framesCaminar.size(), false);
 		for ( unsigned int i=0; i < frames_caminar.size(); i++ ) {
 			int x = frames_caminar[i].get( "x", -100 ).asInt();
 			if ( x < 0 ) {
 				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite de caminata por defecto.", LOG_ERROR );
-				//sprite_caminar = crearSpriteCaminarDefault();
+				sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x, ratio_y);
 				sprite_caminar_ok = false;
 				break;
 			}
 			int y = frames_caminar[i].get( "y", -100 ).asInt();
 			if ( y < 0 ) {
 				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite de caminata por defecto", LOG_ERROR );
-				//sprite_caminar = crearSpriteCaminarDefault();
+				sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x, ratio_y);
 				sprite_caminar_ok = false;
 				break;
 			}
 			int alto = frames_caminar[i].get( "Alto", -100 ).asInt();
 			if ( alto < 0 ) {
 				log( "No se especifico el alto del frame o es negativo. Se genera el sprite de caminata por defecto.", LOG_ERROR );
-				//sprite_caminar = crearSpriteCaminarDefault();
+				sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x, ratio_y);
 				sprite_caminar_ok = false;
 				break;
 			}
 			int ancho = frames_caminar[i].get( "Ancho", -100 ).asInt();
 			if ( ancho < 0 ) {
 				log( "No se especifico el ancho del frame o es negativo. Se genera el sprite de caminata por defecto.", LOG_ERROR );
-				//sprite_caminar = crearSpriteCaminarDefault();
+				sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x, ratio_y);
 				sprite_caminar_ok = false;
 				break;
 			}
 			framesCaminar[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
 			log( "Se creo correctamente un frame del spritesheet del personaje caminando.", LOG_DEBUG );
+			bool loop = frames_caminar[i].get( "loop", false ).asBool();
+			if ( loop ) {
+				loop_caminar[i] = true;
+			}
 		}
 		if ( sprite_caminar_ok ) {
 			try {
 				sprite_caminar = new Sprite(spritesheet_caminar, framesCaminar, ventana);
+				for ( unsigned int j=0; j < framesCaminar.size(); j++ ) {
+					if ( loop_caminar[j] ) sprite_caminar->setLoop(j);
+				}
 				log( "Se creo correctamente el sprite para el personaje caminando.", LOG_DEBUG );
 			} catch ( CargarImagenException &e ) {
-				//sprite_caminar = crearSpriteCaminarDefault();
+				sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x, ratio_y);
 				log( "No se pudo abrir el spritesheet del personaje caminando. Se genera el sprite por defecto.", LOG_ERROR );
 			}
 		}
@@ -170,161 +257,67 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	}
 
 	// Creo Sprites para personaje saltando.
-	Sprite* sprite_saltar_antes;
-	Sprite* sprite_saltar_durante;
-	Sprite* sprite_saltar_despues;
+	Sprite* sprite_saltar;
 	bool sprite_saltar_ok = true;
-	bool sprite_saltar_antes_ok = true;
-	bool sprite_saltar_durante_ok = true;
-	bool sprite_saltar_despues_ok = true;
 	if ( root.get( "saltar", "" ) == "" ) {
 		log( "No se encontro el sprite correspondiente al personaje saltando. Se genera el sprite de salto por defecto.", LOG_ERROR );
-		//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
-		//sprite_saltar_durante = crearSpriteSaltarDefault();
-		//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
+		sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x, ratio_y);
 		sprite_saltar_ok = false;
 
 	} else {
 		string spritesheet_saltar = root["saltar"].get( "ruta", SPRITESHEET_SALTAR_DEFAULT ).asString();
-		//const Json::Value frames_saltar = root["frames"];
-		//vector<Frame*> framesSaltar( frames_saltar.size() );
-		const Json::Value frames_saltar_antes = root["frames"]["antes"];
-		vector<Frame*> framesSaltarAntes( frames_saltar_antes.size() );
-		for ( unsigned int i=0; i < frames_saltar_antes.size(); i++ ) {
-			int x = frames_saltar_antes[i].get( "x", -100 ).asInt();
-			if ( x < 0 ) {
-				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite de antes del salto por defecto.", LOG_ERROR );
-				//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
-				sprite_saltar_antes_ok = false;
-				break;
-			}
-			int y = frames_saltar_antes[i].get( "y", -100 ).asInt();
-			if ( y < 0 ) {
-				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite de antes del salto por defecto", LOG_ERROR );
-				//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
-				sprite_saltar_antes_ok = false;
-				break;
-			}
-			int alto = frames_saltar_antes[i].get( "Alto", -100 ).asInt();
-			if ( alto < 0 ) {
-				log( "No se especifico el alto del frame o es negativo. Se genera el sprite de antes del salto por defecto.", LOG_ERROR );
-				//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
-				sprite_saltar_antes_ok = false;
-				break;
-			}
-			int ancho = frames_saltar_antes[i].get( "Ancho", -100 ).asInt();
-			if ( ancho < 0 ) {
-				log( "No se especifico el ancho del frame o es negativo. Se genera el sprite de antes del salto por defecto.", LOG_ERROR );
-				//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
-				sprite_saltar_antes_ok = false;
-				break;
-			}
-			framesSaltarAntes[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
-			log( "Se creo correctamente un frame del spritesheet del personaje antes de saltar.", LOG_DEBUG );
-		}
-
-		const Json::Value frames_saltar_durante = root["frames"]["durante"];
-		vector<Frame*> framesSaltarDurante( frames_saltar_durante.size() );
-		for ( unsigned int i=0; i < frames_saltar_durante.size(); i++ ) {
-			int x = frames_saltar_durante[i].get( "x", -100 ).asInt();
+		const Json::Value frames_saltar = root["frames"];
+		vector<Frame*> framesSaltar( frames_saltar.size() );
+		vector<bool> loop_saltar(framesSaltar.size(), false);
+		for ( unsigned int i=0; i < frames_saltar.size(); i++ ) {
+			int x = frames_saltar[i].get( "x", -100 ).asInt();
 			if ( x < 0 ) {
 				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite del salto por defecto.", LOG_ERROR );
-				//sprite_saltar_durante = crearSpriteSaltarDefault();
-				sprite_saltar_durante_ok = false;
+				sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x, ratio_y);
+				sprite_saltar_ok = false;
 				break;
 			}
-			int y = frames_saltar_durante[i].get( "y", -100 ).asInt();
+			int y = frames_saltar[i].get( "y", -100 ).asInt();
 			if ( y < 0 ) {
-				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite del salto por defecto", LOG_ERROR );
-				//sprite_saltar_durante = crearSpriteSaltarDefault();
-				sprite_saltar_durante_ok = false;
+				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite del salto por defecto.", LOG_ERROR );
+				sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x, ratio_y);
+				sprite_saltar_ok = false;
 				break;
 			}
-			int alto = frames_saltar_durante[i].get( "Alto", -100 ).asInt();
+			int alto = frames_saltar[i].get( "Alto", -100 ).asInt();
 			if ( alto < 0 ) {
 				log( "No se especifico el alto del frame o es negativo. Se genera el sprite del salto por defecto.", LOG_ERROR );
-				//sprite_saltar_durante = crearSpriteSaltarDefault();
-				sprite_saltar_durante_ok = false;
+				sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x, ratio_y);
+				sprite_saltar_ok = false;
 				break;
 			}
-			int ancho = frames_saltar_durante[i].get( "Ancho", -100 ).asInt();
+			int ancho = frames_saltar[i].get( "Ancho", -100 ).asInt();
 			if ( ancho < 0 ) {
 				log( "No se especifico el ancho del frame o es negativo. Se genera el sprite del salto por defecto.", LOG_ERROR );
-				//sprite_saltar_durante = crearSpriteSaltarDefault();
-				sprite_saltar_durante_ok = false;
+				sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x, ratio_y);
+				sprite_saltar_ok = false;
 				break;
 			}
-			framesSaltarDurante[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
-			log( "Se creo correctamente un frame del spritesheet del personaje saltando.", LOG_DEBUG );
+			framesSaltar[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
+			log( "Se creo correctamente un frame del spritesheet del personaje saltando horizontalmente.", LOG_DEBUG );
+			bool loop = frames_saltar[i].get( "loop", false ).asBool();
+			if ( loop ) {
+				loop_saltar[i] = true;
+			}
 		}
-
-		const Json::Value frames_saltar_despues = root["frames"]["despues"];
-		vector<Frame*> framesSaltarDespues( frames_saltar_despues.size() );
-		for ( unsigned int i=0; i < frames_saltar_despues.size(); i++ ) {
-			int x = frames_saltar_despues[i].get( "x", -100 ).asInt();
-			if ( x < 0 ) {
-				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite posterior al salto por defecto.", LOG_ERROR );
-				//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
-				sprite_saltar_despues_ok = false;
-				break;
-			}
-			int y = frames_saltar_despues[i].get( "y", -100 ).asInt();
-			if ( y < 0 ) {
-				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite posterior al salto por defecto", LOG_ERROR );
-				//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
-				sprite_saltar_despues_ok = false;
-				break;
-			}
-			int alto = frames_saltar_despues[i].get( "Alto", -100 ).asInt();
-			if ( alto < 0 ) {
-				log( "No se especifico el alto del frame o es negativo. Se genera el sprite posterior al salto por defecto.", LOG_ERROR );
-				//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
-				sprite_saltar_despues_ok = false;
-				break;
-			}
-			int ancho = frames_saltar_despues[i].get( "Ancho", -100 ).asInt();
-			if ( ancho < 0 ) {
-				log( "No se especifico el ancho del frame o es negativo. Se genera el sprite posterior al salto por defecto.", LOG_ERROR );
-				//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
-				sprite_saltar_despues_ok = false;
-				break;
-			}
-			framesSaltarDespues[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
-			log( "Se creo correctamente un frame del spritesheet del personaje despues de saltar.", LOG_DEBUG );
-		}
-
 		if ( sprite_saltar_ok ) {
-			if ( sprite_saltar_antes_ok ) {
-				try {
-					sprite_saltar_antes = new Sprite(spritesheet_saltar, framesSaltarAntes, ventana);
-					log( "Se creo correctamente el sprite para el personaje antes de saltar.", LOG_DEBUG );
-				} catch ( CargarImagenException &e ) {
-					//sprite_saltar_antes = crearSpriteAntesSaltarDefault();
-					log( "No se pudo abrir el spritesheet del personaje antes de saltar. Se genera el sprite por defecto.", LOG_ERROR );
+			try {
+				sprite_saltar = new Sprite(spritesheet_saltar, framesSaltar, ventana);
+				for ( unsigned int j=0; j < framesSaltar.size(); j++ ) {
+					if ( loop_saltar[j] ) sprite_saltar->setLoop(j);
 				}
-			}
-			if ( sprite_saltar_durante_ok ) {
-				try {
-					sprite_saltar_durante = new Sprite(spritesheet_saltar, framesSaltarDurante, ventana);
-					log( "Se creo correctamente el sprite para el personaje durante el salto.", LOG_DEBUG );
-				} catch ( CargarImagenException &e ) {
-					//sprite_saltar_durante = crearSpriteSaltarDefault();
-					log( "No se pudo abrir el spritesheet del personaje durante el salto. Se genera el sprite por defecto.", LOG_ERROR );
-				}
-			}
-			if ( sprite_saltar_despues_ok ) {
-				try {
-					sprite_saltar_despues = new Sprite(spritesheet_saltar, framesSaltarDespues, ventana);
-					log( "Se creo correctamente el sprite para el personaje despues del salto.", LOG_DEBUG );
-				} catch ( CargarImagenException &e ) {
-					//sprite_saltar_despues = crearSpriteDespuesSaltarDefault();
-					log( "No se pudo abrir el spritesheet del personaje despues del salto. Se genera el sprite por defecto.", LOG_ERROR );
-				}
+				log( "Se creo correctamente el sprite para el personaje saltando.", LOG_DEBUG );
+			} catch ( CargarImagenException &e ) {
+				sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x, ratio_y);
+				log( "No se pudo abrir el spritesheet del personaje saltando. Se genera el sprite por defecto.", LOG_ERROR );
 			}
 		}
-		sprites[2] = sprite_saltar_antes;
-		sprites[3] = sprite_saltar_durante;
-		sprites[4] = sprite_saltar_despues;
+		sprites[2] = sprite_saltar;
 	}
 
 	// Creo Sprite para personaje saltando en diagonal.
@@ -332,50 +325,58 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	bool sprite_saltar_diagonal_ok = true;
 	if ( root.get( "saltardiagonal", "" ) == "" ) {
 		log( "No se encontro el sprite correspondiente al personaje saltando en diagonal. Se genera el sprite de salto en diagonal por defecto.", LOG_ERROR );
-		//sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault();
+		sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x, ratio_y);
 		sprite_saltar_diagonal_ok = false;
 	} else {
 		string spritesheet_saltar_diagonal = root["saltardiagonal"].get( "ruta", SPRITESHEET_SALTAR_DIAGONAL_DEFAULT ).asString();
 		const Json::Value frames_saltar_diagonal = root["frames"];
 		vector<Frame*> framesSaltarDiagonal( frames_saltar_diagonal.size() );
+		vector<bool> loop_saltar_diagonal(framesSaltarDiagonal.size(), false);
 		for ( unsigned int i=0; i < frames_saltar_diagonal.size(); i++ ) {
 			int x = frames_saltar_diagonal[i].get( "x", -100 ).asInt();
 			if ( x < 0 ) {
-				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite de salto en diagonal por defecto.", LOG_ERROR );
-				//sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault();
+				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite del salto en diagonal por defecto.", LOG_ERROR );
+				sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x, ratio_y);
 				sprite_saltar_diagonal_ok = false;
 				break;
 			}
 			int y = frames_saltar_diagonal[i].get( "y", -100 ).asInt();
 			if ( y < 0 ) {
-				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite de salto en diagonal por defecto.", LOG_ERROR );
-				//sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault();
+				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite del salto en diagonal por defecto.", LOG_ERROR );
+				sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x, ratio_y);
 				sprite_saltar_diagonal_ok = false;
 				break;
 			}
 			int alto = frames_saltar_diagonal[i].get( "Alto", -100 ).asInt();
 			if ( alto < 0 ) {
-				log( "No se especifico el alto del frame o es negativo. Se genera el sprite de salto en diagonal por defecto.", LOG_ERROR );
-				//sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault();
+				log( "No se especifico el alto del frame o es negativo. Se genera el sprite del salto en diagonal por defecto.", LOG_ERROR );
+				sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x, ratio_y);
 				sprite_saltar_diagonal_ok = false;
 				break;
 			}
 			int ancho = frames_saltar_diagonal[i].get( "Ancho", -100 ).asInt();
 			if ( ancho < 0 ) {
-				log( "No se especifico el ancho del frame o es negativo. Se genera el sprite de salto en diagonal por defecto.", LOG_ERROR );
-				//sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault();
+				log( "No se especifico el ancho del frame o es negativo. Se genera el sprite del salto en diagonal por defecto.", LOG_ERROR );
+				sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x, ratio_y);
 				sprite_saltar_diagonal_ok = false;
 				break;
 			}
 			framesSaltarDiagonal[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
 			log( "Se creo correctamente un frame del spritesheet del personaje saltando en diagonal.", LOG_DEBUG );
+			bool loop = frames_saltar_diagonal[i].get( "loop", false ).asBool();
+			if ( loop ) {
+				loop_saltar_diagonal[i] = true;
+			}
 		}
 		if ( sprite_saltar_diagonal_ok ) {
 			try {
 				sprite_saltar_diagonal = new Sprite(spritesheet_saltar_diagonal, framesSaltarDiagonal, ventana);
+				for ( unsigned int j=0; j < framesSaltarDiagonal.size(); j++ ) {
+					if ( loop_saltar_diagonal[j] ) sprite_saltar_diagonal->setLoop(j);
+				}
 				log( "Se creo correctamente el sprite para el personaje saltando en diagonal.", LOG_DEBUG );
 			} catch ( CargarImagenException &e ) {
-				//sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault();
+				sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x, ratio_y);
 				log( "No se pudo abrir el spritesheet del personaje saltando en diagonal. Se genera el sprite por defecto.", LOG_ERROR );
 			}
 		}
@@ -387,50 +388,58 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	bool sprite_agachar_ok = true;
 	if ( root.get( "agachar", "" ) == "" ) {
 		log( "No se encontro el sprite correspondiente al personaje agachado. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-		//sprite_agachar = crearSpriteAgacharDefault();
+		sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x, ratio_y);
 		sprite_agachar_ok = false;
 	} else {
 		string spritesheet_agachar = root["agachar"].get( "ruta", SPRITESHEET_AGACHAR_DEFAULT ).asString();
 		const Json::Value frames_agachar = root["frames"];
 		vector<Frame*> framesAgachar( frames_agachar.size() );
+		vector<bool> loop_agachar(framesAgachar.size(), false);
 		for ( unsigned int i=0; i < frames_agachar.size(); i++ ) {
 			int x = frames_agachar[i].get( "x", -100 ).asInt();
 			if ( x < 0 ) {
 				log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-				//sprite_agachar = crearSpriteAgacharDefault();
+				sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x, ratio_y);
 				sprite_agachar_ok = false;
 				break;
 			}
 			int y = frames_agachar[i].get( "y", -100 ).asInt();
 			if ( y < 0 ) {
 				log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-				//sprite_agachar = crearSpriteAgacharDefault();
+				sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x, ratio_y);
 				sprite_agachar_ok = false;
 				break;
 			}
 			int alto = frames_agachar[i].get( "Alto", -100 ).asInt();
 			if ( alto < 0 ) {
 				log( "No se especifico el alto del frame o es negativo. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-				//sprite_agachar = crearSpriteAgacharDefault();
+				sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x, ratio_y);
 				sprite_agachar_ok = false;
 				break;
 			}
 			int ancho = frames_agachar[i].get( "Ancho", -100 ).asInt();
 			if ( ancho < 0 ) {
 				log( "No se especifico el alto del frame o es negativo. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-				//sprite_agachar = crearSpriteAgacharDefault();
+				sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x, ratio_y);
 				sprite_agachar_ok = false;
 				break;
 			}
 			framesAgachar[i] = new Frame(x/ratio_x, y/ratio_y, alto/ratio_y, ancho/ratio_x);
 			log( "Se creo correctamente un frame del spritesheet del personaje agachandose.", LOG_DEBUG );
+			bool loop = frames_agachar[i].get( "loop", false ).asBool();
+			if ( loop ) {
+				loop_agachar[i] = true;
+			}
 		}
 		if ( sprite_agachar_ok ) {
 			try {
 				sprite_agachar = new Sprite(spritesheet_agachar, framesAgachar, ventana);
+				for ( unsigned int j=0; j < framesAgachar.size(); j++ ) {
+					if ( loop_agachar[j] ) sprite_agachar->setLoop(j);
+				}
 				log( "Se creo correctamente el sprite para el personaje agachado.", LOG_DEBUG );
 			} catch ( CargarImagenException &e ) {
-				//sprite_agachar = crearSpriteAgacharDefault();
+				sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x, ratio_y);
 				log( "No se pudo abrir el spritesheet del personaje agachandose. Se genera el sprite por defecto.", LOG_ERROR );
 			}
 		}
@@ -641,10 +650,7 @@ Mundo* ParserJSON::cargarMundo() {
 
 
 	// PERSONAJE SE LE PASA VELOCIDAD_PERSONAJE POR CONSTRUCTOR PERO NUNCA LO USA.
-	// HACER QUE SI NO SE PUEDE CARGAR IMAGEN DE CAPA SE DEVUELVA NULL.
 	// CAPA PRINCIPAL RECIBE DOS VECES EL MISMO PARAMETRO, EL ANCHO DEL ESCENARIO!!!
-	// EL MUNDO NO TIENE PARA AGREGAR CAPA PRINCIPAL, TRATA TODAS LAS CAPAS COMO IGUALES.
-	// QUE SPRITE DEVUELVA NULL SI NO PUEDE CARGAR EL SPRITESHEET
 
 }
 
