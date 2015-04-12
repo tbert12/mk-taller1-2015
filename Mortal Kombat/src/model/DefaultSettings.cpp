@@ -41,7 +41,7 @@ std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
 			framesCaminar[i] = new Frame(wCaminar*i/rx,0,133/ry,wCaminar/rx);
 	}
 
-	std::vector<Frame*> framesDeSaltar(1);
+	std::vector<Frame*> framesDeSaltar(3);
 	framesDeSaltar[0] = new Frame(0,0,139/ry,69/rx);
 	framesDeSaltar[1] = new Frame(71/rx,0,96/ry,70/rx);
 	framesDeSaltar[2] = new Frame(141/rx,0,107/ry,60/rx);
