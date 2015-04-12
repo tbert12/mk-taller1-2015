@@ -12,10 +12,16 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana){
 	spriteSiguiente = NULL;
 	SpriteSheetTexture = ventana->crearTextura();
 
+	reverse = false;
+
+	//Se queda Loopeando en 1 Frame
+	doloop = false;
+	frameLoop = 0;
+
 	if( !SpriteSheetTexture->loadFromFile( ruta ) ){
 		log( "Error al intentar abrir la imagen del sprite.", LOG_ERROR );
-		throw CargarImagenException( ruta );
 	}
+
 	cantidadFrames = frames.size();
 	
 	spriteFrames = new Rect_Logico[cantidadFrames];
@@ -42,12 +48,23 @@ float Sprite::getAncho(){
 }
 
 bool Sprite::Advance(){
-	//Es necesario el bool?
-	frameActual++;
-	if (frameActual >= cantidadFrames){
-		frameActual = 0;
+	if (!doloop){
+		if (reverse)
+			frameActual--;
+		else
+			frameActual++;
+	} else {
+		if (frameActual != frameLoop){
+			if (reverse)
+				frameActual--;
+			else
+				frameActual++;
+		}
 	}
-
+	if (frameActual >= cantidadFrames or frameActual < 0){
+		Reset();
+	}
+	printf("FrameActual: %d | Cantidad: %d\n",frameActual,cantidadFrames);
 	return true;
 }
 
@@ -73,7 +90,8 @@ void Sprite::setSpriteSiguiente(Sprite* nextsprite){
 }
 
 void Sprite::Reset(){
-	frameActual = 0;
+	if (reverse) frameActual = cantidadFrames - 1;
+	else frameActual = 0;
 }
 
 void Sprite::render(float x, float y, bool fliped){
@@ -82,6 +100,18 @@ void Sprite::render(float x, float y, bool fliped){
 }
 
 void Sprite::setLoop(int num_frame) {
-
+	if (num_frame >= cantidadFrames ) return;
+	frameLoop = num_frame;
 }
 
+void Sprite::doLoop(bool loop){
+	doloop = loop;
+}
+
+void Sprite::Reverse(bool Reverse){
+	reverse = Reverse;
+}
+
+bool Sprite::ultimoFrame(){
+	return (frameActual + 1 == cantidadFrames and !doloop);
+}

@@ -33,81 +33,46 @@
 std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
 
 	std::vector<Frame*> framesInitial(9);
-
 	std::vector<Frame*> framesCaminar(9);
+	int wInitial = 72,wCaminar = 68;
+		for (int i=0;i<9;i++){
 
-	std::vector<Frame*> framesAntesDeSaltar(1);
+			framesInitial[i] = new Frame(wInitial*i/rx,0,133/ry,wInitial/rx);
+			framesCaminar[i] = new Frame(wCaminar*i/rx,0,133/ry,wCaminar/rx);
+	}
+
 	std::vector<Frame*> framesDeSaltar(1);
-	std::vector<Frame*> framesDespuesDeSaltar(1);
+	framesDeSaltar[0] = new Frame(0,0,139/ry,69/rx);
+	framesDeSaltar[1] = new Frame(71/rx,0,96/ry,70/rx);
+	framesDeSaltar[2] = new Frame(141/rx,0,107/ry,60/rx);
 
-	std::vector<Frame*> framesAntesDeSaltarDiagonal(1);
-	std::vector<Frame*> framesSaltoDiagonal(7);
-	std::vector<Frame*> framesSaltoDiagonalAtras(7);
+	std::vector<Frame*> framesSaltoDiagonal(8);
 	std::vector<int> xSaltoDiagonal = {0,72,127,208,283,335,392,472};
 	std::vector<int> hSaltoDiagonal = {136,82,59,55,81,81,59,62};
 	std::vector<int> wSaltoDiagonal = {72,55,74,74,53,55,75,74};
+	for (size_t i = 0; i < framesSaltoDiagonal.size(); i++){
+			framesSaltoDiagonal[i] = new Frame(xSaltoDiagonal[i]/rx ,0 , hSaltoDiagonal[i]/ry , wSaltoDiagonal[i]/rx);
+	}
 
-	std::vector<Frame*> framesAgacharse(2);
+	std::vector<Frame*> framesAgacharse(3);
 	framesAgacharse[0] = new Frame(.0f,.0f,107/ry,60/rx);
 	framesAgacharse[1] = new Frame(60/rx,.0f,89/ry,62/rx);
-	std::vector<Frame*> framesLevantarse(framesAgacharse);
-	std::reverse(framesLevantarse.begin(),framesLevantarse.end());
+	framesAgacharse[2] = new Frame(122/rx,.0f,71/ry,64/rx);
 
-	std::vector<Frame*> framesAgachado(1);
-	framesAgachado[0] = new Frame(122/rx,.0f,71/ry,64/rx);
-
-	int wInitial = 72,wCaminar = 68;
-	for (int i=0;i<9;i++){
-
-		framesInitial[i] = new Frame(wInitial*i/rx,0,133/ry,wInitial/rx);
-		framesCaminar[i] = new Frame(wCaminar*i/rx,0,133/ry,wCaminar/rx);
-	}
-	std::vector<Frame*> framesCaminarAtras (framesCaminar);
-	std::reverse(framesCaminarAtras.begin(),framesCaminarAtras.end());
-
-	framesAntesDeSaltar[0] = new Frame(0,0,139/ry,69/rx);
-	framesDeSaltar[0] = new Frame(71/rx,0,96/ry,70/rx);
-	framesDespuesDeSaltar[0] = new Frame(141/rx,0,107/ry,60/rx);
-
-	framesAntesDeSaltarDiagonal[0] = new Frame(xSaltoDiagonal[0]/rx,0,hSaltoDiagonal[0]/ry,wSaltoDiagonal[0]/ry);
-
-	for (size_t i = 0; i < framesSaltoDiagonal.size(); i++){
-		framesSaltoDiagonal[i] = new Frame(xSaltoDiagonal[i+1]/rx,0,hSaltoDiagonal[i+1]/ry,wSaltoDiagonal[i+1]/rx);
-		framesSaltoDiagonalAtras[framesSaltoDiagonal.size()-i-1] = new Frame(xSaltoDiagonal[i+1]/rx,0,hSaltoDiagonal[i+1]/ry,wSaltoDiagonal[i+1]/rx);
-	}
 	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
 	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
-	std::string rutaCaminarAtras = "data/players/subzero/sprites/walk.png";
 	std::string rutaSalto = "data/players/subzero/sprites/salto.png";
 	std::string rutaSaltoDiagonal = "data/players/subzero/sprites/diag.png";
 	std::string rutaAgacharse = "data/players/subzero/sprites/agachar.png";
 
 	Sprite* Initial = new Sprite(rutaInitial,framesInitial,ventana);
 	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,ventana);
-	Sprite* CaminarAtras = new Sprite(rutaCaminar,framesCaminarAtras,ventana);
-	Sprite* AntesDeSaltar = new Sprite(rutaSalto,framesAntesDeSaltar,ventana);
 	Sprite* Salto = new Sprite(rutaSalto,framesDeSaltar,ventana);
-	Sprite* DespuesDeSaltar = new Sprite(rutaSalto,framesDespuesDeSaltar,ventana);
-
-	AntesDeSaltar->setSpriteSiguiente(Salto);
-	DespuesDeSaltar->setSpriteSiguiente(Initial);
-
-	Sprite* AntesSaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesAntesDeSaltarDiagonal,ventana);
 	Sprite* SaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonal,ventana);
-
-	AntesSaltoDiagonal->setSpriteSiguiente(SaltoDiagonal);
-
-	Sprite* AntesSaltoDiagonalAtras = new Sprite(rutaSaltoDiagonal,framesAntesDeSaltarDiagonal,ventana);
-	Sprite* SaltoDiagonalAtras = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonalAtras,ventana);
-
-	AntesSaltoDiagonalAtras->setSpriteSiguiente(SaltoDiagonalAtras);
-
 	Sprite* Agacharse = new Sprite(rutaAgacharse,framesAgacharse,ventana);
-	Sprite* Agachado = new Sprite(rutaAgacharse,framesAgachado,ventana);
-	Sprite* Levantarse = new Sprite(rutaAgacharse,framesLevantarse,ventana);
 
-	Agacharse->setSpriteSiguiente(Agachado);
-	Levantarse->setSpriteSiguiente(Initial);
+	Salto->setLoop(1);
+	Agacharse->setLoop(2);
 
 	/* PARA ELIMINAR SPRITE->SIGUIENTE
 	 * La onda es hacer esto y que se le diga al Sprite en Personaje que tiene que hacer
@@ -121,19 +86,12 @@ std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
 	 *								   Agacharse};
 	 */
 
-	std::vector<Sprite*> sprites = {Initial,
-									Caminar,
-									CaminarAtras,
-									Salto,
-									AntesDeSaltar,
-									DespuesDeSaltar,
-									AntesSaltoDiagonal,
-									SaltoDiagonal,
-									AntesSaltoDiagonalAtras,
-									SaltoDiagonalAtras,
-									Agacharse,
-									Agachado,
-									Levantarse};
+	 std::vector<Sprite*> sprites = {Initial,
+			 	 	 	 	 	 	 Caminar,
+	 								 Salto,
+	 								 SaltoDiagonal,
+	 								 Agacharse};
+
 
 	return sprites;
 }

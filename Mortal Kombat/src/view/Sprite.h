@@ -24,23 +24,37 @@ class Sprite {
 	private:
 		int frameActual;
 		int cantidadFrames;
+
+		bool reverse;
+		bool doloop;
+		int frameLoop;
+
+		Sprite* spriteSiguiente;
+
 		Rect_Logico* spriteFrames;
 		LTexture* SpriteSheetTexture;
-		Sprite* spriteSiguiente;
 
 	public:
 		Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana);
 		~Sprite();
 
 		void setSpriteSiguiente(Sprite* nextsprite);
-		void Reset();
-		void setRender(SDL_Renderer* Renderer);
-		bool Advance();
-		bool puedeAvanzar();
-		void render(float x,float y, bool fliped);
-		void setLoop(int num_frame);
-		float getAncho();
 		Sprite* getSpriteSiguiente();
+
+		bool Advance();
+		void Reset();
+		bool puedeAvanzar();
+
+		void setLoop(int num_frame);
+		void doLoop(bool loop);
+		void Reverse(bool Reverse);
+
+		bool ultimoFrame();
+		float getAncho();
+
+		void render(float x,float y, bool fliped);
+
+		void setRender(SDL_Renderer* Renderer);
 		Rect_Logico* getFrame();
 		LTexture* getSpriteSheetTexture();
 };

@@ -9,7 +9,12 @@
 #define SRC_MODEL_PERSONAJE_H_
 
 //Constants
-const int SPRITE_INICIAL = 0;
+const int SPRITE_INICIAL=         0;
+const int SPRITE_CAMINAR=         1;
+const int SPRITE_SALTAR=          2;
+const int SPRITE_SALTAR_DIAGONAL= 3;
+const int SPRITE_AGACHAR=         4;
+/*const int SPRITE_INICIAL = 0;
 const int SPRITE_CAMINAR_DERECHA = 1;
 const int SPRITE_CAMINAR_IZQUIERDA = 2;
 const int SPRITE_SALTO = 3;
@@ -24,9 +29,7 @@ const int SPRITE_AGACHADO = 11;
 const int SPRITE_LEVANTARSE = 12;
 const int SPRITE_PUNCHING = 13;
 const int SPRITE_KICKING = 14;
-
-const int VELOCIDAD_ADELANTE = 2.5;
-const int VELOCIDAD_ATRAS = -2;
+*/
 
 #include <stdio.h>
 #include <iostream>
@@ -37,12 +40,13 @@ const int VELOCIDAD_ATRAS = -2;
 class Personaje {
 private:
 	std::string nombre;
+
 	float vida;
 	float m_xActual;
 	float m_yActual;
 	float m_xInicial;
 	float m_yInicial;
-	int _tDeSalto;
+	int tiempoDeSalto;
 	short _estaSaltando;
 	bool m_fliped;
 
