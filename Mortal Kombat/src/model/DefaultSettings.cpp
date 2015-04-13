@@ -149,8 +149,7 @@ Mundo* CrearMundoDefault(){
 	//la que contiene el escenario
 
 	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,VENTANA_ANCHO_LOG,PERSONAJE_FACTOR_VELOCIDAD,personaje_default);
-	mundo->addCapa(capa_principal,PERSONAJE_Z_INDEX_DEFAULT);
-	mundo->setZindexCapaPrincipal(PERSONAJE_Z_INDEX_DEFAULT);
+	mundo->addCapaPrincipal(capa_principal,PERSONAJE_Z_INDEX_DEFAULT);
 
 	//log("Capas agregadas al Mundo",LOG_DEBUG);
 	return mundo;

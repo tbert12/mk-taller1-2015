@@ -34,8 +34,8 @@ int main( int argc, char* args[] )
 
 	try {
 		ParserJSON* parser = new ParserJSON( ruta_archivo_configuracion );
-		//mundo = parser->cargarMundo();
-		mundo = CrearMundoDefault();
+		mundo = parser->cargarMundo();
+		//mundo = CrearMundoDefault();
 		log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
 	} catch ( std::exception &e ) {
 		log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
@@ -71,8 +71,9 @@ int main( int argc, char* args[] )
 				try {
 					delete control_jugador_1;
 					delete mundo;
-					//mundo = parser->cargarMundo();
-					mundo = CrearMundoDefault();
+					ParserJSON* parser = new ParserJSON( ruta_archivo_configuracion );
+					mundo = parser->cargarMundo();
+					//mundo = CrearMundoDefault();
 					log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
 					//Creo el Personaje
 					luchador = mundo->getPersonaje();

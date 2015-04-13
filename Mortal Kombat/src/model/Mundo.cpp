@@ -17,10 +17,6 @@ Mundo::Mundo(float ancho,float alto) {
 	capas = std::vector<Capa*>(6);
 }
 
-void Mundo::setZindexCapaPrincipal(int index){
-	personaje_z_index = index;
-}
-
 bool Mundo::addPersonaje(Personaje* un_personaje){
 	//if (personajes == NULL){
 	//	return false;
@@ -45,6 +41,13 @@ bool Mundo::addCapa(Capa* una_capa,int index){
 	std::sort(indices.begin(),indices.end());
 	return true;
 }
+
+bool Mundo::addCapaPrincipal( CapaPrincipal* capa_principal, int index ) {
+	bool exito = this->addCapa( capa_principal, index );
+	personaje_z_index = index;
+	return exito;
+}
+
 Capa* Mundo::getCapa(int indice){
 	if ((size_t)indice <= capas.size()){
 		return capas[indice];

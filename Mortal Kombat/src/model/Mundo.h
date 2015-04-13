@@ -42,6 +42,7 @@ public:
 	bool addPersonaje(Personaje* un_personaje);
 	Personaje* getPersonaje(int indice = 0);
 	bool addCapa(Capa* unaCapa,int indice);
+	bool addCapaPrincipal(CapaPrincipal* capa_principal, int index);
 	Capa* getCapa(int indice = 0);
 	void setTiempo(Tiempo* unTiempo);
 	void setVentana(Ventana* unaVentana);
@@ -50,7 +51,6 @@ public:
 	Escenario* getEscenario();
 	void render();
 	virtual ~Mundo();
-	void setZindexCapaPrincipal(int index);
 	bool mostrarImagen(string ruta);
 };
 
