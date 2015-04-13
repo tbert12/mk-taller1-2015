@@ -9,12 +9,11 @@
 
 Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana){
 	frameActual = 0;
-	spriteSiguiente = NULL;
 	SpriteSheetTexture = ventana->crearTextura();
 
 	reverse = false;
 
-	//Se queda Loopeando en 1 Frame
+	//Loopear en 1 Frame
 	doloop = false;
 	frameLoop = 0;
 
@@ -31,17 +30,12 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana){
 		spriteFrames[i].y = frames[i]->Y;
 		spriteFrames[i].h = frames[i]->Alto;
 		spriteFrames[i].w = frames[i]->Ancho;
-		//frames[i]->~Frame();
+		delete frames[i];
 	}
 }
 
 Sprite::~Sprite(){
 	SpriteSheetTexture->free();
-}
-
-Rect_Logico* Sprite::getFrame() {
-	Rect_Logico* frame = &spriteFrames[frameActual];
-	return frame;
 }
 
 float Sprite::getAncho(){
@@ -65,29 +59,7 @@ bool Sprite::Advance(){
 	if (frameActual >= cantidadFrames or frameActual < 0){
 		Reset();
 	}
-	printf("FrameActual: %d | Cantidad: %d\n",frameActual,cantidadFrames);
 	return true;
-}
-
-Sprite* Sprite::getSpriteSiguiente(){
-	return spriteSiguiente;
-}
-
-bool Sprite::puedeAvanzar(){
-	if (frameActual + 1 >= cantidadFrames){
-		if (spriteSiguiente){
-			return false;
-		}
-	}
-	return true;
-}
-
-LTexture* Sprite::getSpriteSheetTexture(){
-	return SpriteSheetTexture;
-}
-
-void Sprite::setSpriteSiguiente(Sprite* nextsprite){
-	spriteSiguiente = nextsprite;
 }
 
 void Sprite::Reset(){
@@ -109,10 +81,14 @@ void Sprite::doLoop(bool loop){
 	doloop = loop;
 }
 
-void Sprite::Reverse(bool Reverse){
+void Sprite::doReverse(bool Reverse){
 	reverse = Reverse;
 }
 
 bool Sprite::ultimoFrame(){
-	return (frameActual + 1 == cantidadFrames and !doloop);
+	if (doloop) return false;
+	if (reverse){
+		return (frameActual == 0);
+	}
+	return (frameActual + 1 == cantidadFrames);
 }

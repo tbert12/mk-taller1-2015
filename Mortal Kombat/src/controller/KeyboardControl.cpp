@@ -22,6 +22,7 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 	if(evento.type == SDL_QUIT){
 		quit = true;
 	} else if(evento.type == SDL_KEYDOWN and !agachado){
+		printf("IF 1\n");
 		switch( evento.key.keysym.sym ){
 				case SDLK_UP:
 					personaje->Saltar();
@@ -43,9 +44,9 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 				case SDLK_r:
 					throw std::runtime_error( "Hay que recargar el archivo JSON." );
 					break;
-
 			}
 	} else if (evento.type == SDL_KEYUP and evento.type != SDL_MOUSEMOTION){
+		printf("IF 2\n");
 		switch( evento.key.keysym.sym ){
 			case SDLK_DOWN:
 				agachado = false;
@@ -59,11 +60,14 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 				personaje->Frenar();
 				if (!agachado)personaje->Inicial();
 				break;
+			default:
+				personaje->Inicial();
+				break;
 		}
 	} else if (agachado){
+		printf("IF 3\n");
 		personaje->Agachar();
 	}
-
 }
 
 KeyboardControl::~KeyboardControl() {
