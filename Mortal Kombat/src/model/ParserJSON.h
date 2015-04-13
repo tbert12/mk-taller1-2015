@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <stdexcept>
 #include "../../libs/json/json.h"
 #include "logging.h"
 #include "Mundo.h"
@@ -20,6 +21,8 @@ private:
 public:
 	 ParserJSON(string ruta_archivo);
 	 Mundo* cargarMundo();
+	 Mundo* generarMundoDefault();
+	 vector<Sprite*> generarSpritesDefault(Ventana* ventana, float ratio_x, float ratio_y);
 	 vector<Sprite*> cargarSprites(string ruta_carpeta, Ventana* ventana, float ratio_x, float ratio_y);
 	 Sprite* crearSpriteParadoDefault(Ventana* ventana, float ratio_x, float ratio_y);
 	 Sprite* crearSpriteCaminarDefault(Ventana* ventana, float ratio_x, float ratio_y);

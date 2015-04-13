@@ -20,6 +20,7 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana){
 
 	if( !SpriteSheetTexture->loadFromFile( ruta ) ){
 		log( "Error al intentar abrir la imagen del sprite.", LOG_ERROR );
+		throw CargarImagenException( "No se pudo cargar la imagen del sprite como textura SDL" );
 	}
 
 	cantidadFrames = frames.size();

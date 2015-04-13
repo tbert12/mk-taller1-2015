@@ -8,7 +8,7 @@
 #define ESCENARIO_ANCHO_DEFAULT 600.0
 #define ESCENARIO_ALTO_DEFAULT 150.0
 #define Y_PISO_DEFAULT 135.0
-#define BACKGROUND_DEFAULT "data/img/default/backgrounds/background.png"
+#define BACKGROUND_DEFAULT "data/img/default/background/unknown.png"
 #define CAPA_ANCHO_DEFAULT 600.0
 #define CAPA_Z_INDEX_DEFAULT 0
 #define PERSONAJE_Z_INDEX_DEFAULT 3
@@ -98,6 +98,49 @@ Sprite* ParserJSON::crearSpriteAgacharDefault(Ventana* ventana, float ratio_x, f
 	return spriteAgachar;
 }
 
+vector<Sprite*> ParserJSON::generarSpritesDefault( Ventana* ventana, float ratio_x, float ratio_y ) {
+	vector<Sprite*> sprites;
+
+	sprites.push_back( this->crearSpriteParadoDefault(ventana, ratio_x, ratio_y) );
+	sprites.push_back( this->crearSpriteCaminarDefault(ventana, ratio_x, ratio_y) );
+	sprites.push_back( this->crearSpriteSaltarDefault(ventana, ratio_x, ratio_y) );
+	sprites.push_back( this->crearSpriteSaltarDiagonalDefault(ventana, ratio_x, ratio_y) );
+	sprites.push_back( this->crearSpriteAgacharDefault(ventana, ratio_x, ratio_y) );
+
+	return sprites;
+}
+
+Mundo* ParserJSON::generarMundoDefault(  ) {
+
+	float ratio_x = VENTANA_ANCHO_PX_DEFAULT/VENTANA_ANCHO_DEFAULT;
+	float ratio_y = VENTANA_ALTO_PX_DEFAULT/ESCENARIO_ALTO_DEFAULT;
+	Mundo* mundo = new Mundo(ESCENARIO_ANCHO_DEFAULT,ESCENARIO_ALTO_DEFAULT);
+	Ventana* ventana = new Ventana(VENTANA_ANCHO_PX_DEFAULT,VENTANA_ALTO_PX_DEFAULT,ratio_x,ratio_y);
+
+	if( ! ventana->create_window() ) {
+		throw runtime_error( "No se pudo abrir la ventana del programa." );
+	}
+
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, this->generarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_VELOCIDAD);
+	// Si flippeado, descomentar la siguiente linea:
+	//Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, this->generarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_VELOCIDAD, true);
+
+	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2),Y_PISO_DEFAULT);
+
+	mundo->setVentana(ventana);
+	mundo->setTiempo(new Tiempo(TIEMPO_DEFAULT));
+
+	mundo->addPersonaje(personaje_default);
+
+	CapaFondo* capa = new CapaFondo(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,BACKGROUND_DEFAULT,ventana);
+	mundo->addCapa(capa,CAPA_Z_INDEX_DEFAULT);
+
+	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,VENTANA_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,personaje_default);
+	mundo->addCapaPrincipal(capa_principal,PERSONAJE_Z_INDEX_DEFAULT);
+
+	return mundo;
+}
+
 vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana, float ratio_x, float ratio_y) {
 
 	vector<Sprite*> sprites;
@@ -114,7 +157,7 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	if ( ! archivoConfig.is_open() ) {
 		// Informar al usuario la falla y la resolucion tomada.
 		log( "No se pudo abrir el archivo de sprites JSON, se generan sprites por defecto.", LOG_ERROR );
-		return GenerarSpritesDefault(ventana, ratio_x, ratio_y);
+		return this->generarSpritesDefault(ventana, ratio_x, ratio_y);
 	}
 	log ( "Se abrio el archivo JSON de sprites.", LOG_DEBUG );
 
@@ -123,7 +166,7 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	if ( ! exito ) {
 	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
 	    log( "No se pudo interpretar el JSON, se generan sprites por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
-	    return GenerarSpritesDefault(ventana, ratio_x, ratio_y);
+	    return this->generarSpritesDefault(ventana, ratio_x, ratio_y);
 	} else log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
 
 	// Cerrar archivo.
@@ -464,7 +507,7 @@ Mundo* ParserJSON::cargarMundo() {
 	if ( ! archivoConfig.is_open() ) {
 		// Informar al usuario la falla y la resolucion tomada.
 		log( "No se pudo abrir el archivo de configuracion JSON, se genera una partida por defecto.", LOG_ERROR );
-		return CrearMundoDefault();
+		return this->generarMundoDefault();
 	}
 	log ( "Se abrio el archivo JSON de configuración.", LOG_DEBUG );
 
@@ -473,7 +516,7 @@ Mundo* ParserJSON::cargarMundo() {
 	if ( ! exito ) {
 	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
 	    log( "No se pudo interpretar el JSON, se genera una partida por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
-	    return CrearMundoDefault();
+	    return this->generarMundoDefault();
 	} else log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
 
 	// Cerrar archivo.
@@ -509,41 +552,58 @@ Mundo* ParserJSON::cargarMundo() {
 
 	// Obtener dimensiones de la ventana. Se setean por defecto en caso de error.
 	// El alto se seteara luego dependiendo del escenario.
-	int ventana_ancho_px = root["ventana"].get( "ancho-px", VENTANA_ANCHO_PX_DEFAULT ).asInt();
-	if ( ventana_ancho_px < 0 ) {
+	int ventana_ancho_px, ventana_alto_px;
+	float ventana_ancho;
+	if ( root.get( "ventana", "" ) == "" ) {
+		log( "No se encontraron parametros para la creacion de la ventana. Se asignan valores por defecto.", LOG_ERROR );
 		ventana_ancho_px = VENTANA_ANCHO_PX_DEFAULT;
-		// Informar al usuario el cambio de ancho.
-		log( "El ancho en pixeles de la ventana no puede ser negativo. Se setea automaticamente a 512px.", LOG_WARNING );
-	} else log( "Se cargo correctamente el ancho en pixeles de la ventana.", LOG_DEBUG );
-	int ventana_alto_px = root["ventana"].get( "alto-px", VENTANA_ALTO_PX_DEFAULT ).asInt();
-	if ( ventana_alto_px < 0 ) {
 		ventana_alto_px = VENTANA_ALTO_PX_DEFAULT;
-		// Informar al usuario el cambio de alto.
-		log( "El alto en pixeles de la ventana no puede ser negativo. Se setea automaticamente a 384px.", LOG_WARNING );
-	} else log( "Se cargo correctamente el alto en pixeles de la ventana.", LOG_DEBUG );
-	float ventana_ancho = root["ventana"].get( "ancho", VENTANA_ANCHO_DEFAULT ).asFloat();
-	if ( ventana_ancho < 0 ) {
 		ventana_ancho = VENTANA_ANCHO_DEFAULT;
-		// Informar al usuario el cambio de ancho logico.
-		log( "El ancho logico de la ventana no puede ser negativo. Se setea automaticamente a 200.", LOG_WARNING );
-	} else log( "Se cargo correctamente el ancho logico de la ventana.", LOG_DEBUG );
+	} else {
+		ventana_ancho_px = root["ventana"].get( "ancho-px", VENTANA_ANCHO_PX_DEFAULT ).asInt();
+		if ( ventana_ancho_px < 0 ) {
+			ventana_ancho_px = VENTANA_ANCHO_PX_DEFAULT;
+			// Informar al usuario el cambio de ancho.
+			log( "El ancho en pixeles de la ventana no puede ser negativo. Se setea automaticamente a 512px.", LOG_WARNING );
+		} else log( "Se cargo correctamente el ancho en pixeles de la ventana.", LOG_DEBUG );
+		ventana_alto_px = root["ventana"].get( "alto-px", VENTANA_ALTO_PX_DEFAULT ).asInt();
+		if ( ventana_alto_px < 0 ) {
+			ventana_alto_px = VENTANA_ALTO_PX_DEFAULT;
+			// Informar al usuario el cambio de alto.
+			log( "El alto en pixeles de la ventana no puede ser negativo. Se setea automaticamente a 384px.", LOG_WARNING );
+		} else log( "Se cargo correctamente el alto en pixeles de la ventana.", LOG_DEBUG );
+		ventana_ancho = root["ventana"].get( "ancho", VENTANA_ANCHO_DEFAULT ).asFloat();
+		if ( ventana_ancho < 0 ) {
+			ventana_ancho = VENTANA_ANCHO_DEFAULT;
+			// Informar al usuario el cambio de ancho logico.
+			log( "El ancho logico de la ventana no puede ser negativo. Se setea automaticamente a 200.", LOG_WARNING );
+		} else log( "Se cargo correctamente el ancho logico de la ventana.", LOG_DEBUG );
+	}
 
 	// Obtener las dimensiones logicas del escenario.
 	// En caso de error se setean por defecto.
-	float escenario_ancho = root["escenario"].get( "ancho", ESCENARIO_ANCHO_DEFAULT ).asFloat();
-	if ( escenario_ancho < 0 ) {
+	float escenario_ancho, escenario_alto, y_piso;
+	if ( root.get( "escenario", "" ) == "" ) {
+		log( "No se encontraron parametros para la creacion del escenario. Se asignan valores por defecto.", LOG_ERROR );
 		escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
-		// Informar al usuario el cambio de ancho logico.
-		log( "El ancho del escenario no puede ser negativo. Se setea automaticamente a 600.", LOG_WARNING );
-	} else log( "Se cargo correctamente el ancho logico del escenario.", LOG_DEBUG );
-	float escenario_alto = root["escenario"].get( "alto", ESCENARIO_ALTO_DEFAULT ).asFloat();
-	if ( escenario_alto < 0 ) {
 		escenario_alto = ESCENARIO_ALTO_DEFAULT;
-		// Informar al usuario el cambio de alto logico.
-		log( "WARNING: El alto del escenario no puede ser negativo. Se setea automaticamente a 150.", LOG_WARNING );
-	} else log( "Se cargo correctamente el alto logico del escenario.", LOG_DEBUG );
-	float y_piso = root["escenario"].get( "y-piso", Y_PISO_DEFAULT ).asFloat();
-	log ( "Se cargo correctamente la altura del piso.", LOG_DEBUG );
+		y_piso = Y_PISO_DEFAULT;
+	} else {
+		escenario_ancho = root["escenario"].get( "ancho", ESCENARIO_ANCHO_DEFAULT ).asFloat();
+		if ( escenario_ancho < 0 ) {
+			escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
+			// Informar al usuario el cambio de ancho logico.
+			log( "El ancho del escenario no puede ser negativo. Se setea automaticamente a 600.", LOG_WARNING );
+		} else log( "Se cargo correctamente el ancho logico del escenario.", LOG_DEBUG );
+		escenario_alto = root["escenario"].get( "alto", ESCENARIO_ALTO_DEFAULT ).asFloat();
+		if ( escenario_alto < 0 ) {
+			escenario_alto = ESCENARIO_ALTO_DEFAULT;
+			// Informar al usuario el cambio de alto logico.
+			log( "WARNING: El alto del escenario no puede ser negativo. Se setea automaticamente a 150.", LOG_WARNING );
+		} else log( "Se cargo correctamente el alto logico del escenario.", LOG_DEBUG );
+		y_piso = root["escenario"].get( "y-piso", Y_PISO_DEFAULT ).asFloat();
+		log ( "Se cargo correctamente la altura del piso.", LOG_DEBUG );
+	}
 
 	// Setear alto logico de la ventana de acuerdo al alto del escenario.
 	float ventana_alto = escenario_alto;
@@ -571,7 +631,7 @@ Mundo* ParserJSON::cargarMundo() {
 	log ( "Se creo correctamente la ventana (camara)", LOG_DEBUG );
 	if( ! ventana->create_window() ) {
 		log( "No se puede inicializar la ventana. El programa no puede continuar.", LOG_ERROR );
-		return NULL;
+		throw runtime_error( "No se pudo abrir la ventana del programa." );
 	}
 
 	// Asigno Ventana al Mundo.
@@ -580,52 +640,75 @@ Mundo* ParserJSON::cargarMundo() {
 	// Obtener las capas del escenario. La primera capa es el fondo del escenario.
 	// Se setea por defecto el ancho en caso de error.
 	// Si la imagen no existe, se usa una por defecto.
-	const Json::Value capas = root["capas"];
-	for ( unsigned int i=0; i < capas.size(); i++ ) {
-		string background = capas[i].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
-		float capa_ancho = capas[i].get( "ancho", CAPA_ANCHO_DEFAULT ).asFloat();
-		if ( capa_ancho < 0 ) {
-			capa_ancho = CAPA_ANCHO_DEFAULT;
-			// Informar al usuario el cambio de ancho.
-			log( "El ancho de la capa no puede ser negativo. Se setea automaticamente en 600.", LOG_WARNING );
-		} else if ( capa_ancho > escenario_ancho ) {
-			capa_ancho = CAPA_ANCHO_DEFAULT;
-			// Informar al usuario el cambio de ancho.
-			log ( "El ancho de la capa no puede superar el del escenario. Se setea automaticamente en 600.", LOG_WARNING );
-		} else log( "Se cargo correctamente el ancho logico de la capa.", LOG_DEBUG );
-		float capa_z_index = capas[i].get( "z-index", CAPA_Z_INDEX_DEFAULT + i ).asFloat();
-		log ( "Se cargo el z-index de la capa.", LOG_DEBUG );
-
-		// Setear alto logico de la capa de acuerdo al alto del escenario.
-		float capa_alto = escenario_alto;
-		log ( "Se fijo el alto logico de la capa.", LOG_DEBUG );
-
-		// Creo capas de fondo.
-		CapaFondo* capa_fondo;
-		try {
-			capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, background, ventana );
-			log( "Se creo correctamente la capa.", LOG_DEBUG );
-		} catch ( CargarImagenException &e ) {
-			capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, BACKGROUND_DEFAULT, ventana );
-			log( "No se pudo cargar la imagen de la capa. Se carga imagen por defecto. " + string(e.what()), LOG_ERROR );
-		}
-
-		// Agrego capa al mundo.
+	string background;
+	float capa_ancho, capa_alto;
+	int capa_z_index;
+	if ( root.get( "capas", "" ) == "" ) {
+		log( "No se encontraron parametros para la creacion de las capas. Se crea una unica capa y se asignan valores por defecto.", LOG_ERROR );
+		background = BACKGROUND_DEFAULT;
+		capa_ancho = CAPA_ANCHO_DEFAULT;
+		capa_alto = ESCENARIO_ALTO_DEFAULT;
+		capa_z_index = CAPA_Z_INDEX_DEFAULT;
+		CapaFondo* capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, background, ventana );
 		nuevo_mundo->addCapa(capa_fondo, capa_z_index);
-		log( "Se agrego la capa al mundo.", LOG_DEBUG );
+	} else {
+		const Json::Value capas = root["capas"];
+		for ( unsigned int i=0; i < capas.size(); i++ ) {
+			background = capas[i].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
+			log( "Se cargo el nombre de la imagen de la capa.", LOG_DEBUG );
+			capa_ancho = capas[i].get( "ancho", CAPA_ANCHO_DEFAULT ).asFloat();
+			if ( capa_ancho < 0 ) {
+				capa_ancho = CAPA_ANCHO_DEFAULT;
+				// Informar al usuario el cambio de ancho.
+				log( "El ancho de la capa no puede ser negativo. Se setea automaticamente en 600.", LOG_WARNING );
+			} else if ( capa_ancho > escenario_ancho ) {
+				capa_ancho = CAPA_ANCHO_DEFAULT;
+				// Informar al usuario el cambio de ancho.
+				log ( "El ancho de la capa no puede superar el del escenario. Se setea automaticamente en 600.", LOG_WARNING );
+			} else log( "Se cargo correctamente el ancho logico de la capa.", LOG_DEBUG );
+			capa_z_index = capas[i].get( "z-index", CAPA_Z_INDEX_DEFAULT + i ).asInt();
+			log ( "Se cargo el z-index de la capa.", LOG_DEBUG );
 
+			// Setear alto logico de la capa de acuerdo al alto del escenario.
+			float capa_alto = escenario_alto;
+			log ( "Se fijo el alto logico de la capa.", LOG_DEBUG );
+
+			// Creo capas de fondo.
+			CapaFondo* capa_fondo;
+			try {
+				capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, background, ventana );
+				log( "Se creo correctamente la capa.", LOG_DEBUG );
+			} catch ( CargarImagenException &e ) {
+				capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, BACKGROUND_DEFAULT, ventana );
+				log( "No se pudo cargar la imagen de la capa. Se carga imagen por defecto. " + string(e.what()), LOG_ERROR );
+			}
+
+			// Agrego capa al mundo.
+			nuevo_mundo->addCapa(capa_fondo, capa_z_index);
+			log( "Se agrego la capa al mundo.", LOG_DEBUG );
+		}
 	}
 
 	// Obtener el personaje.
 	// Si no se especifica o no se encuentra la carpeta de sprites del personaje, se usa una por defecto.
 	// Si no se especifica el z-index se fija uno por defecto.
-	int personaje_z_index = root["personaje"].get( "z-index", PERSONAJE_Z_INDEX_DEFAULT ).asInt();
-	log ( "Se cargo correctamente el z-index del personaje.", LOG_DEBUG );
-	string personaje_carpeta_sprites = root["personaje"].get( "sprites", PERSONAJE_CARPETA_SPRITES_DEFAULT ).asString();
-	vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, ratio_x, ratio_y);
-	string personaje_nombre = root["personaje"].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
-	log ( "Se cargo el nombre del personaje.", LOG_DEBUG );
+	int personaje_z_index;
+	string personaje_carpeta_sprites, personaje_nombre;
+	if ( root.get( "personaje", "" ) == "" ) {
+		personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
+		personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+		personaje_nombre = PERSONAJE_NOMBRE_DEFAULT;
+	} else {
+		personaje_z_index = root["personaje"].get( "z-index", PERSONAJE_Z_INDEX_DEFAULT ).asInt();
+		log ( "Se cargo correctamente el z-index del personaje.", LOG_DEBUG );
+		personaje_carpeta_sprites = root["personaje"].get( "sprites", PERSONAJE_CARPETA_SPRITES_DEFAULT ).asString();
+		log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sprites del personaje.", LOG_DEBUG );
+		personaje_nombre = root["personaje"].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
+		log ( "Se cargo el nombre del personaje.", LOG_DEBUG );
+	}
 
+	// Creo Sprites del personaje.
+	vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, ratio_x, ratio_y);
 
 	// Crear personaje.
 	Personaje* personaje = new Personaje(personaje_nombre, sprites, PERSONAJE_VELOCIDAD);
