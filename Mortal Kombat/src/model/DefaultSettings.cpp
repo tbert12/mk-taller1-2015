@@ -10,15 +10,15 @@
 #define ESCENARIO_ANCHO_DEFAULT 600.0
 #define ESCENARIO_ALTO_DEFAULT 150.0
 #define Y_PISO_DEFAULT 135.0
-#define BACKGROUND_0_DEFAULT "data/img/background/background_0.png"
+#define BACKGROUND_0_DEFAULT "data/img/background/default/background_0.png"
 #define BACKGROUND_0__ANCHO_DEFAULT 200.0
 #define BACKGROUND_0__ALTO_DEFAULT 150.0
 #define BACKGROUND_0_Z_INDEX 0
-#define BACKGROUND_1_DEFAULT "data/img/background/background_1.png"
-#define BACKGROUND_1__ANCHO_DEFAULT 400.0
+#define BACKGROUND_1_DEFAULT "data/img/background/default/background_1.png"
+#define BACKGROUND_1__ANCHO_DEFAULT 226.6
 #define BACKGROUND_1__ALTO_DEFAULT 150.0
 #define BACKGROUND_1_Z_INDEX 1
-#define BACKGROUND_2_DEFAULT "data/img/background/background_2.png"
+#define BACKGROUND_2_DEFAULT "data/img/background/default/background_2.png"
 #define BACKGROUND_2__ANCHO_DEFAULT 600.0
 #define BACKGROUND_2__ALTO_DEFAULT 150.0
 #define BACKGROUND_2_Z_INDEX 2
@@ -139,8 +139,8 @@ Mundo* CrearMundoDefault(){
 	mundo->addCapa(capa_1,BACKGROUND_1_Z_INDEX);
 
 	//capa 4 es la ventana que tapa el escenario!
-	CapaFondo* capa_4 = new CapaFondo(BACKGROUND_4__ALTO_DEFAULT,BACKGROUND_4__ANCHO_DEFAULT,BACKGROUND_4_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_4_DEFAULT,ventana);
-	mundo->addCapa(capa_4,BACKGROUND_4_Z_INDEX);
+	//CapaFondo* capa_4 = new CapaFondo(BACKGROUND_4__ALTO_DEFAULT,BACKGROUND_4__ANCHO_DEFAULT,BACKGROUND_4_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_4_DEFAULT,ventana);
+	//mundo->addCapa(capa_4,BACKGROUND_4_Z_INDEX);
 
 	//capa 2 es la mas grande, la del escenario
 	CapaFondo* capa_2 = new CapaFondo(BACKGROUND_2__ALTO_DEFAULT,BACKGROUND_2__ANCHO_DEFAULT,BACKGROUND_2_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_2_DEFAULT,ventana);

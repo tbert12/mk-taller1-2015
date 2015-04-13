@@ -18,17 +18,17 @@
 	
 	"capas": [
 		{
-			"imagen_fondo": "data/img/background/background_0.png",
+			"imagen_fondo": "data/img/background/default/background_0.png",
 			"ancho": 200,
 			"z-index": 0
 		},
 		{
-			"imagen_fondo": "data/img/background/background_1.png",
-			"ancho": 400,
+			"imagen_fondo": "data/img/background/default/background_1.png",
+			"ancho": 226.6,
 			"z-index": 1
 		},
 		{
-			"imagen_fondo": "data/img/background/background_2.png",
+			"imagen_fondo": "data/img/background/default/background_2.png",
 			"ancho": 600,
 			"z-index": 2
 		}
