@@ -53,7 +53,7 @@ bool LTexture::loadFromFile( std::string ruta )
 	SDL_Surface* loadedSurface = IMG_Load( ruta.c_str() );
 	if( loadedSurface == NULL )
 	{
-		printf( "No se puede cargar imagen %s! SDL_image Error: %s\n", ruta.c_str(), IMG_GetError() );
+		log( string("No se puede cargar imagen %s! SDL_image Error: %s\n", ruta.c_str()),LOG_ERROR);
 	}
 	else
 	{
@@ -64,7 +64,7 @@ bool LTexture::loadFromFile( std::string ruta )
 		nuevaTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
 		if( nuevaTexture == NULL )
 		{
-			printf( "No se puede crear textura desde %s! SDL Error: %s\n", ruta.c_str(), SDL_GetError() );
+			log( string("No se puede crear textura desde %s!", ruta.c_str()),LOG_ERROR);
 		}
 		else
 		{

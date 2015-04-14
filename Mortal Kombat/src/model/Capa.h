@@ -21,7 +21,7 @@ public:
 	float getX();
 	virtual void Renderizar();
 	Capa(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal);
-
+	virtual ~Capa();
 protected:
 	int m_zIndex;
 	float m_anchoDeFondo;

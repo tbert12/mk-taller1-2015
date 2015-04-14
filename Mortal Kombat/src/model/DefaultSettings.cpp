@@ -59,11 +59,11 @@ std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
 	framesAgacharse[1] = new Frame(60/rx,.0f,89/ry,62/rx);
 	framesAgacharse[2] = new Frame(122/rx,.0f,71/ry,64/rx);
 
-	std::string rutaInitial = "data/players/subzero/sprites/initial.png";
-	std::string rutaCaminar = "data/players/subzero/sprites/walk.png";
-	std::string rutaSalto = "data/players/subzero/sprites/salto.png";
-	std::string rutaSaltoDiagonal = "data/players/subzero/sprites/diag.png";
-	std::string rutaAgacharse = "data/players/subzero/sprites/agachar.png";
+	std::string rutaInitial = "data/players/default/sprites/initial.png";
+	std::string rutaCaminar = "data/players/default/sprites/walk.png";
+	std::string rutaSalto = "data/players/default/sprites/salto.png";
+	std::string rutaSaltoDiagonal = "data/players/default/sprites/diag.png";
+	std::string rutaAgacharse = "data/players/default/sprites/agachar.png";
 
 	Sprite* Initial = new Sprite(rutaInitial,framesInitial,ventana);
 	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,ventana);

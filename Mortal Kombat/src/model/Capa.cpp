@@ -47,3 +47,7 @@ void Capa::Renderizar()
 {
 
 }
+
+Capa::~Capa(){
+	delete rect;
+}

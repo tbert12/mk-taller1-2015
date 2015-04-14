@@ -12,7 +12,7 @@
 #define CAPA_ANCHO_DEFAULT 600.0
 #define CAPA_Z_INDEX_DEFAULT 0
 #define PERSONAJE_Z_INDEX_DEFAULT 3
-#define PERSONAJE_CARPETA_SPRITES_DEFAULT "data/img/default/sprites/"
+#define PERSONAJE_CARPETA_SPRITES_DEFAULT "data/img/players/default/sprites/"
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
 
 #define SPRITESHEET_PARADO_DEFAULT "initial.png"

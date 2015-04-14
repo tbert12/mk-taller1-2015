@@ -25,5 +25,5 @@ void CapaFondo::Renderizar(){
 }
 
 CapaFondo::~CapaFondo() {
-	return;
+	//this->~Capa();
 }
