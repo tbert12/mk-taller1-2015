@@ -26,17 +26,17 @@ string ruta_archivo_configuracion = "data/config/default.json";
 
 int main( int argc, char* args[] )
 {
-	if (argc){
-		log(string("Se cargara el archivo JSON por parametro: " + ruta_archivo_configuracion),LOG_DEBUG);
-		ruta_archivo_configuracion = args[0];
-	}
-	else {
-		log(string("Se cargara el archivo JSON default: " + ruta_archivo_configuracion),LOG_ERROR);
-
-	}
-
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
+
+	if (argc > 1){
+		ruta_archivo_configuracion = args[1];
+		log(string("Se cargara el archivo JSON por parametro: " + ruta_archivo_configuracion),LOG_DEBUG);
+	}
+	else {
+		log(string("Se cargara el archivo JSON default: " + ruta_archivo_configuracion),LOG_DEBUG);
+
+	}
 
 	Mundo* mundo;
 
