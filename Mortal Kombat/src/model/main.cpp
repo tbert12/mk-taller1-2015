@@ -22,10 +22,18 @@
 #include "../controller/KeyboardControl.h"
 #include "Personaje.h"
 
-const string ruta_archivo_configuracion = "data/config/ejemplo.json";
+string ruta_archivo_configuracion = "data/config/default.json";
 
 int main( int argc, char* args[] )
 {
+	if (argc){
+		log(string("Se cargara el archivo JSON por parametro: %s",ruta_archivo_configuracion),LOG_DEBUG);
+		ruta_archivo_configuracion = args[0];
+	}
+	else {
+		log(string("Se cargara el archivo JSON default: %s",ruta_archivo_configuracion),LOG_ERROR);
+
+	}
 
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
