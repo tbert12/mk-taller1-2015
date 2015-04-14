@@ -34,11 +34,11 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 					break;
 
 				case SDLK_LEFT:
-					personaje->CaminarIzquierda();
+					//personaje->CaminarIzquierda();
 					break;
 
 				case SDLK_RIGHT:
-					personaje->CaminarDerecha();
+					//personaje->CaminarDerecha();
 					break;
 
 				case SDLK_r:

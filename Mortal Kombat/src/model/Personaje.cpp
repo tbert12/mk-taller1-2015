@@ -188,6 +188,7 @@ void Personaje::_actualizarY(){
 	}
 	//Cuando esta llegando al piso, vuelvo a las condiciones iniciales
 	if(tiempoDeSalto > 10 and m_yActual < m_yInicial + 20){
+		m_velocidad = 0;
 		m_yActual = m_yInicial;
 		tiempoDeSalto = 0;
 		_estaSaltando = -1;

@@ -57,9 +57,21 @@ int main( int argc, char* args[] )
 
 	//Manejador de evento
 	SDL_Event e;
+	const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
 	//While Principal
 	while( !control_jugador_1->getQuit() ){
+
+
+	    //continuous-response keys
+	    if(keystate[SDL_SCANCODE_LEFT])
+	    {
+	    	luchador->CaminarIzquierda();
+	    }
+	    if(keystate[SDL_SCANCODE_RIGHT])
+	    {
+	    	luchador->CaminarDerecha();
+	    }
 		//Eventos
 		while( SDL_PollEvent( &e ) != 0 ){
 			try {
