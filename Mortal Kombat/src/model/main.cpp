@@ -78,7 +78,7 @@ int main( int argc, char* args[] )
 				control_jugador_1->KeyPressed(e);
 			// RELOAD
 			// ESTA HECHO A LO VILLA PORQUE TOTAL DESPUES ESTO VUELA A LA MIERDA.
-			} catch ( std::exception &e ) {
+			} catch ( std::runtime_error &e ) {
 				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_DEBUG );
 				try {
 					delete control_jugador_1;

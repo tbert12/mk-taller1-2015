@@ -20,6 +20,7 @@ extern const string ruta_logfile;
 
 void log( const string mensaje, int tipo_de_log = nivel);
 void prepararLog();
+void indicarModo();
 
 
 #endif /* SRC_MODEL_LOGGING_H_ */

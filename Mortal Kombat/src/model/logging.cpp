@@ -51,9 +51,16 @@ void prepararLog() {
 	fstream logfile;
 	logfile.open ( ruta_logfile.c_str(), fstream::app | fstream::out | ios::out );
 	logfile << "\n";
-	logfile << "MODO " << modos[nivel];
-	logfile << "-----------------------------------------------------------------------------------" << endl;
+	logfile << "------------------------------------------------------------------------------------------------------------------------" << endl;
 	logfile << "\n";
+	logfile.close();
+}
+
+void indicarModo() {
+	vector<string> modos { "ERROR", "WARNING", "DEBUG" };
+	fstream logfile;
+	logfile.open ( ruta_logfile.c_str(), fstream::app | fstream::out | ios::out );
+	logfile << "MODO " << modos[nivel] << ":" << endl;
 	logfile.close();
 }
 
