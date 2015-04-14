@@ -11,7 +11,6 @@ Mundo::Mundo(float ancho,float alto) {
 	ancho_mundo = ancho;
 	alto_mundo = alto;
 	tiempo = NULL;
-	escenario = NULL;
 	ventana = NULL;
 	personaje_z_index = 0;
 	capas = std::vector<Capa*>(6);
@@ -63,12 +62,7 @@ void Mundo::setVentana(Ventana* unaVentana){
 Ventana* Mundo::getVentana(){
 	return ventana;
 }
-void Mundo::setEscenario(Escenario* unEscenario){
-	escenario = unEscenario;
-}
-Escenario* Mundo::getEscenario(){
-	return escenario;
-}
+
 int Mundo::_verificarScroll(){
 	CapaPrincipal* capa_principal = (CapaPrincipal*)capas[personaje_z_index];
 	return capa_principal->Scrollear();

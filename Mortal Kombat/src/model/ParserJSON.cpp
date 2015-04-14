@@ -8,11 +8,16 @@
 #define ESCENARIO_ANCHO_DEFAULT 600.0
 #define ESCENARIO_ALTO_DEFAULT 150.0
 #define Y_PISO_DEFAULT 135.0
-#define BACKGROUND_DEFAULT "data/img/default/background/unknown.png"
-#define CAPA_ANCHO_DEFAULT 600.0
+#define BACKGROUND_DEFAULT "data/img/background/default/unknown.png"
+#define CAPA_0_BACKGROUND_DEFAULT "data/img/background/default/background_0.png"
+#define CAPA_1_BACKGROUND_DEFAULT "data/img/background/default/background_1.png"
+#define CAPA_2_BACKGROUND_DEFAULT "data/img/background/default/background_2.png"
+#define CAPA_0_ANCHO_DEFAULT 200.0
+#define CAPA_1_ANCHO_DEFAULT 226.6
+#define CAPA_2_ANCHO_DEFAULT 600.0
 #define CAPA_Z_INDEX_DEFAULT 0
 #define PERSONAJE_Z_INDEX_DEFAULT 3
-#define PERSONAJE_CARPETA_SPRITES_DEFAULT "data/img/players/default/sprites/"
+#define PERSONAJE_CARPETA_SPRITES_DEFAULT "data/players/default/sprites/"
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
 
 #define SPRITESHEET_PARADO_DEFAULT "initial.png"
@@ -110,7 +115,7 @@ vector<Sprite*> ParserJSON::generarSpritesDefault( Ventana* ventana, float ratio
 	return sprites;
 }
 
-Mundo* ParserJSON::generarMundoDefault(  ) {
+Mundo* ParserJSON::generarMundoDefault( ) {
 
 	float ratio_x = VENTANA_ANCHO_PX_DEFAULT/VENTANA_ANCHO_DEFAULT;
 	float ratio_y = VENTANA_ALTO_PX_DEFAULT/ESCENARIO_ALTO_DEFAULT;
@@ -132,8 +137,12 @@ Mundo* ParserJSON::generarMundoDefault(  ) {
 
 	mundo->addPersonaje(personaje_default);
 
-	CapaFondo* capa = new CapaFondo(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,BACKGROUND_DEFAULT,ventana);
-	mundo->addCapa(capa,CAPA_Z_INDEX_DEFAULT);
+	CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_0_BACKGROUND_DEFAULT,ventana);
+	mundo->addCapa(capa_0,CAPA_Z_INDEX_DEFAULT);
+	CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_1_BACKGROUND_DEFAULT,ventana);
+	mundo->addCapa(capa_1,CAPA_Z_INDEX_DEFAULT+1);
+	CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_2_BACKGROUND_DEFAULT,ventana);
+	mundo->addCapa(capa_2,CAPA_Z_INDEX_DEFAULT+2);
 
 	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,VENTANA_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,personaje_default);
 	mundo->addCapaPrincipal(capa_principal,PERSONAJE_Z_INDEX_DEFAULT);
@@ -621,11 +630,6 @@ Mundo* ParserJSON::cargarMundo() {
 	// Agregar tiempo de combate.
 	nuevo_mundo->setTiempo( tiempo_combate );
 
-	/************ NO SE USA ESCENARIO
-	// Crear Escenario.
-	Escenario* escenario = new Escenario();
-	*********************************/
-
 	// Crear Ventana y abrirla.
 	Ventana* ventana = new Ventana( ventana_ancho_px, ventana_alto_px, ratio_x, ratio_y );
 	log ( "Se creo correctamente la ventana (camara)", LOG_DEBUG );
@@ -645,24 +649,24 @@ Mundo* ParserJSON::cargarMundo() {
 	int capa_z_index;
 	if ( root.get( "capas", "" ) == "" ) {
 		log( "No se encontraron parametros para la creacion de las capas. Se crea una unica capa y se asignan valores por defecto.", LOG_ERROR );
-		background = BACKGROUND_DEFAULT;
-		capa_ancho = CAPA_ANCHO_DEFAULT;
-		capa_alto = ESCENARIO_ALTO_DEFAULT;
-		capa_z_index = CAPA_Z_INDEX_DEFAULT;
-		CapaFondo* capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, background, ventana );
-		nuevo_mundo->addCapa(capa_fondo, capa_z_index);
+		CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_0_BACKGROUND_DEFAULT,ventana);
+		nuevo_mundo->addCapa(capa_0,CAPA_Z_INDEX_DEFAULT);
+		CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_1_BACKGROUND_DEFAULT,ventana);
+		nuevo_mundo->addCapa(capa_1,CAPA_Z_INDEX_DEFAULT+1);
+		CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_2_BACKGROUND_DEFAULT,ventana);
+		nuevo_mundo->addCapa(capa_2,CAPA_Z_INDEX_DEFAULT+2);
 	} else {
 		const Json::Value capas = root["capas"];
 		for ( unsigned int i=0; i < capas.size(); i++ ) {
 			background = capas[i].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
 			log( "Se cargo el nombre de la imagen de la capa.", LOG_DEBUG );
-			capa_ancho = capas[i].get( "ancho", CAPA_ANCHO_DEFAULT ).asFloat();
+			capa_ancho = capas[i].get( "ancho", VENTANA_ANCHO_DEFAULT ).asFloat();
 			if ( capa_ancho < 0 ) {
-				capa_ancho = CAPA_ANCHO_DEFAULT;
+				capa_ancho = VENTANA_ANCHO_DEFAULT;
 				// Informar al usuario el cambio de ancho.
 				log( "El ancho de la capa no puede ser negativo. Se setea automaticamente en 600.", LOG_WARNING );
 			} else if ( capa_ancho > escenario_ancho ) {
-				capa_ancho = CAPA_ANCHO_DEFAULT;
+				capa_ancho = VENTANA_ANCHO_DEFAULT;
 				// Informar al usuario el cambio de ancho.
 				log ( "El ancho de la capa no puede superar el del escenario. Se setea automaticamente en 600.", LOG_WARNING );
 			} else log( "Se cargo correctamente el ancho logico de la capa.", LOG_DEBUG );
@@ -670,7 +674,7 @@ Mundo* ParserJSON::cargarMundo() {
 			log ( "Se cargo el z-index de la capa.", LOG_DEBUG );
 
 			// Setear alto logico de la capa de acuerdo al alto del escenario.
-			float capa_alto = escenario_alto;
+			capa_alto = escenario_alto;
 			log ( "Se fijo el alto logico de la capa.", LOG_DEBUG );
 
 			// Creo capas de fondo.

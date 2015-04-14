@@ -17,7 +17,6 @@
 #include "Personaje.h"
 #include "../view/Sprite.h"
 #include "../view/Frame.h"
-#include "Escenario.h"
 #include "../view/Ventana.h"
 #include <vector>
 #include <algorithm>
@@ -31,7 +30,6 @@ private:
 	std::vector<Capa*> capas;
 	std::vector<Personaje*> personajes;
 	Tiempo* tiempo;
-	Escenario* escenario;
 	Ventana* ventana;
 	int personaje_z_index;
 	int _verificarScroll();
@@ -47,8 +45,6 @@ public:
 	void setTiempo(Tiempo* unTiempo);
 	void setVentana(Ventana* unaVentana);
 	Ventana* getVentana();
-	void setEscenario(Escenario* unEscenario);
-	Escenario* getEscenario();
 	void render();
 	virtual ~Mundo();
 	bool mostrarImagen(string ruta);
