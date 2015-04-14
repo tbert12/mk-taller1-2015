@@ -40,7 +40,7 @@ Sprite* ParserJSON::crearSpriteParadoDefault(Ventana* ventana, float ratio_x, fl
 		framesParado[i] = new Frame( wParado*i/ratio_x, 0, 133/ratio_y, wParado/ratio_x );
 	}
 
-	Sprite* spriteParado = new Sprite( SPRITESHEET_PARADO_DEFAULT, framesParado, ventana );
+	Sprite* spriteParado = new Sprite( string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + string(SPRITESHEET_PARADO_DEFAULT), framesParado, ventana );
 	return spriteParado;
 }
 
@@ -52,7 +52,7 @@ Sprite* ParserJSON::crearSpriteCaminarDefault(Ventana* ventana, float ratio_x, f
 		framesCaminar[i] = new Frame( wParado*i/ratio_x, 0, 133/ratio_y, wParado/ratio_x );
 	}
 
-	Sprite* spriteCaminar = new Sprite( SPRITESHEET_CAMINAR_DEFAULT, framesCaminar, ventana );
+	Sprite* spriteCaminar = new Sprite( string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + string(SPRITESHEET_CAMINAR_DEFAULT), framesCaminar, ventana );
 	return spriteCaminar;
 }
 
@@ -67,7 +67,7 @@ Sprite* ParserJSON::crearSpriteSaltarDefault(Ventana* ventana, float ratio_x, fl
 		framesSaltar[i] = new Frame( xSaltar[i]/ratio_x, 0, hSaltar[i]/ratio_y, wSaltar[i]/ratio_x );
 	}
 
-	Sprite* spriteSaltar = new Sprite( SPRITESHEET_SALTAR_DEFAULT, framesSaltar, ventana );
+	Sprite* spriteSaltar = new Sprite( string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + string(SPRITESHEET_SALTAR_DEFAULT), framesSaltar, ventana );
 	spriteSaltar->setLoop(1);
 	return spriteSaltar;
 }
@@ -83,7 +83,7 @@ Sprite* ParserJSON::crearSpriteSaltarDiagonalDefault(Ventana* ventana, float rat
 		framesSaltarDiagonal[i] = new Frame( xSaltarDiagonal[i]/ratio_x, 0, hSaltarDiagonal[i]/ratio_y, wSaltarDiagonal[i]/ratio_x );
 	}
 
-	Sprite* spriteSaltarDiagonal = new Sprite( SPRITESHEET_SALTAR_DIAGONAL_DEFAULT, framesSaltarDiagonal, ventana );
+	Sprite* spriteSaltarDiagonal = new Sprite( string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + string(SPRITESHEET_SALTAR_DIAGONAL_DEFAULT), framesSaltarDiagonal, ventana );
 	return spriteSaltarDiagonal;
 }
 
@@ -98,7 +98,7 @@ Sprite* ParserJSON::crearSpriteAgacharDefault(Ventana* ventana, float ratio_x, f
 		framesAgachar[i] = new Frame( xAgachar[i]/ratio_x, 0, hAgachar[i]/ratio_y, wAgachar[i]/ratio_x );
 	}
 
-	Sprite* spriteAgachar = new Sprite( SPRITESHEET_SALTAR_DEFAULT, framesAgachar, ventana );
+	Sprite* spriteAgachar = new Sprite( string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + string(SPRITESHEET_AGACHAR_DEFAULT), framesAgachar, ventana );
 	spriteAgachar->setLoop(2);
 	return spriteAgachar;
 }
@@ -126,7 +126,7 @@ Mundo* ParserJSON::generarMundoDefault( ) {
 		throw runtime_error( "No se pudo abrir la ventana del programa." );
 	}
 
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, this->generarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_VELOCIDAD);
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_VELOCIDAD);
 	// Si flippeado, descomentar la siguiente linea:
 	//Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, this->generarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_VELOCIDAD, true);
 
@@ -166,7 +166,7 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	if ( ! archivoConfig.is_open() ) {
 		// Informar al usuario la falla y la resolucion tomada.
 		log( "No se pudo abrir el archivo de sprites JSON, se generan sprites por defecto.", LOG_ERROR );
-		return this->generarSpritesDefault(ventana, ratio_x, ratio_y);
+		return generarSpritesDefault(ventana, ratio_x, ratio_y);
 	}
 	log ( "Se abrio el archivo JSON de sprites.", LOG_DEBUG );
 
@@ -175,7 +175,7 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	if ( ! exito ) {
 	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
 	    log( "No se pudo interpretar el JSON, se generan sprites por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
-	    return this->generarSpritesDefault(ventana, ratio_x, ratio_y);
+	    return generarSpritesDefault(ventana, ratio_x, ratio_y);
 	} else log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
 
 	// Cerrar archivo.
@@ -516,7 +516,7 @@ Mundo* ParserJSON::cargarMundo() {
 	if ( ! archivoConfig.is_open() ) {
 		// Informar al usuario la falla y la resolucion tomada.
 		log( "No se pudo abrir el archivo de configuracion JSON, se genera una partida por defecto.", LOG_ERROR );
-		return this->generarMundoDefault();
+		return generarMundoDefault();
 	}
 	log ( "Se abrio el archivo JSON de configuración.", LOG_DEBUG );
 
@@ -525,7 +525,7 @@ Mundo* ParserJSON::cargarMundo() {
 	if ( ! exito ) {
 	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
 	    log( "No se pudo interpretar el JSON, se genera una partida por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
-	    return this->generarMundoDefault();
+	    return generarMundoDefault();
 	} else log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
 
 	// Cerrar archivo.
