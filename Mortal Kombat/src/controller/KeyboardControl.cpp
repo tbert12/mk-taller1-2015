@@ -12,22 +12,25 @@ KeyboardControl::KeyboardControl(Personaje* un_personaje) {
 	personaje = un_personaje;
 	quit = false;
 	agachado = false;
+	keystate = SDL_GetKeyboardState(NULL);
 }
 
 bool KeyboardControl::getQuit(){
 	return quit;
 }
 
-void KeyboardControl::KeyPressed(SDL_Event evento){
+bool KeyboardControl::PollEvent(){
+	return (SDL_PollEvent( &evento ) != 0);
+}
+
+void KeyboardControl::KeyPressed(){
 	if(evento.type == SDL_QUIT){
 		quit = true;
 	} else if(evento.type == SDL_KEYDOWN and !agachado){
-		printf("IF 1\n");
 		switch( evento.key.keysym.sym ){
 				case SDLK_UP:
 					personaje->Saltar();
 					break;
-
 				case SDLK_DOWN:
 					personaje->Agachar();
 					agachado = true;
@@ -37,7 +40,6 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 					break;
 			}
 	} else if (evento.type == SDL_KEYUP and evento.type != SDL_MOUSEMOTION){
-		printf("IF 2\n");
 		switch( evento.key.keysym.sym ){
 			case SDLK_DOWN:
 				agachado = false;
@@ -52,15 +54,26 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 				if (!agachado)personaje->Inicial();
 				break;
 			default:
-				personaje->Inicial();
+				if (!agachado) personaje->Inicial();
 				break;
 		}
 	} else if (agachado){
-		printf("IF 3\n");
 		personaje->Agachar();
 	}
 }
 
-KeyboardControl::~KeyboardControl() {
+void KeyboardControl::KeyState(){
+	//continuous-response keys
+	if (agachado) return;
+	if (keystate[SDL_SCANCODE_LEFT]) {
+		personaje->CaminarIzquierda();
+	}
+	if(keystate[SDL_SCANCODE_RIGHT]){
+		personaje->CaminarDerecha();
+	}
+}
 
+KeyboardControl::~KeyboardControl() {
+	keystate = NULL;
+	personaje = NULL;
 }

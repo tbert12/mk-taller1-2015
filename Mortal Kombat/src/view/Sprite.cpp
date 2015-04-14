@@ -36,6 +36,7 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana){
 
 Sprite::~Sprite(){
 	SpriteSheetTexture->free();
+	delete spriteFrames;
 }
 
 float Sprite::getAncho(){

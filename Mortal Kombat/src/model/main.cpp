@@ -55,27 +55,13 @@ int main( int argc, char* args[] )
 	//Creo el Controlador
 	KeyboardControl* control_jugador_1 = new KeyboardControl(luchador);
 
-	//Manejador de evento
-	SDL_Event e;
-	const Uint8* keystate = SDL_GetKeyboardState(NULL);
-
 	//While Principal
 	while( !control_jugador_1->getQuit() ){
-
-
-	    //continuous-response keys
-	    if(keystate[SDL_SCANCODE_LEFT] && !luchador->EstaAgachado())
-	    {
-	    	luchador->CaminarIzquierda();
-	    }
-	    if(keystate[SDL_SCANCODE_RIGHT] && !luchador->EstaAgachado())
-	    {
-	    	luchador->CaminarDerecha();
-	    }
-		//Eventos
-		while( SDL_PollEvent( &e ) != 0 ){
+		control_jugador_1->KeyState();
+		//Eventos */
+		while( control_jugador_1->PollEvent() ){
 			try {
-				control_jugador_1->KeyPressed(e);
+				control_jugador_1->KeyPressed();
 			// RELOAD
 			// ESTA HECHO A LO VILLA PORQUE TOTAL DESPUES ESTO VUELA A LA MIERDA.
 			} catch ( std::runtime_error &e ) {
@@ -103,7 +89,7 @@ int main( int argc, char* args[] )
 
 	}
 
-	mundo->~Mundo();
+	delete mundo;
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 
 	return 0;

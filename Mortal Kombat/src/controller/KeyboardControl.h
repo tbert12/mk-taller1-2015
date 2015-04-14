@@ -13,13 +13,22 @@
 #include <exception>
 
 class KeyboardControl {
+private:
 	Personaje* personaje;
 	bool quit;
 	bool agachado;
+	const Uint8* keystate;
+	SDL_Event evento;
+
 public:
+
 	KeyboardControl(Personaje*);
 	virtual ~KeyboardControl();
-	void KeyPressed(SDL_Event evento);
+
+	bool PollEvent();
+
+	void KeyPressed();
+	void KeyState();
 	bool getQuit();
 	bool recargar();
 };
