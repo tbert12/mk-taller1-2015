@@ -14,7 +14,7 @@ Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_v
 	m_zIndex = zIndex;
 	m_anchoDeFondo = anchoDeFondo;
 	m_ancho_ventana = ancho_ventana;
-	m_velocidad = (ancho/m_anchoDeFondo)*factorVelocidad;
+	m_velocidad = (ancho-ancho_ventana)/(anchoDeFondo-ancho_ventana) *factorVelocidad;
 }
 
 float Capa::getX()
