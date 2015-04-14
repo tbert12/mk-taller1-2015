@@ -64,11 +64,11 @@ int main( int argc, char* args[] )
 
 
 	    //continuous-response keys
-	    if(keystate[SDL_SCANCODE_LEFT])
+	    if(keystate[SDL_SCANCODE_LEFT] && !luchador->EstaAgachado())
 	    {
 	    	luchador->CaminarIzquierda();
 	    }
-	    if(keystate[SDL_SCANCODE_RIGHT])
+	    if(keystate[SDL_SCANCODE_RIGHT] && !luchador->EstaAgachado())
 	    {
 	    	luchador->CaminarDerecha();
 	    }
@@ -97,9 +97,7 @@ int main( int argc, char* args[] )
 				}
 			}
 		}
-
 		mundo->render();
-
 		//Sleep(Microsegundos)
 		usleep(50000);
 

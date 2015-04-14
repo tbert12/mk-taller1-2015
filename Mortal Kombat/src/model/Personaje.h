@@ -92,6 +92,7 @@ public:
 	float getVelocidadIzquierda();
 	void QuitarVida(int valor);
 	float getAncho();
+	bool EstaAgachado();
 
 	void Inicial();
 	void Frenar();

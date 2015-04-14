@@ -279,12 +279,15 @@ float Personaje::getVelocidadIzquierda(){
 	return velocidadAtras;
 }
 
+bool Personaje::EstaAgachado(){
+	return _estaAgachado();
+}
+
 Personaje::~Personaje() {
 	spriteActual = NULL;
 	for (size_t i=0; i < sprites.size() ; i++){
 		delete sprites[i];
 	}
 }
-
 
 

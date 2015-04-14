@@ -32,15 +32,6 @@ void KeyboardControl::KeyPressed(SDL_Event evento){
 					personaje->Agachar();
 					agachado = true;
 					break;
-
-				case SDLK_LEFT:
-					//personaje->CaminarIzquierda();
-					break;
-
-				case SDLK_RIGHT:
-					//personaje->CaminarDerecha();
-					break;
-
 				case SDLK_r:
 					throw std::runtime_error( "Hay que recargar el archivo JSON." );
 					break;
