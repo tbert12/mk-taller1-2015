@@ -5,33 +5,39 @@
 	"tiempo": 180,
 
 	"ventana": {
-		"ancho-px": 640,
-		"alto-px": 480,
+		"ancho-px": 512,
+		"alto-px": 384,
 		"ancho": 200
 	},
 	
 	"escenario": {
-		"ancho": 1000,
-		"alto": 334.3,
-		"y-piso": 300
+		"ancho": 600,
+		"alto": 150,
+		"y-piso": 135
 	},
 	
 	"capas": [
 		{
-			"imagen_fondo": "data/img/background/Subway/TheSubway_0.png",
-			"ancho": 583,
+			"imagen_fondo": "data/img/background/default/background_0.png",
+			"ancho": 200,
 			"z-index": 0
 		},
 		{
-			"imagen_fondo": "data/img/background/Subway/TheSubway_1.png",
-			"ancho": 1000,
+			"imagen_fondo": "data/img/background/default/background_1.png",
+			"ancho": 226.6,
 			"z-index": 1
+		},
+		{
+			"imagen_fondo": "data/img/background/default/background_2.png",
+			"ancho": 600,
+			"z-index": 2
 		}
 	],
 	
 	"personaje": {
-		"z-index": 2,
+		"z-index": 3,
 		"sprites": "data/players/subzero/sprites/",
 		"nombre": "Sub-Zero"	
 	}
+
 }

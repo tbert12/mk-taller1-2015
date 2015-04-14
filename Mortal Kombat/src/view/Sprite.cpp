@@ -43,6 +43,10 @@ float Sprite::getAncho(){
 	return spriteFrames[frameActual].w;
 }
 
+float Sprite::getAlto(){
+	return spriteFrames[frameActual].h;
+}
+
 bool Sprite::Advance(){
 	if (!doloop){
 		if (reverse)

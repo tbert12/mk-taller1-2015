@@ -45,7 +45,9 @@ class Sprite {
 		void doReverse(bool Reverse);
 
 		bool ultimoFrame();
+
 		float getAncho();
+		float getAlto();
 
 		void setRender(SDL_Renderer* Renderer);
 		void render(float x,float y, bool fliped);

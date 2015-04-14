@@ -14,22 +14,8 @@ const int SPRITE_CAMINAR=         1;
 const int SPRITE_SALTAR=          2;
 const int SPRITE_SALTAR_DIAGONAL= 3;
 const int SPRITE_AGACHAR=         4;
-/*const int SPRITE_INICIAL = 0;
-const int SPRITE_CAMINAR_DERECHA = 1;
-const int SPRITE_CAMINAR_IZQUIERDA = 2;
-const int SPRITE_SALTO = 3;
-const int SPRITE_SALTO_ANTES = 4;
-const int SPRITE_SALTO_CAIDA = 5;
-const int SPRITE_SALTO_DIAGONAL_ANTES_D = 6;
-const int SPRITE_SALTO_DIAGONAL_DERECHA = 7;
-const int SPRITE_SALTO_DIAGONAL_ANTES_I = 8;
-const int SPRITE_SALTO_DIAGONAL_IZQUIERDA = 9;
-const int SPRITE_AGACHARSE = 10;
-const int SPRITE_AGACHADO = 11;
-const int SPRITE_LEVANTARSE = 12;
-const int SPRITE_PUNCHING = 13;
-const int SPRITE_KICKING = 14;
-*/
+
+const int TIEMPOTOTALDESALTO = 10;
 
 #include <stdio.h>
 #include <iostream>
@@ -46,6 +32,7 @@ private:
 	float m_yActual;
 	float m_xInicial;
 	float m_yInicial;
+	float maxAlturaDeSalto;
 	int tiempoDeSalto;
 	short _estaSaltando;
 	bool m_fliped;
@@ -92,7 +79,7 @@ public:
 	float getVelocidadIzquierda();
 	void QuitarVida(int valor);
 	float getAncho();
-	bool EstaAgachado();
+	float getAlto();
 
 	void Inicial();
 	void Frenar();

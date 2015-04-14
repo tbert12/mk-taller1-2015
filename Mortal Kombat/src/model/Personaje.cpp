@@ -14,6 +14,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	sprites = Sprites;
 	spriteActual = sprites[SPRITE_INICIAL];
 
+
 	m_xActual = 0;
 	m_yActual = 0;
 
@@ -29,6 +30,9 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 
 	velocidadAdelante = velocidad;
 	velocidadAtras = -velocidad;
+
+	//Es igual a SpriteActual->getAlto();
+	maxAlturaDeSalto = 1.5*getAlto();
 
 	tiempoDeSalto = 0;
 	_estaSaltando = -1;
@@ -204,8 +208,10 @@ void Personaje::_actualizarY(){
 
 float Personaje::_yDeSalto(float currentY, float currentT)
 {
-	float alturaMax = 3; //Mas Grande -> mas Alto
-	float tiempoDeSalto = 10; //Mas grande -> mas tiempo en volver al suelo
+	float tiempoDeSalto = TIEMPOTOTALDESALTO;
+
+	//Despeje de la Cuadratica dependiendo del MAX;
+	float alturaMax = maxAlturaDeSalto/((tiempoDeSalto*tiempoDeSalto)/4);
 	return alturaMax * currentT * (currentT - tiempoDeSalto) + m_yInicial;
 }
 
@@ -266,6 +272,10 @@ float Personaje::getAncho(){
 	return spriteActual->getAncho();
 }
 
+float Personaje::getAlto(){
+	return spriteActual->getAlto();
+}
+
 int Personaje::getSentidoDeMovimiento(){
 	if (m_velocidad > 0) return 1;
 	else if (m_velocidad < 0) return -1;
@@ -277,10 +287,6 @@ float Personaje::getVelocidadDerecha(){
 }
 float Personaje::getVelocidadIzquierda(){
 	return velocidadAtras;
-}
-
-bool Personaje::EstaAgachado(){
-	return _estaAgachado();
 }
 
 Personaje::~Personaje() {
