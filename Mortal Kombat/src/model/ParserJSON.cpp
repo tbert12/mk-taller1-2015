@@ -864,7 +864,7 @@ Mundo* ParserJSON::cargarMundo() {
 			flipped = PERSONAJE_FLIPPED_DEFAULT;
 			log( "No se especifico si el personaje debe estar flippeado o no. Por defecto, se setea flipped = false, es decir que el personaje mira hacia la derecha.", LOG_WARNING );
 		} else {
-			flipped = root["perosnaje"].get( "flipped", PERSONAJE_FLIPPED_DEFAULT ).asBool();
+			flipped = root["personaje"].get( "flipped", PERSONAJE_FLIPPED_DEFAULT ).asBool();
 			log( "Se cargo el booleano flipped que indica si el personaje inicia mirando hacia la derecha (false) o hacia la izquierda (true).", LOG_DEBUG );
 		}
 	}
