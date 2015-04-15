@@ -30,11 +30,11 @@ void Capa::Mover(bool right){
 	}else{
 		rect->x -=m_velocidad;
 	}
-	if( rect->x < 0){
-		rect->x = 0;
-	}
 	if( rect->x > rect->w - m_ancho_ventana){
 		rect->x = rect->w - m_ancho_ventana;
+	}
+	if( rect->x < 0){
+		rect->x = 0;
 	}
 }
 

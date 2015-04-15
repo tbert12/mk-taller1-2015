@@ -143,21 +143,28 @@ void LTexture::renderObjeto( Rect_Logico* clip,float x, float y, bool flip)
 
 void LTexture::renderFondo( Rect_Logico* clip)
 {
+	float ratio_x_img = mWidth/clip->w;
+	float ratio_y_img =	mHeight/clip->h;
 
-	SDL_Rect camera = { 0,0, mWidth, mHeight};
+	SDL_Rect camera = { 0,0, w_ventana, h_ventana};
 	SDL_Rect clip_px;
+
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
 	{
+		int ancho_px_ventana = int((w_ventana/ratio_x)*ratio_x_img + 0.5); //ancho_logico_de_ventana en lo px de la imagen
+		int alto_px_ventana = int((h_ventana/ratio_y)*ratio_y_img + 0.5);
+		printf("clip.x :%f,w_ventana:%i ,mWidth:%i, clip->w:%f\n",clip->x,w_ventana,mWidth,clip->w);
+
 		clip_px = {(int)(clip->x*ratio_x  + 0.5), //posicion horizontal de la capa
 				(int)(clip->y*ratio_y + 0.5), //posicion vertical de la capa
-				w_ventana , // ancho de la ventana
-				h_ventana }; //alto de la ventana
+				ancho_px_ventana,//w_ventana , // ancho de la ventana
+				alto_px_ventana }; //alto de la ventana
 
+
+		int ancho = (int)(clip->w*ratio_x_img + 0.5);
+		if(clip_px.x > (ancho - ancho_px_ventana))clip_px.x = ancho - ancho_px_ventana;
 		if(clip_px.x <0)clip_px.x = 0;
-
-		int ancho = (int)(clip->w*ratio_x + 0.5);
-		if(clip_px.x > (ancho - w_ventana))clip_px.x = ancho - w_ventana;
 
 		camera.w = w_ventana;//Siempre el tamaño de la ventana
 		camera.h = h_ventana;
