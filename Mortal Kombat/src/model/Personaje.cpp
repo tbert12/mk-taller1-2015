@@ -64,37 +64,13 @@ void Personaje::setPosition(float x, float y){
 }
 
 void Personaje::AvanzarSprite(){
-	if (_estaAgachado()){
-		if (spriteActual->ultimoFrame()){
-			if (m_velocidad == 0){
-				_cambiarSprite(SPRITE_INICIAL);
-			} else {
-				_cambiarSprite(SPRITE_CAMINAR);
-			}
-		}
-	}
-	if (_estaSaltando > 0){
+	if ( (_estaAgachado() and spriteActual->ultimoFrame() ) or !_estaSaltando){
 		if (m_velocidad == 0){
-				spriteActual->doLoop(true);
-		}
-	}
-	if (spriteActual == sprites[SPRITE_SALTAR]){
-		if (spriteActual->ultimoFrame()){
-			if (m_velocidad == 0){
-					_cambiarSprite(SPRITE_INICIAL);
-			} else {
-					_cambiarSprite(SPRITE_CAMINAR);
-			}
-		}
-	}
-	if (spriteActual == sprites[SPRITE_SALTAR_DIAGONAL]){
-		if (_estaSaltando < 0){
 			_cambiarSprite(SPRITE_INICIAL);
+		} else {
+			_cambiarSprite(SPRITE_CAMINAR);
 		}
-		if (spriteActual->ultimoFrame()){
-			//Salteo el Primero que es el que toma impulso
-			spriteActual->Advance();
-		}
+
 	}
 	spriteActual->Advance();
 	return;
@@ -109,21 +85,18 @@ void Personaje::_cambiarSprite(int SpriteAccion){
 	spriteActual->doLoop(false);
 	spriteActual->doReverse(false);
 
-	if (SpriteAccion == SPRITE_CAMINAR){
+	if (SpriteAccion == SPRITE_CAMINAR or
+		SpriteAccion == SPRITE_SALTAR_DIAGONAL){
+
 		bool doReverse;
 		if (m_velocidad > 0){
-			if (m_fliped) doReverse = true;
-			else doReverse = false;
+			doReverse = m_fliped;
 		}
 		else if (m_velocidad < 0){
-			if (m_fliped) doReverse = false;
-			else doReverse = true;
+			doReverse = !m_fliped;
 		}
 		spriteActual->doReverse(doReverse);
 		return;
-	}
-	if (_estaSaltando > 0){
-		spriteActual->doLoop(true);
 	}
 	spriteActual->Reset();
 
@@ -180,6 +153,7 @@ void Personaje::_SaltarIzquierda(){
 
 void Personaje::_SaltarHorizontal(){
 	this->_cambiarSprite(SPRITE_SALTAR);
+	spriteActual->doLoop(true);
 	_estaSaltando = 1;
 }
 
@@ -190,19 +164,27 @@ void Personaje::_actualizarY(){
 		m_yActual = _yDeSalto(m_yActual,tiempoDeSalto);
 		tiempoDeSalto++;
 	}
+
 	//Cuando esta llegando al piso, vuelvo a las condiciones iniciales
-	if(tiempoDeSalto > 10 and m_yActual < m_yInicial + 20){
-		m_velocidad = 0;
-		m_yActual = m_yInicial;
+	if(tiempoDeSalto > TIEMPOTOTALDESALTO){
 		tiempoDeSalto = 0;
-		_estaSaltando = -1;
+		_estaSaltando = 0;
 		if (m_velocidad) {
 			//Voy al tercero para visualizar la caida
 			_cambiarSprite(SPRITE_SALTAR);
 			spriteActual->Advance();
 			spriteActual->Advance();
 		}
+		m_velocidad = 0;
 		spriteActual->doLoop(false);
+		return;
+	}
+	if(tiempoDeSalto == TIEMPOTOTALDESALTO and !m_velocidad){
+		tiempoDeSalto = 0;
+		_estaSaltando = 0;
+		m_velocidad = 0;
+		spriteActual->doLoop(false);
+		return;
 	}
 }
 
@@ -252,16 +234,25 @@ bool Personaje::_estaAgachado(){
 	return (spriteActual == sprites[SPRITE_AGACHAR]);
 }
 
-void Personaje::renderizar(float x_dist_ventana){
+void Personaje::Update(){
 	float renderX = m_xActual + m_velocidad;
-	if (renderX <= (m_AnchoMundo- spriteActual->getAncho()) and renderX >= 0){
-		if (!_estaAgachado()) m_xActual += m_velocidad;
+	if (renderX <= (m_AnchoMundo - spriteActual->getAncho()) and renderX >= 0){
+		if ( !_estaAgachado() ) m_xActual += m_velocidad;
 	}
 	if(_estaSaltando > 0){
 			_actualizarY();
 	}
+	else if (_estaSaltando == 0){
+		m_yActual = m_yInicial;
+		_estaSaltando = -1;
+	}
+}
+
+void Personaje::renderizar(float x_dist_ventana){
+	Update();
 	spriteActual->render(m_xActual-x_dist_ventana,m_yActual,m_fliped);
 	AvanzarSprite();
+
 }
 
 bool Personaje::enMovimiento(){
