@@ -19,6 +19,7 @@
 #define PERSONAJE_Z_INDEX_DEFAULT 3
 #define PERSONAJE_CARPETA_SPRITES_DEFAULT "data/players/default/sprites/"
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
+#define PERSONAJE_FLIPPED_DEFAULT false
 
 #define SPRITESHEET_PARADO_DEFAULT "initial.png"
 #define SPRITESHEET_CAMINAR_DEFAULT "walk.png"
@@ -126,9 +127,7 @@ Mundo* ParserJSON::generarMundoDefault( ) {
 		throw runtime_error( "No se pudo abrir la ventana del programa." );
 	}
 
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_VELOCIDAD);
-	// Si flippeado, descomentar la siguiente linea:
-	//Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, this->generarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_VELOCIDAD, true);
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
 
 	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2),Y_PISO_DEFAULT);
 
@@ -554,6 +553,12 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 
 Mundo* ParserJSON::cargarMundo() {
 
+	// Variables para poder registrar los errores/warnings luego de setear el nivel de bitacora.
+	bool error_abrir_archivo = false;
+	bool json_invalido = false;
+	bool loglvl_no_seteado = false;
+	bool loglvl_invalido = false;
+
 	Json::Value root;
 	Json::Reader reader;
 
@@ -563,17 +568,13 @@ Mundo* ParserJSON::cargarMundo() {
 
 	// Si no se pudo abrir archivo, generar mundo por defecto.
 	if ( ! archivoConfig.is_open() ) {
-		// Informar al usuario la falla y la resolucion tomada.
-		log( "No se pudo abrir el archivo de configuracion JSON, se genera una partida por defecto.", LOG_ERROR );
-		return generarMundoDefault();
+		error_abrir_archivo = true;
 	}
 
 	// Si no se pudo parsear archivo, generar mundo por defecto.
 	bool exito = reader.parse( archivoConfig, root, false );
 	if ( ! exito ) {
-	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
-	    log( "No se pudo interpretar el JSON, se genera una partida por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
-	    return generarMundoDefault();
+	    json_invalido = true;
 	}
 
 	// Cerrar archivo.
@@ -584,16 +585,16 @@ Mundo* ParserJSON::cargarMundo() {
 	// evento del programa.
 	int loglvl;
 	if ( root.get( "loglvl", "" ) == "" ) {
-		log( "No se especifico el nivel de logging. Se setea en modo DEBUG por defecto.", LOG_WARNING );
 		loglvl = LOGLVL_DEFAULT;
+		loglvl_no_seteado = true;
 	} else {
 		loglvl = root.get( "loglvl", LOGLVL_DEFAULT ).asInt();
 		if ( loglvl > 2 ) {
 			loglvl = LOGLVL_DEFAULT;
-			// Informar al usuario el cambio de nivel.
-			log ( " Nivel de logging incorrecto. Los niveles de logging son: 0-ERRORES, 1-WARNINGS/ERRORES, 2-SUCESOS/WARNINGS/ERRORES (DEBUG). Se setea por defecto nivel DEBUG.", LOG_WARNING );
+			loglvl_invalido = true;
 		}
 	}
+
 	// Setear nivel de logging del programa.
 	nivel = loglvl;
 
@@ -601,6 +602,25 @@ Mundo* ParserJSON::cargarMundo() {
 	indicarModo();
 
 	// Registrar sucesos anteriores al seteo del nivel de logging.
+	log( string("Se cargara el archivo de configuracion JSON: " + m_ruta_archivo), LOG_DEBUG );
+
+	if ( error_abrir_archivo ) {
+		log( "No se pudo abrir el archivo de configuracion JSON, se genera una partida por defecto.", LOG_ERROR );
+		return generarMundoDefault();
+	}
+	if ( json_invalido ) {
+	    log( "No se pudo interpretar el JSON, se genera una partida por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
+	    return generarMundoDefault();
+	}
+	if ( loglvl_no_seteado ) {
+		log( "No se especifico el nivel de logging. Se setea en modo DEBUG por defecto.", LOG_WARNING );
+
+	}
+	if ( loglvl_invalido ) {
+		log ( " Nivel de logging incorrecto. Los niveles de logging son: 0-ERRORES, 1-WARNINGS/ERRORES, 2-SUCESOS/WARNINGS/ERRORES (DEBUG). Se setea por defecto nivel DEBUG.", LOG_WARNING );
+
+	}
+
 	log ( "Se abrio el archivo JSON de configuración.", LOG_DEBUG );
 	log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
 	log ( "Se cerro el archivo JSON de configuracion.", LOG_DEBUG );
@@ -812,10 +832,12 @@ Mundo* ParserJSON::cargarMundo() {
 	// Si no se especifica el z-index se fija uno por defecto.
 	int personaje_z_index;
 	string personaje_carpeta_sprites, personaje_nombre;
+	bool flipped;
 	if ( root.get( "personaje", "" ) == "" ) {
 		personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
 		personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 		personaje_nombre = PERSONAJE_NOMBRE_DEFAULT;
+		flipped = PERSONAJE_FLIPPED_DEFAULT;
 	} else {
 		if ( root["personaje"].get( "z-index", "" ) == "" ) {
 			personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
@@ -838,13 +860,20 @@ Mundo* ParserJSON::cargarMundo() {
 			personaje_nombre = root["personaje"].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
 			log ( "Se cargo el nombre del personaje.", LOG_DEBUG );
 		}
+		if ( root["personaje"].get( "flipped", "" ) == "" ) {
+			flipped = PERSONAJE_FLIPPED_DEFAULT;
+			log( "No se especifico si el personaje debe estar flippeado o no. Por defecto, se setea flipped = false, es decir que el personaje mira hacia la derecha.", LOG_WARNING );
+		} else {
+			flipped = root["perosnaje"].get( "flipped", PERSONAJE_FLIPPED_DEFAULT ).asBool();
+			log( "Se cargo el booleano flipped que indica si el personaje inicia mirando hacia la derecha (false) o hacia la izquierda (true).", LOG_DEBUG );
+		}
 	}
 
 	// Creo Sprites del personaje.
 	vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, ratio_x, ratio_y);
 
 	// Crear personaje.
-	Personaje* personaje = new Personaje(personaje_nombre, sprites, PERSONAJE_VELOCIDAD);
+	Personaje* personaje = new Personaje(personaje_nombre, sprites, PERSONAJE_VELOCIDAD, flipped);
 	log( "Se creo correctamente el personaje.", LOG_DEBUG );
 
 	// Indico posicion inicial del personaje.

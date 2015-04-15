@@ -32,6 +32,6 @@
 	"personaje": {
 		"z-index": 2,
 		"sprites": "data/players/subzero/sprites/",
-		"nombre": "Sub-Zero"	
+		"nombre": "Sub-Zero"
 	}
 }

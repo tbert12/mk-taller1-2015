@@ -31,11 +31,6 @@ int main( int argc, char* args[] )
 
 	if (argc > 1){
 		ruta_archivo_configuracion = args[1];
-		log(string("Se cargara el archivo JSON por parametro: " + ruta_archivo_configuracion),LOG_DEBUG);
-	}
-	else {
-		log(string("Se cargara el archivo JSON default: " + ruta_archivo_configuracion),LOG_DEBUG);
-
 	}
 
 	Mundo* mundo;
