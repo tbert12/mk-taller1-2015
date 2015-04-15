@@ -122,7 +122,7 @@ bool Ventana::mostrarImagen(string ruta){
 	}
 	textura->renderImagen();
 	Refresh();
-	textura->~LTexture();
+	delete textura;
 	return true;
 }
 
