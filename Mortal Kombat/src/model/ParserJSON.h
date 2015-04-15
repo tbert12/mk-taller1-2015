@@ -20,6 +20,7 @@ private:
 
 public:
 	 ParserJSON(string ruta_archivo);
+	 ~ParserJSON();
 	 Mundo* cargarMundo();
 	 Mundo* generarMundoDefault();
 	 vector<Sprite*> generarSpritesDefault(Ventana* ventana, float ratio_x, float ratio_y);

@@ -40,5 +40,8 @@ int CapaPrincipal::Scrollear(){
 }
 
 CapaPrincipal::~CapaPrincipal() {
-	//this->Capa::~Capa();
+	//auto call Capa::~Capa();
+	m_velocidad_derecha = 0;
+	m_velocidad_izquierda = 0;
+	m_Personaje = NULL;
 }

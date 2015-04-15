@@ -25,5 +25,6 @@ void CapaFondo::Renderizar(){
 }
 
 CapaFondo::~CapaFondo() {
-	//this->~Capa();
+	//auto call ~Capa() <- delete rect;
+	delete m_texture;
 }

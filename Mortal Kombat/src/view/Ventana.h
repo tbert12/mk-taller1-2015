@@ -19,7 +19,7 @@ private:
 public:
 
 	Ventana(int screenWidth, int screenHeight,float ratiox,float ratioy);
-
+	~Ventana();
 	float obtenerAncho();
 
 	//Starts up SDL and creates window

@@ -33,10 +33,11 @@ int main( int argc, char* args[] )
 		ruta_archivo_configuracion = args[1];
 	}
 
+	ParserJSON* parser;
 	Mundo* mundo;
 
 	try {
-		ParserJSON* parser = new ParserJSON( ruta_archivo_configuracion );
+		parser = new ParserJSON( ruta_archivo_configuracion );
 		mundo = parser->cargarMundo();
 		//mundo = CrearMundoDefault();
 		log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
@@ -70,9 +71,10 @@ int main( int argc, char* args[] )
 			} catch ( std::runtime_error &e ) {
 				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_DEBUG );
 				try {
+					delete parser;
 					delete control_jugador_1;
 					delete mundo;
-					ParserJSON* parser = new ParserJSON( ruta_archivo_configuracion );
+					parser = new ParserJSON( ruta_archivo_configuracion );
 					mundo = parser->cargarMundo();
 					//mundo = CrearMundoDefault();
 					log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
@@ -91,7 +93,8 @@ int main( int argc, char* args[] )
 		usleep(50000);
 
 	}
-
+	delete parser;
+	delete control_jugador_1;
 	delete mundo;
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 

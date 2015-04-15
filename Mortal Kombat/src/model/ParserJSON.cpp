@@ -33,6 +33,9 @@ ParserJSON::ParserJSON(string ruta_archivo) {
 	m_ruta_archivo = ruta_archivo;
 }
 
+ParserJSON::~ParserJSON() {
+}
+
 Sprite* ParserJSON::crearSpriteParadoDefault(Ventana* ventana, float ratio_x, float ratio_y) {
 	vector<Frame*> framesParado(9);
 

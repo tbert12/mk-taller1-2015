@@ -91,6 +91,11 @@ void LTexture::free()
 		mTexture = NULL;
 		mWidth = 0;
 		mHeight = 0;
+		gRenderer = NULL;
+		ratio_x = 0;
+		ratio_y = 0;
+		w_ventana = 0;
+		h_ventana = 0;
 	}
 }
 

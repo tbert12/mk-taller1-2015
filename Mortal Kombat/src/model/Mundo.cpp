@@ -104,7 +104,7 @@ void Mundo::render(){
 
 Mundo::~Mundo() {
 	//fijar si hay que liberar cada uno de los contenidos de los vectores
-	for (unsigned int i = 0 ; i < indices.size() -1 ; i++){
+	for (unsigned int i = 0 ; i < indices.size() ; i++){
 	      delete capas[indices[i]];
 	}
 	capas.clear();
@@ -112,7 +112,7 @@ Mundo::~Mundo() {
 		delete personajes[i];
 	}
 	personajes.clear();
-	ventana->close_window();
+	delete ventana;
 	delete tiempo;
 }
 
