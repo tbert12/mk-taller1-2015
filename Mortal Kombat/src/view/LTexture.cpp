@@ -134,8 +134,15 @@ void LTexture::renderObjeto( Rect_Logico* clip,float x, float y, bool flip)
 				(int)(clip->w*ratio_x + 0.5), // ancho del objeto
 				(int)(clip->h*ratio_y + 0.5) }; //alto del objeto
 
-		Object.w = clip_px.w;//Siempre el tamaño de la ventana
-		Object.h = clip_px.h;
+		//Cuanto lo tengo que estirar dependiendo el tamano de a pantall?
+		//Ahora lo estoy aumentando 40 pixeles en y, y 20 en x, para que vean
+		int nuevo_h_estirado = clip_px.h + 40;
+		int nuevo_w_estirado = clip_px.w + 20;
+
+		Object.x = Object.x - nuevo_w_estirado + clip_px.w;
+		Object.y = Object.y - nuevo_h_estirado + clip_px.h;
+		Object.w = nuevo_w_estirado;//Siempre el tamaño de la ventana
+		Object.h = nuevo_h_estirado;
 	}
 
 	//Renderizar a la pantalla
