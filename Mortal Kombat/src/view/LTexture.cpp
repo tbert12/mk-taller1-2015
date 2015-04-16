@@ -160,8 +160,8 @@ void LTexture::renderFondo( Rect_Logico* clip)
 		int ancho_px_ventana = int((w_ventana/ratio_x)*ratio_x_img + 0.5); //ancho_logico_de_ventana en lo px de la imagen
 		int alto_px_ventana = int((h_ventana/ratio_y)*ratio_y_img + 0.5);
 
-		clip_px = {(int)(clip->x*ratio_x  + 0.5), //posicion horizontal de la capa
-				(int)(clip->y*ratio_y + 0.5), //posicion vertical de la capa
+		clip_px = {(int)(clip->x*ratio_x_img  + 0.5), //posicion horizontal de la capa
+				(int)(clip->y*ratio_y_img + 0.5), //posicion vertical de la capa
 				ancho_px_ventana,//w_ventana , // ancho de la ventana
 				alto_px_ventana }; //alto de la ventana
 
