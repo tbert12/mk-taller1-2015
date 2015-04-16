@@ -19,7 +19,7 @@
 #define PERSONAJE_Z_INDEX_DEFAULT 3
 #define PERSONAJE_CARPETA_SPRITES_DEFAULT "data/players/default/sprites/"
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
-#define PERSONAJE_FLIPPED_DEFAULT true
+#define PERSONAJE_FLIPPED_DEFAULT false
 
 #define SPRITESHEET_PARADO_DEFAULT "initial.png"
 #define SPRITESHEET_CAMINAR_DEFAULT "walk.png"
