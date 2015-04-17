@@ -1,0 +1,59 @@
+{
+
+	"loglvl": 2,
+	
+	"tiempo": 180,
+
+	"ventana": {
+		"ancho-px": 640,
+		"alto-px": 480,
+		"ancho": 445.68
+	},
+	
+	"escenario": {
+		"ancho": 1000,
+		"alto": 334.3,
+		"y-piso": 300
+	},
+	
+	"capas": [
+		{
+			"imagen_fondo": "data/img/background/Parallax/0.png",
+			"ancho": 1000,
+			"z-index": 0
+		},
+		{
+			"imagen_fondo": "data/img/background/Parallax/1.png",
+			"ancho": 1000,
+			"z-index": 0
+		},
+		{
+			"imagen_fondo": "data/img/background/Parallax/2.png",
+			"ancho": 850,
+			"z-index": 0
+		},
+		{
+			"imagen_fondo": "data/img/background/Parallax/3.png",
+			"ancho": 650,
+			"z-index": 0
+		},
+		{
+			"imagen_fondo": "data/img/background/Parallax/4.png",
+			"ancho": 500,
+			"z-index": 0
+		},
+		{
+			"imagen_fondo": "data/img/background/Parallax/5.png",
+			"ancho": 445.68,
+			"z-index": 0
+		},
+
+	],
+	
+	"personaje": {
+		"z-index": 2,
+		"sprites": "data/players/subzero/sprites/",
+		"nombre": "Sub-Zero",
+		"flipped": false
+	}
+}
