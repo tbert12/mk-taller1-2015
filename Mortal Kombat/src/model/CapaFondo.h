@@ -13,6 +13,9 @@
 #include "../view/Ventana.h"
 #include <string>
 #include <SDL2/SDL.h>
+#include "../model/CargarImagenException.h"
+#include <stdexcept>
+#include <exception>
 
 
 class CapaFondo: public Capa {

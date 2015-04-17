@@ -43,6 +43,8 @@ int main( int argc, char* args[] )
 		log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
 	} catch ( std::exception &e ) {
 		log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
+		delete parser;
+		delete mundo;
 		return 1;
 	}
 

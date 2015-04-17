@@ -32,7 +32,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	velocidadAtras = -velocidad;
 
 	//Es igual a SpriteActual->getAlto();
-	maxAlturaDeSalto = 1.5*getAlto();
+	maxAlturaDeSalto = 1.10*getAlto();
 
 	tiempoDeSalto = 0;
 	_estaSaltando = -1;
@@ -179,6 +179,7 @@ void Personaje::_actualizarY(){
 		spriteActual->doLoop(false);
 		return;
 	}
+
 	if(tiempoDeSalto == TIEMPOTOTALDESALTO and !m_velocidad){
 		tiempoDeSalto = 0;
 		_estaSaltando = 0;

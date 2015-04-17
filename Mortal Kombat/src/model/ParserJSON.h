@@ -9,7 +9,7 @@
 #include "Mundo.h"
 #include "DefaultSettings.h"
 
-const float PERSONAJE_VELOCIDAD = 10.0;
+const float PERSONAJE_VELOCIDAD = 7.0;
 
 using namespace std;
 
@@ -23,13 +23,13 @@ public:
 	 ~ParserJSON();
 	 Mundo* cargarMundo();
 	 Mundo* generarMundoDefault();
-	 vector<Sprite*> generarSpritesDefault(Ventana* ventana, float ratio_x, float ratio_y);
-	 vector<Sprite*> cargarSprites(string ruta_carpeta, Ventana* ventana, float ratio_x, float ratio_y);
-	 Sprite* crearSpriteParadoDefault(Ventana* ventana, float ratio_x, float ratio_y);
-	 Sprite* crearSpriteCaminarDefault(Ventana* ventana, float ratio_x, float ratio_y);
-	 Sprite* crearSpriteSaltarDefault(Ventana* ventana, float ratio_x, float ratio_y);
-	 Sprite* crearSpriteSaltarDiagonalDefault(Ventana* ventana, float ratio_x, float ratio_y);
-	 Sprite* crearSpriteAgacharDefault(Ventana* ventana, float ratio_x, float ratio_y);
+	 vector<Sprite*> generarSpritesDefault(Ventana* ventana, float personaje_ancho, float personaje_alto);
+	 vector<Sprite*> cargarSprites(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto);
+	 Sprite* crearSpriteParadoDefault(Ventana* ventana, float personaje_ancho, float personaje_alto);
+	 Sprite* crearSpriteCaminarDefault(Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje);
+	 Sprite* crearSpriteSaltarDefault(Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje);
+	 Sprite* crearSpriteSaltarDiagonalDefault(Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje);
+	 Sprite* crearSpriteAgacharDefault(Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje);
 };
 
 #endif /* SRC_MODEL_PARSER_H_ */
