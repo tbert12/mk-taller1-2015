@@ -5,8 +5,8 @@
 	"tiempo": 180,
 
 	"ventana": {
-		"ancho-px": 640,
-		"alto-px": 480,
+		"ancho-px": 800,
+		"alto-px": 600,
 		"ancho": 445.68
 	},
 	

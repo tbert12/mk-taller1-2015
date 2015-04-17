@@ -22,7 +22,7 @@
 #include "../controller/KeyboardControl.h"
 #include "Personaje.h"
 
-string ruta_archivo_configuracion = "data/config/TheSubway.json";
+string ruta_archivo_configuracion = "data/config/Parallax.json";
 
 int main( int argc, char* args[] )
 {
