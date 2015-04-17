@@ -54,6 +54,7 @@ bool LTexture::loadFromFile( std::string ruta )
 	if( loadedSurface == NULL )
 	{
 		log( string("No se puede cargar imagen %s! SDL_image Error: %s\n", ruta.c_str()),LOG_ERROR);
+		return false;
 	}
 	else
 	{
@@ -65,6 +66,7 @@ bool LTexture::loadFromFile( std::string ruta )
 		if( nuevaTexture == NULL )
 		{
 			log( string("No se puede crear textura desde %s!", ruta.c_str()),LOG_ERROR);
+			return false;
 		}
 		else
 		{
@@ -79,7 +81,7 @@ bool LTexture::loadFromFile( std::string ruta )
 
 	//Success
 	mTexture = nuevaTexture;
-	return mTexture != NULL;
+	return true;
 }
 
 void LTexture::free()

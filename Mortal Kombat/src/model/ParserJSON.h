@@ -8,6 +8,7 @@
 #include "logging.h"
 #include "Mundo.h"
 #include "DefaultSettings.h"
+#include <sys/stat.h>
 
 const float PERSONAJE_VELOCIDAD = 7.0;
 

@@ -180,6 +180,12 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, string 
 		} else {
 			try {
 				spritesheet = root[accion_sprite].get( "nombre", spritesheet_default ).asString();
+				struct stat sb;
+				if ( stat((ruta_carpeta + spritesheet).c_str(), &sb) != 0 ) {
+					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
+					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+					spritesheet = spritesheet_default;
+				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
 			} catch (exception &e) {
 				spritesheet = spritesheet_default;
 				log( "El nombre ingresado del spritesheet " + accion_sprite + " no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
@@ -318,8 +324,12 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	float ratio_x_personaje = PERSONAJE_ANCHO_PX_DEFAULT / personaje_ancho;
 	float ratio_y_personaje = PERSONAJE_ALTO_PX_DEFAULT / personaje_alto;
 
+	// Guardo la ruta original de la carpeta de sprites para actualizar antes de crear cada sprite por si se hubiese creado uno uno por defecto desde otra carpeta.
+	string ruta_carpeta_original = ruta_carpeta;
+
 	// Creo Sprite para personaje parado.
 	Sprite* sprite_parado;
+	ruta_carpeta = ruta_carpeta_original;
 	bool sprite_parado_ok = true;
 	string spritesheet_parado;
 	if ( root.get( "parado", "" ) == "" ) {
@@ -332,6 +342,12 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 		} else {
 			try {
 				spritesheet_parado = root["parado"].get( "nombre", SPRITESHEET_PARADO_DEFAULT ).asString();
+				struct stat sb;
+				if ( stat((ruta_carpeta + spritesheet_parado).c_str(), &sb) != 0 ) {
+					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
+					spritesheet_parado = SPRITESHEET_PARADO_DEFAULT;
+					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				spritesheet_parado = SPRITESHEET_PARADO_DEFAULT;
 				log( "El nombre ingresado del spritesheet para el personaje parado no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
@@ -462,6 +478,7 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 
 	// Creo Sprite para personaje caminando.
 	Sprite* sprite_caminar;
+	ruta_carpeta = ruta_carpeta_original;
 	bool sprite_caminar_ok = true;
 	string spritesheet_caminar;
 	if ( root.get( "caminar", "" ) == "" ) {
@@ -474,6 +491,12 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 		} else {
 			try {
 				spritesheet_caminar = root["caminar"].get( "nombre", SPRITESHEET_CAMINAR_DEFAULT ).asString();
+				struct stat sb;
+				if ( stat((ruta_carpeta + spritesheet_caminar).c_str(), &sb) != 0 ) {
+					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
+					spritesheet_caminar = SPRITESHEET_CAMINAR_DEFAULT;
+					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
 			} catch (exception &e) {
 				spritesheet_caminar = SPRITESHEET_CAMINAR_DEFAULT;
 				log( "El nombre ingresado del spritesheet para el personaje caminando no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
@@ -576,6 +599,7 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 
 	// Creo Sprites para personaje saltando.
 	Sprite* sprite_saltar;
+	ruta_carpeta = ruta_carpeta_original;
 	bool sprite_saltar_ok = true;
 	string spritesheet_saltar;
 	if ( root.get( "saltar", "" ) == "" ) {
@@ -588,6 +612,12 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 		} else {
 			try {
 				spritesheet_saltar = root["saltar"].get( "nombre", SPRITESHEET_SALTAR_DEFAULT ).asString();
+				struct stat sb;
+				if ( stat((ruta_carpeta + spritesheet_saltar).c_str(), &sb) != 0 ) {
+					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
+					spritesheet_saltar = SPRITESHEET_SALTAR_DEFAULT;
+					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
 			} catch (exception &e) {
 				spritesheet_saltar = SPRITESHEET_SALTAR_DEFAULT;
 				log( "El nombre ingresado del spritesheet para el personaje saltando no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
@@ -690,6 +720,7 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 
 	// Creo Sprite para personaje saltando en diagonal.
 	Sprite* sprite_saltar_diagonal;
+	ruta_carpeta = ruta_carpeta_original;
 	bool sprite_saltar_diagonal_ok = true;
 	string spritesheet_saltar_diagonal;
 	if ( root.get( "saltardiagonal", "" ) == "" ) {
@@ -702,6 +733,12 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 		} else {
 			try {
 				spritesheet_saltar_diagonal = root["saltardiagonal"].get( "nombre", SPRITESHEET_SALTAR_DIAGONAL_DEFAULT ).asString();
+				struct stat sb;
+				if ( stat((ruta_carpeta + spritesheet_saltar_diagonal).c_str(), &sb) != 0 ) {
+					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
+					spritesheet_saltar_diagonal = SPRITESHEET_SALTAR_DIAGONAL_DEFAULT;
+					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
 			} catch (exception &e) {
 				spritesheet_saltar_diagonal = SPRITESHEET_SALTAR_DIAGONAL_DEFAULT;
 				log( "El nombre ingresado del spritesheet para el personaje saltando en diagonal no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
@@ -804,6 +841,7 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 
 	// Creo Sprite para personaje agachado.
 	Sprite* sprite_agachar;
+	ruta_carpeta = ruta_carpeta_original;
 	bool sprite_agachar_ok = true;
 	string spritesheet_agachar;
 	if ( root.get( "agachar", "" ) == "" ) {
@@ -815,7 +853,13 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 			log( "No se especifico el nombre de la imagen para el spritesheet del personaje agachandose. Se setea uno por defecto.", LOG_WARNING );
 		} else {
 			try {
-			spritesheet_agachar = root["agachar"].get( "nombre", SPRITESHEET_AGACHAR_DEFAULT ).asString();
+				spritesheet_agachar = root["agachar"].get( "nombre", SPRITESHEET_AGACHAR_DEFAULT ).asString();
+				struct stat sb;
+				if ( stat((ruta_carpeta + spritesheet_agachar).c_str(), &sb) != 0 ) {
+					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
+					spritesheet_agachar = SPRITESHEET_AGACHAR_DEFAULT;
+					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
 			} catch (exception &e) {
 				spritesheet_agachar = SPRITESHEET_AGACHAR_DEFAULT;
 				log( "El nombre ingresado del spritesheet para el personaje agachado no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
@@ -1188,7 +1232,12 @@ Mundo* ParserJSON::cargarMundo() {
 			} else {
 				try {
 					background = capas[i].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
-					log( "Se cargo el nombre de la imagen de la capa.", LOG_DEBUG );
+
+					struct stat sb;
+					if ( stat(background.c_str(), &sb) != 0 ) {
+						log( "La ruta a la imagen de la capa no existe. Se carga la ruta por defecto.", LOG_ERROR );
+						background = BACKGROUND_DEFAULT;
+					} else log( "Se cargo el nombre de la imagen de la capa.", LOG_DEBUG );
 				} catch ( exception &e ) {
 					background = BACKGROUND_DEFAULT;
 					log( "La ruta del archivo de la imagen de la capa no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
@@ -1237,6 +1286,7 @@ Mundo* ParserJSON::cargarMundo() {
 				capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, background, ventana );
 				log( "Se creo correctamente la capa.", LOG_DEBUG );
 			} catch ( CargarImagenException &e ) {
+				delete capa_fondo;
 				capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, BACKGROUND_DEFAULT, ventana );
 				log( "No se pudo cargar la imagen de la capa. Se carga imagen por defecto. " + string(e.what()), LOG_ERROR );
 			}
@@ -1314,7 +1364,11 @@ Mundo* ParserJSON::cargarMundo() {
 		} else {
 			try {
 				personaje_carpeta_sprites = root["personaje"].get( "sprites", PERSONAJE_CARPETA_SPRITES_DEFAULT ).asString();
-				log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sprites del personaje.", LOG_DEBUG );
+				struct stat sb;
+				if ( stat(personaje_carpeta_sprites.c_str(), &sb) != 0 ) {
+					log( "La ruta a la carpeta de sprites del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
+					personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+				} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sprites del personaje.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 				log( "La ruta a la carpeta contenedora de los sprites del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
