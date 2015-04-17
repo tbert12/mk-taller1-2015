@@ -29,6 +29,7 @@ public:
 	CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal,std::string ruta, Ventana* ventana);
 	//virtual void Mover(bool right);
 	virtual void Renderizar();
+	virtual void Update(int scroll);
 	virtual ~CapaFondo();
 };
 

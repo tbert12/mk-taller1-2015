@@ -23,6 +23,11 @@ CapaFondo::CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, fl
 void CapaFondo::_actualizarX(){
 }
 
+void CapaFondo::Update(int scroll){
+	if (scroll > 0)this->Mover(true);
+	else if (scroll < 0) this->Mover(false);
+}
+
 void CapaFondo::Renderizar(){
 	m_texture->renderFondo(rect);
 }

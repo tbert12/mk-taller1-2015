@@ -250,7 +250,6 @@ void Personaje::Update(){
 }
 
 void Personaje::renderizar(float x_dist_ventana){
-	Update();
 	spriteActual->render(m_xActual-x_dist_ventana,m_yActual,m_fliped);
 	AvanzarSprite();
 

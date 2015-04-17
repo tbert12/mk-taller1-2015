@@ -20,6 +20,7 @@ public:
 	void Mover(bool right);
 	float getX();
 	virtual void Renderizar();
+	virtual void Update(int scroll);
 	Capa(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal);
 	virtual ~Capa();
 protected:

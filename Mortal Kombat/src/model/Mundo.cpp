@@ -17,9 +17,6 @@ Mundo::Mundo(float ancho,float alto) {
 }
 
 bool Mundo::addPersonaje(Personaje* un_personaje){
-	//if (personajes == NULL){
-	//	return false;
-	//}
 	personajes.push_back(un_personaje);
 	return true;
 }
@@ -84,16 +81,16 @@ void Mundo::render(){
 	//verifico scroll
 	int scroll = _verificarScroll();
 
+
+	//actualizo los estados
+	for (unsigned int i = 0 ; i <= indices.size() -1 ; i++){
+		capas[indices[i]]->Update(scroll);
+	}
+
+	//aca una vez actualizado todo chequeo las colisiones y demas.
+
 	//renderizo las capas
 	for (unsigned int i = 0 ; i <= indices.size() -1 ; i++){
-		//capas[indices[i]]->Mover(true);
-		if(scroll > 0) {
-			capas[indices[i]]->Mover(true);
-		}
-		if(scroll < 0) {
-			capas[indices[i]]->Mover(false);
-		}
-
 		capas[indices[i]]->Renderizar();
 	}
 
