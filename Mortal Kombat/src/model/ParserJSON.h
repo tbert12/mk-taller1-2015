@@ -23,6 +23,7 @@ public:
 	 ~ParserJSON();
 	 Mundo* cargarMundo();
 	 Mundo* generarMundoDefault();
+	 Sprite* cargarSprite( Json::Value root, string ruta_carpeta, string accion_sprite, string spritesheet_default, Sprite* (*crearSpritePorDefecto)(Ventana*, float, float), Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje );
 	 vector<Sprite*> generarSpritesDefault(Ventana* ventana, float personaje_ancho, float personaje_alto);
 	 vector<Sprite*> cargarSprites(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto);
 	 Sprite* crearSpriteParadoDefault(Ventana* ventana, float personaje_ancho, float personaje_alto);
