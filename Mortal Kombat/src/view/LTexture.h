@@ -20,6 +20,13 @@ typedef struct Rect_Logico
     float w, h;
 } Rect_Logico;
 
+typedef struct Rect_Objeto
+{
+    int x, y;
+    int w, h;
+    float w_log,h_log;
+} Rect_Objeto;
+
 //Texture wrapper class
 class LTexture
 {
@@ -49,7 +56,7 @@ class LTexture
 		void renderFondo(Rect_Logico* clip);
 
 		//Renders texture at given point
-		void renderObjeto(Rect_Logico* clip, float x = 0, float y = 0, bool flip = false);
+		void renderObjeto(Rect_Objeto* clip, float x = 0, float y = 0, bool flip = false);
 
 		//Gets image dimensions
 		int getWidth();
@@ -67,8 +74,8 @@ class LTexture
 		//Image dimensions
 		int mWidth;
 		int mHeight;
-		float ratio_x;
-		float ratio_y;
+		float ratio_x_ventana;
+		float ratio_y_ventana;
 		int w_ventana;
 		int h_ventana;
 

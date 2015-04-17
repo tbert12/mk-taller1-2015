@@ -29,35 +29,41 @@
 #define PERSONAJE_Z_INDEX_DEFAULT 3
 #define PERSONAJE_NOMBRE_DEFAULT "Jugador"
 #define PERSONAJE_FACTOR_VELOCIDAD 3
+#define ALTO_LOG_PERSONAJE 60.0
+#define ANCHO_LOG_PERSONAJE 30.0
 
-std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
+std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float alto_logico,float ancho_logico){
+
+	int wInitial = 72,wCaminar = 68,hInitialCaminar = 133;
+
+	float ratio_x_personaje = wInitial/ancho_logico;
+	float ratio_y_personaje = hInitialCaminar/alto_logico;
 
 	std::vector<Frame*> framesInitial(9);
 	std::vector<Frame*> framesCaminar(9);
-	int wInitial = 72,wCaminar = 68;
 		for (int i=0;i<9;i++){
 
-			framesInitial[i] = new Frame(wInitial*i/rx,0,133/ry,wInitial/rx);
-			framesCaminar[i] = new Frame(wCaminar*i/rx,0,133/ry,wCaminar/rx);
+			framesInitial[i] = new Frame(wInitial*i,0,hInitialCaminar,wInitial);
+			framesCaminar[i] = new Frame(wCaminar*i,0,hInitialCaminar,wCaminar);
 	}
 
 	std::vector<Frame*> framesDeSaltar(3);
-	framesDeSaltar[0] = new Frame(0,0,139/ry,69/rx);
-	framesDeSaltar[1] = new Frame(71/rx,0,96/ry,70/rx);
-	framesDeSaltar[2] = new Frame(141/rx,0,107/ry,60/rx);
+	framesDeSaltar[0] = new Frame(0,0,139,69);
+	framesDeSaltar[1] = new Frame(71,0,96,70);
+	framesDeSaltar[2] = new Frame(141,0,107,60);
 
 	std::vector<Frame*> framesSaltoDiagonal(8);
 	std::vector<int> xSaltoDiagonal = {0,72,127,208,283,335,392,472};
 	std::vector<int> hSaltoDiagonal = {136,82,59,55,81,81,59,62};
 	std::vector<int> wSaltoDiagonal = {72,55,74,74,53,55,75,74};
 	for (size_t i = 0; i < framesSaltoDiagonal.size(); i++){
-			framesSaltoDiagonal[i] = new Frame(xSaltoDiagonal[i]/rx ,0 , hSaltoDiagonal[i]/ry , wSaltoDiagonal[i]/rx);
+			framesSaltoDiagonal[i] = new Frame(xSaltoDiagonal[i] ,0 , hSaltoDiagonal[i], wSaltoDiagonal[i]);
 	}
 
 	std::vector<Frame*> framesAgacharse(3);
-	framesAgacharse[0] = new Frame(.0f,.0f,107/ry,60/rx);
-	framesAgacharse[1] = new Frame(60/rx,.0f,89/ry,62/rx);
-	framesAgacharse[2] = new Frame(122/rx,.0f,71/ry,64/rx);
+	framesAgacharse[0] = new Frame(.0f,.0f,107,60);
+	framesAgacharse[1] = new Frame(60,.0f,89,62);
+	framesAgacharse[2] = new Frame(122,.0f,71,64);
 
 	std::string rutaInitial = "data/players/default/sprites/initial.png";
 	std::string rutaCaminar = "data/players/default/sprites/walk.png";
@@ -65,11 +71,11 @@ std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float rx, float ry){
 	std::string rutaSaltoDiagonal = "data/players/default/sprites/diag.png";
 	std::string rutaAgacharse = "data/players/default/sprites/agachar.png";
 
-	Sprite* Initial = new Sprite(rutaInitial,framesInitial,ventana);
-	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,ventana);
-	Sprite* Salto = new Sprite(rutaSalto,framesDeSaltar,ventana);
-	Sprite* SaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonal,ventana);
-	Sprite* Agacharse = new Sprite(rutaAgacharse,framesAgacharse,ventana);
+	Sprite* Initial = new Sprite(rutaInitial,framesInitial,ventana,ratio_x_personaje,ratio_y_personaje);
+	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,ventana,ratio_x_personaje,ratio_y_personaje);
+	Sprite* Salto = new Sprite(rutaSalto,framesDeSaltar,ventana,ratio_x_personaje,ratio_y_personaje);
+	Sprite* SaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonal,ventana,ratio_x_personaje,ratio_y_personaje);
+	Sprite* Agacharse = new Sprite(rutaAgacharse,framesAgacharse,ventana,ratio_x_personaje,ratio_y_personaje);
 
 	Salto->setLoop(1);
 	Agacharse->setLoop(2);
@@ -107,7 +113,7 @@ Mundo* CrearMundoDefault(){
 	if(!ventana->create_window()){
 		log("No se puede inicializar la ventana",LOG_ERROR);
 	}
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD);
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ALTO_LOG_PERSONAJE,ANCHO_LOG_PERSONAJE), PERSONAJE_FACTOR_VELOCIDAD);
 	//si flipeado, descomentar la siguiente linea
 	//Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD,true);
 	if(personaje_default == NULL){

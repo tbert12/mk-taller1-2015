@@ -8,7 +8,7 @@
 
 #include "Frame.h"
 
-Frame::Frame(float x,float y,float alto,float ancho){
+Frame::Frame(int x,int y,int alto,int ancho){
 	X = x;
 	Y = y;
 	Alto = alto;

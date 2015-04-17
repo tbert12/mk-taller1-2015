@@ -19,8 +19,8 @@ LTexture::LTexture(SDL_Renderer* Renderer)
 	mWidth = 0;
 	mHeight = 0;
 	gRenderer = Renderer;
-	ratio_x = 1;
-	ratio_y = 1;
+	ratio_x_ventana = 1;
+	ratio_y_ventana = 1;
 	w_ventana = 0;
 	h_ventana = 0;
 }
@@ -32,8 +32,8 @@ LTexture::~LTexture()
 }
 
 void LTexture::setRatio(float ratiox , float ratioy){
-	ratio_x = ratiox;
-	ratio_y = ratioy;
+	ratio_x_ventana = ratiox;
+	ratio_y_ventana = ratioy;
 }
 
 void LTexture::setDimensionesVentana(int w,int h){
@@ -92,8 +92,8 @@ void LTexture::free()
 		mWidth = 0;
 		mHeight = 0;
 		gRenderer = NULL;
-		ratio_x = 0;
-		ratio_y = 0;
+		ratio_x_ventana = 0;
+		ratio_y_ventana = 0;
 		w_ventana = 0;
 		h_ventana = 0;
 	}
@@ -117,32 +117,23 @@ void LTexture::setAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( mTexture, alpha );
 }
 
-void LTexture::renderObjeto( Rect_Logico* clip,float x, float y, bool flip)
+void LTexture::renderObjeto( Rect_Objeto* clip,float x, float y, bool flip)
 {
-	int x_px = (int)(x*ratio_x);
-	int y_px = (int)(y*ratio_y);
+	int x_px = (int)(x*ratio_x_ventana);
+	int y_px = (int)(y*ratio_y_ventana);
 
 	SDL_Rect Object = { x_px,y_px, mWidth, mHeight};
 	SDL_Rect clip_px;
 	//Setear tamanio de renderizacion
 	if( clip != NULL )
 	{
-		//El + 0.5 es el casteo que usa en C++
-		//Si se usa la librea std::round. HACE LO MISMO!. (StackOverFlow)
-		clip_px = {(int)(clip->x*ratio_x + 0.5), //posicion horizontal del objeto
-				(int)(clip->y*ratio_y + 0.5), //posicion vertical del objeto
-				(int)(clip->w*ratio_x + 0.5), // ancho del objeto
-				(int)(clip->h*ratio_y + 0.5) }; //alto del objeto
+		clip_px = {clip->x, //posicion en pixel horizontal del objeto en la imagen
+				clip->y, //posicion en pixel vertical del objeto en la imagen
+				clip->w,// ancho en pixel del objeto en la imagen
+				clip->h}; //alto en pixel del objeto en la imagen
 
-		//Cuanto lo tengo que estirar dependiendo el tamano de a pantall?
-		//Ahora lo estoy aumentando 40 pixeles en y, y 20 en x, para que vean
-		int nuevo_h_estirado = clip_px.h + 40;
-		int nuevo_w_estirado = clip_px.w + 20;
-
-		Object.x = Object.x - nuevo_w_estirado + clip_px.w;
-		Object.y = Object.y - nuevo_h_estirado + clip_px.h;
-		Object.w = nuevo_w_estirado;//Siempre el tamaño de la ventana
-		Object.h = nuevo_h_estirado;
+		Object.w = clip->w_log*ratio_x_ventana;	//tamaño logico del objeto por el ratio de ventana
+		Object.h = clip->h_log*ratio_y_ventana;
 	}
 
 	//Renderizar a la pantalla
@@ -164,8 +155,8 @@ void LTexture::renderFondo( Rect_Logico* clip)
 		float ratio_x_img = mWidth/clip->w;
 		float ratio_y_img =	mHeight/clip->h;
 
-		int ancho_px_ventana = int((w_ventana/ratio_x)*ratio_x_img + 0.5); //ancho_logico_de_ventana en lo px de la imagen
-		int alto_px_ventana = int((h_ventana/ratio_y)*ratio_y_img + 0.5);
+		int ancho_px_ventana = int((w_ventana/ratio_x_ventana)*ratio_x_img + 0.5); //ancho_logico_de_ventana en lo px de la imagen
+		int alto_px_ventana = int((h_ventana/ratio_y_ventana)*ratio_y_img + 0.5);
 
 		clip_px = {(int)(clip->x*ratio_x_img  + 0.5), //posicion horizontal de la capa
 				(int)(clip->y*ratio_y_img + 0.5), //posicion vertical de la capa
