@@ -67,7 +67,7 @@ public:
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
 	bool enMovimiento();
-	void Update();
+	void Update(int velocidadScroll);
 	void renderizar(float x_dist_ventana);
 
 	void setPosition(float x, float y);
