@@ -29,11 +29,11 @@ class Sprite {
 		bool doloop;
 		int frameLoop;
 
-		Rect_Logico* spriteFrames;
+		Rect_Objeto* spriteFrames;
 		LTexture* SpriteSheetTexture;
 
 	public:
-		Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana);
+		Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y);
 		~Sprite();
 
 		bool Advance();

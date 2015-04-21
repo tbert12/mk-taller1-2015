@@ -1,12 +1,12 @@
 {
 	"parado": {
 		"nombre": "initial.png",
-		"frames":[
+		"frames": [
 			{	
 				"x": 0,
 				"y": 0,
 				"Alto": 133,
-				"Ancho": 72
+				"Ancho": 72	
 			},
 			{	
 				"x": 72,
@@ -60,7 +60,7 @@
 	},
 	"caminar":{
 		"nombre": "walk.png",
-		"frames":[
+		"frames": [
 			{	
 				"x": 0,
 				"y": 0,
@@ -119,7 +119,7 @@
 	},
 	"saltar":{
 		"nombre": "salto.png",
-		"frames":[
+		"frames": [
 			{	
 				"x": 0,
 				"y": 0,
@@ -175,7 +175,7 @@
 				"Ancho": 53
 			},
 			{	
-				"x": 335,
+				"x": 338,
 				"y": 0,
 				"Alto": 81,
 				"Ancho": 55

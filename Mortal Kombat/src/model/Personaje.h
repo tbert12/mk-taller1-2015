@@ -15,7 +15,7 @@ const int SPRITE_SALTAR=          2;
 const int SPRITE_SALTAR_DIAGONAL= 3;
 const int SPRITE_AGACHAR=         4;
 
-const int TIEMPOTOTALDESALTO = 10;
+const int TIEMPOTOTALDESALTO = 8;
 
 #include <stdio.h>
 #include <iostream>
@@ -67,6 +67,7 @@ public:
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
 	bool enMovimiento();
+	void Update();
 	void renderizar(float x_dist_ventana);
 
 	void setPosition(float x, float y);

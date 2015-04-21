@@ -13,6 +13,9 @@
 #include "../view/Ventana.h"
 #include <string>
 #include <SDL2/SDL.h>
+#include "../model/CargarImagenException.h"
+#include <stdexcept>
+#include <exception>
 
 
 class CapaFondo: public Capa {
@@ -26,6 +29,7 @@ public:
 	CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal,std::string ruta, Ventana* ventana);
 	//virtual void Mover(bool right);
 	virtual void Renderizar();
+	virtual void Update(int scroll);
 	virtual ~CapaFondo();
 };
 

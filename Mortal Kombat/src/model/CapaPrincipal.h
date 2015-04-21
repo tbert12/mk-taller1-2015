@@ -20,7 +20,7 @@ public:
 	int Scrollear(); //0 no scrollea , 1 para la derecha -1 para la izquierda!
 	virtual ~CapaPrincipal();
 	virtual void Renderizar();
-	//virtual void Mover(bool right);
+	virtual void Update(int scroll);
 
 private:
 	Personaje* m_Personaje;

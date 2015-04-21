@@ -38,9 +38,15 @@ void CapaPrincipal::_actualizarX(){
 	if (rect->x > rect->w) rect->x = rect->w;
 }
 
+void CapaPrincipal::Update(int scroll){
+	if (scroll > 0)this->Mover(true);
+	else if (scroll < 0) this->Mover(false);
+	this->_actualizarX();
+	m_Personaje->Update();
+}
+
 void CapaPrincipal::Renderizar()
 {
-	_actualizarX();
 	m_Personaje->renderizar(getX());
 	if(m_PersonajeDos)
 		m_PersonajeDos->renderizar(getX());
@@ -49,11 +55,14 @@ void CapaPrincipal::Renderizar()
 int CapaPrincipal::Scrollear(){
 	if(getX() == 0 and (m_Personaje->getSentidoDeMovimiento() < 0))return 0;
 	if(getX() == rect->w and (m_Personaje->getSentidoDeMovimiento() > 0)) return 0;
-	if ((m_Personaje->getX() <= (getX() + m_ancho_ventana*0.05f)) and (m_Personaje->getSentidoDeMovimiento() < 0)) return -1;
-	if ((m_Personaje->getX() >= (getX() + m_ancho_ventana*0.85f)) and (m_Personaje->getSentidoDeMovimiento() > 0) ) return 1;
+	if ((m_Personaje->getX() <= (getX() + m_ancho_ventana*0.02f)) and (m_Personaje->getSentidoDeMovimiento() < 0)) return -1;
+	if ((m_Personaje->getX() >= (getX() + m_ancho_ventana*0.80f)) and (m_Personaje->getSentidoDeMovimiento() > 0) ) return 1;
 	return 0;
 }
 
 CapaPrincipal::~CapaPrincipal() {
-	//this->Capa::~Capa();
+	//auto call Capa::~Capa();
+	m_velocidad_derecha = 0;
+	m_velocidad_izquierda = 0;
+	m_Personaje = NULL;
 }

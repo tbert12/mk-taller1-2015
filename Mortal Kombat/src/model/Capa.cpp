@@ -42,6 +42,9 @@ void Capa::Mover(bool right){
 int Capa::getZIndex(){
 	return m_zIndex;
 }
+void Capa::Update(int scroll){
+
+}
 
 void Capa::Renderizar()
 {
