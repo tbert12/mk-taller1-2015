@@ -16,6 +16,7 @@ class CapaPrincipal: public Capa {
 
 public:
 	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personaje);
+	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personajeUno, Personaje* personajeDos);
 	int Scrollear(); //0 no scrollea , 1 para la derecha -1 para la izquierda!
 	virtual ~CapaPrincipal();
 	virtual void Renderizar();
@@ -23,6 +24,7 @@ public:
 
 private:
 	Personaje* m_Personaje;
+	Personaje* m_PersonajeDos;
 	void _actualizarX();
 	float m_velocidad_derecha;
 	float m_velocidad_izquierda;
