@@ -1,162 +1,171 @@
-#include "Mundo.h"
-#include "logging.h"
-#include <algorithm>
+#include "DefaultSettings.h"
 
-#define TIEMPO_DEFAULT 3.00
-#define VENTANA_ANCHO_PX_DEFAULT 512
-#define VENTANA_ALTO_PX_DEFAULT 384
-#define VENTANA_ANCHO_LOG 200.0
-#define VENTANA_ALTO_LOG 150.0
-#define ESCENARIO_ANCHO_DEFAULT 600.0
-#define ESCENARIO_ALTO_DEFAULT 150.0
-#define Y_PISO_DEFAULT 135.0
-#define BACKGROUND_0_DEFAULT "data/img/background/default/background_0.png"
-#define BACKGROUND_0__ANCHO_DEFAULT 200.0
-#define BACKGROUND_0__ALTO_DEFAULT 150.0
-#define BACKGROUND_0_Z_INDEX 0
-#define BACKGROUND_1_DEFAULT "data/img/background/default/background_1.png"
-#define BACKGROUND_1__ANCHO_DEFAULT 226.6
-#define BACKGROUND_1__ALTO_DEFAULT 150.0
-#define BACKGROUND_1_Z_INDEX 1
-#define BACKGROUND_2_DEFAULT "data/img/background/default/background_2.png"
-#define BACKGROUND_2__ANCHO_DEFAULT 600.0
-#define BACKGROUND_2__ALTO_DEFAULT 150.0
-#define BACKGROUND_2_Z_INDEX 2
-#define BACKGROUND_4_DEFAULT "data/img/background/Ventana.png"
-#define BACKGROUND_4__ANCHO_DEFAULT 200
-#define BACKGROUND_4__ALTO_DEFAULT 150.0
-#define BACKGROUND_4_Z_INDEX 4
-#define PERSONAJE_Z_INDEX_DEFAULT 3
-#define PERSONAJE_NOMBRE_DEFAULT "Jugador"
-#define PERSONAJE_FACTOR_VELOCIDAD 3
-#define ALTO_LOG_PERSONAJE 60.0
-#define ANCHO_LOG_PERSONAJE 30.0
+using namespace std;
 
-std::vector<Sprite*> GenerarSpritesDefault(Ventana* ventana,float alto_logico,float ancho_logico){
 
-	int wInitial = 72,wCaminar = 68,hInitialCaminar = 133;
+Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje) {
+	Sprite* sprite;
 
-	float ratio_x_personaje = wInitial/ancho_logico;
-	float ratio_y_personaje = hInitialCaminar/alto_logico;
+	Json::Value root;
+	Json::Reader reader;
 
-	std::vector<Frame*> framesInitial(9);
-	std::vector<Frame*> framesCaminar(9);
-		for (int i=0;i<9;i++){
+	// Abrir archivo.
+	ifstream json_sprites;
+	json_sprites.open( JSON_SPRITES_DEFAULT );
 
-			framesInitial[i] = new Frame(wInitial*i,0,hInitialCaminar,wInitial);
-			framesCaminar[i] = new Frame(wCaminar*i,0,hInitialCaminar,wCaminar);
+	if ( ! json_sprites.is_open() ) {
+		// Informar al usuario la falla y la resolucion tomada.
+		log( "No se pudo abrir el archivo por defecto de sprites JSON. Se aborta el programa.", LOG_ERROR );
+		throw runtime_error( "No se pudo abrir el archivo por defecto de sprites JSON." );
 	}
 
-	std::vector<Frame*> framesDeSaltar(3);
-	framesDeSaltar[0] = new Frame(0,0,139,69);
-	framesDeSaltar[1] = new Frame(71,0,96,70);
-	framesDeSaltar[2] = new Frame(141,0,107,60);
-
-	std::vector<Frame*> framesSaltoDiagonal(8);
-	std::vector<int> xSaltoDiagonal = {0,72,127,208,283,335,392,472};
-	std::vector<int> hSaltoDiagonal = {136,82,59,55,81,81,59,62};
-	std::vector<int> wSaltoDiagonal = {72,55,74,74,53,55,75,74};
-	for (size_t i = 0; i < framesSaltoDiagonal.size(); i++){
-			framesSaltoDiagonal[i] = new Frame(xSaltoDiagonal[i] ,0 , hSaltoDiagonal[i], wSaltoDiagonal[i]);
+	bool exito = reader.parse( json_sprites, root, false );
+	if ( ! exito ) {
+	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
+	    log( "No se pudo interpretar el JSON de sprites por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
+	    throw runtime_error( "No se pudo interpretar el JSON de sprites por defecto." );
 	}
 
-	std::vector<Frame*> framesAgacharse(3);
-	framesAgacharse[0] = new Frame(.0f,.0f,107,60);
-	framesAgacharse[1] = new Frame(60,.0f,89,62);
-	framesAgacharse[2] = new Frame(122,.0f,71,64);
+	// Cerrar archivo.
+	json_sprites.close();
 
-	std::string rutaInitial = "data/players/default/sprites/initial.png";
-	std::string rutaCaminar = "data/players/default/sprites/walk.png";
-	std::string rutaSalto = "data/players/default/sprites/salto.png";
-	std::string rutaSaltoDiagonal = "data/players/default/sprites/diag.png";
-	std::string rutaAgacharse = "data/players/default/sprites/agachar.png";
+	string spritesheet;
+	try {
+		if ( ! root[accion_sprite].isMember("nombre") ) {
+			log( "No se encontro el nombre de la imagen del spritesheet de la accion por defecto. Se aborta el programa", LOG_ERROR );
+			throw runtime_error( "No se encontro el nombre de la imagen del spritesheet de la accion por defecto." );
+		}
+		spritesheet = root[accion_sprite].get( "nombre", "" ).asString();
+		struct stat sb;
+		if ( stat((string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + spritesheet).c_str(), &sb) != 0 ) {
+			log( "La ruta al spritesheet por defecto de la accion no existe. Se aborta el programa", LOG_ERROR );
+			throw runtime_error( "La ruta al spritesheet por defecto de la accion no existe." );
+		}
+	} catch (exception &e) {
+		log( "La ruta al spritesheet por defecto de la accion no es una cadena de texto valida. Se aborta el programa.", LOG_ERROR );
+		throw runtime_error( "La ruta al spritesheet por defecto de la accion no es una cadena de texto valida." );
+	}
+	if ( ! root[accion_sprite].isMember("frames") || ! root[accion_sprite]["frames"].isArray() ) {
+		log( "No se especificaron parametros en un vector para los frames del sprite por defecto de la accion. Se aborta el programa.", LOG_ERROR );
+		throw runtime_error( "No se especificaron parametros para los frames del sprite por defecto de la accion." );
+	}
+	const Json::Value frames_accion = root[accion_sprite]["frames"];
+	vector<Frame*> frames( frames_accion.size() );
+	vector<bool> loop_accion(frames.size(), false);
+	for ( unsigned int i=0; i < frames_accion.size(); i++ ) {
+		int x, y, alto, ancho;
+		try {
+			x = frames_accion[i].get( "x", -100 ).asInt();
+			if ( x < 0 ) {
+				log( "No se especifico la posicion X de un frame del sprite por defecto de la accion o es negativa. Se aborta el programa.", LOG_ERROR );
+				throw runtime_error( "No se especifico la posicion X de un frame del sprite por defecto de la accion." );
+			}
+		} catch (exception &e) {
+			log ( "La posicion X de un frame del sprite por defecto indicada no es valida y no puede ser convertida a un numero. Se aborta el programa.", LOG_ERROR );
+			throw runtime_error( "La posicion X de un frame del sprite por defecto de la accion no pudo ser convertida a numero." );
+		}
+		try {
+			y = frames_accion[i].get( "y", -100 ).asInt();
+			if ( y < 0 ) {
+				log( "No se especifico la posicion Y de un frame del sprite por defecto de la accion o es negativa. Se aborta el programa.", LOG_ERROR );
+				throw runtime_error( "No se especifico la posicion Y de un frame del sprite por defecto de la accion." );
+			}
+		} catch (exception &e) {
+			log ( "La posicion Y de un frame del sprite por defecto de la accion indicada no es valida y no puede ser convertida a un numero. Se aborta el programa.", LOG_ERROR );
+			throw runtime_error( "La posicion Y de un frame del sprite por defecto de la accion no pudo ser convertida a numero." );
+		}
+		try {
+			alto = frames_accion[i].get( "Alto", -100 ).asInt();
+			if ( alto < 0 ) {
+				log( "No se especifico el alto de un frame del sprite por defecto de la accion o es negativo. Se aborta el programa.", LOG_ERROR );
+				throw runtime_error( "No se especifico el alto de un frame del sprite por defecto de la accion." );
+			}
+		} catch (exception &e) {
+			log ( "El alto de un frame del sprite por defecto de la accion indicada no es valido y no puede ser convertido a un numero. Se aborta el programa.", LOG_ERROR );
+			throw runtime_error( "El alto de un frame del sprite por defecto de la accion no pudo ser convertido a numero." );
+		}
+		try {
+			ancho = frames_accion[i].get( "Ancho", -100 ).asInt();
+			if ( ancho < 0 ) {
+				log( "No se especifico el ancho de un frame del sprite por defecto de la accion o es negativo. Se aborta el programa.", LOG_ERROR );
+				throw runtime_error( "No se especifico el ancho de un frame del sprite por defecto de la accion." );
+			}
+		} catch (exception &e) {
+			log ( "El ancho de un frame del sprite por defecto de la accion indicada no es valido y no puede ser convertido a un numero. Se aborta el programa.", LOG_ERROR );
+			throw runtime_error( "El ancho de un frame del sprite por defecto de la accion no pudo ser convertido a numero." );
+		}
+		bool loop;
+		try {
+			loop = frames_accion[i].get( "loop", false ).asBool();
+		} catch (exception &e) {
+			log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite por defecto de la accion. Se setea en false por defecto.", LOG_WARNING );
+			loop = false;
+		}
+		if ( loop ) {
+			loop_accion[i] = true;
+		}
+		frames[i] = new Frame(x, y, alto, ancho);
+	}
+	try {
+		sprite = new Sprite(string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje );
+		for ( unsigned int j=0; j < frames.size(); j++ ) {
+			if ( loop_accion[j] ) sprite->setLoop(j);
+		}
+	} catch ( CargarImagenException &e ) {
+		delete sprite;
+		log( "No se pudo abrir el spritesheet por defecto de la accion. Se aborta el programa. " + string(e.what()), LOG_ERROR );
+		throw runtime_error( "No se pudo abrir el spritesheet por defecto de la accion." );
+	}
+	return sprite;
+}
 
-	Sprite* Initial = new Sprite(rutaInitial,framesInitial,ventana,ratio_x_personaje,ratio_y_personaje);
-	Sprite* Caminar = new Sprite(rutaCaminar,framesCaminar,ventana,ratio_x_personaje,ratio_y_personaje);
-	Sprite* Salto = new Sprite(rutaSalto,framesDeSaltar,ventana,ratio_x_personaje,ratio_y_personaje);
-	Sprite* SaltoDiagonal = new Sprite(rutaSaltoDiagonal,framesSaltoDiagonal,ventana,ratio_x_personaje,ratio_y_personaje);
-	Sprite* Agacharse = new Sprite(rutaAgacharse,framesAgacharse,ventana,ratio_x_personaje,ratio_y_personaje);
+vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto ) {
 
-	Salto->setLoop(1);
-	Agacharse->setLoop(2);
+	vector<Sprite*> sprites;
 
-	/* PARA ELIMINAR SPRITE->SIGUIENTE
-	 * La onda es hacer esto y que se le diga al Sprite en Personaje que tiene que hacer
-	 * Hay que implementar Sprite->Reverse (Para reproducir en reversa saltar y caminar)
-	 * Hay que implementar Sprite->Loop y Sprite->SetLoop (Viene del JSON), para cuando este saltando o agachado
-	 * ...(No se me ocurre nada mas)
-	 * std::vector<Sprite*> sprites = {Initial,
-	 *								   Caminar,
-	 *								   Salto,
-	 *								   SaltoDiagonal
-	 *								   Agacharse};
-	 */
+	// Calculo ratios para el personaje en base a las dimensiones del sprite inicial por defecto.
+	float ratio_x_personaje = PERSONAJE_ANCHO_PX_DEFAULT / personaje_ancho;
+	float ratio_y_personaje = PERSONAJE_ALTO_PX_DEFAULT / personaje_alto;
 
-	 std::vector<Sprite*> sprites = {Initial,
-			 	 	 	 	 	 	 Caminar,
-	 								 Salto,
-	 								 SaltoDiagonal,
-	 								 Agacharse};
-
+	sprites.push_back( crearSpritePorDefecto("parado", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("caminar", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("saltar", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("saltardiagonal", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("agachar", ventana, ratio_x_personaje, ratio_y_personaje) );
 
 	return sprites;
 }
 
-Mundo* CrearMundoDefault(){
-	log("Se comienza a crear un Mundo con valores Default",LOG_DEBUG);
+Mundo* generarMundoDefault() {
 
-	float ratio_x = (float)VENTANA_ANCHO_PX_DEFAULT/VENTANA_ANCHO_LOG;
-	float ratio_y = (float)VENTANA_ALTO_PX_DEFAULT/VENTANA_ALTO_LOG;
+	float ratio_x = VENTANA_ANCHO_PX_DEFAULT/VENTANA_ANCHO_DEFAULT;
+	float ratio_y = VENTANA_ALTO_PX_DEFAULT/ESCENARIO_ALTO_DEFAULT;
+
 	Mundo* mundo = new Mundo(ESCENARIO_ANCHO_DEFAULT,ESCENARIO_ALTO_DEFAULT);
 	Ventana* ventana = new Ventana(VENTANA_ANCHO_PX_DEFAULT,VENTANA_ALTO_PX_DEFAULT,ratio_x,ratio_y);
 
-	if(!ventana->create_window()){
-		log("No se puede inicializar la ventana",LOG_ERROR);
-	}
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ALTO_LOG_PERSONAJE,ANCHO_LOG_PERSONAJE), PERSONAJE_FACTOR_VELOCIDAD);
-	//si flipeado, descomentar la siguiente linea
-	//Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, GenerarSpritesDefault(ventana,ratio_x,ratio_y), PERSONAJE_FACTOR_VELOCIDAD,true);
-	if(personaje_default == NULL){
-		log("No se pudo crear el personaje default",LOG_ERROR);
+	if( ! ventana->create_window() ) {
+		throw runtime_error( "No se pudo abrir la ventana del programa." );
 	}
 
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
+
 	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2),Y_PISO_DEFAULT);
-	log("Creado Personaje Default (SubZero)",LOG_DEBUG);
 
 	mundo->setVentana(ventana);
 	mundo->setTiempo(new Tiempo(TIEMPO_DEFAULT));
 
-	log("Creado el tiempo, la ventana y el escenario. Seteados a Mundo",LOG_DEBUG);
-	if (!mundo->addPersonaje(personaje_default)){
-		log("Personaje Default NO agregado al Mundo",LOG_ERROR);
-	}
-	log("Personaje Default agregado al Mundo",LOG_DEBUG);
+	mundo->addPersonaje(personaje_default);
 
-	// CREO LAS CAPAS, SON 3 NIVELES
-	// La relacion entre el las medidas logicas y los pixeles es la divicion
+	CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_0_BACKGROUND_DEFAULT,ventana);
+	mundo->addCapa(capa_0,CAPA_Z_INDEX_DEFAULT);
+	CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_1_BACKGROUND_DEFAULT,ventana);
+	mundo->addCapa(capa_1,CAPA_Z_INDEX_DEFAULT+1);
+	CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_2_BACKGROUND_DEFAULT,ventana);
+	mundo->addCapa(capa_2,CAPA_Z_INDEX_DEFAULT+2);
 
-	//capa 0, es la ultima. de la misma medida que la ventana
-
-	CapaFondo* capa_0 =new CapaFondo(BACKGROUND_0__ALTO_DEFAULT,BACKGROUND_0__ANCHO_DEFAULT,BACKGROUND_0_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_0_DEFAULT,ventana);
-	mundo->addCapa(capa_0,BACKGROUND_0_Z_INDEX);
-
-	//capa 1 ,es la del medio. del doble que la ventana
-	CapaFondo* capa_1 =new CapaFondo(BACKGROUND_1__ALTO_DEFAULT,BACKGROUND_1__ANCHO_DEFAULT,BACKGROUND_1_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_1_DEFAULT,ventana);
-	mundo->addCapa(capa_1,BACKGROUND_1_Z_INDEX);
-
-	//capa 4 es la ventana que tapa el escenario!
-	//CapaFondo* capa_4 = new CapaFondo(BACKGROUND_4__ALTO_DEFAULT,BACKGROUND_4__ANCHO_DEFAULT,BACKGROUND_4_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_4_DEFAULT,ventana);
-	//mundo->addCapa(capa_4,BACKGROUND_4_Z_INDEX);
-
-	//capa 2 es la mas grande, la del escenario
-	CapaFondo* capa_2 = new CapaFondo(BACKGROUND_2__ALTO_DEFAULT,BACKGROUND_2__ANCHO_DEFAULT,BACKGROUND_2_Z_INDEX,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_FACTOR_VELOCIDAD,BACKGROUND_2_DEFAULT,ventana);
-	mundo->addCapa(capa_2,BACKGROUND_2_Z_INDEX);
-
-	//la que contiene el escenario
-
-	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,VENTANA_ANCHO_LOG,PERSONAJE_FACTOR_VELOCIDAD,personaje_default);
+	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,VENTANA_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,personaje_default);
 	mundo->addCapaPrincipal(capa_principal,PERSONAJE_Z_INDEX_DEFAULT);
 
-	//log("Capas agregadas al Mundo",LOG_DEBUG);
 	return mundo;
 }

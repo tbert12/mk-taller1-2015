@@ -1,35 +1,5 @@
 #include "ParserJSON.h"
 
-#define LOGLVL_DEFAULT 2
-#define TIEMPO_DEFAULT 180
-#define VENTANA_ANCHO_PX_DEFAULT 512
-#define VENTANA_ALTO_PX_DEFAULT 384
-#define VENTANA_ANCHO_DEFAULT 200.0
-#define ESCENARIO_ANCHO_DEFAULT 600.0
-#define ESCENARIO_ALTO_DEFAULT 150.0
-#define Y_PISO_DEFAULT 135.0
-#define BACKGROUND_DEFAULT "data/img/background/default/unknown.png"
-#define CAPA_0_BACKGROUND_DEFAULT "data/img/background/default/background_0.png"
-#define CAPA_1_BACKGROUND_DEFAULT "data/img/background/default/background_1.png"
-#define CAPA_2_BACKGROUND_DEFAULT "data/img/background/default/background_2.png"
-#define CAPA_0_ANCHO_DEFAULT 200.0
-#define CAPA_1_ANCHO_DEFAULT 226.6
-#define CAPA_2_ANCHO_DEFAULT 600.0
-#define CAPA_Z_INDEX_DEFAULT 0
-#define PERSONAJE_Z_INDEX_DEFAULT 3
-#define PERSONAJE_CARPETA_SPRITES_DEFAULT "data/players/default/sprites/"
-#define PERSONAJE_NOMBRE_DEFAULT "Jugador"
-#define PERSONAJE_FLIPPED_DEFAULT false
-#define PERSONAJE_ANCHO_PX_DEFAULT 72
-#define PERSONAJE_ALTO_PX_DEFAULT 133
-#define PERSONAJE_ANCHO_DEFAULT 40
-#define PERSONAJE_ALTO_DEFAULT 70
-
-#define SPRITESHEET_PARADO_DEFAULT "initial.png"
-#define SPRITESHEET_CAMINAR_DEFAULT "walk.png"
-#define SPRITESHEET_SALTAR_DEFAULT "salto.png"
-#define SPRITESHEET_SALTAR_DIAGONAL_DEFAULT "diag.png"
-#define SPRITESHEET_AGACHAR_DEFAULT "agachar.png"
 
 using namespace std;
 
@@ -40,160 +10,87 @@ ParserJSON::ParserJSON(string ruta_archivo) {
 ParserJSON::~ParserJSON() {
 }
 
-Sprite* ParserJSON::crearSpriteParadoDefault(Ventana* ventana, float personaje_ancho, float personaje_alto) {
-	vector<Frame*> framesParado(9);
-
-	int wParado = PERSONAJE_ANCHO_PX_DEFAULT;
-	for ( int i=0; i < 9; i++ ){
-		framesParado[i] = new Frame( wParado*i, 0, PERSONAJE_ALTO_PX_DEFAULT, wParado );
+float ParserJSON::getRatioXPersonaje( Json::Value root_sprites, float personaje_ancho ) {
+	if ( ! root_sprites.isMember("parado") ) {
+		log( "No se encontro la etiqueta para la creacion del sprite inicial del personaje. Se setea el ratio_x del personaje por defecto.", LOG_ERROR );
+		return PERSONAJE_ANCHO_PX_DEFAULT / personaje_ancho;
+	}
+	if ( ! root_sprites["parado"].isMember("frames") || ! root_sprites["parado"]["frames"].isArray() ) {
+		log( "No se encontraron especificaciones en un vector para la creacion del sprite inicial del personaje. Se setea el ratio_x del personaje por defecto.", LOG_ERROR );
+		return PERSONAJE_ANCHO_PX_DEFAULT / personaje_ancho;
+	}
+	int ancho_px;
+	try {
+		ancho_px = root_sprites["parado"]["frames"][0].get( "Ancho", -100 ).asInt();
+		if ( ancho_px < 0 ) {
+			log( "No se especifico el ancho en pixeles del personaje o es negativo. No se puede calcular el ratio_x del personaje. Se setea por defecto.", LOG_ERROR );
+			return PERSONAJE_ANCHO_PX_DEFAULT / personaje_ancho;
+		}
+	} catch ( exception &e ) {
+		log( "El ancho en pixeles indicado del personaje no puede ser convertido a numero. Se setea el ratio_x del personaje por defecto.", LOG_ERROR );
+		return PERSONAJE_ANCHO_PX_DEFAULT / personaje_ancho;
 	}
 
-	// Calculo ratios para el personaje.
-	float ratio_x_personaje = PERSONAJE_ANCHO_PX_DEFAULT / personaje_ancho;
-	float ratio_y_personaje = PERSONAJE_ALTO_PX_DEFAULT / personaje_alto;
-
-	Sprite* spriteParado = new Sprite( string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + string(SPRITESHEET_PARADO_DEFAULT), framesParado, ventana, ratio_x_personaje, ratio_y_personaje );
-	return spriteParado;
+	float ratio_x_personaje = ancho_px / personaje_ancho;
+	log( "Se calculo el ratio_x del personaje.", LOG_DEBUG );
+	return ratio_x_personaje;
 }
 
-Sprite* ParserJSON::crearSpriteCaminarDefault(Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje ) {
-	vector<Frame*> framesCaminar(9);
-
-	int wParado = 68;
-	for ( int i=0; i < 9; i++ ){
-		framesCaminar[i] = new Frame( wParado*i, 0, PERSONAJE_ALTO_PX_DEFAULT, wParado );
+float ParserJSON::getRatioYPersonaje( Json::Value root_sprites, float personaje_alto ) {
+	if ( ! root_sprites.isMember("parado") ) {
+		log( "No se encontro la etiqueta para la creacion del sprite inicial del personaje. Se setea el ratio_y del personaje por defecto.", LOG_ERROR );
+		return PERSONAJE_ALTO_PX_DEFAULT / personaje_alto;
+	}
+	if ( ! root_sprites["parado"].isMember("frames") || ! root_sprites["parado"]["frames"].isArray() ) {
+		log( "No se encontraron especificaciones en un vector para la creacion del sprite inicial del personaje. Se setea el ratio_y del personaje por defecto.", LOG_ERROR );
+		return PERSONAJE_ALTO_PX_DEFAULT / personaje_alto;
+	}
+	int alto_px;
+	try {
+		alto_px = root_sprites["parado"]["frames"][0].get( "Alto", -100 ).asInt();
+		if ( alto_px < 0 ) {
+			log( "No se especifico el alto en pixeles del personaje o es negativo. No se puede calcular el ratio_y del personaje. Se setea por defecto.", LOG_ERROR );
+			return PERSONAJE_ALTO_PX_DEFAULT / personaje_alto;
+		}
+	} catch ( exception &e ) {
+		log( "El alto en pixeles indicado del personaje no puede ser convertido a numero. Se setea el ratio_y del personaje por defecto.", LOG_ERROR );
+		return PERSONAJE_ALTO_PX_DEFAULT / personaje_alto;
 	}
 
-	Sprite* spriteCaminar = new Sprite( string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + string(SPRITESHEET_CAMINAR_DEFAULT), framesCaminar, ventana, ratio_x_personaje, ratio_y_personaje );
-	return spriteCaminar;
+	float ratio_y_personaje = alto_px / personaje_alto;
+	log( "Se calculo el ratio_y del personaje.", LOG_DEBUG );
+	return ratio_y_personaje;
 }
 
-Sprite* ParserJSON::crearSpriteSaltarDefault(Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje ) {
-	vector<Frame*> framesSaltar(3);
 
-	vector<int> xSaltar = { 0, 71, 141 };
-	vector<int> hSaltar = { 139, 96, 107 };
-	vector<int> wSaltar = { 69, 70, 60 };
 
-	for ( int i=0; i < 3; i++ ) {
-		framesSaltar[i] = new Frame( xSaltar[i], 0, hSaltar[i], wSaltar[i] );
-	}
-
-	Sprite* spriteSaltar = new Sprite( string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + string(SPRITESHEET_SALTAR_DEFAULT), framesSaltar, ventana, ratio_x_personaje, ratio_y_personaje );
-	spriteSaltar->setLoop(1);
-	return spriteSaltar;
-}
-
-Sprite* ParserJSON::crearSpriteSaltarDiagonalDefault(Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje) {
-	vector<Frame*> framesSaltarDiagonal(8);
-
-	vector<int> xSaltarDiagonal = { 0, 72, 127, 208, 283, 335, 392, 472 };
-	vector<int> hSaltarDiagonal = { 136, 82, 59, 55, 81, 81, 59, 62 };
-	vector<int> wSaltarDiagonal = { 72, 55, 74, 74, 53, 55, 75, 74 };
-
-	for ( int i=0; i < 8; i++ ) {
-		framesSaltarDiagonal[i] = new Frame( xSaltarDiagonal[i], 0, hSaltarDiagonal[i], wSaltarDiagonal[i] );
-	}
-
-	Sprite* spriteSaltarDiagonal = new Sprite( string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + string(SPRITESHEET_SALTAR_DIAGONAL_DEFAULT), framesSaltarDiagonal, ventana, ratio_x_personaje, ratio_y_personaje );
-	return spriteSaltarDiagonal;
-}
-
-Sprite* ParserJSON::crearSpriteAgacharDefault(Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje) {
-	vector<Frame*> framesAgachar(3);
-
-	vector<int> xAgachar = { 0, 60, 122 };
-	vector<int> hAgachar = { 107, 89, 71 };
-	vector<int> wAgachar = { 69, 62, 64 };
-
-	for ( int i=0; i < 3; i++ ) {
-		framesAgachar[i] = new Frame( xAgachar[i], 0, hAgachar[i], wAgachar[i] );
-	}
-
-	Sprite* spriteAgachar = new Sprite( string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + string(SPRITESHEET_AGACHAR_DEFAULT), framesAgachar, ventana, ratio_x_personaje, ratio_y_personaje );
-	spriteAgachar->setLoop(2);
-	return spriteAgachar;
-}
-
-vector<Sprite*> ParserJSON::generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto ) {
-	vector<Sprite*> sprites;
-
-	sprites.push_back( crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto) );
-
-	// Calculo ratios para el personaje en base a las dimensiones del sprite inicial.
-	float ratio_x_personaje = PERSONAJE_ANCHO_PX_DEFAULT / personaje_ancho;
-	float ratio_y_personaje = PERSONAJE_ALTO_PX_DEFAULT / personaje_alto;
-
-	sprites.push_back( crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje) );
-
-	return sprites;
-}
-
-Mundo* ParserJSON::generarMundoDefault( ) {
-
-	float ratio_x = VENTANA_ANCHO_PX_DEFAULT/VENTANA_ANCHO_DEFAULT;
-	float ratio_y = VENTANA_ALTO_PX_DEFAULT/ESCENARIO_ALTO_DEFAULT;
-
-	Mundo* mundo = new Mundo(ESCENARIO_ANCHO_DEFAULT,ESCENARIO_ALTO_DEFAULT);
-	Ventana* ventana = new Ventana(VENTANA_ANCHO_PX_DEFAULT,VENTANA_ALTO_PX_DEFAULT,ratio_x,ratio_y);
-
-	if( ! ventana->create_window() ) {
-		throw runtime_error( "No se pudo abrir la ventana del programa." );
-	}
-
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault(ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
-
-	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2),Y_PISO_DEFAULT);
-
-	mundo->setVentana(ventana);
-	mundo->setTiempo(new Tiempo(TIEMPO_DEFAULT));
-
-	mundo->addPersonaje(personaje_default);
-
-	CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_0_BACKGROUND_DEFAULT,ventana);
-	mundo->addCapa(capa_0,CAPA_Z_INDEX_DEFAULT);
-	CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_1_BACKGROUND_DEFAULT,ventana);
-	mundo->addCapa(capa_1,CAPA_Z_INDEX_DEFAULT+1);
-	CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_2_BACKGROUND_DEFAULT,ventana);
-	mundo->addCapa(capa_2,CAPA_Z_INDEX_DEFAULT+2);
-
-	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,VENTANA_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,personaje_default);
-	mundo->addCapaPrincipal(capa_principal,PERSONAJE_Z_INDEX_DEFAULT);
-
-	return mundo;
-}
-/*
-Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, string accion_sprite, string spritesheet_default, Sprite* (*crearSpritePorDefecto)(Ventana*, float, float), Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje ) {
+Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const char accion_sprite[], string spritesheet_accion, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje ) {
 	Sprite* sprite;
-	bool sprite_ok = true;
 	string spritesheet;
-	if ( root.get( accion_sprite, "" ) == "" ) {
-		log( "No se encontro el sprite correspondiente a " + accion_sprite + ". Se genera el sprite por defecto.", LOG_ERROR );
-		sprite = crearSpritePorDefecto(ventana, ratio_x_personaje, ratio_y_personaje);
+	if ( ! root.isMember(accion_sprite) ) {
+		log( "No se encontro el sprite correspondiente a la accion del personaje. Se generan el sprite de la accion por defecto.", LOG_ERROR );
+		return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 	} else {
-		if ( root[accion_sprite].get( "nombre", "" ) == "" ) {
-			spritesheet = spritesheet_default;
-			log( "No se especifico el nombre de la imagen para el spritesheet de " + accion_sprite + ". Se setea uno por defecto.", LOG_WARNING );
+		if ( ! root[accion_sprite].isMember("nombre") ) {
+			log( "No se especifico el nombre de la imagen para el spritesheet de la accion. Se setea uno por defecto.", LOG_WARNING );
+			spritesheet = spritesheet_accion;
 		} else {
 			try {
-				spritesheet = root[accion_sprite].get( "nombre", spritesheet_default ).asString();
+				spritesheet = root[accion_sprite].get( "nombre", spritesheet_accion ).asString();
 				struct stat sb;
 				if ( stat((ruta_carpeta + spritesheet).c_str(), &sb) != 0 ) {
 					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
+					spritesheet = spritesheet_accion;
 					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-					spritesheet = spritesheet_default;
 				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
 			} catch (exception &e) {
-				spritesheet = spritesheet_default;
-				log( "El nombre ingresado del spritesheet " + accion_sprite + " no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
+				spritesheet = spritesheet_accion;
+				log( "El nombre ingresado del spritesheet no es una cadena de texto valida. Se setea un nombre por defecto.", LOG_ERROR );
 			}
 		}
-		if ( root[accion_sprite].get( "frames", "" ) == "" ) {
-			log( "No se encontraron especificaciones sobre los frames del spritesheet de " + accion_sprite + ". Se genera el sprite por defecto.", LOG_ERROR );
-			sprite = crearSpritePorDefecto(ventana, ratio_x_personaje, ratio_y_personaje);
+		if ( ! root[accion_sprite].isMember("frames") || ! root[accion_sprite]["frames"].isArray() ) {
+			log( "No se encontraron especificaciones sobre los frames del spritesheet de la accion. Se genera el sprite por defecto.", LOG_ERROR );
+			return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 		} else {
 			const Json::Value frames_accion = root[accion_sprite]["frames"];
 			vector<Frame*> frames( frames_accion.size() );
@@ -203,90 +100,74 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, string 
 				try {
 					x = frames_accion[i].get( "x", -100 ).asInt();
 					if ( x < 0 ) {
-						log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite de " + accion_sprite + " por defecto.", LOG_ERROR );
-						sprite = crearSpritePorDefecto(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_ok = false;
-						break;
+						log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite de la accion por defecto.", LOG_ERROR );
+						return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 					}
 				} catch (exception &e) {
-					log ( "La posicion X del frame indicada no es valida y no puede ser convertida a un numero. Se genera el sprite de " + accion_sprite + " por defecto.", LOG_ERROR );
-					sprite = crearSpritePorDefecto(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_ok = false;
-					break;
+					log ( "La posicion X del frame indicada no es valida y no puede ser convertida a un numero. Se genera el sprite de la accion por defecto.", LOG_ERROR );
+					return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 				}
 				try {
 					y = frames_accion[i].get( "y", -100 ).asInt();
 					if ( y < 0 ) {
-						log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite de " + accion_sprite + " por defecto", LOG_ERROR );
-						sprite = crearSpritePorDefecto(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_ok = false;
-						break;
+						log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite de la accion por defecto", LOG_ERROR );
+						return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 					}
 				} catch (exception &e) {
-					log ( "La posicion Y del frame indicada es invalida y no puede ser convertida a un numero. Se genera el sprite de " + accion_sprite + " por defecto.", LOG_ERROR );
-					sprite = crearSpritePorDefecto(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_ok = false;
-					break;
+					log ( "La posicion Y del frame indicada es invalida y no puede ser convertida a un numero. Se genera el sprite de la accion por defecto.", LOG_ERROR );
+					return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 				}
 				try {
 					alto = frames_accion[i].get( "Alto", -100 ).asInt();
 					if ( alto < 0 ) {
-						log( "No se especifico el alto del frame o es negativo. Se genera el sprite de " + accion_sprite + " por defecto.", LOG_ERROR );
-						sprite = crearSpritePorDefecto(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_ok = false;
-						break;
+						log( "No se especifico el alto del frame o es negativo. Se genera el sprite de la accion por defecto.", LOG_ERROR );
+						return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 					}
 				} catch (exception &e) {
-					log ( "El alto del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de " + accion_sprite + " por defecto.", LOG_ERROR );
-					sprite = crearSpritePorDefecto(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_ok = false;
-					break;
+					log ( "El alto del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de la accion por defecto.", LOG_ERROR );
+					return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 				}
 				try {
 					ancho = frames_accion[i].get( "Ancho", -100 ).asInt();
 					if ( ancho < 0 ) {
-						log( "No se especifico el ancho del frame o es negativo. Se genera el sprite de " + accion_sprite + " por defecto.", LOG_ERROR );
-						sprite = crearSpritePorDefecto(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_ok = false;
-						break;
+						log( "No se especifico el ancho del frame o es negativo. Se genera el sprite de la accion por defecto.", LOG_ERROR );
+						return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 					}
 				} catch (exception &e) {
-					log ( "El ancho del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de " + accion_sprite + " por defecto.", LOG_ERROR );
-					sprite = crearSpritePorDefecto(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_ok = false;
-					break;
+					log ( "El ancho del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de la accion por defecto.", LOG_ERROR );
+					return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 				}
 				bool loop;
 				try {
 					loop = frames_accion[i].get( "loop", false ).asBool();
 				} catch (exception &e) {
-					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite de " + accion_sprite + ". Se setea en false por defecto.", LOG_ERROR );
+					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite de la accion. Se setea en false por defecto.", LOG_ERROR );
 					loop = false;
 				}
 				if ( loop ) {
 					loop_accion[i] = true;
 				}
 				frames[i] = new Frame(x, y, alto, ancho);
-				log( "Se creo correctamente un frame del spritesheet de " + accion_sprite + ".", LOG_DEBUG );
+				log( "Se creo correctamente un frame del spritesheet de la accion.", LOG_DEBUG );
 			}
-			if ( sprite_ok ) {
-				try {
-					sprite = new Sprite( ruta_carpeta + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje );
-					for ( unsigned int j=0; j < frames.size(); j++ ) {
-						if ( loop_accion[j] ) sprite->setLoop(j);
-					}
-					log( "Se creo correctamente el sprite para el " + accion_sprite + ".", LOG_DEBUG );
-				} catch ( CargarImagenException &e ) {
-					delete sprite;
-					sprite = crearSpritePorDefecto(ventana, ratio_x_personaje, ratio_y_personaje);
-					log( "No se pudo abrir el spritesheet de " + accion_sprite + ". Se genera el sprite por defecto. " + string(e.what()), LOG_ERROR );
+			try {
+				sprite = new Sprite( ruta_carpeta + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje );
+				for ( unsigned int j=0; j < frames.size(); j++ ) {
+					if ( loop_accion[j] ) sprite->setLoop(j);
 				}
+				log( "Se creo correctamente el sprite para la accion del personaje.", LOG_DEBUG );
+			} catch ( CargarImagenException &e ) {
+				delete sprite;
+				sprite = crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+				log( "No se pudo abrir el spritesheet de la accion. Se genera el sprite por defecto. " + string(e.what()), LOG_ERROR );
 			}
 		}
 	}
 	return sprite;
 }
-*/
+
+
+
 
 vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto) {
 
@@ -320,645 +201,31 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	archivoConfig.close();
 	log ( "Se cerro el archivo JSON de sprites.", LOG_DEBUG );
 
-	// Calculo por defecto los ratios del personaje. Seran modificados al cargar el sprite inicial.
-	float ratio_x_personaje = PERSONAJE_ANCHO_PX_DEFAULT / personaje_ancho;
-	float ratio_y_personaje = PERSONAJE_ALTO_PX_DEFAULT / personaje_alto;
 
-	// Guardo la ruta original de la carpeta de sprites para actualizar antes de crear cada sprite por si se hubiese creado uno uno por defecto desde otra carpeta.
-	string ruta_carpeta_original = ruta_carpeta;
+	// Calculo los ratios del personaje.
+	float ratio_x_personaje = getRatioXPersonaje(root, personaje_ancho);
+	float ratio_y_personaje = getRatioYPersonaje(root, personaje_alto);
 
-	// Creo Sprite para personaje parado.
-	Sprite* sprite_parado;
-	ruta_carpeta = ruta_carpeta_original;
-	bool sprite_parado_ok = true;
-	string spritesheet_parado;
-	if ( root.get( "parado", "" ) == "" ) {
-		log( "No se encontro el sprite correspondiente al personaje parado. Se genera el sprite inicial por defecto.", LOG_ERROR );
-		sprite_parado = crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto);
-	} else {
-		if ( root["parado"].get( "nombre", "" ) == "" ) {
-			spritesheet_parado = SPRITESHEET_PARADO_DEFAULT;
-			log( "No se especifico el nombre de la imagen para el spritesheet del personaje parado. Se setea uno por defecto.", LOG_WARNING );
-		} else {
-			try {
-				spritesheet_parado = root["parado"].get( "nombre", SPRITESHEET_PARADO_DEFAULT ).asString();
-				struct stat sb;
-				if ( stat((ruta_carpeta + spritesheet_parado).c_str(), &sb) != 0 ) {
-					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
-					spritesheet_parado = SPRITESHEET_PARADO_DEFAULT;
-					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
-			} catch ( exception &e ) {
-				spritesheet_parado = SPRITESHEET_PARADO_DEFAULT;
-				log( "El nombre ingresado del spritesheet para el personaje parado no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
-			}
-		}
-		if ( root["parado"].get( "frames", "" ) == "" ) {
-			log( "No se encontraron especificaciones sobre los frames del spritesheet para el jugador parado. Se genera el sprite inicial por defecto.", LOG_ERROR );
-			sprite_parado = crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto);
-		} else {
-			const Json::Value frames_parado = root["parado"]["frames"];
-			vector<Frame*> framesParado( frames_parado.size() );
-			vector<bool> loop_parado(framesParado.size(), false);
-			for ( unsigned int i=0; i < frames_parado.size(); i++ ) {
-				int x, y, alto, ancho;
-				try {
-					x = frames_parado[i].get( "x", -100 ).asInt();
-					if ( x < 0 ) {
-						log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite inicial por defecto.", LOG_ERROR );
-						sprite_parado = crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto);
-						sprite_parado_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "La posicion X del frame indicada es invalida y no puede ser convertida a un numero. Se genera el sprite inicial por defecto.", LOG_ERROR );
-					sprite_parado = crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto);
-					sprite_parado_ok = false;
-					break;
-				}
-				try {
-					y = frames_parado[i].get( "y", -100 ).asInt();
-					if ( y < 0 ) {
-						log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite inicial por defecto", LOG_ERROR );
-						sprite_parado = crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto);
-						sprite_parado_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "La posicion Y del frame indicada es invalida y no puede ser convertida a un numero. Se genera el sprite inicial por defecto.", LOG_ERROR );
-					sprite_parado = crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto);
-					sprite_parado_ok = false;
-					break;
-				}
-				try {
-					alto = frames_parado[i].get( "Alto", -100 ).asInt();
-					if ( alto < 0 ) {
-						log( "No se especifico el alto del frame o es negativo. Se genera el sprite inicial por defecto.", LOG_ERROR );
-						sprite_parado = crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto);
-						sprite_parado_ok = false;
-						break;
-					}
-					// Actualizo el ratio y del personaje de acuerdo al alto en pixeles de los frames del sprite inicial (el alto es constante mientras esta parado).
-					ratio_y_personaje = alto / personaje_alto;
-				} catch (exception &e) {
-					log ( "El alto del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite inicial por defecto.", LOG_ERROR );
-					sprite_parado = crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto);
-					sprite_parado_ok = false;
-					break;
-				}
-				try {
-					ancho = frames_parado[i].get( "Ancho", -100 ).asInt();
-					if ( ancho < 0 ) {
-						log( "No se especifico el ancho del frame o es negativo. Se genera el sprite inicial por defecto.", LOG_ERROR );
-						sprite_parado = crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto);
-						sprite_parado_ok = false;
-						break;
-					}
-					// Actualizo el ratio x del personaje de acuerdo al ancho en pixeles de los frames del sprite inicial (el ancho es constante mientras esta parado).
-					ratio_x_personaje = ancho / personaje_ancho;
-				} catch (exception &e) {
-					log ( "El ancho del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite inicial por defecto.", LOG_ERROR );
-					sprite_parado = crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto);
-					sprite_parado_ok = false;
-					break;
-				}
-				bool loop;
-				try {
-					loop = frames_parado[i].get( "loop", false ).asBool();
-				} catch (exception &e) {
-					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite inicial. Se setea en false por defecto.", LOG_ERROR );
-					loop = false;
-				}
-				if ( loop ) {
-					loop_parado[i] = true;
-				}
-				framesParado[i] = new Frame(x, y, alto, ancho);
-				log( "Se creo correctamente un frame del spritesheet del personaje parado.", LOG_DEBUG );
-			}
-			if ( sprite_parado_ok ) {
-				try {
-					sprite_parado = new Sprite( ruta_carpeta + spritesheet_parado, framesParado, ventana, ratio_x_personaje, ratio_y_personaje);
-					for ( unsigned int j=0; j < framesParado.size(); j++ ) {
-						if ( loop_parado[j] ) sprite_parado->setLoop(j);
-					}
-					log( "Se creo correctamente el sprite para el personaje parado.", LOG_DEBUG );
-				} catch ( CargarImagenException &e ) {
-					delete sprite_parado;
-					sprite_parado = crearSpriteParadoDefault(ventana, personaje_ancho, personaje_alto);
-					log( "No se pudo abrir el spritesheet del personaje parado. Se genera el sprite por defecto. " + string(e.what()), LOG_ERROR );
-				}
-			}
-		}
-		sprites.push_back( sprite_parado );
-	}
+	// Cargo uno por uno los sprites correspondientes a cada accion.
+	log( "Se cargara el sprite inicial para la accion de estar parado.", LOG_DEBUG );
+	Sprite* sprite_parado =  cargarSprite( root, ruta_carpeta, "parado", SPRITESHEET_PARADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_parado );
 
-	/*
-	// Creo Sprite para personaje caminando.
-	Sprite* (ParserJSON::*spritePorDefecto)(Ventana*, float, float);
-	spritePorDefecto = &ParserJSON::crearSpriteCaminarDefault;
-	string accion = string("caminar");
-	string spritesheet = string(SPRITESHEET_CAMINAR_DEFAULT);
-	Sprite* sprite_caminar = cargarSprite( root, ruta_carpeta, accion, spritesheet, spritePorDefecto, ventana, ratio_x_personaje, ratio_y_personaje );
+	log( "Se cargara el sprite para la accion de caminar del personaje", LOG_DEBUG );
+	Sprite* sprite_caminar =  cargarSprite( root, ruta_carpeta, "caminar", SPRITESHEET_CAMINAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
 	sprites.push_back( sprite_caminar );
 
-	// Creo Sprite para personaje saltando.
-	Sprite* sprite_saltar = cargarSprite( root, ruta_carpeta, "saltar", string(SPRITESHEET_SALTAR_DEFAULT), crearSpriteSaltarDefault, ventana, ratio_x_personaje, ratio_y_personaje );
+	log( "Se cargara el sprite para la accion de saltar del personaje", LOG_DEBUG );
+	Sprite* sprite_saltar =  cargarSprite( root, ruta_carpeta, "saltar", SPRITESHEET_SALTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
 	sprites.push_back( sprite_saltar );
 
-	// Creo Sprite para personaje saltando en diagonal.
-	Sprite* sprite_saltar_diagonal = cargarSprite( root, ruta_carpeta, "saltardiagonal", string(SPRITESHEET_SALTAR_DIAGONAL_DEFAULT), crearSpriteSaltarDiagonalDefault, ventana, ratio_x_personaje, ratio_y_personaje );
+	log( "Se cargara el sprite para la accion de saltar en diagonal del personaje", LOG_DEBUG );
+	Sprite* sprite_saltar_diagonal =  cargarSprite( root, ruta_carpeta, "saltardiagonal", SPRITESHEET_SALTAR_DIAGONAL_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
 	sprites.push_back( sprite_saltar_diagonal );
 
-	// Creo Sprite para personaje agachado.
-	Sprite* sprite_agachar = cargarSprite( root, ruta_carpeta, "agachar", string(SPRITESHEET_AGACHAR_DEFAULT), crearSpriteAgacharDefault, ventana, ratio_x_personaje, ratio_y_personaje );
+	log( "Se cargara el sprite para la accion de agacharse del personaje", LOG_DEBUG );
+	Sprite* sprite_agachar =  cargarSprite( root, ruta_carpeta, "agachar", SPRITESHEET_AGACHAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
 	sprites.push_back( sprite_agachar );
-	*/
-
-
-
-	// Creo Sprite para personaje caminando.
-	Sprite* sprite_caminar;
-	ruta_carpeta = ruta_carpeta_original;
-	bool sprite_caminar_ok = true;
-	string spritesheet_caminar;
-	if ( root.get( "caminar", "" ) == "" ) {
-		log( "No se encontro el sprite correspondiente al personaje caminando. Se genera el sprite de caminata por defecto.", LOG_ERROR );
-		sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-	} else {
-		if ( root["caminar"].get( "nombre", "" ) == "" ) {
-			spritesheet_caminar = SPRITESHEET_CAMINAR_DEFAULT;
-			log( "No se especifico el nombre de la imagen para el spritesheet del personaje caminando. Se setea uno por defecto.", LOG_WARNING );
-		} else {
-			try {
-				spritesheet_caminar = root["caminar"].get( "nombre", SPRITESHEET_CAMINAR_DEFAULT ).asString();
-				struct stat sb;
-				if ( stat((ruta_carpeta + spritesheet_caminar).c_str(), &sb) != 0 ) {
-					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
-					spritesheet_caminar = SPRITESHEET_CAMINAR_DEFAULT;
-					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
-			} catch (exception &e) {
-				spritesheet_caminar = SPRITESHEET_CAMINAR_DEFAULT;
-				log( "El nombre ingresado del spritesheet para el personaje caminando no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
-			}
-		}
-		if ( root["caminar"].get( "frames", "" ) == "" ) {
-			log( "No se encontraron especificaciones sobre los frames del spritesheet para el jugador caminando. Se genera el sprite de caminar por defecto.", LOG_ERROR );
-			sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-		} else {
-			const Json::Value frames_caminar = root["caminar"]["frames"];
-			vector<Frame*> framesCaminar( frames_caminar.size() );
-			vector<bool> loop_caminar(framesCaminar.size(), false);
-			for ( unsigned int i=0; i < frames_caminar.size(); i++ ) {
-				int x, y, alto, ancho;
-				try {
-					x = frames_caminar[i].get( "x", -100 ).asInt();
-					if ( x < 0 ) {
-						log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite de caminata por defecto.", LOG_ERROR );
-						sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_caminar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "La posicion X del frame indicada no es valida y no puede ser convertida a un numero. Se genera el sprite de caminar por defecto.", LOG_ERROR );
-					sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_caminar_ok = false;
-					break;
-				}
-				try {
-					y = frames_caminar[i].get( "y", -100 ).asInt();
-					if ( y < 0 ) {
-						log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite de caminata por defecto", LOG_ERROR );
-						sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_caminar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "La posicion Y del frame indicada es invalida y no puede ser convertida a un numero. Se genera el sprite de caminar por defecto.", LOG_ERROR );
-					sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_caminar_ok = false;
-					break;
-				}
-				try {
-					alto = frames_caminar[i].get( "Alto", -100 ).asInt();
-					if ( alto < 0 ) {
-						log( "No se especifico el alto del frame o es negativo. Se genera el sprite de caminata por defecto.", LOG_ERROR );
-						sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_caminar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "El alto del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de caminar por defecto.", LOG_ERROR );
-					sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_caminar_ok = false;
-					break;
-				}
-				try {
-					ancho = frames_caminar[i].get( "Ancho", -100 ).asInt();
-					if ( ancho < 0 ) {
-						log( "No se especifico el ancho del frame o es negativo. Se genera el sprite de caminata por defecto.", LOG_ERROR );
-						sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_caminar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "El ancho del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de caminar por defecto.", LOG_ERROR );
-					sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_caminar_ok = false;
-					break;
-				}
-				bool loop;
-				try {
-					loop = frames_caminar[i].get( "loop", false ).asBool();
-				} catch (exception &e) {
-					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite de caminar. Se setea en false por defecto.", LOG_ERROR );
-					loop = false;
-				}
-				if ( loop ) {
-					loop_caminar[i] = true;
-				}
-				framesCaminar[i] = new Frame(x, y, alto, ancho);
-				log( "Se creo correctamente un frame del spritesheet del personaje caminando.", LOG_DEBUG );
-			}
-			if ( sprite_caminar_ok ) {
-				try {
-					sprite_caminar = new Sprite( ruta_carpeta + spritesheet_caminar, framesCaminar, ventana, ratio_x_personaje, ratio_y_personaje );
-					for ( unsigned int j=0; j < framesCaminar.size(); j++ ) {
-						if ( loop_caminar[j] ) sprite_caminar->setLoop(j);
-					}
-					log( "Se creo correctamente el sprite para el personaje caminando.", LOG_DEBUG );
-				} catch ( CargarImagenException &e ) {
-					delete sprite_caminar;
-					sprite_caminar = crearSpriteCaminarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					log( "No se pudo abrir el spritesheet del personaje caminando. Se genera el sprite por defecto. " + string(e.what()), LOG_ERROR );
-				}
-			}
-		}
-		sprites.push_back( sprite_caminar );
-	}
-
-	// Creo Sprites para personaje saltando.
-	Sprite* sprite_saltar;
-	ruta_carpeta = ruta_carpeta_original;
-	bool sprite_saltar_ok = true;
-	string spritesheet_saltar;
-	if ( root.get( "saltar", "" ) == "" ) {
-		log( "No se encontro el sprite correspondiente al personaje saltando. Se genera el sprite de salto por defecto.", LOG_ERROR );
-		sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-	} else {
-		if ( root["saltar"].get( "nombre", "" ) == "" ) {
-			spritesheet_saltar = SPRITESHEET_SALTAR_DEFAULT;
-			log( "No se especifico el nombre de la imagen para el spritesheet del personaje saltando. Se setea uno por defecto.", LOG_WARNING );
-		} else {
-			try {
-				spritesheet_saltar = root["saltar"].get( "nombre", SPRITESHEET_SALTAR_DEFAULT ).asString();
-				struct stat sb;
-				if ( stat((ruta_carpeta + spritesheet_saltar).c_str(), &sb) != 0 ) {
-					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
-					spritesheet_saltar = SPRITESHEET_SALTAR_DEFAULT;
-					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
-			} catch (exception &e) {
-				spritesheet_saltar = SPRITESHEET_SALTAR_DEFAULT;
-				log( "El nombre ingresado del spritesheet para el personaje saltando no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
-			}
-		}
-		if ( root["saltar"].get( "frames", "" ) == "" ) {
-			log( "No se encontraron especificaciones sobre los frames del spritesheet para el jugador saltando. Se genera el sprite de salto por defecto.", LOG_ERROR );
-			sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-		} else {
-			const Json::Value frames_saltar = root["saltar"]["frames"];
-			vector<Frame*> framesSaltar( frames_saltar.size() );
-			vector<bool> loop_saltar(framesSaltar.size(), false);
-			for ( unsigned int i=0; i < frames_saltar.size(); i++ ) {
-				int x, y, alto, ancho;
-				try {
-					x = frames_saltar[i].get( "x", -100 ).asInt();
-					if ( x < 0 ) {
-						log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite del salto por defecto.", LOG_ERROR );
-						sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_saltar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "La posicion X del frame indicada no es valida y no puede ser convertida a un numero. Se genera el sprite de saltar por defecto.", LOG_ERROR );
-					sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_saltar_ok = false;
-					break;
-				}
-				try {
-					y = frames_saltar[i].get( "y", -100 ).asInt();
-					if ( y < 0 ) {
-						log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite del salto por defecto.", LOG_ERROR );
-						sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_saltar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "La posicion Y del frame indicada no es valida y no puede ser convertida a un numero. Se genera el sprite de saltar por defecto.", LOG_ERROR );
-					sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_saltar_ok = false;
-					break;
-				}
-				try {
-					alto = frames_saltar[i].get( "Alto", -100 ).asInt();
-					if ( alto < 0 ) {
-						log( "No se especifico el alto del frame o es negativo. Se genera el sprite del salto por defecto.", LOG_ERROR );
-						sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_saltar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "El alto del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de saltar por defecto.", LOG_ERROR );
-					sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_saltar_ok = false;
-					break;
-				}
-				try {
-					ancho = frames_saltar[i].get( "Ancho", -100 ).asInt();
-					if ( ancho < 0 ) {
-						log( "No se especifico el ancho del frame o es negativo. Se genera el sprite del salto por defecto.", LOG_ERROR );
-						sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_saltar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "El ancho del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de saltar por defecto.", LOG_ERROR );
-					sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_saltar_ok = false;
-					break;
-				}
-				bool loop;
-				try {
-					loop = frames_saltar[i].get( "loop", false ).asBool();
-				} catch (exception &e) {
-					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite de salto. Se setea en false por defecto.", LOG_ERROR );
-					loop = false;
-				}
-				if ( loop ) {
-					loop_saltar[i] = true;
-				}
-				framesSaltar[i] = new Frame(x, y, alto, ancho);
-				log( "Se creo correctamente un frame del spritesheet del personaje saltando verticalmente.", LOG_DEBUG );
-			}
-			if ( sprite_saltar_ok ) {
-				try {
-					sprite_saltar = new Sprite( ruta_carpeta + spritesheet_saltar, framesSaltar, ventana, ratio_x_personaje, ratio_y_personaje );
-					for ( unsigned int j=0; j < framesSaltar.size(); j++ ) {
-						if ( loop_saltar[j] ) sprite_saltar->setLoop(j);
-					}
-					log( "Se creo correctamente el sprite para el personaje saltando.", LOG_DEBUG );
-				} catch ( CargarImagenException &e ) {
-					delete sprite_saltar;
-					sprite_saltar = crearSpriteSaltarDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					log( "No se pudo abrir el spritesheet del personaje saltando. Se genera el sprite por defecto. " + string(e.what()), LOG_ERROR );
-				}
-			}
-		}
-		sprites.push_back( sprite_saltar );
-	}
-
-	// Creo Sprite para personaje saltando en diagonal.
-	Sprite* sprite_saltar_diagonal;
-	ruta_carpeta = ruta_carpeta_original;
-	bool sprite_saltar_diagonal_ok = true;
-	string spritesheet_saltar_diagonal;
-	if ( root.get( "saltardiagonal", "" ) == "" ) {
-		log( "No se encontro el sprite correspondiente al personaje saltando en diagonal. Se genera el sprite de salto en diagonal por defecto.", LOG_ERROR );
-		sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-	} else {
-		if ( root["saltardiagonal"].get( "nombre", "" ) == "" ) {
-			spritesheet_saltar_diagonal = SPRITESHEET_SALTAR_DIAGONAL_DEFAULT;
-			log( "No se especifico el nombre de la imagen para el spritesheet del personaje saltando en diagonal. Se setea uno por defecto.", LOG_WARNING );
-		} else {
-			try {
-				spritesheet_saltar_diagonal = root["saltardiagonal"].get( "nombre", SPRITESHEET_SALTAR_DIAGONAL_DEFAULT ).asString();
-				struct stat sb;
-				if ( stat((ruta_carpeta + spritesheet_saltar_diagonal).c_str(), &sb) != 0 ) {
-					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
-					spritesheet_saltar_diagonal = SPRITESHEET_SALTAR_DIAGONAL_DEFAULT;
-					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
-			} catch (exception &e) {
-				spritesheet_saltar_diagonal = SPRITESHEET_SALTAR_DIAGONAL_DEFAULT;
-				log( "El nombre ingresado del spritesheet para el personaje saltando en diagonal no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
-			}
-		}
-		if ( root["saltardiagonal"].get( "frames", "" ) == "" ) {
-			log( "No se encontraron especificaciones sobre los frames del spritesheet para el jugador saltando en diagonal. Se genera el sprite de salto en diagonal por defecto.", LOG_ERROR );
-			sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-		} else {
-			const Json::Value frames_saltar_diagonal = root["saltardiagonal"]["frames"];
-			vector<Frame*> framesSaltarDiagonal( frames_saltar_diagonal.size() );
-			vector<bool> loop_saltar_diagonal(framesSaltarDiagonal.size(), false);
-			for ( unsigned int i=0; i < frames_saltar_diagonal.size(); i++ ) {
-				int x, y, alto, ancho;
-				try {
-					x = frames_saltar_diagonal[i].get( "x", -100 ).asInt();
-					if ( x < 0 ) {
-						log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite del salto en diagonal por defecto.", LOG_ERROR );
-						sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_saltar_diagonal_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "La posicion X del frame indicada no es valida y no puede ser convertida a un numero. Se genera el sprite de salto en diagonal por defecto.", LOG_ERROR );
-					sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_saltar_diagonal_ok = false;
-					break;
-				}
-				try {
-					y = frames_saltar_diagonal[i].get( "y", -100 ).asInt();
-					if ( y < 0 ) {
-						log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite del salto en diagonal por defecto.", LOG_ERROR );
-						sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_saltar_diagonal_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "La posicion Y del frame indicada no es valida y no puede ser convertida a un numero. Se genera el sprite de salto en diagonal por defecto.", LOG_ERROR );
-					sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_saltar_diagonal_ok = false;
-					break;
-				}
-				try {
-					alto = frames_saltar_diagonal[i].get( "Alto", -100 ).asInt();
-					if ( alto < 0 ) {
-						log( "No se especifico el alto del frame o es negativo. Se genera el sprite del salto en diagonal por defecto.", LOG_ERROR );
-						sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_saltar_diagonal_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "El alto del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de salto en diagonal por defecto.", LOG_ERROR );
-					sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_saltar_diagonal_ok = false;
-					break;
-				}
-				try {
-					ancho = frames_saltar_diagonal[i].get( "Ancho", -100 ).asInt();
-					if ( ancho < 0 ) {
-						log( "No se especifico el ancho del frame o es negativo. Se genera el sprite del salto en diagonal por defecto.", LOG_ERROR );
-						sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_saltar_diagonal_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "El ancho del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de salto en diagonal por defecto.", LOG_ERROR );
-					sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_saltar_diagonal_ok = false;
-					break;
-				}
-				bool loop;
-				try {
-					loop = frames_saltar_diagonal[i].get( "loop", false ).asBool();
-				} catch (exception &e) {
-					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite de salto en diagonal. Se setea en false por defecto.", LOG_ERROR );
-					loop = false;
-				}
-				if ( loop ) {
-					loop_saltar_diagonal[i] = true;
-				}
-				framesSaltarDiagonal[i] = new Frame(x, y, alto, ancho);
-				log( "Se creo correctamente un frame del spritesheet del personaje saltando en diagonal.", LOG_DEBUG );
-			}
-			if ( sprite_saltar_diagonal_ok ) {
-				try {
-					sprite_saltar_diagonal = new Sprite( ruta_carpeta + spritesheet_saltar_diagonal, framesSaltarDiagonal, ventana, ratio_x_personaje, ratio_y_personaje );
-					for ( unsigned int j=0; j < framesSaltarDiagonal.size(); j++ ) {
-						if ( loop_saltar_diagonal[j] ) sprite_saltar_diagonal->setLoop(j);
-					}
-					log( "Se creo correctamente el sprite para el personaje saltando en diagonal.", LOG_DEBUG );
-				} catch ( CargarImagenException &e ) {
-					delete sprite_saltar_diagonal;
-					sprite_saltar_diagonal = crearSpriteSaltarDiagonalDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					log( "No se pudo abrir el spritesheet del personaje saltando en diagonal. Se genera el sprite por defecto. " + string(e.what()), LOG_ERROR );
-				}
-			}
-		}
-		sprites.push_back( sprite_saltar_diagonal );
-	}
-
-	// Creo Sprite para personaje agachado.
-	Sprite* sprite_agachar;
-	ruta_carpeta = ruta_carpeta_original;
-	bool sprite_agachar_ok = true;
-	string spritesheet_agachar;
-	if ( root.get( "agachar", "" ) == "" ) {
-		log( "No se encontro el sprite correspondiente al personaje agachado. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-		sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-	} else {
-		if ( root["agachar"].get( "nombre", "" ) == "" ) {
-			spritesheet_agachar = SPRITESHEET_AGACHAR_DEFAULT;
-			log( "No se especifico el nombre de la imagen para el spritesheet del personaje agachandose. Se setea uno por defecto.", LOG_WARNING );
-		} else {
-			try {
-				spritesheet_agachar = root["agachar"].get( "nombre", SPRITESHEET_AGACHAR_DEFAULT ).asString();
-				struct stat sb;
-				if ( stat((ruta_carpeta + spritesheet_agachar).c_str(), &sb) != 0 ) {
-					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
-					spritesheet_agachar = SPRITESHEET_AGACHAR_DEFAULT;
-					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-				} else log( "Se cargo correctamente el nombre del archivo de imagen del spritesheet.", LOG_DEBUG );
-			} catch (exception &e) {
-				spritesheet_agachar = SPRITESHEET_AGACHAR_DEFAULT;
-				log( "El nombre ingresado del spritesheet para el personaje agachado no es una cadena de texto. Se setea un nombre por defecto.", LOG_ERROR );
-			}
-		}
-		if ( root["agachar"].get( "frames", "" ) == "" ) {
-			log( "No se encontraron especificaciones sobre los frames del spritesheet para el jugador agachandose. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-			sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-		} else {
-			const Json::Value frames_agachar = root["agachar"]["frames"];
-			vector<Frame*> framesAgachar( frames_agachar.size() );
-			vector<bool> loop_agachar(framesAgachar.size(), false);
-			for ( unsigned int i=0; i < frames_agachar.size(); i++ ) {
-				int x, y, alto, ancho;
-				try {
-					x = frames_agachar[i].get( "x", -100 ).asInt();
-					if ( x < 0 ) {
-						log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-						sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_agachar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "La posicion X del frame indicada no es valida y no puede ser convertida a un numero. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-					sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_agachar_ok = false;
-					break;
-				}
-				try {
-					y = frames_agachar[i].get( "y", -100 ).asInt();
-					if ( y < 0 ) {
-						log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-						sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_agachar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "La posicion Y del frame indicada no es valida y no puede ser convertida a un numero. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-					sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_agachar_ok = false;
-					break;
-				}
-				try {
-					alto = frames_agachar[i].get( "Alto", -100 ).asInt();
-					if ( alto < 0 ) {
-						log( "No se especifico el alto del frame o es negativo. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-						sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_agachar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "El alto del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-					sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_agachar_ok = false;
-					break;
-				}
-				try {
-					ancho = frames_agachar[i].get( "Ancho", -100 ).asInt();
-					if ( ancho < 0 ) {
-						log( "No se especifico el alto del frame o es negativo. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-						sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-						sprite_agachar_ok = false;
-						break;
-					}
-				} catch (exception &e) {
-					log ( "El ancho del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de agacharse por defecto.", LOG_ERROR );
-					sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					sprite_agachar_ok = false;
-					break;
-				}
-				bool loop;
-				try {
-					loop = frames_agachar[i].get( "loop", false ).asBool();
-				} catch (exception &e) {
-					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite de salto en diagonal. Se setea en false por defecto.", LOG_ERROR );
-					loop = false;
-				}
-				if ( loop ) {
-					loop_agachar[i] = true;
-				}
-				framesAgachar[i] = new Frame(x, y, alto, ancho);
-				log( "Se creo correctamente un frame del spritesheet del personaje agachandose.", LOG_DEBUG );
-			}
-			if ( sprite_agachar_ok ) {
-				try {
-					sprite_agachar = new Sprite( ruta_carpeta + spritesheet_agachar, framesAgachar, ventana, ratio_x_personaje, ratio_y_personaje );
-					for ( unsigned int j=0; j < framesAgachar.size(); j++ ) {
-						if ( loop_agachar[j] ) sprite_agachar->setLoop(j);
-					}
-					log( "Se creo correctamente el sprite para el personaje agachado.", LOG_DEBUG );
-				} catch ( CargarImagenException &e ) {
-					delete sprite_agachar;
-					sprite_agachar = crearSpriteAgacharDefault(ventana, ratio_x_personaje, ratio_y_personaje);
-					log( "No se pudo abrir el spritesheet del personaje agachandose. Se genera el sprite por defecto. " + string(e.what()), LOG_ERROR );
-				}
-			}
-		}
-		sprites.push_back( sprite_agachar );
-	}
 
 
 	log( "Se crearon todos los sprites del personaje.", LOG_DEBUG );
@@ -1044,8 +311,9 @@ Mundo* ParserJSON::cargarMundo() {
 	// Obtener tiempo limite del combate.
 	float tiempo;
 	Tiempo* tiempo_combate;
-	if ( root.get( "tiempo", "" ) == "" ) {
+	if ( ! root.isMember("tiempo") ) {
 		log( "No se especifico el tiempo de combate. Se setea en 3 minutos por defecto.", LOG_WARNING );
+		tiempo_combate = new Tiempo(TIEMPO_DEFAULT);
 	} else {
 		try {
 			tiempo = root.get( "tiempo", TIEMPO_DEFAULT ).asInt();
@@ -1069,13 +337,13 @@ Mundo* ParserJSON::cargarMundo() {
 	// El alto se seteara luego dependiendo del escenario.
 	int ventana_ancho_px, ventana_alto_px;
 	float ventana_ancho;
-	if ( root.get( "ventana", "" ) == "" ) {
+	if ( ! root.isMember("ventana") ) {
 		log( "No se encontraron parametros para la creacion de la ventana. Se asignan valores por defecto.", LOG_ERROR );
 		ventana_ancho_px = VENTANA_ANCHO_PX_DEFAULT;
 		ventana_alto_px = VENTANA_ALTO_PX_DEFAULT;
 		ventana_ancho = VENTANA_ANCHO_DEFAULT;
 	} else {
-		if ( root["ventana"].get( "ancho-px", "" ) == "" ) {
+		if ( ! root["ventana"].isMember("ancho-px") ) {
 			ventana_ancho_px = VENTANA_ANCHO_PX_DEFAULT;
 			log( "No se especifico el ancho en pixeles de la ventana. Se seta en 512px por defecto.", LOG_WARNING );
 		} else {
@@ -1091,7 +359,7 @@ Mundo* ParserJSON::cargarMundo() {
 				log( "El ancho en pixeles de la ventana indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( root["ventana"].get( "alto-px", "" ) == "" ) {
+		if ( ! root["ventana"].isMember("alto-px") ) {
 			ventana_alto_px = VENTANA_ALTO_PX_DEFAULT;
 			log( "No se especifico el alto en pixeles de la ventana. Se seta en 384px por defecto.", LOG_WARNING );
 		} else {
@@ -1107,7 +375,7 @@ Mundo* ParserJSON::cargarMundo() {
 				log( "El alto en pixeles de la ventana indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( root["ventana"].get( "ancho", "" ) == "" ) {
+		if ( ! root["ventana"].isMember("ancho") ) {
 			ventana_ancho = VENTANA_ANCHO_DEFAULT;
 			log( "No se especifico el ancho logico de la ventana. Se seta en 200 por defecto.", LOG_WARNING );
 		} else {
@@ -1128,13 +396,13 @@ Mundo* ParserJSON::cargarMundo() {
 	// Obtener las dimensiones logicas del escenario.
 	// En caso de error se setean por defecto.
 	float escenario_ancho, escenario_alto, y_piso;
-	if ( root.get( "escenario", "" ) == "" ) {
+	if ( ! root.isMember("escenario") ) {
 		log( "No se encontraron parametros para la creacion del escenario. Se asignan valores por defecto.", LOG_ERROR );
 		escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
 		escenario_alto = ESCENARIO_ALTO_DEFAULT;
 		y_piso = Y_PISO_DEFAULT;
 	} else {
-		if ( root["escenario"].get( "ancho", "" ) == "" ) {
+		if ( ! root["escenario"].isMember("ancho") ) {
 			escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
 			log( "No se especifico el ancho logico del escenario. Se setea en 600 por defecto.", LOG_WARNING );
 		} else {
@@ -1150,7 +418,7 @@ Mundo* ParserJSON::cargarMundo() {
 				log( "El ancho logico del escenario indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( root["escenario"].get( "alto", "" ) == "" ) {
+		if ( ! root["escenario"].isMember("alto") ) {
 			escenario_alto = ESCENARIO_ALTO_DEFAULT;
 			log( "No se especifico el alto logico del escenario. Se setea en 150 por defecto.", LOG_WARNING );
 		} else {
@@ -1166,7 +434,7 @@ Mundo* ParserJSON::cargarMundo() {
 				log( "El alto logico del escenario indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( root["escenario"].get( "y-piso", "" ) == "" ) {
+		if ( ! root["escenario"].isMember("y-piso") ) {
 			y_piso = Y_PISO_DEFAULT;
 			log( "No se especifico la altura del piso del escenario. Se setea en 135 por defecto.", LOG_WARNING );
 		} else {
@@ -1215,8 +483,8 @@ Mundo* ParserJSON::cargarMundo() {
 	string background;
 	float capa_ancho, capa_alto;
 	int capa_z_index;
-	if ( root.get( "capas", "" ) == "" ) {
-		log( "No se encontraron parametros para la creacion de las capas. Se crea una unica capa y se asignan valores por defecto.", LOG_ERROR );
+	if ( ! root.isMember("capas") || ! root["capas"].isArray() ) {
+		log( "No se encontraron parametros en un vector para la creacion de las capas. Se crean capas y se asignan valores por defecto.", LOG_ERROR );
 		CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_0_BACKGROUND_DEFAULT,ventana);
 		nuevo_mundo->addCapa(capa_0,CAPA_Z_INDEX_DEFAULT);
 		CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_1_BACKGROUND_DEFAULT,ventana);
@@ -1226,7 +494,7 @@ Mundo* ParserJSON::cargarMundo() {
 	} else {
 		const Json::Value capas = root["capas"];
 		for ( unsigned int i=0; i < capas.size(); i++ ) {
-			if ( capas[i].get( "imagen_fondo", "" ) == "" ) {
+			if ( ! capas[i].isMember("imagen_fondo") ) {
 				background = BACKGROUND_DEFAULT;
 				log( "No se especifico la imagen de fondo de la capa. Se asigna una imagen por defecto.", LOG_ERROR );
 			} else {
@@ -1243,7 +511,7 @@ Mundo* ParserJSON::cargarMundo() {
 					log( "La ruta del archivo de la imagen de la capa no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 				}
 			}
-			if ( capas[i].get( "ancho", "" ) == "" ) {
+			if ( ! capas[i].isMember("ancho") ) {
 				capa_ancho = VENTANA_ANCHO_DEFAULT;
 				log( "No se especifico el ancho logico de la capa. Se setea en 600 por defecto.", LOG_WARNING );
 			} else {
@@ -1263,7 +531,7 @@ Mundo* ParserJSON::cargarMundo() {
 					log( "El ancho de la capa es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 				}
 			}
-			if ( capas[i].get( "z-index", "" ) == "" ) {
+			if ( ! capas[i].isMember("z-index") ) {
 				capa_z_index = CAPA_Z_INDEX_DEFAULT + i;
 				log( "No se especifico el z-index de la capa. Se le asigna un indice por defecto.", LOG_WARNING );
 			} else {
@@ -1304,13 +572,13 @@ Mundo* ParserJSON::cargarMundo() {
 	float personaje_ancho, personaje_alto;
 	string personaje_carpeta_sprites, personaje_nombre;
 	bool flipped;
-	if ( root.get( "personaje", "" ) == "" ) {
+	if ( ! root.isMember("personaje") ) {
 		personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
 		personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 		personaje_nombre = PERSONAJE_NOMBRE_DEFAULT;
 		flipped = PERSONAJE_FLIPPED_DEFAULT;
 	} else {
-		if ( root["personaje"].get( "ancho", "" ) == "" ) {
+		if ( ! root["personaje"].isMember("ancho") ) {
 			personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
 			log( "No se especifico el ancho logico del personaje. Se setea por defecto en 30.", LOG_WARNING );
 		} else {
@@ -1328,7 +596,7 @@ Mundo* ParserJSON::cargarMundo() {
 				log( "El ancho logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( root["personaje"].get( "alto", "" ) == "" ) {
+		if ( ! root["personaje"].isMember("alto") ) {
 			personaje_alto = PERSONAJE_ALTO_DEFAULT;
 			log( "No se especifico el alto logico del personaje. Se setea por defecto en 60.", LOG_WARNING );
 		} else {
@@ -1346,7 +614,7 @@ Mundo* ParserJSON::cargarMundo() {
 				log( "El alto logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( root["personaje"].get( "z-index", "" ) == "" ) {
+		if ( ! root["personaje"].isMember("z-index") ) {
 			personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
 			log( "No se especifico el z-index del personaje. Se le asigna indice 3 por defecto.", LOG_WARNING );
 		} else {
@@ -1358,7 +626,7 @@ Mundo* ParserJSON::cargarMundo() {
 				log( "El z-index del personaje indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( root["personaje"].get( "sprites", "" ) == "" ) {
+		if ( ! root["personaje"].isMember("sprites") ) {
 			personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 			log( "No se especifico la carpeta contenedora de los sprites del personaje. Se utiliza carpeta por defecto.", LOG_ERROR );
 		} else {
@@ -1374,7 +642,7 @@ Mundo* ParserJSON::cargarMundo() {
 				log( "La ruta a la carpeta contenedora de los sprites del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( root["personaje"].get( "nombre", "" ) == "" ) {
+		if ( ! root["personaje"].isMember("nombre") ) {
 			personaje_nombre = PERSONAJE_NOMBRE_DEFAULT;
 			log( "No se especifico el nombre del personaje. Se llama Jugador por defecto.", LOG_ERROR );
 		} else {
@@ -1386,7 +654,7 @@ Mundo* ParserJSON::cargarMundo() {
 				log( "El nombre del personaje indicado no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( root["personaje"].get( "flipped", "" ) == "" ) {
+		if ( ! root["personaje"].isMember("flipped") ) {
 			flipped = PERSONAJE_FLIPPED_DEFAULT;
 			log( "No se especifico si el personaje debe estar flippeado o no. Por defecto, se setea flipped = false, es decir que el personaje mira hacia la derecha.", LOG_WARNING );
 		} else {
