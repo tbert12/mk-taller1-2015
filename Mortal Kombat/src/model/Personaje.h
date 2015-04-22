@@ -68,7 +68,7 @@ public:
 	void AvanzarSprite();
 	bool enMovimiento();
 	void Update(int velocidadScroll);
-	void renderizar(float x_dist_ventana);
+	void renderizar(float x_dist_ventana, float posOtherPlayer);
 
 	void setPosition(float x, float y);
 	void setDimensiones(float h, float w);

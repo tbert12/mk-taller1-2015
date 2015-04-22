@@ -73,9 +73,9 @@ void CapaPrincipal::Update(int scroll){
 
 void CapaPrincipal::Renderizar()
 {
-	m_Personaje->renderizar(getX());
+	m_Personaje->renderizar(getX(), m_PersonajeDos->getX());
 	if(m_PersonajeDos){
-		m_PersonajeDos->renderizar(getX());
+		m_PersonajeDos->renderizar(getX(), m_Personaje->getX());
 	}
 }
 

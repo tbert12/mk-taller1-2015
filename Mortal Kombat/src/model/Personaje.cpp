@@ -256,7 +256,8 @@ void Personaje::Update(int velocidadScroll){
 	}
 }
 
-void Personaje::renderizar(float x_dist_ventana){
+void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
+	m_fliped = posOtherPlayer < m_xActual;
 	spriteActual->render(m_xActual-x_dist_ventana,m_yActual,m_fliped);
 	AvanzarSprite();
 }
