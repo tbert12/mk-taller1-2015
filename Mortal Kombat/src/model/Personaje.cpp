@@ -237,7 +237,7 @@ bool Personaje::_estaAgachado(){
 
 void Personaje::Update(){
 	float renderX = m_xActual + m_velocidad;
-	if (renderX <= (m_AnchoMundo - spriteActual->getAncho()) and renderX >= 0){
+	if (renderX <= (m_AnchoMundo - spriteActual->getAncho()*1.3f) and renderX >= 0){
 		if ( !_estaAgachado() ) m_xActual += m_velocidad;
 	}
 	if(_estaSaltando > 0){
@@ -247,6 +247,9 @@ void Personaje::Update(){
 		m_yActual = m_yInicial;
 		_estaSaltando = -1;
 	}
+
+	if(m_xActual > m_AnchoMundo - spriteActual->getAncho()*1.3f) m_xActual = m_AnchoMundo - spriteActual->getAncho()*1.3f;
+	else if(m_xActual<0) m_xActual = 0;
 }
 
 void Personaje::renderizar(float x_dist_ventana){
