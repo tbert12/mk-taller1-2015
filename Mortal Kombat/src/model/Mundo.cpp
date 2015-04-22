@@ -32,6 +32,9 @@ bool Mundo::addCapa(Capa* una_capa,int index){
 		log(string("No se pudo agregar la capa con z_index:%i",index),LOG_ERROR);
 		return false;
 	}
+	if (index > (int)capas.size() ){
+		capas.resize(index + 1);
+	}
 	capas[index] = una_capa;
 	indices.push_back(index);
 	std::sort(indices.begin(),indices.end());
