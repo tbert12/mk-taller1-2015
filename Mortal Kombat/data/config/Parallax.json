@@ -51,8 +51,8 @@
 	],
 	
 	"personaje": {
-		"ancho": 85,
-		"alto": 160,
+		"ancho": 70,
+		"alto": 130,
 		"z-index": 5,
 		"sprites": "data/players/subzero/sprites/",
 		"nombre": "Sub-Zero",
