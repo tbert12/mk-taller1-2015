@@ -18,36 +18,29 @@
 	
 	"capas": [
 		{
-			"imagen_fondo": "data/img/background/Parallax/0.png",
-			"ancho": 1000,
-			"z-index": 6
-		},
-		{
-			"imagen_fondo": "data/img/background/Parallax/1.png",
-			"ancho": 1000,
-			"z-index": 4
-		},
-		{
-			"imagen_fondo": "data/img/background/Parallax/2.png",
-			"ancho": 900,
-			"z-index": 3
-		},
-		{
-			"imagen_fondo": "data/img/background/Parallax/3.png",
-			"ancho": 700,
-			"z-index": 2
+			"imagen_fondo": "data/img/background/Parallax/5.png",
+			"ancho": 400
 		},
 		{
 			"imagen_fondo": "data/img/background/Parallax/4.png",
-			"ancho": 500,
-			"z-index": 1
+			"ancho": 500
 		},
 		{
-			"imagen_fondo": "data/img/background/Parallax/5.png",
-			"ancho": 400,
-			"z-index": 0
+			"imagen_fondo": "data/img/background/Parallax/3.png",
+			"ancho": 700
+		},
+		{
+			"imagen_fondo": "data/img/background/Parallax/2.png",
+			"ancho": 900
+		},
+		{
+			"imagen_fondo": "data/img/background/Parallax/1.png",
+			"ancho": 1000
+		},
+		{
+			"imagen_fondo": "data/img/background/Parallax/0.png",
+			"ancho": 1000
 		}
-
 	],
 	
 	"personaje": {

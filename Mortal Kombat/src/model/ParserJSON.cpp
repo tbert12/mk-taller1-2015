@@ -483,17 +483,20 @@ Mundo* ParserJSON::cargarMundo() {
 	string background;
 	float capa_ancho, capa_alto;
 	int capa_z_index;
+	bool capas_ok = true;
+	int i=0;
 	if ( ! root.isMember("capas") || ! root["capas"].isArray() ) {
 		log( "No se encontraron parametros en un vector para la creacion de las capas. Se crean capas y se asignan valores por defecto.", LOG_ERROR );
 		CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_0_BACKGROUND_DEFAULT,ventana);
-		nuevo_mundo->addCapa(capa_0,CAPA_Z_INDEX_DEFAULT);
+		nuevo_mundo->addCapa(capa_0);
 		CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_1_BACKGROUND_DEFAULT,ventana);
-		nuevo_mundo->addCapa(capa_1,CAPA_Z_INDEX_DEFAULT+1);
+		nuevo_mundo->addCapa(capa_1);
 		CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_2_BACKGROUND_DEFAULT,ventana);
-		nuevo_mundo->addCapa(capa_2,CAPA_Z_INDEX_DEFAULT+2);
+		nuevo_mundo->addCapa(capa_2);
+		capas_ok = false;
 	} else {
 		const Json::Value capas = root["capas"];
-		for ( unsigned int i=0; i < capas.size(); i++ ) {
+		for ( ; i < capas.size(); i++ ) {
 			if ( ! capas[i].isMember("imagen_fondo") ) {
 				background = BACKGROUND_DEFAULT;
 				log( "No se especifico la imagen de fondo de la capa. Se asigna una imagen por defecto.", LOG_ERROR );
@@ -531,18 +534,8 @@ Mundo* ParserJSON::cargarMundo() {
 					log( "El ancho de la capa es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 				}
 			}
-			if ( ! capas[i].isMember("z-index") ) {
-				capa_z_index = CAPA_Z_INDEX_DEFAULT + i;
-				log( "No se especifico el z-index de la capa. Se le asigna un indice por defecto.", LOG_WARNING );
-			} else {
-				try {
-					capa_z_index = capas[i].get( "z-index", CAPA_Z_INDEX_DEFAULT + i ).asInt();
-					log ( "Se cargo el z-index de la capa.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					capa_z_index = CAPA_Z_INDEX_DEFAULT +i ;
-					log( "El z-index de la capa es invalido y no puede ser convertido a un numero. Se setea por defecto de acuerdo al orden de carga de las capas.", LOG_ERROR );
-				}
-			}
+
+			capa_z_index = i;
 
 			// Setear alto logico de la capa de acuerdo al alto del escenario.
 			capa_alto = escenario_alto;
@@ -560,7 +553,8 @@ Mundo* ParserJSON::cargarMundo() {
 			}
 
 			// Agrego capa al mundo.
-			nuevo_mundo->addCapa(capa_fondo, capa_z_index);
+			//nuevo_mundo->addCapa(capa_fondo, capa_z_index);
+			nuevo_mundo->addCapa(capa_fondo);
 			log( "Se agrego la capa al mundo.", LOG_DEBUG );
 		}
 	}
@@ -615,14 +609,18 @@ Mundo* ParserJSON::cargarMundo() {
 			}
 		}
 		if ( ! root["personaje"].isMember("z-index") ) {
-			personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
+			if ( capas_ok ) {
+				personaje_z_index = i+1;
+			} else personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
 			log( "No se especifico el z-index del personaje. Se le asigna indice 3 por defecto.", LOG_WARNING );
 		} else {
 			try {
-				personaje_z_index = root["personaje"].get( "z-index", PERSONAJE_Z_INDEX_DEFAULT ).asInt();
+				personaje_z_index = root["personaje"].get( "z-index", i+1 ).asInt();
 				log ( "Se cargo correctamente el z-index del personaje.", LOG_DEBUG );
 			} catch ( exception &e ) {
-				personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
+				if ( capas_ok ) {
+					personaje_z_index = i+1;
+				} else personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
 				log( "El z-index del personaje indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 			}
 		}
@@ -684,6 +682,7 @@ Mundo* ParserJSON::cargarMundo() {
 	log( "Se agrego el personaje al mundo", LOG_DEBUG );
 
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
+	if ( personaje_z_index > i+1 ) personaje_z_index = i+1;
 	CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index, escenario_ancho, ventana_ancho, PERSONAJE_VELOCIDAD, personaje );
 	log( "Se creo correctamente la capa principal.", LOG_DEBUG );
 

@@ -1,0 +1,50 @@
+{
+
+	"loglvl": 2,
+	
+	"tiempo": 180,
+
+	"ventana": {
+		"ancho-px": 640,
+		"alto-px": 480,
+		"ancho": 250
+	},
+	
+	"escenario": {
+		"ancho": 1100,
+		"alto": 300,
+		"y-piso": 295
+	},
+	
+	"capas": [
+		{
+			"imagen_fondo": "data/img/background/campo/campo_0.png",
+			"ancho": 581,
+			"z-index": 0
+		},
+		{
+			"imagen_fondo": "data/img/background/campo/campo_1.png",
+			"ancho": 660,
+			"z-index": 1
+		},
+		{
+			"imagen_fondo": "data/img/background/campo/campo_2.png",
+			"ancho": 956,
+			"z-index": 2
+		},
+		{
+			"imagen_fondo": "data/img/background/campo/campo_3.png",
+			"ancho": 1100,
+			"z-index": 3
+		}
+	],
+	
+	"personaje": {
+		"ancho": 45,
+		"alto": 80,
+		"z-index": 4,
+		"sprites": "data/players/subzero/sprites/",
+		"nombre": "Sub-Zero"	
+	}
+
+}
