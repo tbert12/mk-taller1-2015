@@ -104,6 +104,7 @@ Mundo::~Mundo() {
 	for (unsigned int i = 0 ; i < indices.size() ; i++){
 	      delete capas[indices[i]];
 	}
+	indices.clear();
 	capas.clear();
 	for (unsigned int i = 0 ; i < personajes.size() ; i++){
 		delete personajes[i];

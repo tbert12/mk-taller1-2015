@@ -26,12 +26,15 @@ string ruta_archivo_configuracion = "data/config/Parallax.json";
 
 int main( int argc, char* args[] )
 {
+
+
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
 
 	if (argc > 1){
 		ruta_archivo_configuracion = args[1];
 	}
+
 
 	ParserJSON* parser;
 	Mundo* mundo;
@@ -72,10 +75,11 @@ int main( int argc, char* args[] )
 			// ESTA HECHO A LO VILLA PORQUE TOTAL DESPUES ESTO VUELA A LA MIERDA.
 			} catch ( std::runtime_error &e ) {
 				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_DEBUG );
+				delete parser;
+				delete control_jugador_1;
+				delete mundo;
+
 				try {
-					delete parser;
-					delete control_jugador_1;
-					delete mundo;
 					parser = new ParserJSON( ruta_archivo_configuracion );
 					mundo = parser->cargarMundo();
 					//mundo = CrearMundoDefault();
@@ -87,7 +91,9 @@ int main( int argc, char* args[] )
 				} catch ( std::runtime_error &e ) {
 					log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
 					return 1;
+
 				}
+
 			}
 		}
 		mundo->render();
