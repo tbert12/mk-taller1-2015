@@ -32,6 +32,9 @@ bool Mundo::addCapa(Capa* una_capa,int index){
 		log(string("No se pudo agregar la capa con z_index:%i",index),LOG_ERROR);
 		return false;
 	}
+	if (index > (int)capas.size() ){
+		capas.resize(index + 1);
+	}
 	capas[index] = una_capa;
 	indices.push_back(index);
 	std::sort(indices.begin(),indices.end());
@@ -101,11 +104,12 @@ void Mundo::render(){
 
 Mundo::~Mundo() {
 	//fijar si hay que liberar cada uno de los contenidos de los vectores
-	for (unsigned int i = 0 ; i < indices.size() ; i++){
-	      delete capas[indices[i]];
+	for (unsigned int i = 0 ; i < capas.size() ; i++){
+	      delete capas[i];
 	}
 	indices.clear();
 	capas.clear();
+	indices.clear();
 	for (unsigned int i = 0 ; i < personajes.size() ; i++){
 		delete personajes[i];
 	}
