@@ -616,6 +616,10 @@ Mundo* ParserJSON::cargarMundo() {
 		} else {
 			try {
 				personaje_z_index = root["personaje"].get( "z-index", i+1 ).asInt();
+				if(personaje_z_index < 0){
+					personaje_z_index = -personaje_z_index;
+					log("El z_index del pesonaje no puede ser negativo, se aplica modulo.",LOG_WARNING);
+				}
 				log ( "Se cargo correctamente el z-index del personaje.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				if ( capas_ok ) {
