@@ -71,7 +71,7 @@ public:
 	void renderizar(float x_dist_ventana, float posOtherPlayer);
 
 	void setPosition(float x, float y);
-	void setDimensiones(float h, float w);
+	void setDimensionesMundo(float h, float w);
 	float getX();
 	float getY();
 	float getVida();

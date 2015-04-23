@@ -31,7 +31,7 @@ private:
 	std::vector<Personaje*> personajes;
 	Tiempo* tiempo;
 	Ventana* ventana;
-	int personaje_z_index;
+	int personajes_z_index;
 	int _verificarScroll();
 
 public:

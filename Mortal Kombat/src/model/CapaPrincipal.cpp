@@ -9,26 +9,26 @@
 #include <list>
 
 
-CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personaje)
-:Capa(alto,ancho,zIndex, anchoDeFondo,ancho_ventana,velocidadPrincipal) //call superclass constructor
-{
-	m_Personaje = personaje;
-	m_PersonajeDos = NULL;
-	personaje->setDimensiones(alto,ancho);
-	rect->x = rect->x - ancho_ventana/2;//Inicia al medio
-	m_velocidad_derecha = m_Personaje->getVelocidadDerecha();
-	m_velocidad_izquierda = m_Personaje->getVelocidadIzquierda();
-	m_PersonajeQueScrollea = 0;
-	//m_velocidad = m_velocidad_derecha;
-}
-
 CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personajeUno, Personaje* personajeDos)
 :Capa(alto,ancho,zIndex, anchoDeFondo,ancho_ventana,velocidadPrincipal) //call superclass constructorPersonaje* personajeUno
 {
 	m_Personaje = personajeUno;
 	m_PersonajeDos = personajeDos;
-	personajeUno->setDimensiones(alto,ancho);
-	personajeDos->setDimensiones(alto,ancho);
+	personajeUno->setDimensionesMundo(alto,ancho);
+	personajeDos->setDimensionesMundo(alto,ancho);
+	rect->x = rect->x - ancho_ventana/2;//Inicia al medio
+	m_velocidad_derecha = m_Personaje->getVelocidadDerecha();
+	m_velocidad_izquierda = m_Personaje->getVelocidadIzquierda();
+	m_PersonajeQueScrollea = 0;
+}
+
+CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, vector<Personaje*> personajes)
+:Capa(alto,ancho,zIndex, anchoDeFondo,ancho_ventana,velocidadPrincipal) //call superclass constructorPersonaje* personajeUno
+{
+	m_Personaje = personajes[0];
+	m_PersonajeDos = personajes[1];
+	personajes[0]->setDimensionesMundo(alto,ancho);
+	personajes[1]->setDimensionesMundo(alto,ancho);
 	rect->x = rect->x - ancho_ventana/2;//Inicia al medio
 	m_velocidad_derecha = m_Personaje->getVelocidadDerecha();
 	m_velocidad_izquierda = m_Personaje->getVelocidadIzquierda();

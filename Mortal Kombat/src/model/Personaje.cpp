@@ -47,7 +47,7 @@ Sprite* Personaje::getSpriteActual(){;
 	return spriteActual;
 }
 
-void Personaje::setDimensiones(float h,float w){
+void Personaje::setDimensionesMundo(float h,float w){
 	m_AltoMundo = h;
 	m_AnchoMundo = w;
 }

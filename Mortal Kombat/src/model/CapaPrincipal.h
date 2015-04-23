@@ -15,8 +15,8 @@
 class CapaPrincipal: public Capa {
 
 public:
-	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personaje);
 	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personajeUno, Personaje* personajeDos);
+	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, vector<Personaje*> personajes);
 	int Scrollear(); //0 no scrollea , 1 para la derecha -1 para la izquierda!
 	int CheckSegundoJugador(int estadoSegundoJugador);
 	virtual ~CapaPrincipal();

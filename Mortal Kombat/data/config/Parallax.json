@@ -4,7 +4,7 @@
 	
 	"tiempo": 180,
 
-	"ventana": 
+	"ventana": {
 		"ancho-px": 640,
 		"alto-px": 480,
 		"ancho": 400
@@ -13,7 +13,8 @@
 	"escenario": {
 		"ancho": 1000,
 		"alto": 334.3,
-		"y-piso": 325
+		"y-piso": 325,		
+		"z-index_personajes": 5
 	},
 	
 	"capas": [
@@ -43,12 +44,19 @@
 		}
 	],
 	
-	"personaje": {
+	"personajes": [
+		{
 		"ancho": 85,
 		"alto": 160,
-		"z-index": 5,
 		"sprites": "data/players/subzero/sprites/",
 		"nombre": "Sub-Zero",
 		"flipped": false
-	}
+		},
+		{
+		"ancho": 85,
+		"alto": 160,
+		"sprites": "data/players/default/sprites/",
+		"flipped": true
+		}
+	]
 }

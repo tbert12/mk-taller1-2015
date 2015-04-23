@@ -136,6 +136,7 @@ vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, 
 	return sprites;
 }
 
+
 Mundo* generarMundoDefault() {
 
 	float ratio_x = VENTANA_ANCHO_PX_DEFAULT/VENTANA_ANCHO_DEFAULT;
@@ -160,6 +161,10 @@ Mundo* generarMundoDefault() {
 	mundo->addPersonaje(personaje_default);
 	mundo->addPersonaje(personaje2_default);
 
+	vector<Personaje*> personajes;
+	personajes.push_back(personaje_default);
+	personajes.push_back(personaje2_default);
+
 	CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_0_BACKGROUND_DEFAULT,ventana);
 	mundo->addCapa(capa_0);
 	CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_1_BACKGROUND_DEFAULT,ventana);
@@ -167,8 +172,8 @@ Mundo* generarMundoDefault() {
 	CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_2_BACKGROUND_DEFAULT,ventana);
 	mundo->addCapa(capa_2);
 
-	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,VENTANA_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,personaje_default, personaje2_default);
-	mundo->addCapaPrincipal(capa_principal,PERSONAJE_Z_INDEX_DEFAULT);
+	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJES_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,VENTANA_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,personajes);
+	mundo->addCapaPrincipal(capa_principal,PERSONAJES_Z_INDEX_DEFAULT);
 
 	return mundo;
 }

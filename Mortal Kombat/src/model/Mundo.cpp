@@ -12,7 +12,7 @@ Mundo::Mundo(float ancho,float alto) {
 	alto_mundo = alto;
 	tiempo = NULL;
 	ventana = NULL;
-	personaje_z_index = 0;
+	personajes_z_index = 0;
 }
 
 bool Mundo::addPersonaje(Personaje* un_personaje){
@@ -34,10 +34,10 @@ void Mundo::addCapaPrincipal( CapaPrincipal* capa_principal, int index ) {
 
 	if ( index > (int)capas.size() ) {
 		this->addCapa(capa_principal);
-		personaje_z_index = capas.size()-1;
+		personajes_z_index = capas.size()-1;
 	} else {
 		capas.insert(capas.begin()+index, capa_principal);
-		personaje_z_index = index;
+		personajes_z_index = index;
 	}
 }
 
@@ -58,7 +58,7 @@ Ventana* Mundo::getVentana(){
 }
 
 int Mundo::_verificarScroll(){
-	CapaPrincipal* capa_principal = (CapaPrincipal*)capas[personaje_z_index];
+	CapaPrincipal* capa_principal = (CapaPrincipal*)capas[personajes_z_index];
 	return capa_principal->Scrollear();
 }
 
