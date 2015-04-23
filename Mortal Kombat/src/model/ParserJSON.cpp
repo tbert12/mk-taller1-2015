@@ -496,7 +496,7 @@ Mundo* ParserJSON::cargarMundo() {
 		capas_ok = false;
 	} else {
 		const Json::Value capas = root["capas"];
-		for ( ; i < capas.size(); i++ ) {
+		for ( ; i < (int)capas.size(); i++ ) {
 			if ( ! capas[i].isMember("imagen_fondo") ) {
 				background = BACKGROUND_DEFAULT;
 				log( "No se especifico la imagen de fondo de la capa. Se asigna una imagen por defecto.", LOG_ERROR );
@@ -524,11 +524,8 @@ Mundo* ParserJSON::cargarMundo() {
 						capa_ancho = VENTANA_ANCHO_DEFAULT;
 						// Informar al usuario el cambio de ancho.
 						log( "El ancho de la capa no puede ser negativo. Se setea automaticamente en 600.", LOG_WARNING );
-					} else if ( capa_ancho > escenario_ancho ) {
-						capa_ancho = VENTANA_ANCHO_DEFAULT;
-						// Informar al usuario el cambio de ancho.
-						log ( "El ancho de la capa no puede superar el del escenario. Se setea automaticamente en 600.", LOG_WARNING );
-					} else log( "Se cargo correctamente el ancho logico de la capa.", LOG_DEBUG );
+					}
+					else log( "Se cargo correctamente el ancho logico de la capa.", LOG_DEBUG );
 				} catch ( exception &e ) {
 					capa_ancho = VENTANA_ANCHO_DEFAULT;
 					log( "El ancho de la capa es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
