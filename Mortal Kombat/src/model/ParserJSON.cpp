@@ -707,6 +707,7 @@ Mundo* ParserJSON::cargarMundo() {
 	log( "Se agrego la capa principal al mundo.", LOG_DEBUG );
 
 	return nuevo_mundo;
+	//
 
 }
 
