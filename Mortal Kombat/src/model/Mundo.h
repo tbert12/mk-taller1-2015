@@ -33,14 +33,13 @@ private:
 	Ventana* ventana;
 	int personaje_z_index;
 	int _verificarScroll();
-	std::vector<int> indices;
 
 public:
 	Mundo(float AnchoMundo,float AltoMundo);
 	bool addPersonaje(Personaje* un_personaje);
 	Personaje* getPersonaje(int indice = 0);
-	bool addCapa(Capa* unaCapa,int indice);
-	bool addCapaPrincipal(CapaPrincipal* capa_principal, int index);
+	void addCapa(Capa* unaCapa);
+	void addCapaPrincipal(CapaPrincipal* capa_principal,int index);
 	Capa* getCapa(int indice = 0);
 	void setTiempo(Tiempo* unTiempo);
 	void setVentana(Ventana* unaVentana);

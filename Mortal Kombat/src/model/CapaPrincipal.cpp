@@ -133,7 +133,6 @@ int CapaPrincipal::_NadieScrollea(){
 }
 
 CapaPrincipal::~CapaPrincipal() {
-	//auto call Capa::~Capa();
 	m_velocidad_derecha = 0;
 	m_velocidad_izquierda = 0;
 	m_Personaje = NULL;

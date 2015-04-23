@@ -13,7 +13,6 @@ Mundo::Mundo(float ancho,float alto) {
 	tiempo = NULL;
 	ventana = NULL;
 	personaje_z_index = 0;
-	capas = std::vector<Capa*>(6);
 }
 
 bool Mundo::addPersonaje(Personaje* un_personaje){
@@ -27,21 +26,19 @@ Personaje* Mundo::getPersonaje(int indice){
 	return NULL;
 }
 
-bool Mundo::addCapa(Capa* una_capa,int index){
-	if (std::find(indices.begin(), indices.end(), index)!= indices.end()){
-		log(string("No se pudo agregar la capa con z_index:%i",index),LOG_ERROR);
-		return false;
-	}
-	capas[index] = una_capa;
-	indices.push_back(index);
-	std::sort(indices.begin(),indices.end());
-	return true;
+void Mundo::addCapa(Capa* una_capa) {
+	capas.push_back(una_capa);
 }
 
-bool Mundo::addCapaPrincipal( CapaPrincipal* capa_principal, int index ) {
-	bool exito = this->addCapa( capa_principal, index );
-	personaje_z_index = index;
-	return exito;
+void Mundo::addCapaPrincipal( CapaPrincipal* capa_principal, int index ) {
+
+	if ( index > (int)capas.size() ) {
+		this->addCapa(capa_principal);
+		personaje_z_index = capas.size()-1;
+	} else {
+		capas.insert(capas.begin()+index, capa_principal);
+		personaje_z_index = index;
+	}
 }
 
 Capa* Mundo::getCapa(int indice){
@@ -83,15 +80,15 @@ void Mundo::render(){
 
 
 	//actualizo los estados
-	for (unsigned int i = 0 ; i <= indices.size() -1 ; i++){
-		capas[indices[i]]->Update(scroll);
+	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
+		capas[i]->Update(scroll);
 	}
 
 	//aca una vez actualizado todo chequeo las colisiones y demas.
 
 	//renderizo las capas
-	for (unsigned int i = 0 ; i <= indices.size() -1 ; i++){
-		capas[indices[i]]->Renderizar();
+	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
+		capas[i]->Renderizar();
 	}
 
 	//actualizo pantalla -> SDL_RenderPresent( Renderer );
@@ -101,8 +98,8 @@ void Mundo::render(){
 
 Mundo::~Mundo() {
 	//fijar si hay que liberar cada uno de los contenidos de los vectores
-	for (unsigned int i = 0 ; i < indices.size() ; i++){
-	      delete capas[indices[i]];
+	for (unsigned int i = 0 ; i < capas.size() ; i++){
+	      delete capas[i];
 	}
 	capas.clear();
 	for (unsigned int i = 0 ; i < personajes.size() ; i++){

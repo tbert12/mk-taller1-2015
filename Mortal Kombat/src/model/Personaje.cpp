@@ -235,17 +235,10 @@ bool Personaje::_estaAgachado(){
 	return (spriteActual == sprites[SPRITE_AGACHAR]);
 }
 
-void Personaje::Update(int velocidadScroll){
-	float renderX = m_xActual;
-	if(velocidadScroll != 0)
-		renderX += velocidadScroll;
-	else
-		renderX += m_velocidad;
-
-	if (renderX <= (m_AnchoMundo - spriteActual->getAncho()) and renderX >= 0){
-		if ( !_estaAgachado() ){
-			m_xActual += (velocidadScroll!=0? velocidadScroll : m_velocidad);
-		}
+void Personaje::Update(){
+	float renderX = m_xActual + m_velocidad;
+	if (renderX <= (m_AnchoMundo - spriteActual->getAncho()*1.3f) and renderX >= 0){
+		if ( !_estaAgachado() ) m_xActual += m_velocidad;
 	}
 	if(_estaSaltando > 0){
 			_actualizarY();
@@ -254,12 +247,15 @@ void Personaje::Update(int velocidadScroll){
 		m_yActual = m_yInicial;
 		_estaSaltando = -1;
 	}
+
+	if(m_xActual > m_AnchoMundo - spriteActual->getAncho()*1.3f) m_xActual = m_AnchoMundo - spriteActual->getAncho()*1.3f;
+	else if(m_xActual<0) m_xActual = 0;
 }
 
-void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
-	m_fliped = posOtherPlayer < m_xActual;
+void Personaje::renderizar(float x_dist_ventana){
 	spriteActual->render(m_xActual-x_dist_ventana,m_yActual,m_fliped);
 	AvanzarSprite();
+
 }
 
 bool Personaje::enMovimiento(){
