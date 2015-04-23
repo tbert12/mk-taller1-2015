@@ -254,6 +254,10 @@ void Personaje::Update(int velocidadScroll){
 		m_yActual = m_yInicial;
 		_estaSaltando = -1;
 	}
+
+	if(m_xActual > m_AnchoMundo - spriteActual->getAncho()*1.3f) m_xActual = m_AnchoMundo - spriteActual->getAncho()*1.3f;
+	else if(m_xActual<0) m_xActual = 0;
+
 }
 
 void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
