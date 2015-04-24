@@ -14,6 +14,18 @@ const int SPRITE_CAMINAR=         1;
 const int SPRITE_SALTAR=          2;
 const int SPRITE_SALTAR_DIAGONAL= 3;
 const int SPRITE_AGACHAR=         4;
+const int SPRITE_PATADA_ALTA_AGACHADO=  5;
+const int SPRITE_PATADA_BAJA_AGACHADO=  6;
+const int SPRITE_CUBRIRSE=        9;
+const int SPRITE_CUBRIRSE_AGACHADO=    10;
+const int SPRITE_GANCHO=         12;
+const int SPRITE_PATADA_ALTA=    14;
+const int SPRITE_PATADA_CIRCULAR=15;
+const int SPRITE_PATADA_SALTANDO=16;
+const int SPRITE_PINA_AGACHADO=  17;
+const int SPRITE_PINA_ALTA=		 18;
+const int SPRITE_PINA_BAJA=		 19;
+const int SPRITE_PINA_SALTANDO=  20;
 
 const int TIEMPOTOTALDESALTO = 8;
 
@@ -36,6 +48,9 @@ private:
 	int tiempoDeSalto;
 	short _estaSaltando;
 	bool m_fliped;
+	bool sigueAgachado;
+	bool estaAtacando;
+	bool estaCubriendose;
 
 	float velocidadAdelante;
 	float velocidadAtras;
@@ -59,6 +74,14 @@ private:
 	void _parabola();
 	void _actualizarY();
 	float _yDeSalto(float currentY, float currentT);
+
+	void _pinaSaltando();
+	void _pinaAgachado();
+	void _gancho();
+	void _patadaSaltando();
+	void _patadaAltaAgachado();
+	void _patadaBajaAgachado();
+
 
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad, bool fliped = false);
@@ -87,8 +110,16 @@ public:
 	void Saltar();
 	void Agachar();
 	void Levantarse();
+	void sacarGuardia();
 	void CaminarDerecha();
 	void CaminarIzquierda();
+	void pinaBaja();
+	void pinaAlta();
+	void patadaBaja();
+	void patadaAlta();
+	void patadaCircular();
+	void cubrirse();
+	void cubrirseAgachado();
 
 	virtual ~Personaje();
 };

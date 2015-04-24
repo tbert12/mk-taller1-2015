@@ -18,8 +18,9 @@
 
 #include <algorithm>    // std::reverse (Tranfuguiada para que camine para atras)
 
+#include "../controller/KeyboardControl1.h"
+#include "../controller/KeyboardControl2.h"
 #include "../view/Ventana.h"
-#include "../controller/KeyboardControl.h"
 #include "Personaje.h"
 
 string ruta_archivo_configuracion = "data/config/Parallax.json";
@@ -42,7 +43,6 @@ int main( int argc, char* args[] )
 	try {
 		parser = new ParserJSON( ruta_archivo_configuracion );
 		mundo = parser->cargarMundo();
-		//mundo = CrearMundoDefault();
 		log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
 	} catch ( std::exception &e ) {
 		log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
@@ -51,8 +51,9 @@ int main( int argc, char* args[] )
 		return 1;
 	}
 
-	//Creo el Personaje
-	Personaje* luchador = mundo->getPersonaje();
+	//Creo los Personajes
+	Personaje* luchador1 = mundo->getPersonaje(0);
+	Personaje* luchador2 = mundo->getPersonaje(1);
 
 
 	//mostrar imagen inicio
@@ -61,11 +62,12 @@ int main( int argc, char* args[] )
 		usleep(3000000);
 	}
 
-	//Creo el Controlador
-	KeyboardControl* control_jugador_1 = new KeyboardControl(luchador);
+	//Creo los Controladores
+	KeyboardControl1* control_jugador_1 = new KeyboardControl1(luchador1);
+	KeyboardControl2* control_jugador_2 = new KeyboardControl2(luchador2);
 
 	//While Principal
-	while( !control_jugador_1->getQuit() ){
+	while( !control_jugador_1->getQuit() && !control_jugador_2->getQuit() ){
 		control_jugador_1->KeyState();
 		//Eventos */
 		while( control_jugador_1->PollEvent() ){
@@ -77,17 +79,19 @@ int main( int argc, char* args[] )
 				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_DEBUG );
 				delete parser;
 				delete control_jugador_1;
+				delete control_jugador_2;
 				delete mundo;
 
 				try {
 					parser = new ParserJSON( ruta_archivo_configuracion );
 					mundo = parser->cargarMundo();
-					//mundo = CrearMundoDefault();
 					log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
-					//Creo el Personaje
-					luchador = mundo->getPersonaje();
-					//Creo el Controlador
-					control_jugador_1 = new KeyboardControl(luchador);
+					//Creo los Personajes
+					luchador1 = mundo->getPersonaje(0);
+					luchador2 = mundo->getPersonaje(1);
+					//Creo los Controladores
+					control_jugador_1 = new KeyboardControl1(luchador1);
+					control_jugador_2 = new KeyboardControl2(luchador2);
 				} catch ( std::runtime_error &e ) {
 					log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
 					return 1;
@@ -96,6 +100,11 @@ int main( int argc, char* args[] )
 
 			}
 		}
+		control_jugador_2->KeyState();
+		while ( control_jugador_2->PollEvent() ) {
+			control_jugador_2->KeyPressed();
+		}
+
 		mundo->render();
 		//Sleep(Microsegundos)
 		usleep(50000);
@@ -103,6 +112,7 @@ int main( int argc, char* args[] )
 	}
 	delete parser;
 	delete control_jugador_1;
+	delete control_jugador_2;
 	delete mundo;
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 

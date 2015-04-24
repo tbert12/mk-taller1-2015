@@ -1,18 +1,18 @@
 /*
- * KeyboardControl.h
+ * KeyboardControl1.h
  *
  *  Created on: 26/3/2015
  *      Author: tomi
  */
 
-#ifndef SRC_CONTROLLER_KEYBOARDCONTROL_H_
-#define SRC_CONTROLLER_KEYBOARDCONTROL_H_
+#ifndef SRC_CONTROLLER_KEYBOARDCONTROL1_H_
+#define SRC_CONTROLLER_KEYBOARDCONTROL1_H_
 
 #include<SDL2/SDL.h>
 #include "../model/Personaje.h"
 #include <exception>
 
-class KeyboardControl {
+class KeyboardControl1 {
 private:
 	Personaje* personaje;
 	bool quit;
@@ -22,8 +22,8 @@ private:
 
 public:
 
-	KeyboardControl(Personaje*);
-	virtual ~KeyboardControl();
+	KeyboardControl1(Personaje*);
+	virtual ~KeyboardControl1();
 
 	bool PollEvent();
 
@@ -33,4 +33,4 @@ public:
 	bool recargar();
 };
 
-#endif /* SRC_CONTROLLER_KEYBOARDCONTROL_H_ */
+#endif /* SRC_CONTROLLER_KEYBOARDCONTROL1_H_ */

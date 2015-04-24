@@ -27,6 +27,9 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	m_AnchoMundo = 0;
 
 	m_fliped = fliped;
+	sigueAgachado = false;
+	estaAtacando = false;
+	estaCubriendose = false;
 
 	velocidadAdelante = velocidad;
 	velocidadAtras = -velocidad;
@@ -70,7 +73,17 @@ void Personaje::AvanzarSprite(){
 		} else {
 			_cambiarSprite(SPRITE_CAMINAR);
 		}
-
+	} else if ( (estaAtacando or estaCubriendose) and spriteActual->ultimoFrame() ) {
+		if ( ! sigueAgachado ) {
+			_cambiarSprite(SPRITE_INICIAL);
+			estaAtacando = false;
+			estaCubriendose = false;
+		} else {
+			_cambiarSprite(SPRITE_AGACHAR);
+			spriteActual->doLoop(true);
+			estaAtacando = false;
+			estaCubriendose = false;
+		}
 	}
 	spriteActual->Advance();
 	return;
@@ -203,6 +216,7 @@ void Personaje::Agachar(){
 	if (_estaSaltando > 0) return;
 	_cambiarSprite(SPRITE_AGACHAR);
 	spriteActual->doLoop(true);
+	sigueAgachado = true;
 }
 
 void Personaje::Levantarse(){
@@ -211,7 +225,142 @@ void Personaje::Levantarse(){
 	spriteActual->doLoop(false);
 	//Reproducir levantarse
 	spriteActual->doReverse(true);
+	sigueAgachado = false;
 }
+
+void Personaje::sacarGuardia() {
+	if ( sigueAgachado ) {
+		_cambiarSprite(SPRITE_AGACHAR);
+		spriteActual->doLoop(true);
+		estaAtacando = false;
+		estaCubriendose = false;
+	} else {
+		_cambiarSprite(SPRITE_INICIAL);
+		estaCubriendose = false;
+	}
+}
+
+void Personaje::_pinaAgachado() {
+	//Destrabarlo
+	spriteActual->doLoop(false);
+	this->_cambiarSprite(SPRITE_PINA_AGACHADO);
+	estaAtacando = true;
+
+}
+
+void Personaje::_pinaSaltando() {
+
+}
+
+void Personaje::_gancho() {
+	//Destrabarlo
+	spriteActual->doLoop(false);
+	this->_cambiarSprite(SPRITE_GANCHO);
+	estaAtacando = true;
+}
+
+void Personaje::_patadaAltaAgachado() {
+	//Destrabarlo
+	spriteActual->doLoop(false);
+	this->_cambiarSprite(SPRITE_PATADA_ALTA_AGACHADO);
+	estaAtacando = true;
+}
+
+void Personaje::_patadaBajaAgachado() {
+	//Destrabarlo
+	spriteActual->doLoop(false);
+	this->_cambiarSprite(SPRITE_PATADA_BAJA_AGACHADO);
+	estaAtacando = true;
+}
+
+void Personaje::cubrirseAgachado() {
+	// Destrabarlo
+	spriteActual->doLoop(false);
+	this->_cambiarSprite(SPRITE_CUBRIRSE_AGACHADO);
+	spriteActual->doLoop(true);
+	estaCubriendose = true;
+}
+
+void Personaje::patadaCircular() {
+	this->_cambiarSprite(SPRITE_PATADA_CIRCULAR);
+	estaAtacando = true;
+}
+
+void Personaje::_patadaSaltando() {
+
+}
+
+void Personaje::pinaBaja() {
+	this->Frenar();
+	if ( this->_estaAgachado() ) {
+		this->_pinaAgachado();
+		return;
+	}
+	if ( _estaSaltando > 0 )  {
+		this->_pinaSaltando();
+		return;
+	}
+	estaAtacando = true;
+	this->_cambiarSprite(SPRITE_PINA_BAJA);
+}
+
+void Personaje::pinaAlta() {
+	this->Frenar();
+	if ( this->_estaAgachado() ) {
+		this->_gancho();
+		return;
+	}
+	if ( _estaSaltando > 0 ) {
+		this->_pinaSaltando();
+		return;
+	}
+	estaAtacando = true;
+	this->_cambiarSprite(SPRITE_PINA_ALTA);
+}
+
+void Personaje::patadaBaja() {
+	this->Frenar();
+	if ( this->_estaAgachado() ) {
+		this->_patadaBajaAgachado();
+		return;
+	}
+	if ( _estaSaltando > 0 ) {
+		this->_patadaSaltando();
+		return;
+	}
+	estaAtacando = true;
+	//this->_cambiarSprite(SPRITE_PATADA_BAJA);
+}
+
+void Personaje::patadaAlta() {
+	this->Frenar();
+	if ( this->_estaAgachado() ) {
+		this->_patadaAltaAgachado();
+		return;
+	}
+	if ( _estaSaltando > 0 ) {
+		this->_patadaSaltando();
+		return;
+	}
+	estaAtacando = true;
+	this->_cambiarSprite(SPRITE_PATADA_ALTA);
+}
+
+void Personaje::cubrirse() {
+	this->Frenar();
+	if ( this->_estaAgachado() ) {
+		this->cubrirseAgachado();
+		return;
+	}
+	if ( _estaSaltando <= 0 ) {
+		this->_cambiarSprite(SPRITE_CUBRIRSE);
+		spriteActual->doLoop(true);
+		estaCubriendose = true;
+	}
+}
+
+
+
 
 float Personaje::getX()
 {
