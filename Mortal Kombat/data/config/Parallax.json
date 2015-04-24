@@ -54,7 +54,8 @@
 		{
 		"ancho": 85,
 		"alto": 160,
-		"sprites": "data/players/default/sprites/"
+		"sprites": "data/players/subzero/sprites/",
+		"nombre": "Sub-Zero"
 		}
 	]
 }
