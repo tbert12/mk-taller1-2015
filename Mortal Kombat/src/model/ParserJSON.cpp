@@ -227,6 +227,86 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	Sprite* sprite_agachar =  cargarSprite( root, ruta_carpeta, "agachar", SPRITESHEET_AGACHAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
 	sprites.push_back( sprite_agachar );
 
+	log( "Se cargara el sprite para la accion de pegar patada alta estando agachado del personaje", LOG_DEBUG );
+	Sprite* sprite_agachado_patada_alta =  cargarSprite( root, ruta_carpeta, "agachadoPatadaAlta", SPRITESHEET_AGACHADO_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_agachado_patada_alta );
+
+	log( "Se cargara el sprite para la accion de pegar patada baja estando agachado del personaje", LOG_DEBUG );
+	Sprite* sprite_agachado_patada_baja =  cargarSprite( root, ruta_carpeta, "agachadoPatadaBaja", SPRITESHEET_AGACHADO_PATADA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_agachado_patada_baja );
+
+	log( "Se cargara el sprite para la accion de caerse por una barrida del personaje", LOG_DEBUG );
+	Sprite* sprite_caer_en_z =  cargarSprite( root, ruta_carpeta, "caeEnZ", SPRITESHEET_CAER_EN_Z_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_caer_en_z );
+
+	log( "Se cargara el sprite para la accion de caerse y levantarse inmediatamente del personaje", LOG_DEBUG );
+	Sprite* sprite_caer_y_levantarse =  cargarSprite( root, ruta_carpeta, "caeYSeLevanta", SPRITESHEET_CAER_Y_LEVANTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_caer_y_levantarse );
+
+	log( "Se cargara el sprite para la accion de cubrirse del personaje", LOG_DEBUG );
+	Sprite* sprite_cubrirse =  cargarSprite( root, ruta_carpeta, "cubrirse", SPRITESHEET_CUBRIRSE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_cubrirse );
+
+	log( "Se cargara el sprite para la accion de cubrirse agachado del personaje", LOG_DEBUG );
+	Sprite* sprite_cubrirse_agachado =  cargarSprite( root, ruta_carpeta, "cubrirseAgachado", SPRITESHEET_CUBRIRSE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_cubrirse_agachado );
+
+	log( "Se cargara el sprite para la pose de victoria del personaje", LOG_DEBUG );
+	Sprite* sprite_ganar =  cargarSprite( root, ruta_carpeta, "gana", SPRITESHEET_GANAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_ganar );
+
+	log( "Se cargara el sprite para la accion de gancho del personaje", LOG_DEBUG );
+	Sprite* sprite_gancho =  cargarSprite( root, ruta_carpeta, "gancho", SPRITESHEET_GANCHO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_gancho );
+
+	log( "Se cargara el sprite para la accion de morirse del personaje", LOG_DEBUG );
+	Sprite* sprite_morir =  cargarSprite( root, ruta_carpeta, "muere", SPRITESHEET_MORIR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_morir );
+
+	log( "Se cargara el sprite para la accion de patada alta del personaje", LOG_DEBUG );
+	Sprite* sprite_patada_alta =  cargarSprite( root, ruta_carpeta, "patadaAlta", SPRITESHEET_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_patada_alta );
+
+	log( "Se cargara el sprite para la accion de patada circular del personaje", LOG_DEBUG );
+	Sprite* sprite_patada_circular =  cargarSprite( root, ruta_carpeta, "patadaConGiro", SPRITESHEET_PATADA_CIRCULAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_patada_circular );
+
+	log( "Se cargara el sprite para la accion de patada saltando del personaje", LOG_DEBUG );
+	Sprite* sprite_patada_saltando =  cargarSprite( root, ruta_carpeta, "patadaEnSalto", SPRITESHEET_PATADA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_patada_saltando );
+
+	log( "Se cargara el sprite para la accion de pina agachado del personaje", LOG_DEBUG );
+	Sprite* sprite_pina_agachado =  cargarSprite( root, ruta_carpeta, "pinaAgachado", SPRITESHEET_PINA_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_pina_agachado );
+
+	log( "Se cargara el sprite para la accion de pina alta del personaje", LOG_DEBUG );
+	Sprite* sprite_pina_alta =  cargarSprite( root, ruta_carpeta, "pinaAlta", SPRITESHEET_PINA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_pina_alta );
+
+	log( "Se cargara el sprite para la accion de pina baja del personaje", LOG_DEBUG );
+	Sprite* sprite_pina_baja =  cargarSprite( root, ruta_carpeta, "pinaBaja", SPRITESHEET_PINA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_pina_baja );
+
+	log( "Se cargara el sprite para la accion de pina saltando del personaje", LOG_DEBUG );
+	Sprite* sprite_pina_saltando =  cargarSprite( root, ruta_carpeta, "pinaEnSalto", SPRITESHEET_PINA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_pina_saltando );
+
+	log( "Se cargara el sprite para la accion recibir golpe agachado del personaje", LOG_DEBUG );
+	Sprite* sprite_recibir_golpe_agachado =  cargarSprite( root, ruta_carpeta, "recibeGolpeAgachado", SPRITESHEET_RECIBIR_GOLPE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_recibir_golpe_agachado );
+
+	log( "Se cargara el sprite para la accion de recibir golpe alto del personaje", LOG_DEBUG );
+	Sprite* sprite_recibir_golpe_alto =  cargarSprite( root, ruta_carpeta, "recibeGolpeAlto", SPRITESHEET_RECIBIR_GOLPE_ALTO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_recibir_golpe_alto );
+
+	log( "Se cargara el sprite para la accion de recibir golpe bajo del personaje", LOG_DEBUG );
+	Sprite* sprite_recibir_golpe_bajo =  cargarSprite( root, ruta_carpeta, "recibeGolpeBajo", SPRITESHEET_RECIBIR_GOLPE_BAJO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_recibir_golpe_bajo );
+
+	log( "Se cargara el sprite para la accion de recibir golpes fuerte del personaje", LOG_DEBUG );
+	Sprite* sprite_recibir_golpe_fuerte =  cargarSprite( root, ruta_carpeta, "recibeGolpeFuerte", SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	sprites.push_back( sprite_recibir_golpe_fuerte );
+
 
 	log( "Se crearon todos los sprites del personaje.", LOG_DEBUG );
 	return sprites;

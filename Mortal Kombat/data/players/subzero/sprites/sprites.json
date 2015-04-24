@@ -366,7 +366,7 @@
 			}
 		]
 	},
-	"caeySeLevanta":{
+	"caeYSeLevanta":{
 		"nombre":"caeySeLevanta.png",
 		"frames":[
 			{
@@ -674,7 +674,7 @@
 			}
 		]
 	},
-	"PatadaConGiro":{
+	"patadaConGiro":{
 		"nombre":"PatadaConGiro.png",
 		"frames":[
 			{
@@ -735,7 +735,7 @@
 			}
 		]
 	},
-	"PatadaEnSalto":{
+	"patadaEnSalto":{
 		"nombre":"PatadaEnSalto.png",
 		"frames":[
 			{
@@ -761,7 +761,7 @@
 			}
 		]
 	},
-	"PinaAgachado":{
+	"pinaAgachado":{
 		"nombre":"PinaAgachado.png",
 		"frames":[
 			{
@@ -787,7 +787,7 @@
 			}
 		]
 	},
-	"PinaAlta":{
+	"pinaAlta":{
 		"nombre":"PinaAlta.png",
 		"frames":[
 			{
@@ -841,7 +841,7 @@
 			}
 		]
 	},
-	"PinaBaja":{
+	"pinaBaja":{
 		"nombre":"PinaBaja.png",
 		"frames":[
 			{
@@ -888,7 +888,7 @@
 			}
 		]
 	},
-	"PinaEnSalto":{
+	"pinaEnSalto":{
 		"nombre":"PinaEnSalto.png",
 		"frames":[
 			{

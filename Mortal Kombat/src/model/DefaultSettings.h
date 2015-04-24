@@ -35,11 +35,34 @@ const float PERSONAJE_ANCHO_DEFAULT = 40.0;
 const float PERSONAJE_ALTO_DEFAULT = 70.0;
 
 const char* const JSON_SPRITES_DEFAULT = "data/players/default/sprites/sprites.json";
+
 const char* const SPRITESHEET_PARADO_DEFAULT = "initial.png";
 const char* const SPRITESHEET_CAMINAR_DEFAULT = "walk.png";
 const char* const SPRITESHEET_SALTAR_DEFAULT = "salto.png";
 const char* const SPRITESHEET_SALTAR_DIAGONAL_DEFAULT = "diag.png";
 const char* const SPRITESHEET_AGACHAR_DEFAULT = "agachar.png";
+const char* const SPRITESHEET_AGACHADO_PATADA_ALTA_DEFAULT = "agachadoPatadaAlta.png";
+const char* const SPRITESHEET_AGACHADO_PATADA_BAJA_DEFAULT = "agachadoPatadaBaja.png";
+const char* const SPRITESHEET_CAER_EN_Z_DEFAULT = "caeEnZ.png";
+const char* const SPRITESHEET_CAER_Y_LEVANTAR_DEFAULT = "caeySeLevanta.png";
+const char* const SPRITESHEET_CUBRIRSE_DEFAULT = "cubrirse.png";
+const char* const SPRITESHEET_CUBRIRSE_AGACHADO_DEFAULT = "cubrirseAgachado.png";
+const char* const SPRITESHEET_GANAR_DEFAULT = "gana.png";
+const char* const SPRITESHEET_GANCHO_DEFAULT = "gancho.png";
+const char* const SPRITESHEET_MORIR_DEFAULT = "muere.png";
+const char* const SPRITESHEET_PATADA_ALTA_DEFAULT = "patadaAlta.png";
+const char* const SPRITESHEET_PATADA_CIRCULAR_DEFAULT = "PatadaConGiro.png";
+const char* const SPRITESHEET_PATADA_SALTANDO_DEFAULT = "PatadaEnSalto.png";
+const char* const SPRITESHEET_PINA_AGACHADO_DEFAULT = "PinaAgachado.png";
+const char* const SPRITESHEET_PINA_ALTA_DEFAULT = "PinaAlta.png";
+const char* const SPRITESHEET_PINA_BAJA_DEFAULT = "PinaBaja.png";
+const char* const SPRITESHEET_PINA_SALTANDO_DEFAULT = "PinaEnSalto.png";
+const char* const SPRITESHEET_RECIBIR_GOLPE_AGACHADO_DEFAULT = "recibeGolpeAgachado.png";
+const char* const SPRITESHEET_RECIBIR_GOLPE_ALTO_DEFAULT = "recibeGolpeAlto.png";
+const char* const SPRITESHEET_RECIBIR_GOLPE_BAJO_DEFAULT = "recibeGolpeBajo.png";
+const char* const SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT = "recibeGolpeFuerte.png";
+
+
 
 const float PERSONAJE_VELOCIDAD = 7.0;
 

@@ -132,6 +132,26 @@ vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, 
 	sprites.push_back( crearSpritePorDefecto("saltar", ventana, ratio_x_personaje, ratio_y_personaje) );
 	sprites.push_back( crearSpritePorDefecto("saltardiagonal", ventana, ratio_x_personaje, ratio_y_personaje) );
 	sprites.push_back( crearSpritePorDefecto("agachar", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("agachadoPatadaAlta", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("agachadoPatadaBaja", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("caeEnZ", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("caeYSeLevanta", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("cubrirse", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("cubrirseAgachado", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("gana", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("gancho", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("muere", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("patadaAlta", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("patadaConGiro", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("patadaEnSalto", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("pinaAgachado", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("pinaAlta", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("pinaBaja", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("pinaEnSalto", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("recibeGolpeAgachado", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("recibeGolpeAlto", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("recibeGolpeBajo", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("recibeGolpeFuerte", ventana, ratio_x_personaje, ratio_y_personaje) );
 
 	return sprites;
 }

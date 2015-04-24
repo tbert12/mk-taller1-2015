@@ -13,7 +13,7 @@
 	"escenario": {
 		"ancho": 1000,
 		"alto": 334.3,
-		"y-piso": 325,		
+		"y-piso": 325,
 		"z-index_personajes": 5
 	},
 	
@@ -49,14 +49,12 @@
 		"ancho": 85,
 		"alto": 160,
 		"sprites": "data/players/subzero/sprites/",
-		"nombre": "Sub-Zero",
-		"flipped": false
+		"nombre": "Sub-Zero"
 		},
 		{
 		"ancho": 85,
 		"alto": 160,
-		"sprites": "data/players/default/sprites/",
-		"flipped": true
+		"sprites": "data/players/default/sprites/"
 		}
 	]
 }
