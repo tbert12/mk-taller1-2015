@@ -1,6 +1,5 @@
 #include "ParserJSON.h"
 
-
 using namespace std;
 
 ParserJSON::ParserJSON(string ruta_archivo) {
@@ -312,6 +311,114 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	return sprites;
 
 }
+
+
+void ParserJSON::cargarMapaComandos(Json::Value root) {
+	if ( ! root.isMember("botones") ) {
+		mapaComandosDefault();
+		return;
+	}
+
+	char pina_baja;
+	if ( ! root["botones"].isMember("pina baja") ) {
+		pina_baja = COMANDO_PINA_BAJA_DEFAULT;
+	} else {
+		try {
+			string pina_baja_s;
+			pina_baja_s = root["botones"].get( "pina baja", "" ).asString();
+			if ( pina_baja_s == "" ) pina_baja = COMANDO_PINA_BAJA_DEFAULT;
+			pina_baja = pina_baja_s[0];
+		} catch ( exception &e ) {
+			pina_baja = COMANDO_PINA_BAJA_DEFAULT;
+			log( "El boton correspondiente a la pina baja no es un caracter valido.", LOG_ERROR );
+		}
+	}
+	comandos["pina baja"] = pina_baja;
+
+	char pina_alta;
+	if ( ! root["botones"].isMember("pina alta") ) {
+		pina_alta = COMANDO_PINA_ALTA_DEFAULT;
+	} else {
+		try {
+			string pina_alta_s;
+			pina_alta_s = root["botones"].get( "pina alta", "" ).asString();
+			if ( pina_alta_s == "" ) pina_alta = COMANDO_PINA_ALTA_DEFAULT;
+			pina_alta = pina_alta_s[0];
+		} catch ( exception &e ) {
+			pina_alta = COMANDO_PINA_ALTA_DEFAULT;
+			log( "El boton correspondiente a la pina alta no es un caracter valido.", LOG_ERROR );
+		}
+	}
+	comandos["pina alta"] = pina_alta;
+
+	char patada_baja;
+	if ( ! root["botones"].isMember("patada baja") ) {
+		patada_baja = COMANDO_PATADA_BAJA_DEFAULT;
+	} else {
+		try {
+			string patada_baja_s;
+			patada_baja_s = root["botones"].get( "patada baja", "" ).asString();
+			if ( patada_baja_s == "" ) patada_baja = COMANDO_PATADA_BAJA_DEFAULT;
+			patada_baja = patada_baja_s[0];
+		} catch ( exception &e ) {
+			patada_baja = COMANDO_PATADA_BAJA_DEFAULT;
+			log( "El boton correspondiente a la patada baja no es un caracter valido.", LOG_ERROR );
+		}
+	}
+	comandos["patada baja"] = patada_baja;
+
+	char patada_alta;
+	if ( ! root["botones"].isMember("patada alta") ) {
+		patada_alta = COMANDO_PATADA_ALTA_DEFAULT;
+	} else {
+		try {
+			string patada_alta_s;
+			patada_alta_s = root["botones"].get( "patada alta", "" ).asString();
+			if ( patada_alta_s == "" ) patada_alta = COMANDO_PATADA_ALTA_DEFAULT;
+			patada_alta = patada_alta_s[0];
+		} catch ( exception &e ) {
+			patada_alta = COMANDO_PATADA_ALTA_DEFAULT;
+			log( "El boton correspondiente a la patada alta no es un caracter valido.", LOG_ERROR );
+		}
+	}
+	comandos["patada alta"] = patada_alta;
+
+	char cubrirse;
+	if ( ! root["botones"].isMember("cubrirse") ) {
+		cubrirse = COMANDO_CUBRIRSE_DEFAULT;
+	} else {
+		try {
+			string cubrirse_s;
+			cubrirse_s = root["botones"].get( "cubrirse", "" ).asString();
+			if ( cubrirse_s == "" ) cubrirse = COMANDO_CUBRIRSE_DEFAULT;
+			cubrirse = cubrirse_s[0];
+		} catch ( exception &e ) {
+			cubrirse = COMANDO_CUBRIRSE_DEFAULT;
+			log( "El boton correspondiente al comando de cubrirse no es un caracter valido.", LOG_ERROR );
+		}
+	}
+	comandos["cubrirse"] = cubrirse;
+
+	char lanzar_arma;
+	if ( ! root["botones"].isMember("lanzar arma") ) {
+		lanzar_arma = COMANDO_LANZAR_ARMA_DEFAULT;
+	} else {
+		try {
+			string lanzar_arma_s;
+			lanzar_arma_s = root["botones"].get( "lanzar_arma", "" ).asString();
+			if ( lanzar_arma_s == "" ) lanzar_arma = COMANDO_LANZAR_ARMA_DEFAULT;
+			lanzar_arma = lanzar_arma_s[0];
+		} catch ( exception &e ) {
+			lanzar_arma = COMANDO_LANZAR_ARMA_DEFAULT;
+			log( "El boton correspondiente al comando de lanzar el arma arrojable no es un caracter valido.", LOG_ERROR );
+		}
+	}
+	comandos["lanzar arma"] = lanzar_arma;
+
+	log( "Se cargo correctamente el mapa de comandos y botones del controlador.", LOG_DEBUG );
+
+}
+
 
 Mundo* ParserJSON::cargarMundo() {
 
@@ -787,8 +894,12 @@ Mundo* ParserJSON::cargarMundo() {
 	nuevo_mundo->addCapaPrincipal( capa_principal, personajes_z_index );
 	log( "Se agrego la capa principal al mundo.", LOG_DEBUG );
 
+	// Obtener hash de comandos.
+	cargarMapaComandos(root);
+
+
 	return nuevo_mundo;
-	//
+
 
 }
 

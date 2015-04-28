@@ -7,6 +7,7 @@
 #include "../../libs/json/json.h"
 #include "logging.h"
 #include "Mundo.h"
+#include "../controller/KeyboardControl.h"
 #include <sys/stat.h>
 
 const int LOGLVL_DEFAULT = 2;
@@ -62,7 +63,15 @@ const char* const SPRITESHEET_RECIBIR_GOLPE_ALTO_DEFAULT = "recibeGolpeAlto.png"
 const char* const SPRITESHEET_RECIBIR_GOLPE_BAJO_DEFAULT = "recibeGolpeBajo.png";
 const char* const SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT = "recibeGolpeFuerte.png";
 
+const char COMANDO_PINA_BAJA_DEFAULT = 'a';
+const char COMANDO_PATADA_BAJA_DEFAULT = 's';
+const char COMANDO_PINA_ALTA_DEFAULT = 'q';
+const char COMANDO_PATADA_ALTA_DEFAULT = 'w';
+const char COMANDO_CUBRIRSE_DEFAULT = 'd';
+const char COMANDO_LANZAR_ARMA_DEFAULT = 'e';
 
+
+extern map<const char*, char> comandos;
 
 const float PERSONAJE_VELOCIDAD = 7.0;
 
@@ -72,6 +81,7 @@ using namespace std;
 
 Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje);
 vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto );
+void mapaComandosDefault();
 Mundo* generarMundoDefault();
 
 

@@ -16,6 +16,7 @@ public:
 	 float getRatioXPersonaje( Json::Value root_sprites, float personaje_ancho );
 	 float getRatioYPersonaje( Json::Value root_sprites, float personaje_alto );
 	 Mundo* cargarMundo();
+	 void cargarMapaComandos(Json::Value root);
 	 Sprite* cargarSprite( Json::Value root, string ruta_carpeta, const char accion_sprite[], string spritesheet_accion, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje );
 	 vector<Sprite*> cargarSprites(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto);
 

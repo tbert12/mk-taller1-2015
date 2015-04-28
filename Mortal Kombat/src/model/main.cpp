@@ -18,8 +18,7 @@
 
 #include <algorithm>    // std::reverse (Tranfuguiada para que camine para atras)
 
-#include "../controller/KeyboardControl1.h"
-#include "../controller/KeyboardControl2.h"
+#include "../controller/KeyboardControl.h"
 #include "../view/Ventana.h"
 #include "Personaje.h"
 
@@ -42,10 +41,10 @@ Mundo* cargarMundo(){
 	return unMundo;
 }
 
-void free(Mundo* mundo,KeyboardControl1* c1,KeyboardControl2* c2){
+void free(Mundo* mundo,KeyboardControl* c1/*,KeyboardControl* c2*/){
 	delete mundo;
 	delete c1;
-	delete c2;
+	//delete c2;
 }
 
 int main( int argc, char* args[] )
@@ -59,8 +58,11 @@ int main( int argc, char* args[] )
 		ruta_archivo_configuracion = args[1];
 	}
 
+
 	Mundo* mundo = cargarMundo();
-	if (mundo == NULL) return 1;
+	if (mundo == NULL) {
+		return 1;
+	}
 
 
 	//mostrar imagen inicio
@@ -69,32 +71,34 @@ int main( int argc, char* args[] )
 		usleep(3000000);
 	}
 
+	SDL_Event event;
+
 	//Creo los Controladores
-	KeyboardControl1* control_jugador_1 = new KeyboardControl1(mundo->getPersonaje(0));
-	KeyboardControl2* control_jugador_2 = new KeyboardControl2(mundo->getPersonaje(1));
+	KeyboardControl* control_jugador_1 = new KeyboardControl(event, comandos, mundo->getPersonaje(0));
+	//KeyboardControl* control_jugador_2 = new KeyboardControl(event, comandos, mundo->getPersonaje(1));
 
 	//While Principal
-	while( !control_jugador_1->getQuit() && !control_jugador_2->getQuit() ){
+	while( !control_jugador_1->getQuit() /*&& !control_jugador_2->getQuit()*/ ){
 		control_jugador_1->KeyState();
-		control_jugador_2->KeyState();
+		//control_jugador_2->KeyState();
 		//Eventos */
-		while( control_jugador_1->PollEvent() or control_jugador_2->PollEvent() ){
+		while( control_jugador_1->PollEvent() /*or control_jugador_2->PollEvent()*/ ){
 			try {
 
 				control_jugador_1->KeyPressed();
-				control_jugador_2->KeyPressed();
+				//control_jugador_2->KeyPressed();
 
 			} catch ( std::runtime_error &e ) {
 				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_DEBUG );
-				free(mundo,control_jugador_1,control_jugador_2);
+				free(mundo,control_jugador_1/*,control_jugador_2*/);
 
 				mundo = cargarMundo();
 				if (mundo == NULL) return 1;
 				log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
 
 				//Creo los Controladores
-				control_jugador_1 = new KeyboardControl1(mundo->getPersonaje(0));
-				control_jugador_2 = new KeyboardControl2(mundo->getPersonaje(1));
+				control_jugador_1 = new KeyboardControl(event, comandos, mundo->getPersonaje(0));
+				//control_jugador_2 = new KeyboardControl(event, comandos, mundo->getPersonaje(1));
 
 			}
 		}
@@ -107,7 +111,7 @@ int main( int argc, char* args[] )
 	}
 
 
-	free(mundo,control_jugador_1,control_jugador_2);
+	free(mundo,control_jugador_1/*,control_jugador_2*/);
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 
 	return 0;

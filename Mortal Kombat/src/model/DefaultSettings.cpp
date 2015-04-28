@@ -2,6 +2,8 @@
 
 using namespace std;
 
+map<const char*, char> comandos;
+
 
 Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje) {
 	Sprite* sprite;
@@ -154,6 +156,17 @@ vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, 
 	sprites.push_back( crearSpritePorDefecto("recibeGolpeFuerte", ventana, ratio_x_personaje, ratio_y_personaje) );
 
 	return sprites;
+}
+
+void mapaComandosDefault() {
+
+	comandos["pina baja"] = COMANDO_PINA_BAJA_DEFAULT;
+	comandos["patada baja"] = COMANDO_PATADA_BAJA_DEFAULT;
+	comandos["pina alta"] = COMANDO_PINA_ALTA_DEFAULT;
+	comandos["patada alta"] = COMANDO_PATADA_ALTA_DEFAULT;
+	comandos["cubrirse"] = COMANDO_CUBRIRSE_DEFAULT;
+	comandos["lanzar arma"] = COMANDO_LANZAR_ARMA_DEFAULT;
+
 }
 
 

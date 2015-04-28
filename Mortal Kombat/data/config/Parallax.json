@@ -57,5 +57,14 @@
 		"sprites": "data/players/subzero/sprites/",
 		"nombre": "Sub-Zero"
 		}
-	]
+	],
+	
+	"botones": {
+		"pina baja": "a",
+		"patada baja": "s",
+		"pina alta": "q",
+		"patada alta": "w",
+		"cubrirse": "d",
+		"lanzar arma": "e"
+	}
 }

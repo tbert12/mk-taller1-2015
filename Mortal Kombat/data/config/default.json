@@ -41,5 +41,18 @@
 		"sprites": "data/players/subzero/sprites/",
 		"nombre": "Sub-Zero"	
 	}
+	
+	"botones": {
+		"arriba": "SDLK_UP",
+		"abajo": "SDLK_DOWN",
+		"derecha": "SDLK_RIGHT",
+		"izquierda": "SDLK_LEFT",
+		"pina baja": "SDLK_a",
+		"patada baja": "SDLK_s",
+		"pina alta": "SDLK_q",
+		"patada alta": "SDLK_w",
+		"cubrirse": "SDLK_d",
+		"lanzar arma": "SDLK_e"
+	}
 
 }
