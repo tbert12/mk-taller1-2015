@@ -31,7 +31,7 @@ LTexture::LTexture(SDL_Renderer* Renderer)
 int LTexture::_corrimiento(){
 	int corr = corrimientos[indice_corrimientos];
 	indice_corrimientos += 1;
-	if (indice_corrimientos > (int)corrimientos.size() - 1){
+	if (indice_corrimientos >= (int)corrimientos.size() ){
 		//termino la vibracion
 		indice_corrimientos = 0;
 		m_vibrar = false;
