@@ -115,4 +115,5 @@ int main( int argc, char* args[] )
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 
 	return 0;
+	//
 }
