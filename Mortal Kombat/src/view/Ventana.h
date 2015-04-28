@@ -21,7 +21,9 @@ public:
 	Ventana(int screenWidth, int screenHeight,float ratiox,float ratioy);
 	~Ventana();
 	float obtenerAncho();
-
+	float obtenerAlto();
+	float obtenerRatioX();
+	float obtenerRatioY();
 	//Starts up SDL and creates window
 	bool create_window();
 

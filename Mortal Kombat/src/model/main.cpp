@@ -36,7 +36,6 @@ int main( int argc, char* args[] )
 		ruta_archivo_configuracion = args[1];
 	}
 
-
 	ParserJSON* parser;
 	Mundo* mundo;
 
