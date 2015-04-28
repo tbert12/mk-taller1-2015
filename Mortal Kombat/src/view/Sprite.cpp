@@ -77,7 +77,10 @@ void Sprite::Reset(){
 
 void Sprite::render(float x, float y, bool fliped){
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
-	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h_log, fliped);
+	float correrX;
+	if (fliped) correrX = currentClip->w_log;
+	else correrX = 0;
+	SpriteSheetTexture->renderObjeto(currentClip,x - correrX ,y - currentClip->h_log, fliped);
 }
 
 void Sprite::setLoop(int num_frame) {
