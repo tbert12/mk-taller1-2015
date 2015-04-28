@@ -65,9 +65,11 @@ class LTexture
 		void setRatio(float ratiox,float ratioy);
 
 		void setDimensionesVentana(int w,int h);
+		void setVibrar();
 		void renderImagen();
 
 	private:
+		bool m_vibrar;
 		//The actual hardware texture
 		SDL_Texture* mTexture;
 
@@ -81,6 +83,11 @@ class LTexture
 
 		//The window renderer
 		SDL_Renderer* gRenderer;
+
+		//Vibrar
+		std::vector<int> corrimientos;
+		int indice_corrimientos;
+		int _corrimiento();
 };
 
 

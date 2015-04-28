@@ -13,8 +13,10 @@ private:
 	int m_alto_px;
 	float ratio_x;
 	float ratio_y;
+	bool m_vibrar;
 	SDL_Window* Window;
 	SDL_Renderer* Renderer;
+	std::vector<LTexture*> texturas;
 
 public:
 
@@ -29,6 +31,8 @@ public:
 
 	//Refrescar el mundo (la pantalla, para cada ciclo)
 	void Refresh();
+
+	void vibrar();
 
 	//Frees media and shuts down SDL
 	void close_window();

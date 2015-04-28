@@ -104,6 +104,7 @@ public:
 	void QuitarVida(int valor);
 	float getAncho();
 	float getAlto();
+	bool estaAgachado();
 
 	void Inicial();
 	void Frenar();

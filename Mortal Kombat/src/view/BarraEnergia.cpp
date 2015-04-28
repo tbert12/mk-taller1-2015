@@ -15,8 +15,8 @@ BarraEnergia::BarraEnergia(Ventana* una_ventana,int max_barra) {
 	actual = maximo_barra;
 	velocidad_descarga = 1;
 	flip = false;
-	ancho_logico = (0.25)*ventana->obtenerAncho(); //40% de la ventana
-	alto_logico = ventana->obtenerAlto()*(0.05) ;//10% de la ventana
+	ancho_logico = (0.35)*ventana->obtenerAncho();
+	alto_logico = ventana->obtenerAlto()*(0.05) ;
 	rect_base = new SDL_Rect;
 	rect_relleno = new SDL_Rect;
 	textura_base = NULL;

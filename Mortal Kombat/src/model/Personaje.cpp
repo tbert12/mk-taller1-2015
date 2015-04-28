@@ -66,6 +66,10 @@ void Personaje::setPosition(float x, float y){
 	m_yInicial = m_yActual;
 }
 
+bool Personaje::estaAgachado(){
+	return _estaAgachado();
+}
+
 void Personaje::AvanzarSprite(){
 	if ( (_estaAgachado() and spriteActual->ultimoFrame() ) or !_estaSaltando){
 		if (m_velocidad == 0){

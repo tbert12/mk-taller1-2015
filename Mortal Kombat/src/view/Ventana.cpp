@@ -10,6 +10,13 @@ Ventana::Ventana(int screenWidth, int screenHeight, float ratiox,float ratioy)
 	ratio_y = ratioy;
 	Window = NULL;
 	Renderer = NULL;
+	m_vibrar = false;
+}
+
+void Ventana::vibrar(){
+	for (int i = 0;i <= (int)texturas.size()-1; i++){
+		texturas[i]->setVibrar();
+	}
 }
 
 float Ventana::obtenerRatioX(){
@@ -33,6 +40,7 @@ LTexture* Ventana::crearTextura(){
 	LTexture* m_texture = new LTexture(Renderer);
 	m_texture->setRatio(ratio_x,ratio_y);
 	m_texture->setDimensionesVentana(m_ancho_px,m_alto_px);
+	texturas.push_back(m_texture);
 	return m_texture;
 }
 
@@ -56,7 +64,7 @@ bool Ventana::create_window()
 	bool success = true;
 
 	//Inicializar SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) < 0 )
 	{
 		log(string("SDL no puede inicializar! SDL Error: %s\n", SDL_GetError()),LOG_ERROR );
 		success = false;
