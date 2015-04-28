@@ -121,8 +121,8 @@ void LTexture::setAlpha( Uint8 alpha )
 
 void LTexture::renderObjeto( Rect_Objeto* clip,float x, float y, bool flip)
 {
-	int x_px = (int)(x*ratio_x_ventana);
-	int y_px = (int)(y*ratio_y_ventana);
+	int x_px = (int)(x*ratio_x_ventana + 0.5);
+	int y_px = (int)(y*ratio_y_ventana +0.5);
 
 	SDL_Rect Object = { x_px,y_px, mWidth, mHeight};
 	SDL_Rect clip_px;
@@ -134,8 +134,8 @@ void LTexture::renderObjeto( Rect_Objeto* clip,float x, float y, bool flip)
 				clip->w,// ancho en pixel del objeto en la imagen
 				clip->h}; //alto en pixel del objeto en la imagen
 
-		Object.w = clip->w_log*ratio_x_ventana;	//tamaño logico del objeto por el ratio de ventana
-		Object.h = clip->h_log*ratio_y_ventana;
+		Object.w = (int)(clip->w_log*ratio_x_ventana +0.5);	//tamaño logico del objeto por el ratio de ventana
+		Object.h = (int)(clip->h_log*ratio_y_ventana +0.5);
 	}
 
 	//Renderizar a la pantalla

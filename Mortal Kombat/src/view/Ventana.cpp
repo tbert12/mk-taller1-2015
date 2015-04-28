@@ -12,6 +12,14 @@ Ventana::Ventana(int screenWidth, int screenHeight, float ratiox,float ratioy)
 	Renderer = NULL;
 }
 
+float Ventana::obtenerRatioX(){
+	return ratio_x;
+}
+
+float Ventana::obtenerRatioY(){
+	return ratio_y;
+}
+
 Ventana::~Ventana(){
 	m_ancho_px = 0;
 	m_alto_px = 0;
@@ -35,6 +43,10 @@ SDL_Renderer* Ventana::getRenderer(){
 float Ventana::obtenerAncho()
 {
 	return m_ancho_px/ratio_x;
+}
+float Ventana::obtenerAlto()
+{
+	return m_alto_px/ratio_y;
 }
 
 
