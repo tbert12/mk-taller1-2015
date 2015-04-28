@@ -561,6 +561,7 @@ Mundo* ParserJSON::cargarMundo() {
 
 	// Crear Mundo.
 	Mundo* nuevo_mundo = new Mundo(escenario_ancho, escenario_alto);
+
 	log ( "Se creo correctamente un mundo vacio.", LOG_DEBUG );
 
 	// Agregar tiempo de combate.

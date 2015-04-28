@@ -215,6 +215,8 @@ void Personaje::Agachar(){
 	if (_estaAgachado()) return;
 	if (_estaSaltando > 0) return;
 	_cambiarSprite(SPRITE_AGACHAR);
+	//PARA PROBAR BARRA
+	this->QuitarVida(5);
 	spriteActual->doLoop(true);
 	sigueAgachado = true;
 }
