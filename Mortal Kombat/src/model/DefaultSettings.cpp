@@ -183,10 +183,10 @@ Mundo* generarMundoDefault() {
 	}
 
 	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
-	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2),Y_PISO_DEFAULT);
+	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
 
 	Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, !PERSONAJE_FLIPPED_DEFAULT);
-	personaje2_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2),Y_PISO_DEFAULT);
+	personaje2_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) + (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
 
 	mundo->setVentana(ventana);
 	mundo->setTiempo(new Tiempo(TIEMPO_DEFAULT));
