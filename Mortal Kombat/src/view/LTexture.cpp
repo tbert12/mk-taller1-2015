@@ -74,12 +74,13 @@ bool LTexture::cambiarColor( SDL_PixelFormat* format, float h_inicial, float h_f
 		log( "Texture is already locked!", LOG_WARNING );
 	}
 	//Lock texture
-	else {
-		if( SDL_LockTexture( mTexture, NULL, &mPixels, &mPitch ) != 0 ) {
-			log( "Unable to lock texture!", LOG_ERROR );
-			success = false;
-			return success;
-		}
+	else { */
+	if( SDL_LockTexture( mTexture, NULL, &mPixels, &mPitch ) != 0 ) {
+		log( string("Unable to lock texture!"), LOG_ERROR );
+		success = false;
+		return success;
+	}
+	/*
 	}
 	*/
 
@@ -122,12 +123,11 @@ bool LTexture::cambiarColor( SDL_PixelFormat* format, float h_inicial, float h_f
 		log( "Texture is not locked!", LOG_WARNING );
 	}
 	//Unlock texture
-	else {
+
+	else {*/
 		SDL_UnlockTexture( mTexture );
-		mPixels = NULL;
-		mPitch = 0;
-	}
-	*/
+
+	//}
 
 	return success;
 

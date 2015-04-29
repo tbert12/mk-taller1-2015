@@ -64,13 +64,6 @@ int main( int argc, char* args[] )
 		return 1;
 	}
 
-
-	//mostrar imagen inicio
-	if(mundo->mostrarImagen("data/img/background/inicio.png")){
-		//3 segundos
-		usleep(3000000);
-	}
-
 	SDL_Event event;
 
 	//Creo los Controladores

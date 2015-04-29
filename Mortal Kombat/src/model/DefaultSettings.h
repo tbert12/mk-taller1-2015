@@ -34,6 +34,7 @@ const int PERSONAJE_ANCHO_PX_DEFAULT = 72;
 const int PERSONAJE_ALTO_PX_DEFAULT = 133;
 const float PERSONAJE_ANCHO_DEFAULT = 40.0;
 const float PERSONAJE_ALTO_DEFAULT = 70.0;
+const float PERSONAJE_POS_RESPECTO_CAM = 0.8;
 
 const char* const JSON_SPRITES_DEFAULT = "data/players/default/sprites/sprites.json";
 
@@ -73,6 +74,8 @@ const char COMANDO_LANZAR_ARMA_DEFAULT = 'e';
 const int COLOR_H_INICIAL_DEFAULT = 40;
 const int COLOR_H_FINAL_DEFAULT = 45;
 const int COLOR_DESPLAZAMIENTO_DEFAULT = 30;
+
+const char* const IMAGEN_CARGANDO_JUEGO = "data/img/background/inicio.png";
 
 
 extern map<const char*, char> comandos;

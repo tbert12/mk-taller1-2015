@@ -11,7 +11,7 @@ const string fechaHora() {
     struct tm tstruct;
     char buf[80];
     tstruct = *localtime(&ahora);
-    strftime( buf, sizeof(buf), "[%Y-%m-%d.%X]-", &tstruct );
+    strftime( buf, sizeof(buf), "[%Y-%m-%d.%X] ", &tstruct );
 
     return buf;
 }

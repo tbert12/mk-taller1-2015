@@ -687,6 +687,11 @@ Mundo* ParserJSON::cargarMundo() {
 	nuevo_mundo->setVentana(ventana);
 	log( "Se le asigno la ventana creada al nuevo mundo.", LOG_DEBUG );
 
+	// Se va a mostrar en pantalla una imagen durante el tiempo de carga
+	if(nuevo_mundo->mostrarImagen("data/img/background/inicio.png")){
+		log("Se muestra imagen bienvenida en Ventanta durante tiempo de carga", LOG_DEBUG );
+	}
+
 	// Obtener las capas del escenario. La primera capa es el fondo del escenario.
 	// Se setea por defecto el ancho en caso de error.
 	// Si la imagen no existe, se usa una por defecto.
@@ -773,13 +778,14 @@ Mundo* ParserJSON::cargarMundo() {
 	// Si no se especifica o no se encuentra la carpeta de sprites del personaje, se usa una por defecto.
 	// Si no se especifica el z-index se fija uno por defecto.
 	float personaje_ancho, personaje_alto;
+	float rpos = PERSONAJE_POS_RESPECTO_CAM;
 	string personaje_carpeta_sprites, personaje_nombre;
 	bool flipped;
 	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
 		Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
-		personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2),Y_PISO_DEFAULT);
+		personaje_default->setPosition((escenario_ancho/2) - (ventana_ancho/2)*rpos,Y_PISO_DEFAULT);
 		Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, !PERSONAJE_FLIPPED_DEFAULT);
-		personaje2_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2),Y_PISO_DEFAULT);
+		personaje2_default->setPosition((escenario_ancho/2) + (ventana_ancho/2)*rpos,Y_PISO_DEFAULT);
 		nuevo_mundo->addPersonaje(personaje_default);
 		nuevo_mundo->addPersonaje(personaje2_default);
 		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan dos personajes iguales por defecto.", LOG_ERROR );
@@ -874,7 +880,14 @@ Mundo* ParserJSON::cargarMundo() {
 			personajes.push_back(personaje);
 
 			// Indico posicion inicial del personaje.
-			personaje->setPosition( (escenario_ancho/2), y_piso );
+			float position;
+			if (k == 0){
+				position = (escenario_ancho/2) - (ventana_ancho/2)*rpos;
+			}
+			else{
+				position = (escenario_ancho/2) + (ventana_ancho/2)*rpos;
+			}
+			personaje->setPosition( position , y_piso );
 			log( "Se seteo la posicion inicial en el escenario del personaje.", LOG_DEBUG );
 
 			// Agrego Personaje al mundo.
