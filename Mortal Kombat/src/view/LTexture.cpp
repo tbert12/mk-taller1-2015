@@ -41,8 +41,85 @@ void LTexture::setDimensionesVentana(int w,int h){
 	h_ventana = h;
 }
 
+bool LTexture::cambiarColor( SDL_PixelFormat* format, float h_inicial, float h_final, float desplazamiento) {
+
+	bool success = true;
+
+	int mPitch = 0;
+	void* mPixels = NULL;
+
+	/*
+	//Texture is already locked
+	if( mPixels != NULL ) {
+		log( "Texture is already locked!", LOG_WARNING );
+	}
+	//Lock texture
+	else {
+		if( SDL_LockTexture( mTexture, NULL, &mPixels, &mPitch ) != 0 ) {
+			log( "Unable to lock texture!", LOG_ERROR );
+			success = false;
+			return success;
+		}
+	}
+	*/
+
+	//Manual color key
+	//Get pixel data
+	Uint32* pixels = (Uint32*) mPixels;
+	int pixelCount = ( mPitch / 4 ) * this->getHeight();
+
+	//Color key pixels
+	for( int i = 0; i < pixelCount; ++i ) {
+
+		// Obtengo color RGB del pixel.
+		Uint8 r, g, b;
+		float h, s, v;
+		SDL_GetRGB( pixels[i], format, &r, &g, &b);
+
+		// Transformo de RGB a HSV. Si el hue cae en el rango especificado, se desplaza.
+		RGBaHSV(r, g, b, &h, &s, &v);
+
+		bool hayQuePintar = false;
+		if ( h >= h_inicial && h <= h_final ) {
+			desplazarHue(&h, desplazamiento);
+			hayQuePintar = true;
+		}
+
+		// Vuelvo a transformar a coordenadas RGB.
+		HSVaRGB(h, s, v, &r, &g, &b);
+
+		// Pinto el pixel con el nuevo color.
+		if ( hayQuePintar ) {
+			Uint32 nuevoColor = SDL_MapRGB( format, r, g, b );
+			pixels[i] = nuevoColor;
+		}
+
+	}
+
+	/*
+	//Texture is not locked
+	if( mPixels == NULL ) {
+		log( "Texture is not locked!", LOG_WARNING );
+	}
+	//Unlock texture
+	else {
+		SDL_UnlockTexture( mTexture );
+		mPixels = NULL;
+		mPitch = 0;
+	}
+	*/
+
+	return success;
+
+}
+
+
+
+
+
 bool LTexture::loadFromFile( std::string ruta )
 {
+
 	//Get rid of preexisting texture
 	free();
 
@@ -58,6 +135,7 @@ bool LTexture::loadFromFile( std::string ruta )
 	}
 	else
 	{
+
 		//Color de Imagen
 		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
@@ -177,6 +255,8 @@ void LTexture::renderFondo( Rect_Logico* clip)
 	//Renderizar a la pantalla
 	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &camera );
 }
+
+
 
 void LTexture::renderImagen(){
 	SDL_Rect camera = { 0,0, w_ventana, h_ventana};

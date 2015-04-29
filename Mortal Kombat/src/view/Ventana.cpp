@@ -20,6 +20,10 @@ float Ventana::obtenerRatioY(){
 	return ratio_y;
 }
 
+SDL_Window* Ventana::getWindow() {
+	return Window;
+}
+
 Ventana::~Ventana(){
 	m_ancho_px = 0;
 	m_alto_px = 0;

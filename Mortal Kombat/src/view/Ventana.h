@@ -27,6 +27,8 @@ public:
 	//Starts up SDL and creates window
 	bool create_window();
 
+	SDL_Window* getWindow();
+
 	//Refrescar el mundo (la pantalla, para cada ciclo)
 	void Refresh();
 

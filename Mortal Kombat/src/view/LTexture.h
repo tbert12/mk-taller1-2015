@@ -13,6 +13,7 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include "../model/logging.h"
+#include "../model/Color.h"
 
 typedef struct Rect_Logico
 {
@@ -37,6 +38,9 @@ class LTexture
 		//Deallocates memory
 		~LTexture();
 
+		// Cambiar el matiz de la textura de acuerdo a ciertos parametros.
+		bool cambiarColor(SDL_PixelFormat* format, float, float, float);
+
 		//Loads image at specified path
 		bool loadFromFile( std::string path );
 
@@ -57,6 +61,7 @@ class LTexture
 
 		//Renders texture at given point
 		void renderObjeto(Rect_Objeto* clip, float x = 0, float y = 0, bool flip = false);
+
 
 		//Gets image dimensions
 		int getWidth();

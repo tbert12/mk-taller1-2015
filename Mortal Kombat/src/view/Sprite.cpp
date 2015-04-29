@@ -10,6 +10,7 @@
 Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y){
 	frameActual = 0;
 	SpriteSheetTexture = ventana->crearTextura();
+	ruta_archivo = ruta;
 
 	reverse = false;
 
@@ -41,6 +42,11 @@ Sprite::~Sprite(){
 	delete SpriteSheetTexture;
 	delete []spriteFrames;
 }
+
+void Sprite::cambiarColor(SDL_PixelFormat* format, float h_inicial, float h_final, float desplazamiento) {
+	SpriteSheetTexture->cambiarColor(format, h_inicial, h_final, desplazamiento);
+}
+
 
 float Sprite::getAncho(){
 	return spriteFrames[frameActual].w_log;
@@ -103,3 +109,5 @@ bool Sprite::ultimoFrame(){
 	}
 	return (frameActual + 1 == cantidadFrames);
 }
+
+

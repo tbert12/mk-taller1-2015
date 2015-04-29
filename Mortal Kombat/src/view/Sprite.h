@@ -24,6 +24,7 @@ class Sprite {
 	private:
 		int frameActual;
 		int cantidadFrames;
+		string ruta_archivo;
 
 		bool reverse;
 		bool doloop;
@@ -39,6 +40,9 @@ class Sprite {
 		bool Advance();
 		void Reset();
 
+		// Desplaza un rango de matices del spritesheet.
+		void cambiarColor(SDL_PixelFormat*, float, float, float);
+
 		void setLoop(int num_frame);
 		void doLoop(bool loop);
 
@@ -48,6 +52,7 @@ class Sprite {
 
 		float getAncho();
 		float getAlto();
+
 
 		void setRender(SDL_Renderer* Renderer);
 		void render(float x,float y, bool fliped);

@@ -93,6 +93,8 @@ public:
 	void Update(int velocidadScroll);
 	void renderizar(float x_dist_ventana, float posOtherPlayer);
 
+	void colorAlternativo(SDL_PixelFormat* format, float h_inicial, float h_final, float desplazamiento);
+
 	void setPosition(float x, float y);
 	void setDimensionesMundo(float h, float w);
 	float getX();
@@ -102,6 +104,7 @@ public:
 	float getVelocidadDerecha();
 	float getVelocidadIzquierda();
 	void QuitarVida(int valor);
+	std::string getNombre();
 	float getAncho();
 	float getAlto();
 

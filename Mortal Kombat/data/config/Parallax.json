@@ -59,6 +59,12 @@
 		}
 	],
 	
+	"color-alternativo": {
+		"h-inicial": 220,
+		"h-final": 230,
+		"desplazamiento": 60
+	},
+	
 	"botones": {
 		"pina baja": "a",
 		"patada baja": "s",

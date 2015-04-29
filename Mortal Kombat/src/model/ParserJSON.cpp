@@ -883,6 +883,72 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 	}
 
+	// Verificar si se debe cambiar el color del segundo personaje y hacerlo.
+	if ( personajes[0]->getNombre() == personajes[1]->getNombre() ) {
+
+		if ( ! root.isMember("color-alternativo") ) {
+			log( "No se especificaron parametros para el color alternativo para el segundo personaje. No se cambian los colores.", LOG_WARNING );
+		} else {
+			float h_inicial, h_final, desplazamiento;
+			if ( ! root["color-alternativo"].isMember("h-inicial") ) {
+				h_inicial = COLOR_H_INICIAL_DEFAULT;
+				log( "No se especifico el hue inicial para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_WARNING );
+			} else {
+				try {
+					h_inicial = root["color-alternativo"].get( "h-inicial", COLOR_H_INICIAL_DEFAULT ).asFloat();
+					if ( h_inicial < 0 ) {
+						h_inicial = fabs(h_inicial);
+						log( "El hue inicial no puede ser negativo. Se le aplica modulo.", LOG_WARNING );
+					}
+					if ( h_inicial > 360 ) {
+						h_inicial = fmod(h_inicial, 360);
+						log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+					}
+					log( "Se cargo el hue inicial para el desplazamiento al color alternativo.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					h_inicial = COLOR_H_INICIAL_DEFAULT;
+					log( "El hue inicial especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
+				}
+			}
+			if ( ! root["color-alternativo"].isMember("h-final") ) {
+				h_final = COLOR_H_FINAL_DEFAULT;
+				log( "No se especifico el hue final para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_WARNING );
+			} else {
+				try {
+					h_final = root["color-alternativo"].get( "h-final", COLOR_H_FINAL_DEFAULT ).asFloat();
+					if ( h_final < 0 ) {
+						h_final = fabs(h_final);
+						log( "El hue final no puede ser negativo. Se le aplica modulo.", LOG_WARNING );
+					}
+					if ( h_final > 360 ) {
+						h_final = fmod(h_final, 360);
+						log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+					}
+					log( "Se cargo el hue final para el desplazamiento al color alternativo.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					h_final = COLOR_H_FINAL_DEFAULT;
+					log( "El hue final especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
+				}
+			}
+			if ( ! root["color-alternativo"].isMember("desplazamiento") ) {
+				desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
+				log( "No se especificaron los grados de desplazamiento hacia otro color alternativo. Se setea por defecto.", LOG_WARNING );
+			} else {
+				try {
+					desplazamiento = root["color-alternativo"].get( "desplazamiento", COLOR_DESPLAZAMIENTO_DEFAULT ).asFloat();
+					log( "Se cargaron los grados de el desplazamiento hacia el color alternativo.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
+					log( "Los grados de desplazameinto hacia el color alternativo especificados no son un numero valido. Se setea por defecto.", LOG_ERROR );
+				}
+			}
+			SDL_Window* window = ventana->getWindow();
+			SDL_PixelFormat* format = SDL_GetWindowSurface(window)->format;
+			personajes[1]->colorAlternativo(format, h_inicial, h_final, desplazamiento);
+		}
+
+	}
+
 
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
 	// Validaciones para el z-index de los personajes.
@@ -895,7 +961,7 @@ Mundo* ParserJSON::cargarMundo() {
 	log( "Se agrego la capa principal al mundo.", LOG_DEBUG );
 
 	// Obtener hash de comandos.
-	cargarMapaComandos(root);
+	this->cargarMapaComandos(root);
 
 
 	return nuevo_mundo;

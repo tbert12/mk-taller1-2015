@@ -70,6 +70,10 @@ const char COMANDO_PATADA_ALTA_DEFAULT = 'w';
 const char COMANDO_CUBRIRSE_DEFAULT = 'd';
 const char COMANDO_LANZAR_ARMA_DEFAULT = 'e';
 
+const int COLOR_H_INICIAL_DEFAULT = 40;
+const int COLOR_H_FINAL_DEFAULT = 45;
+const int COLOR_DESPLAZAMIENTO_DEFAULT = 30;
+
 
 extern map<const char*, char> comandos;
 

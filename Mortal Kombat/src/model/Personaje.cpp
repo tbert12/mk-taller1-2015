@@ -115,6 +115,14 @@ void Personaje::_cambiarSprite(int SpriteAccion){
 
 }
 
+void Personaje::colorAlternativo(SDL_PixelFormat* format, float h_inicial, float h_final, float desplazamiento) {
+	for ( int i=0; i < (int)sprites.size(); i++ ) {
+		sprites[i]->cambiarColor(format, h_inicial, h_final, desplazamiento);
+	}
+
+}
+
+
 void Personaje::Inicial(){
 	if (_estaSaltando > 0) return;
 	this->_cambiarSprite(SPRITE_INICIAL);
@@ -362,7 +370,9 @@ void Personaje::cubrirse() {
 }
 
 
-
+std::string Personaje::getNombre() {
+	return nombre;
+}
 
 float Personaje::getX()
 {
