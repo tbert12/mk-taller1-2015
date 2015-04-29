@@ -66,7 +66,9 @@ bool LTexture::cambiarColor( SDL_PixelFormat* format, float h_inicial, float h_f
 	int mPitch = 0;
 	void* mPixels = NULL;
 
-	/*
+	/* COMENTO EL LOCK Y EL UNLOCK PORQUE NO ESTARIA ANDANDO. ENTRA SIEMPRE AL IF.
+	 * TIENE QUE VER SEGURO CON EL MPIXELS Y EL MPITCH. EN EL EJEMPLO DE TOMI SE USAN EN EL LOADFROMFILE
+	 * Y NOSOTRS NO LO USAMOS NUNCA. HABRIA QUE VER ESO.
 	//Texture is already locked
 	if( mPixels != NULL ) {
 		log( "Texture is already locked!", LOG_WARNING );
