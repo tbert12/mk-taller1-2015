@@ -88,6 +88,7 @@ bool Ventana::create_window()
 		}
 		else
 		{
+
 			//Vsync-renderer for window
 			Renderer = SDL_CreateRenderer( Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 			if( Renderer == NULL )
@@ -107,6 +108,20 @@ bool Ventana::create_window()
 					log(string( "SDL_image no pudo inicializarse! SDL_image Errors: %s\n", IMG_GetError() ),LOG_ERROR);
 					success = false;
 				}
+			}
+
+			//agrego icono
+			SDL_Surface* Surface = IMG_Load( RUTA_ICONO );
+			if( Surface == NULL )
+					log( string("No se puede cargar imagen del icono %s! SDL_image Error: %s\n", RUTA_ICONO),LOG_ERROR);
+			else
+			{
+				//Color de Imagen
+				SDL_SetColorKey( Surface, SDL_TRUE, SDL_MapRGB( Surface->format, 0, 0xFF, 0xFF ) );
+
+				SDL_SetWindowIcon(Window,Surface);
+
+				SDL_FreeSurface(Surface);
 			}
 		}
 	}

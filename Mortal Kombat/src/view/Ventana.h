@@ -6,6 +6,8 @@
 #include <string>
 #include "LTexture.h"
 
+#define RUTA_ICONO "data/img/etc/icono.png"
+
 class Ventana
 {
 private:
