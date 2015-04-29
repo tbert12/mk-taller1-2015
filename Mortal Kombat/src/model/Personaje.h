@@ -107,6 +107,7 @@ public:
 	std::string getNombre();
 	float getAncho();
 	float getAlto();
+	bool estaAgachado();
 
 	void Inicial();
 	void Frenar();

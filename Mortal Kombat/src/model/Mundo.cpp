@@ -101,6 +101,10 @@ void Mundo::render(){
 	}
 
 	//aca una vez actualizado to do chequeo las colisiones y demas.
+	if(personajes[0]->estaAgachado()){
+		ventana->vibrar();
+	}
+	//
 
 	//renderizo las capas
 	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){

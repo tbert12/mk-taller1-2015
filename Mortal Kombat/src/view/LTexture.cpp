@@ -16,6 +16,7 @@ LTexture::LTexture(SDL_Renderer* Renderer)
 {
 	//Inicializar LTexture
 	mTexture = NULL;
+	m_vibrar = false;
 	mWidth = 0;
 	mHeight = 0;
 	gRenderer = Renderer;
@@ -23,6 +24,19 @@ LTexture::LTexture(SDL_Renderer* Renderer)
 	ratio_y_ventana = 1;
 	w_ventana = 0;
 	h_ventana = 0;
+	corrimientos = {-5,5,-2,2,-1,1};
+	indice_corrimientos = 0;
+}
+
+int LTexture::_corrimiento(){
+	int corr = corrimientos[indice_corrimientos];
+	indice_corrimientos += 1;
+	if (indice_corrimientos >= (int)corrimientos.size() ){
+		//termino la vibracion
+		indice_corrimientos = 0;
+		m_vibrar = false;
+	}
+	return corr;
 }
 
 LTexture::~LTexture()
@@ -39,6 +53,10 @@ void LTexture::setRatio(float ratiox , float ratioy){
 void LTexture::setDimensionesVentana(int w,int h){
 	w_ventana = w;
 	h_ventana = h;
+}
+
+void LTexture::setVibrar(){
+	m_vibrar = true;
 }
 
 bool LTexture::cambiarColor( SDL_PixelFormat* format, float h_inicial, float h_final, float desplazamiento) {
@@ -199,8 +217,17 @@ void LTexture::setAlpha( Uint8 alpha )
 
 void LTexture::renderObjeto( Rect_Objeto* clip,float x, float y, bool flip)
 {
-	int x_px = (int)(x*ratio_x_ventana + 0.5);
-	int y_px = (int)(y*ratio_y_ventana +0.5);
+	int corrimiento_x = 0;
+	int corrimiento_y = 0;
+
+	if(m_vibrar){
+		corrimiento_x = _corrimiento();
+		corrimiento_y = corrimiento_x;
+	}
+
+
+	int x_px = (int)(x*ratio_x_ventana + 0.5) + corrimiento_x;
+	int y_px = (int)(y*ratio_y_ventana +0.5) + corrimiento_y;
 
 	SDL_Rect Object = { x_px,y_px, mWidth, mHeight};
 	SDL_Rect clip_px;
@@ -226,6 +253,14 @@ void LTexture::renderObjeto( Rect_Objeto* clip,float x, float y, bool flip)
 
 void LTexture::renderFondo( Rect_Logico* clip)
 {
+	int corrimiento_x = 0;
+	int corrimiento_y = 0;
+
+	if(m_vibrar){
+		corrimiento_x = _corrimiento();
+		corrimiento_y = corrimiento_x;
+	}
+
 	SDL_Rect camera = { 0,0, w_ventana, h_ventana};
 	SDL_Rect clip_px;
 
@@ -243,6 +278,8 @@ void LTexture::renderFondo( Rect_Logico* clip)
 				ancho_px_ventana,//w_ventana , // ancho de la ventana
 				alto_px_ventana }; //alto de la ventana
 
+		clip_px.x += corrimiento_x;
+		clip_px.y += corrimiento_y;
 
 		int ancho = (int)(clip->w*ratio_x_img + 0.5);
 		if(clip_px.x > (ancho - ancho_px_ventana))clip_px.x = ancho - ancho_px_ventana;

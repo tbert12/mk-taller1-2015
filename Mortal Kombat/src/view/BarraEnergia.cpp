@@ -15,8 +15,8 @@ BarraEnergia::BarraEnergia(Ventana* una_ventana,int max_barra) {
 	actual = maximo_barra;
 	velocidad_descarga = 1;
 	flip = false;
-	ancho_logico = (0.25)*ventana->obtenerAncho(); //40% de la ventana
-	alto_logico = ventana->obtenerAlto()*(0.05) ;//10% de la ventana
+	ancho_logico = (0.40)*ventana->obtenerAncho();
+	alto_logico = ventana->obtenerAlto()*(0.1) ;
 	rect_base = new SDL_Rect;
 	rect_relleno = new SDL_Rect;
 	textura_base = NULL;
@@ -170,8 +170,7 @@ void BarraEnergia::_renderRelleno(int estado){
 	SDL_Rect clip;
 	clip.x = rect_relleno->x;
 	clip.y = rect_relleno->y;
-	//clip.w = (actual*rect_relleno->w)/100;
-	clip.w = rect_relleno->w;
+	clip.w = (actual*rect_relleno->w)/100;
 	clip.h = rect_relleno->h;
 	//Renderizar a la pantalla
 	SDL_RendererFlip flipType = SDL_FLIP_NONE;

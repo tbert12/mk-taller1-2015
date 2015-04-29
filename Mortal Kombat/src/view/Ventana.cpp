@@ -10,6 +10,15 @@ Ventana::Ventana(int screenWidth, int screenHeight, float ratiox,float ratioy)
 	ratio_y = ratioy;
 	Window = NULL;
 	Renderer = NULL;
+	m_vibrar = false;
+}
+
+void Ventana::vibrar(){
+	for (int i = 0;i < (int)texturas.size() ; i++){
+		if (texturas[i] != NULL){
+			texturas[i]->setVibrar();
+		}
+	}
 }
 
 float Ventana::obtenerRatioX(){
@@ -37,6 +46,7 @@ LTexture* Ventana::crearTextura(){
 	LTexture* m_texture = new LTexture(Renderer);
 	m_texture->setRatio(ratio_x,ratio_y);
 	m_texture->setDimensionesVentana(m_ancho_px,m_alto_px);
+	texturas.push_back(m_texture);
 	return m_texture;
 }
 
@@ -60,7 +70,7 @@ bool Ventana::create_window()
 	bool success = true;
 
 	//Inicializar SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) < 0 )
 	{
 		log(string("SDL no puede inicializar! SDL Error: %s\n", SDL_GetError()),LOG_ERROR );
 		success = false;
@@ -82,6 +92,7 @@ bool Ventana::create_window()
 		}
 		else
 		{
+
 			//Vsync-renderer for window
 			Renderer = SDL_CreateRenderer( Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 			if( Renderer == NULL )
@@ -101,6 +112,20 @@ bool Ventana::create_window()
 					log(string( "SDL_image no pudo inicializarse! SDL_image Errors: %s\n", IMG_GetError() ),LOG_ERROR);
 					success = false;
 				}
+			}
+
+			//agrego icono
+			SDL_Surface* Surface = IMG_Load( RUTA_ICONO );
+			if( Surface == NULL )
+					log( string("No se puede cargar imagen del icono %s! SDL_image Error: %s\n", RUTA_ICONO),LOG_ERROR);
+			else
+			{
+				//Color de Imagen
+				SDL_SetColorKey( Surface, SDL_TRUE, SDL_MapRGB( Surface->format, 0, 0xFF, 0xFF ) );
+
+				SDL_SetWindowIcon(Window,Surface);
+
+				SDL_FreeSurface(Surface);
 			}
 		}
 	}
