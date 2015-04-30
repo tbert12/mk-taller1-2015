@@ -70,7 +70,7 @@ bool Ventana::create_window()
 	bool success = true;
 
 	//Inicializar SDL
-	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) < 0 )
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC) < 0 )
 	{
 		log(string("SDL no puede inicializar! SDL Error: %s\n", SDL_GetError()),LOG_ERROR );
 		success = false;

@@ -52,6 +52,7 @@ void Controller::_Init(){
 }
 
 void Controller::_JoystickRemoved(){
+	printf("JOYSTICK REMOOOOOOVEEEDDD\n");
 }
 
 void Controller::Pressed(){
@@ -66,7 +67,7 @@ void Controller::Pressed(){
 		_JoystickRemoved();
 	}
 	//evento de joystick
-	else if(evento.type == SDL_JOYAXISMOTION ){
+	else if(evento.type == SDL_JOYAXISMOTION || evento.type == SDL_JOYBUTTONUP){
 		//evento en el joystick 1
 		if( evento.jaxis.which == 0 ){
 			if(Joystick_1 != NULL)
