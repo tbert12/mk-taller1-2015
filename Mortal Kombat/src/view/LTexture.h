@@ -39,10 +39,10 @@ class LTexture
 		~LTexture();
 
 		// Cambiar el matiz de la textura de acuerdo a ciertos parametros.
-		bool cambiarColor(SDL_PixelFormat* format, float, float, float);
+		//bool cambiarColor(SDL_PixelFormat* format, float, float, float);
 
 		//Loads image at specified path
-		bool loadFromFile( std::string path );
+		bool loadFromFile( std::string path, bool cambiar_color = false, float h_inicial = 0, float h_final = 0, float desplazamiento = 0 );
 
 		//Deallocates texture
 		void free();

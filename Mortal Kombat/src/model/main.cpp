@@ -50,6 +50,8 @@ void free(Mundo* mundo,KeyboardControl* c1/*,KeyboardControl* c2*/){
 int main( int argc, char* args[] )
 {
 
+	// ATENCION: hasta no cargar los sprites de Noob Saibot en el sprites.json por defecto,
+	// no podemos romper el json de configuración inicial (Parallax) porque pincha el programa, lógicamente.
 
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();

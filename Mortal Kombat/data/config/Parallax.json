@@ -60,9 +60,9 @@
 	],
 	
 	"color-alternativo": {
-		"h-inicial": 220,
-		"h-final": 230,
-		"desplazamiento": 60
+		"h-inicial": 180,
+		"h-final": 240,
+		"desplazamiento": 235
 	},
 	
 	"botones": {

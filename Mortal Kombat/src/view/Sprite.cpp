@@ -7,10 +7,9 @@
 
 #include "Sprite.h"
 
-Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y){
+Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y, bool cambiar_color, float h_inicial, float h_final, float desplazamiento){
 	frameActual = 0;
 	SpriteSheetTexture = ventana->crearTextura();
-	ruta_archivo = ruta;
 
 	reverse = false;
 
@@ -18,7 +17,7 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 	doloop = false;
 	frameLoop = 0;
 
-	if( !SpriteSheetTexture->loadFromFile( ruta ) ){
+	if( !SpriteSheetTexture->loadFromFile( ruta, cambiar_color, h_inicial, h_final, desplazamiento ) ){
 		log( "Error al intentar abrir la imagen del sprite.", LOG_ERROR );
 		throw CargarImagenException( "No se pudo cargar la imagen del sprite como textura SDL" );
 	}
@@ -41,10 +40,6 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 Sprite::~Sprite(){
 	delete SpriteSheetTexture;
 	delete []spriteFrames;
-}
-
-void Sprite::cambiarColor(SDL_PixelFormat* format, float h_inicial, float h_final, float desplazamiento) {
-	SpriteSheetTexture->cambiarColor(format, h_inicial, h_final, desplazamiento);
 }
 
 

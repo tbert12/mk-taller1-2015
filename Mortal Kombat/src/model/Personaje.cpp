@@ -15,6 +15,8 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	spriteActual = sprites[SPRITE_INICIAL];
 
 
+
+
 	m_xActual = 0;
 	m_yActual = 0;
 
@@ -116,13 +118,6 @@ void Personaje::_cambiarSprite(int SpriteAccion){
 		return;
 	}
 	spriteActual->Reset();
-
-}
-
-void Personaje::colorAlternativo(SDL_PixelFormat* format, float h_inicial, float h_final, float desplazamiento) {
-	for ( int i=0; i < (int)sprites.size(); i++ ) {
-		sprites[i]->cambiarColor(format, h_inicial, h_final, desplazamiento);
-	}
 
 }
 
