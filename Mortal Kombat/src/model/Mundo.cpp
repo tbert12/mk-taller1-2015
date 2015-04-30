@@ -101,7 +101,7 @@ void Mundo::render(){
 	}
 
 	//aca una vez actualizado to do chequeo las colisiones y demas.
-	if(personajes[0]->estaAgachado()){
+	if(personajes[0]->getX() == 200){
 		ventana->vibrar();
 	}
 	//

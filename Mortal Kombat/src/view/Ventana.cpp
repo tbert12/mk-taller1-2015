@@ -15,7 +15,7 @@ Ventana::Ventana(int screenWidth, int screenHeight, float ratiox,float ratioy)
 
 void Ventana::vibrar(){
 	for (int i = 0;i < (int)texturas.size() ; i++){
-		if (texturas[i] != NULL){
+		if (texturas[i] != NULL and !texturas[i]->estaVibrando() ){
 			texturas[i]->setVibrar();
 		}
 	}

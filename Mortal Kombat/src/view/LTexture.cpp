@@ -16,7 +16,6 @@ LTexture::LTexture(SDL_Renderer* Renderer)
 {
 	//Inicializar LTexture
 	mTexture = NULL;
-	m_vibrar = false;
 	mWidth = 0;
 	mHeight = 0;
 	gRenderer = Renderer;
@@ -25,17 +24,16 @@ LTexture::LTexture(SDL_Renderer* Renderer)
 	w_ventana = 0;
 	h_ventana = 0;
 	corrimientos = {-5,5,-2,2,-1,1};
-	indice_corrimientos = 0;
+	indice_corrimientos = corrimientos.size();
 }
 
 int LTexture::_corrimiento(){
+	if (indice_corrimientos >= corrimientos.size() ){
+			//No Vibrar
+			return 0;
+	}
 	int corr = corrimientos[indice_corrimientos];
 	indice_corrimientos += 1;
-	if (indice_corrimientos >= (int)corrimientos.size() ){
-		//termino la vibracion
-		indice_corrimientos = 0;
-		m_vibrar = false;
-	}
 	return corr;
 }
 
@@ -56,7 +54,11 @@ void LTexture::setDimensionesVentana(int w,int h){
 }
 
 void LTexture::setVibrar(){
-	m_vibrar = true;
+	indice_corrimientos = 0;
+}
+
+bool LTexture::estaVibrando(){
+	return indice_corrimientos < corrimientos.size();
 }
 
 
@@ -245,10 +247,8 @@ void LTexture::renderObjeto( Rect_Objeto* clip,float x, float y, bool flip)
 	int corrimiento_x = 0;
 	int corrimiento_y = 0;
 
-	if(m_vibrar){
-		corrimiento_x = _corrimiento();
-		corrimiento_y = corrimiento_x;
-	}
+	corrimiento_x = _corrimiento();
+	corrimiento_y = corrimiento_x;
 
 
 	int x_px = (int)(x*ratio_x_ventana + 0.5) + corrimiento_x;
@@ -281,10 +281,8 @@ void LTexture::renderFondo( Rect_Logico* clip)
 	int corrimiento_x = 0;
 	int corrimiento_y = 0;
 
-	if(m_vibrar){
-		corrimiento_x = _corrimiento();
-		corrimiento_y = corrimiento_x;
-	}
+	corrimiento_x = _corrimiento();
+	corrimiento_y = corrimiento_x;
 
 	SDL_Rect camera = { 0,0, w_ventana, h_ventana};
 	SDL_Rect clip_px;
