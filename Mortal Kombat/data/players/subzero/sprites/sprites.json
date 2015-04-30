@@ -18,7 +18,8 @@
 				"x":0,
 				"y":0,
 				"Alto":71,
-				"Ancho":64
+				"Ancho":64,
+				"loop": true
 			}
 		]
 	},
@@ -194,7 +195,8 @@
 				"x":0,
 				"y":0,
 				"Alto":96,
-				"Ancho":70
+				"Ancho":70,
+				"loop": true
 			},
 			{
 				"x":0,
