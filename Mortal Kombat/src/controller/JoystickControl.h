@@ -26,6 +26,9 @@
 #define JOY_L3 10
 #define JOY_R3 11
 
+#define BUTTON_PRESSED 1
+#define BUTTON_UNPRESSED 0
+
 
 #include "../model/logging.h"
 #include "../model/Personaje.h"
@@ -37,6 +40,7 @@ public:
 	JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje);
 	void JoyPressed();
 	void JoyState();
+	bool pause();
 	virtual ~JoystickControl();
 
 private:
@@ -44,7 +48,7 @@ private:
 	SDL_Joystick* joystick;
 	SDL_Haptic* joystickHaptic;
 	Personaje* personaje;
-	bool conectado;
+	bool pausa;
 
 	void _Init(int id);
 };

@@ -26,6 +26,7 @@ private:
 
 	void _Init();
 	void _JoystickRemoved();
+	void _JoystickAdded();
 
 public:
 	Controller(Personaje* un_personaje,Personaje* otro_personaje);
@@ -33,6 +34,7 @@ public:
 	bool PollEvent();
 	void Pressed();
 	void KeyState();
+	bool pausa();
 
 	virtual ~Controller();
 };

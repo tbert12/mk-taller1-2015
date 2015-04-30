@@ -15,7 +15,11 @@ using namespace std;
 KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje) {
 	personaje = un_personaje;
 	evento = e;
+	pausa = false;
 	keystate = SDL_GetKeyboardState(NULL);
+}
+bool KeyboardControl::pause(){
+	return pausa;
 }
 void KeyboardControl::KeyPressed(){
 	switch( evento->key.keysym.sym ){
@@ -51,8 +55,8 @@ void KeyboardControl::KeyPressed(){
 			case SDLK_d:
 				personaje->cubrirse();
 				break;
-			default:
-				//personaje->Inicial();
+			case SDLK_p:
+				pausa = !pausa;
 				break;
 		}
 }
