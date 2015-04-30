@@ -112,8 +112,8 @@ void JoystickControl::JoyState(){
 		personaje->Levantarse();
 
 	//se deja de cubrir si no esta apretado
-	//if (SDL_JoystickGetButton(joystick,JOY_R1) == BUTTON_UNPRESSED);
-		//personaje->dejarDeCubrirse();
+	if (SDL_JoystickGetButton(joystick,JOY_R1) == BUTTON_UNPRESSED)
+		personaje->dejarDeCubrirse();
 
 }
 
