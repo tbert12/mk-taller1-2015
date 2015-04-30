@@ -8,18 +8,27 @@
 #ifndef SRC_CONTROLLER_JOYSTICKCONTROL_H_
 #define SRC_CONTROLLER_JOYSTICKCONTROL_H_
 
-#include "../model/logging.h"
-#include <SDL2/SDL.h>
+//maximo en el analogico
+#define JOYSTICK_DEAD_ZONE 8000
 
+#include "../model/logging.h"
+#include "../model/Personaje.h"
+#include <SDL2/SDL.h>
+#include <string>
 
 class JoystickControl {
 public:
-	JoystickControl();
+	JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje);
+	void JoyPressed();
+	void JoyState();
 	virtual ~JoystickControl();
 
 private:
+	SDL_Event* evento;
 	SDL_Joystick* joystick;
-	int cant_joystick;
+	Personaje* personaje;
+
+	void _Init(int id);
 };
 
 #endif /* SRC_CONTROLLER_JOYSTICKCONTROL_H_ */

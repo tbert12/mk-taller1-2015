@@ -67,7 +67,7 @@ bool BarraEnergia::_loadBase(){
 
 		//Success
 		textura_base = nuevaTexture;
-		log("Se cargo correctamente la textura base de la barra de energia");
+		log("Se cargo correctamente la textura base de la barra de energia",LOG_DEBUG);
 		_calcularRatios();
 		return true;
 
@@ -163,7 +163,7 @@ void BarraEnergia::_renderRelleno(int estado){
 		float dist_borde= (ventana->obtenerAncho()*(0.02)*ventana->obtenerRatioX());
 
 		pos_x = (int)((ventana->obtenerAncho() - dist_borde - ancho_logico)*ventana->obtenerRatioX() +0.5);
-
+		pos_x += (int)(ancho_logico*ventana->obtenerRatioX() +0.5) - actual*(int)(ancho_logico*ventana->obtenerRatioX() +0.5)/100;
 	}
 
 	SDL_Rect Object = { pos_x,pos_y, actual*(int)(ancho_logico*ventana->obtenerRatioX() +0.5)/100, (int)(alto_logico*ventana->obtenerRatioY() + 0.5)};
