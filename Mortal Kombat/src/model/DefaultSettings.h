@@ -53,6 +53,7 @@ const char* const SPRITESHEET_GANAR_DEFAULT = "gana.png";
 const char* const SPRITESHEET_GANCHO_DEFAULT = "gancho.png";
 const char* const SPRITESHEET_MORIR_DEFAULT = "muere.png";
 const char* const SPRITESHEET_PATADA_ALTA_DEFAULT = "patadaAlta.png";
+const char* const SPRITESHEET_PATADA_BAJA_DEFAULT = "patadaBaja.png";
 const char* const SPRITESHEET_PATADA_CIRCULAR_DEFAULT = "PatadaConGiro.png";
 const char* const SPRITESHEET_PATADA_SALTANDO_DEFAULT = "PatadaEnSalto.png";
 const char* const SPRITESHEET_PINA_AGACHADO_DEFAULT = "PinaAgachado.png";

@@ -20,13 +20,13 @@ const int SPRITE_CUBRIRSE=        9;
 const int SPRITE_CUBRIRSE_AGACHADO=    10;
 const int SPRITE_GANCHO=         12;
 const int SPRITE_PATADA_ALTA=    14;
-//const int SPRITE_PATADA_BAJA=    15;
-const int SPRITE_PATADA_CIRCULAR=15;
-const int SPRITE_PATADA_SALTANDO=16;
-const int SPRITE_PINA_AGACHADO=  17;
-const int SPRITE_PINA_ALTA=		 18;
-const int SPRITE_PINA_BAJA=		 19;
-const int SPRITE_PINA_SALTANDO=  20;
+const int SPRITE_PATADA_BAJA=    15;
+const int SPRITE_PATADA_CIRCULAR=16;
+const int SPRITE_PATADA_SALTANDO=17;
+const int SPRITE_PINA_AGACHADO=  18;
+const int SPRITE_PINA_ALTA=		 19;
+const int SPRITE_PINA_BAJA=		 20;
+const int SPRITE_PINA_SALTANDO=  21;
 
 const int TIEMPOTOTALDESALTO = 14;
 

@@ -302,7 +302,7 @@ void Personaje::patadaBaja() {
 	} else if ( _estaSaltando > 0 ) {
 		_patadaSaltando();
 	} else {
-		//_cambiarSprite(SPRITE_PATADA_BAJA);
+		_cambiarSprite(SPRITE_PATADA_BAJA);
 	}
 }
 
