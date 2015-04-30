@@ -888,7 +888,7 @@ Mundo* ParserJSON::cargarMundo() {
 				position = (escenario_ancho/2) + (ventana_ancho/2)*rpos;
 			}
 			personaje->setPosition( position , y_piso );
-			log( "Se seteo la posicion inicial en el escenario del personaje.", LOG_DEBUG );
+			log( string("Seteada Posicion en escenario de Personaje_") + to_string(k) + string(" Xlog:") + to_string(position) + string(" Ylog:") + to_string(y_piso), LOG_DEBUG );
 
 			// Agrego Personaje al mundo.
 			nuevo_mundo->addPersonaje(personaje);

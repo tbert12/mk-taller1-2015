@@ -76,7 +76,7 @@ bool LTexture::cambiarColor( SDL_PixelFormat* format, float h_inicial, float h_f
 	//Lock texture
 	else { */
 	if( SDL_LockTexture( mTexture, NULL, &mPixels, &mPitch ) != 0 ) {
-		log( string("Unable to lock texture!"), LOG_ERROR );
+		log( string("Unable to lock texture! SDL_Error: ") + string( SDL_GetError() ), LOG_ERROR );
 		success = false;
 		return success;
 	}
@@ -150,7 +150,7 @@ bool LTexture::loadFromFile( std::string ruta )
 	SDL_Surface* loadedSurface = IMG_Load( ruta.c_str() );
 	if( loadedSurface == NULL )
 	{
-		log( string("No se puede cargar imagen %s! SDL_image Error: %s\n", ruta.c_str()),LOG_ERROR);
+		log( string("No se puede cargar imagen: ") + string( ruta.c_str() ) + string(" SDL_image Error: ") + string(SDL_GetError()),LOG_ERROR);
 		return false;
 	}
 	else
@@ -163,7 +163,7 @@ bool LTexture::loadFromFile( std::string ruta )
 		nuevaTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
 		if( nuevaTexture == NULL )
 		{
-			log( string("No se puede crear textura desde %s!", ruta.c_str()),LOG_ERROR);
+			log( string("No se puede crear textura desde") + string( ruta.c_str() ),LOG_ERROR);
 			return false;
 		}
 		else
