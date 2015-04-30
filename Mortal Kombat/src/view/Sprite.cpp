@@ -14,6 +14,7 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 	reverse = false;
 
 	//Loopear en 1 Frame
+	//Si el frameLoop es 3, y estas en frameActual 0, hace 0,1,2,3 y se queda (hasta que sea false)
 	doloop = false;
 	frameLoop = 0;
 
@@ -77,6 +78,7 @@ void Sprite::Reset(){
 }
 
 void Sprite::render(float x, float y, bool fliped){
+	printf("FrameActual: %d\n",frameActual);
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
 	float correrX;
 	if (fliped) correrX = currentClip->w_log;
@@ -103,6 +105,14 @@ bool Sprite::ultimoFrame(){
 		return (frameActual == 0);
 	}
 	return (frameActual + 1 == cantidadFrames);
+}
+
+bool Sprite::proxFrameUltimo(){
+	if (doloop) return false;
+	if (reverse){
+		return (frameActual == 1);
+	}
+	return (frameActual + 1 == cantidadFrames - 1);
 }
 
 

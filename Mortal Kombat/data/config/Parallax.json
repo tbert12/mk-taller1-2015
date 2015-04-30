@@ -46,14 +46,14 @@
 	
 	"personajes": [
 		{
-		"ancho": 85,
-		"alto": 160,
+		"ancho": 65,
+		"alto": 150,
 		"sprites": "data/players/subzero/sprites/",
 		"nombre": "Sub-Zero"
 		},
 		{
-		"ancho": 85,
-		"alto": 160,
+		"ancho": 65,
+		"alto": 150,
 		"sprites": "data/players/subzero/sprites/",
 		"nombre": "Sub-Zero"
 		}

@@ -45,6 +45,7 @@ class Sprite {
 		void doReverse(bool Reverse);
 
 		bool ultimoFrame();
+		bool proxFrameUltimo();
 
 		float getAncho();
 		float getAlto();
