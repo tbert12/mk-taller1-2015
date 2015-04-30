@@ -24,7 +24,6 @@ class Sprite {
 	private:
 		int frameActual;
 		int cantidadFrames;
-		string ruta_archivo;
 
 		bool reverse;
 		bool doloop;
@@ -34,14 +33,11 @@ class Sprite {
 		LTexture* SpriteSheetTexture;
 
 	public:
-		Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y);
+		Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y, bool cambiar_color = false, float h_inicial = 0, float h_final = 0, float desplazamiento = 0);
 		~Sprite();
 
 		bool Advance();
 		void Reset();
-
-		// Desplaza un rango de matices del spritesheet.
-		void cambiarColor(SDL_PixelFormat*, float, float, float);
 
 		void setLoop(int num_frame);
 		void doLoop(bool loop);

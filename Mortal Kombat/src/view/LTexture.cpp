@@ -59,6 +59,9 @@ void LTexture::setVibrar(){
 	m_vibrar = true;
 }
 
+
+
+/*
 bool LTexture::cambiarColor( SDL_PixelFormat* format, float h_inicial, float h_final, float desplazamiento) {
 
 	bool success = true;
@@ -66,28 +69,18 @@ bool LTexture::cambiarColor( SDL_PixelFormat* format, float h_inicial, float h_f
 	int mPitch = 0;
 	void* mPixels = NULL;
 
-	/* COMENTO EL LOCK Y EL UNLOCK PORQUE NO ESTARIA ANDANDO. ENTRA SIEMPRE AL IF.
-	 * TIENE QUE VER SEGURO CON EL MPIXELS Y EL MPITCH. EN EL EJEMPLO DE TOMI SE USAN EN EL LOADFROMFILE
-	 * Y NOSOTRS NO LO USAMOS NUNCA. HABRIA QUE VER ESO.
 	//Texture is already locked
 	if( mPixels != NULL ) {
 		log( "Texture is already locked!", LOG_WARNING );
 	}
 	//Lock texture
-	else { */
 	if( SDL_LockTexture( mTexture, NULL, &mPixels, &mPitch ) != 0 ) {
 		log( string("Unable to lock texture! SDL_Error: ") + string( SDL_GetError() ), LOG_ERROR );
 		success = false;
 		return success;
 	}
-	/*
-	}
-	*/
 
-	//Manual color key
-	//Get pixel data
-	Uint32* pixels = (Uint32*) mPixels;
-	int pixelCount = ( mPitch / 4 ) * this->getHeight();
+
 
 	//Color key pixels
 	for( int i = 0; i < pixelCount; ++i ) {
@@ -117,28 +110,23 @@ bool LTexture::cambiarColor( SDL_PixelFormat* format, float h_inicial, float h_f
 
 	}
 
-	/*
 	//Texture is not locked
 	if( mPixels == NULL ) {
 		log( "Texture is not locked!", LOG_WARNING );
 	}
 	//Unlock texture
-
-	else {*/
-		SDL_UnlockTexture( mTexture );
-
-	//}
+	else SDL_UnlockTexture( mTexture );
 
 	return success;
 
 }
+*/
 
 
 
 
 
-bool LTexture::loadFromFile( std::string ruta )
-{
+bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inicial, float h_final, float desplazamiento ) {
 
 	//Get rid of preexisting texture
 	free();
@@ -148,29 +136,68 @@ bool LTexture::loadFromFile( std::string ruta )
 
 	//Cargar imagen desde ruta
 	SDL_Surface* loadedSurface = IMG_Load( ruta.c_str() );
-	if( loadedSurface == NULL )
-	{
+	if( loadedSurface == NULL ) {
 		log( string("No se puede cargar imagen: ") + string( ruta.c_str() ) + string(" SDL_image Error: ") + string(SDL_GetError()),LOG_ERROR);
 		return false;
-	}
-	else
-	{
+	} else {
 
 		//Color de Imagen
 		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
 		//Crear textura desde Surface por pixer
 		nuevaTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
-		if( nuevaTexture == NULL )
-		{
+		if( nuevaTexture == NULL ) {
 			log( string("No se puede crear textura desde") + string( ruta.c_str() ),LOG_ERROR);
 			return false;
-		}
-		else
-		{
+		} else {
 			//Dimensiones de imagen
 			mWidth = loadedSurface->w;
 			mHeight = loadedSurface->h;
+
+		    //If the surface must be locked
+		    if( SDL_MUSTLOCK( loadedSurface ) )
+		    {
+		        //Lock the surface
+		        SDL_LockSurface( loadedSurface );
+		    }
+
+		    //Convert the pixels to 32 bit
+		    Uint32* pixels = (Uint32*)loadedSurface->pixels;
+
+			//Color key pixels
+			for( int i = 0; i < loadedSurface->pitch; ++i ) {
+
+				// Obtengo color RGB del pixel.
+				Uint8 r, g, b;
+				float h, s, v;
+				SDL_GetRGB( pixels[i], loadedSurface->format, &r, &g, &b);
+
+				// Transformo de RGB a HSV. Si el hue cae en el rango especificado, se desplaza.
+				RGBaHSV(r, g, b, &h, &s, &v);
+
+				bool hayQuePintar = false;
+				if ( h >= h_inicial && h <= h_final ) {
+					desplazarHue(&h, desplazamiento);
+					hayQuePintar = true;
+				}
+
+				// Vuelvo a transformar a coordenadas RGB.
+				HSVaRGB(h, s, v, &r, &g, &b);
+
+				// Pinto el pixel con el nuevo color.
+				if ( hayQuePintar ) {
+					Uint32 nuevoColor = SDL_MapRGB( loadedSurface->format, r, g, b );
+					pixels[i] = nuevoColor;
+				}
+
+			}
+
+		    //Unlock surface
+		    if( SDL_MUSTLOCK( loadedSurface ) )
+		    {
+		        SDL_UnlockSurface( loadedSurface );
+		    }
+
 		}
 
 		//Liberar la imagen cargada

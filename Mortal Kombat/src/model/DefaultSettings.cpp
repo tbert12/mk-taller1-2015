@@ -5,7 +5,7 @@ using namespace std;
 map<const char*, char> comandos;
 
 
-Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje) {
+Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color ) {
 	Sprite* sprite;
 
 	Json::Value root;
@@ -109,7 +109,7 @@ Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float
 		frames[i] = new Frame(x, y, alto, ancho);
 	}
 	try {
-		sprite = new Sprite(string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje );
+		sprite = new Sprite(string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color );
 		for ( unsigned int j=0; j < frames.size(); j++ ) {
 			if ( loop_accion[j] ) sprite->setLoop(j);
 		}
@@ -121,7 +121,7 @@ Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float
 	return sprite;
 }
 
-vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto ) {
+vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color ) {
 
 	vector<Sprite*> sprites;
 
@@ -129,31 +129,31 @@ vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, 
 	float ratio_x_personaje = PERSONAJE_ANCHO_PX_DEFAULT / personaje_ancho;
 	float ratio_y_personaje = PERSONAJE_ALTO_PX_DEFAULT / personaje_alto;
 
-	sprites.push_back( crearSpritePorDefecto("parado", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("caminar", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("saltar", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("saltardiagonal", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("agachar", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("agachadoPatadaAlta", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("agachadoPatadaBaja", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("caeEnZ", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("caeYSeLevanta", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("cubrirse", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("cubrirseAgachado", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("gana", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("gancho", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("muere", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("patadaAlta", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("patadaConGiro", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("patadaEnSalto", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("pinaAgachado", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("pinaAlta", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("pinaBaja", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("pinaEnSalto", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("recibeGolpeAgachado", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("recibeGolpeAlto", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("recibeGolpeBajo", ventana, ratio_x_personaje, ratio_y_personaje) );
-	sprites.push_back( crearSpritePorDefecto("recibeGolpeFuerte", ventana, ratio_x_personaje, ratio_y_personaje) );
+	sprites.push_back( crearSpritePorDefecto("parado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("caminar", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("saltar", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("saltardiagonal", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("agachar", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("agachadoPatadaAlta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("agachadoPatadaBaja", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("caeEnZ", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("caeYSeLevanta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("cubrirse", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("cubrirseAgachado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("gana", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("gancho", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("muere", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("patadaAlta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("patadaConGiro", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("patadaEnSalto", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("pinaAgachado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("pinaAlta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("pinaBaja", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("pinaEnSalto", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("recibeGolpeAgachado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("recibeGolpeAlto", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("recibeGolpeBajo", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
+	sprites.push_back( crearSpritePorDefecto("recibeGolpeFuerte", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color) );
 
 	return sprites;
 }
@@ -182,10 +182,10 @@ Mundo* generarMundoDefault() {
 		throw runtime_error( "No se pudo abrir la ventana del programa." );
 	}
 
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, false), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
 	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
 
-	Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, !PERSONAJE_FLIPPED_DEFAULT);
+	Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, true), PERSONAJE_VELOCIDAD, !PERSONAJE_FLIPPED_DEFAULT);
 	personaje2_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) + (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
 
 	mundo->setVentana(ventana);

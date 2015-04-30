@@ -63,12 +63,12 @@ float ParserJSON::getRatioYPersonaje( Json::Value root_sprites, float personaje_
 
 
 
-Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const char accion_sprite[], string spritesheet_accion, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje ) {
+Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const char accion_sprite[], string spritesheet_accion, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color, float h_inicial, float h_final, float desplazamiento ) {
 	Sprite* sprite;
 	string spritesheet;
 	if ( ! root.isMember(accion_sprite) ) {
 		log( "No se encontro el sprite correspondiente a la accion del personaje. Se generan el sprite de la accion por defecto.", LOG_ERROR );
-		return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+		return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color);
 	} else {
 		if ( ! root[accion_sprite].isMember("nombre") ) {
 			log( "No se especifico el nombre de la imagen para el spritesheet de la accion. Se setea uno por defecto.", LOG_WARNING );
@@ -150,7 +150,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 				log( "Se creo correctamente un frame del spritesheet de la accion.", LOG_DEBUG );
 			}
 			try {
-				sprite = new Sprite( ruta_carpeta + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje );
+				sprite = new Sprite( ruta_carpeta + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 				for ( unsigned int j=0; j < frames.size(); j++ ) {
 					if ( loop_accion[j] ) sprite->setLoop(j);
 				}
@@ -168,7 +168,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 
 
 
-vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto) {
+vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
 
 	vector<Sprite*> sprites;
 
@@ -207,103 +207,103 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 
 	// Cargo uno por uno los sprites correspondientes a cada accion.
 	log( "Se cargara el sprite inicial para la accion de estar parado.", LOG_DEBUG );
-	Sprite* sprite_parado =  cargarSprite( root, ruta_carpeta, "parado", SPRITESHEET_PARADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_parado =  cargarSprite( root, ruta_carpeta, "parado", SPRITESHEET_PARADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_parado );
 
 	log( "Se cargara el sprite para la accion de caminar del personaje", LOG_DEBUG );
-	Sprite* sprite_caminar =  cargarSprite( root, ruta_carpeta, "caminar", SPRITESHEET_CAMINAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_caminar =  cargarSprite( root, ruta_carpeta, "caminar", SPRITESHEET_CAMINAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_caminar );
 
 	log( "Se cargara el sprite para la accion de saltar del personaje", LOG_DEBUG );
-	Sprite* sprite_saltar =  cargarSprite( root, ruta_carpeta, "saltar", SPRITESHEET_SALTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_saltar =  cargarSprite( root, ruta_carpeta, "saltar", SPRITESHEET_SALTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_saltar );
 
 	log( "Se cargara el sprite para la accion de saltar en diagonal del personaje", LOG_DEBUG );
-	Sprite* sprite_saltar_diagonal =  cargarSprite( root, ruta_carpeta, "saltardiagonal", SPRITESHEET_SALTAR_DIAGONAL_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_saltar_diagonal =  cargarSprite( root, ruta_carpeta, "saltardiagonal", SPRITESHEET_SALTAR_DIAGONAL_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_saltar_diagonal );
 
 	log( "Se cargara el sprite para la accion de agacharse del personaje", LOG_DEBUG );
-	Sprite* sprite_agachar =  cargarSprite( root, ruta_carpeta, "agachar", SPRITESHEET_AGACHAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_agachar =  cargarSprite( root, ruta_carpeta, "agachar", SPRITESHEET_AGACHAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_agachar );
 
 	log( "Se cargara el sprite para la accion de pegar patada alta estando agachado del personaje", LOG_DEBUG );
-	Sprite* sprite_agachado_patada_alta =  cargarSprite( root, ruta_carpeta, "agachadoPatadaAlta", SPRITESHEET_AGACHADO_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_agachado_patada_alta =  cargarSprite( root, ruta_carpeta, "agachadoPatadaAlta", SPRITESHEET_AGACHADO_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_agachado_patada_alta );
 
 	log( "Se cargara el sprite para la accion de pegar patada baja estando agachado del personaje", LOG_DEBUG );
-	Sprite* sprite_agachado_patada_baja =  cargarSprite( root, ruta_carpeta, "agachadoPatadaBaja", SPRITESHEET_AGACHADO_PATADA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_agachado_patada_baja =  cargarSprite( root, ruta_carpeta, "agachadoPatadaBaja", SPRITESHEET_AGACHADO_PATADA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_agachado_patada_baja );
 
 	log( "Se cargara el sprite para la accion de caerse por una barrida del personaje", LOG_DEBUG );
-	Sprite* sprite_caer_en_z =  cargarSprite( root, ruta_carpeta, "caeEnZ", SPRITESHEET_CAER_EN_Z_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_caer_en_z =  cargarSprite( root, ruta_carpeta, "caeEnZ", SPRITESHEET_CAER_EN_Z_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_caer_en_z );
 
 	log( "Se cargara el sprite para la accion de caerse y levantarse inmediatamente del personaje", LOG_DEBUG );
-	Sprite* sprite_caer_y_levantarse =  cargarSprite( root, ruta_carpeta, "caeYSeLevanta", SPRITESHEET_CAER_Y_LEVANTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_caer_y_levantarse =  cargarSprite( root, ruta_carpeta, "caeYSeLevanta", SPRITESHEET_CAER_Y_LEVANTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_caer_y_levantarse );
 
 	log( "Se cargara el sprite para la accion de cubrirse del personaje", LOG_DEBUG );
-	Sprite* sprite_cubrirse =  cargarSprite( root, ruta_carpeta, "cubrirse", SPRITESHEET_CUBRIRSE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_cubrirse =  cargarSprite( root, ruta_carpeta, "cubrirse", SPRITESHEET_CUBRIRSE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_cubrirse );
 
 	log( "Se cargara el sprite para la accion de cubrirse agachado del personaje", LOG_DEBUG );
-	Sprite* sprite_cubrirse_agachado =  cargarSprite( root, ruta_carpeta, "cubrirseAgachado", SPRITESHEET_CUBRIRSE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_cubrirse_agachado =  cargarSprite( root, ruta_carpeta, "cubrirseAgachado", SPRITESHEET_CUBRIRSE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_cubrirse_agachado );
 
 	log( "Se cargara el sprite para la pose de victoria del personaje", LOG_DEBUG );
-	Sprite* sprite_ganar =  cargarSprite( root, ruta_carpeta, "gana", SPRITESHEET_GANAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_ganar =  cargarSprite( root, ruta_carpeta, "gana", SPRITESHEET_GANAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_ganar );
 
 	log( "Se cargara el sprite para la accion de gancho del personaje", LOG_DEBUG );
-	Sprite* sprite_gancho =  cargarSprite( root, ruta_carpeta, "gancho", SPRITESHEET_GANCHO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_gancho =  cargarSprite( root, ruta_carpeta, "gancho", SPRITESHEET_GANCHO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_gancho );
 
 	log( "Se cargara el sprite para la accion de morirse del personaje", LOG_DEBUG );
-	Sprite* sprite_morir =  cargarSprite( root, ruta_carpeta, "muere", SPRITESHEET_MORIR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_morir =  cargarSprite( root, ruta_carpeta, "muere", SPRITESHEET_MORIR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_morir );
 
 	log( "Se cargara el sprite para la accion de patada alta del personaje", LOG_DEBUG );
-	Sprite* sprite_patada_alta =  cargarSprite( root, ruta_carpeta, "patadaAlta", SPRITESHEET_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_patada_alta =  cargarSprite( root, ruta_carpeta, "patadaAlta", SPRITESHEET_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_patada_alta );
 
 	log( "Se cargara el sprite para la accion de patada circular del personaje", LOG_DEBUG );
-	Sprite* sprite_patada_circular =  cargarSprite( root, ruta_carpeta, "patadaConGiro", SPRITESHEET_PATADA_CIRCULAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_patada_circular =  cargarSprite( root, ruta_carpeta, "patadaConGiro", SPRITESHEET_PATADA_CIRCULAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_patada_circular );
 
 	log( "Se cargara el sprite para la accion de patada saltando del personaje", LOG_DEBUG );
-	Sprite* sprite_patada_saltando =  cargarSprite( root, ruta_carpeta, "patadaEnSalto", SPRITESHEET_PATADA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_patada_saltando =  cargarSprite( root, ruta_carpeta, "patadaEnSalto", SPRITESHEET_PATADA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_patada_saltando );
 
 	log( "Se cargara el sprite para la accion de pina agachado del personaje", LOG_DEBUG );
-	Sprite* sprite_pina_agachado =  cargarSprite( root, ruta_carpeta, "pinaAgachado", SPRITESHEET_PINA_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_pina_agachado =  cargarSprite( root, ruta_carpeta, "pinaAgachado", SPRITESHEET_PINA_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_pina_agachado );
 
 	log( "Se cargara el sprite para la accion de pina alta del personaje", LOG_DEBUG );
-	Sprite* sprite_pina_alta =  cargarSprite( root, ruta_carpeta, "pinaAlta", SPRITESHEET_PINA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_pina_alta =  cargarSprite( root, ruta_carpeta, "pinaAlta", SPRITESHEET_PINA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_pina_alta );
 
 	log( "Se cargara el sprite para la accion de pina baja del personaje", LOG_DEBUG );
-	Sprite* sprite_pina_baja =  cargarSprite( root, ruta_carpeta, "pinaBaja", SPRITESHEET_PINA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_pina_baja =  cargarSprite( root, ruta_carpeta, "pinaBaja", SPRITESHEET_PINA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_pina_baja );
 
 	log( "Se cargara el sprite para la accion de pina saltando del personaje", LOG_DEBUG );
-	Sprite* sprite_pina_saltando =  cargarSprite( root, ruta_carpeta, "pinaEnSalto", SPRITESHEET_PINA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_pina_saltando =  cargarSprite( root, ruta_carpeta, "pinaEnSalto", SPRITESHEET_PINA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_pina_saltando );
 
 	log( "Se cargara el sprite para la accion recibir golpe agachado del personaje", LOG_DEBUG );
-	Sprite* sprite_recibir_golpe_agachado =  cargarSprite( root, ruta_carpeta, "recibeGolpeAgachado", SPRITESHEET_RECIBIR_GOLPE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_recibir_golpe_agachado =  cargarSprite( root, ruta_carpeta, "recibeGolpeAgachado", SPRITESHEET_RECIBIR_GOLPE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_recibir_golpe_agachado );
 
 	log( "Se cargara el sprite para la accion de recibir golpe alto del personaje", LOG_DEBUG );
-	Sprite* sprite_recibir_golpe_alto =  cargarSprite( root, ruta_carpeta, "recibeGolpeAlto", SPRITESHEET_RECIBIR_GOLPE_ALTO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_recibir_golpe_alto =  cargarSprite( root, ruta_carpeta, "recibeGolpeAlto", SPRITESHEET_RECIBIR_GOLPE_ALTO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_recibir_golpe_alto );
 
 	log( "Se cargara el sprite para la accion de recibir golpe bajo del personaje", LOG_DEBUG );
-	Sprite* sprite_recibir_golpe_bajo =  cargarSprite( root, ruta_carpeta, "recibeGolpeBajo", SPRITESHEET_RECIBIR_GOLPE_BAJO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_recibir_golpe_bajo =  cargarSprite( root, ruta_carpeta, "recibeGolpeBajo", SPRITESHEET_RECIBIR_GOLPE_BAJO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_recibir_golpe_bajo );
 
 	log( "Se cargara el sprite para la accion de recibir golpes fuerte del personaje", LOG_DEBUG );
-	Sprite* sprite_recibir_golpe_fuerte =  cargarSprite( root, ruta_carpeta, "recibeGolpeFuerte", SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_recibir_golpe_fuerte =  cargarSprite( root, ruta_carpeta, "recibeGolpeFuerte", SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_recibir_golpe_fuerte );
 
 
@@ -771,6 +771,102 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 	}
 
+	// Verificar si se debe cambiar el color del segundo personaje y hacerlo.
+	bool cambiar_color = false;
+	string personaje_nombre_1, personaje_nombre_2;
+
+	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
+		cambiar_color = true;
+		log( "Se generaran dos personajes iguales por defecto. Como son iguales, el segundo tendrá otro color.", LOG_WARNING );
+	} else {
+
+		if ( ! root["personajes"][0].isMember("nombre") ) {
+			personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
+		} else {
+			try {
+				personaje_nombre_1 = root["personajes"][0].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
+			} catch ( exception &e ) {
+				personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
+			}
+		}
+
+		if ( ! root["personajes"][1].isMember("nombre") ) {
+			personaje_nombre_2 = PERSONAJE_NOMBRE_DEFAULT;
+		} else {
+			try {
+				personaje_nombre_2 = root["personajes"][0].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
+			} catch ( exception &e ) {
+				personaje_nombre_2 = PERSONAJE_NOMBRE_DEFAULT;
+			}
+		}
+
+		if ( personaje_nombre_1 == personaje_nombre_2 ) {
+			cambiar_color = true;
+			log( "Los personajes tienen el mismo nombre. Por lo tanto, se le cambiara el color al segundo personaje.", LOG_WARNING );
+		}
+	}
+
+	float h_inicial=0, h_final=0, desplazamiento=0;
+	if ( cambiar_color ) {
+
+		if ( ! root.isMember("color-alternativo") ) {
+			log( "No se especificaron parametros para el color alternativo para el segundo personaje. No se cambian los colores.", LOG_WARNING );
+		} else {
+			if ( ! root["color-alternativo"].isMember("h-inicial") ) {
+				h_inicial = COLOR_H_INICIAL_DEFAULT;
+				log( "No se especifico el hue inicial para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
+			} else {
+				try {
+					h_inicial = root["color-alternativo"].get( "h-inicial", COLOR_H_INICIAL_DEFAULT ).asFloat();
+					if ( h_inicial < 0 ) {
+						h_inicial = fabs(h_inicial);
+						log( "El hue inicial no puede ser negativo. Se le aplica modulo.", LOG_WARNING );
+					}
+					if ( h_inicial > 360 ) {
+						h_inicial = fmod(h_inicial, 360);
+						log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+					}
+					log( "Se cargo el hue inicial para el desplazamiento al color alternativo.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					h_inicial = COLOR_H_INICIAL_DEFAULT;
+					log( "El hue inicial especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
+				}
+			}
+			if ( ! root["color-alternativo"].isMember("h-final") ) {
+				h_final = COLOR_H_FINAL_DEFAULT;
+				log( "No se especifico el hue final para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
+			} else {
+				try {
+					h_final = root["color-alternativo"].get( "h-final", COLOR_H_FINAL_DEFAULT ).asFloat();
+					if ( h_final < 0 ) {
+						h_final = fabs(h_final);
+						log( "El hue final no puede ser negativo. Se le aplica modulo.", LOG_WARNING );
+					}
+					if ( h_final > 360 ) {
+						h_final = fmod(h_final, 360);
+						log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+					}
+					log( "Se cargo el hue final para el desplazamiento al color alternativo.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					h_final = COLOR_H_FINAL_DEFAULT;
+					log( "El hue final especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
+				}
+			}
+			if ( ! root["color-alternativo"].isMember("desplazamiento") ) {
+				desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
+				log( "No se especificaron los grados de desplazamiento hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
+			} else {
+				try {
+					desplazamiento = root["color-alternativo"].get( "desplazamiento", COLOR_DESPLAZAMIENTO_DEFAULT ).asFloat();
+					log( "Se cargaron los grados de el desplazamiento hacia el color alternativo.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
+					log( "Los grados de desplazameinto hacia el color alternativo especificados no son un numero valido. Se setea por defecto.", LOG_ERROR );
+				}
+			}
+		}
+	}
+
 	// Creo vector de personajes.
 	vector<Personaje*> personajes;
 
@@ -870,7 +966,7 @@ Mundo* ParserJSON::cargarMundo() {
 				}
 			}
 			// Creo Sprites del personaje.
-			vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, personaje_ancho, personaje_alto);
+			vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, personaje_ancho, personaje_alto, cambiar_color, h_inicial, h_final, desplazamiento);
 
 			// Crear personaje.
 			Personaje* personaje = new Personaje(personaje_nombre, sprites, PERSONAJE_VELOCIDAD, flipped);
@@ -888,78 +984,12 @@ Mundo* ParserJSON::cargarMundo() {
 				position = (escenario_ancho/2) + (ventana_ancho/2)*rpos;
 			}
 			personaje->setPosition( position , y_piso );
-			log( string("Seteada Posicion en escenario de Personaje_") + to_string(k) + string(" Xlog:") + to_string(position) + string(" Ylog:") + to_string(y_piso), LOG_DEBUG );
+			log( "Seteada Posicion en escenario de Personaje", LOG_DEBUG );
 
 			// Agrego Personaje al mundo.
 			nuevo_mundo->addPersonaje(personaje);
 			log( "Se agrego el personaje al mundo", LOG_DEBUG );
 		}
-	}
-
-	// Verificar si se debe cambiar el color del segundo personaje y hacerlo.
-	if ( personajes[0]->getNombre() == personajes[1]->getNombre() ) {
-
-		if ( ! root.isMember("color-alternativo") ) {
-			log( "No se especificaron parametros para el color alternativo para el segundo personaje. No se cambian los colores.", LOG_WARNING );
-		} else {
-			float h_inicial, h_final, desplazamiento;
-			if ( ! root["color-alternativo"].isMember("h-inicial") ) {
-				h_inicial = COLOR_H_INICIAL_DEFAULT;
-				log( "No se especifico el hue inicial para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_WARNING );
-			} else {
-				try {
-					h_inicial = root["color-alternativo"].get( "h-inicial", COLOR_H_INICIAL_DEFAULT ).asFloat();
-					if ( h_inicial < 0 ) {
-						h_inicial = fabs(h_inicial);
-						log( "El hue inicial no puede ser negativo. Se le aplica modulo.", LOG_WARNING );
-					}
-					if ( h_inicial > 360 ) {
-						h_inicial = fmod(h_inicial, 360);
-						log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-					}
-					log( "Se cargo el hue inicial para el desplazamiento al color alternativo.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					h_inicial = COLOR_H_INICIAL_DEFAULT;
-					log( "El hue inicial especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-			if ( ! root["color-alternativo"].isMember("h-final") ) {
-				h_final = COLOR_H_FINAL_DEFAULT;
-				log( "No se especifico el hue final para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_WARNING );
-			} else {
-				try {
-					h_final = root["color-alternativo"].get( "h-final", COLOR_H_FINAL_DEFAULT ).asFloat();
-					if ( h_final < 0 ) {
-						h_final = fabs(h_final);
-						log( "El hue final no puede ser negativo. Se le aplica modulo.", LOG_WARNING );
-					}
-					if ( h_final > 360 ) {
-						h_final = fmod(h_final, 360);
-						log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-					}
-					log( "Se cargo el hue final para el desplazamiento al color alternativo.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					h_final = COLOR_H_FINAL_DEFAULT;
-					log( "El hue final especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-			if ( ! root["color-alternativo"].isMember("desplazamiento") ) {
-				desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
-				log( "No se especificaron los grados de desplazamiento hacia otro color alternativo. Se setea por defecto.", LOG_WARNING );
-			} else {
-				try {
-					desplazamiento = root["color-alternativo"].get( "desplazamiento", COLOR_DESPLAZAMIENTO_DEFAULT ).asFloat();
-					log( "Se cargaron los grados de el desplazamiento hacia el color alternativo.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
-					log( "Los grados de desplazameinto hacia el color alternativo especificados no son un numero valido. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-			SDL_Window* window = ventana->getWindow();
-			SDL_PixelFormat* format = SDL_GetWindowSurface(window)->format;
-			personajes[1]->colorAlternativo(format, h_inicial, h_final, desplazamiento);
-		}
-
 	}
 
 
