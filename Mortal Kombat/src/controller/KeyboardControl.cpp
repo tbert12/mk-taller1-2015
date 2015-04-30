@@ -42,9 +42,7 @@ void KeyboardControl::KeyPressed(){
 				personaje->pinaBaja();
 				break;
 			case SDLK_s:
-				if ( (personaje->getSentidoDeMovimiento() > 0 && keystate[SDL_SCANCODE_LEFT])
-						or (personaje->getSentidoDeMovimiento() < 0 && keystate[SDL_SCANCODE_RIGHT]) ) {
-					personaje->patadaCircular();					} else personaje->patadaBaja();
+				personaje->patadaBaja();
 				break;
 			case SDLK_q:
 				personaje->pinaAlta();
@@ -69,8 +67,8 @@ void KeyboardControl::KeyState(){
 	if(!keystate[SDL_SCANCODE_DOWN])
 		personaje->Levantarse();
 
-	//if(!keystate[SDL_SCANCODE_D]);
-		//personaje->DejarDeCubrir();
+	if(!keystate[SDL_SCANCODE_D])
+		personaje->dejarDeCubrirse();
 }
 
 KeyboardControl::~KeyboardControl() {

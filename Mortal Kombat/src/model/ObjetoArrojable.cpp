@@ -30,6 +30,10 @@ bool ObjetoArrojable::lanzar(float pos_x, float pos_y){
 	return true;
 }
 
+void ObjetoArrojable::_Update(){
+
+}
+
 void ObjetoArrojable::renderizar(float x_dist_ventana, float posOtherPlayer){
 	//si no tiene vida no lo renderizo
 	if (!vida) return;
