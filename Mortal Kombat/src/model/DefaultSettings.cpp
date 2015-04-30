@@ -158,15 +158,12 @@ vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, 
 	return sprites;
 }
 
-void mapaComandosDefault() {
+void mapaComandosDefault(map<string, int>* comandos) {
 
-	comandos["pina baja"] = COMANDO_PINA_BAJA_DEFAULT;
-	comandos["patada baja"] = COMANDO_PATADA_BAJA_DEFAULT;
-	comandos["pina alta"] = COMANDO_PINA_ALTA_DEFAULT;
-	comandos["patada alta"] = COMANDO_PATADA_ALTA_DEFAULT;
-	comandos["cubrirse"] = COMANDO_CUBRIRSE_DEFAULT;
-	comandos["lanzar arma"] = COMANDO_LANZAR_ARMA_DEFAULT;
-
+	*comandos = { {string("pina baja"), COMANDO_PINA_BAJA_DEFAULT},
+			{string("patada baja"), COMANDO_PATADA_BAJA_DEFAULT}, {string("pina alta"), COMANDO_PINA_ALTA_DEFAULT},
+				{string("patada alta"), COMANDO_PATADA_ALTA_DEFAULT}, {string("cubrirse"), COMANDO_CUBRIRSE_DEFAULT},
+					{string("lanzar arma"), COMANDO_LANZAR_ARMA_DEFAULT} };
 }
 
 

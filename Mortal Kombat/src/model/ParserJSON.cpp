@@ -4,6 +4,7 @@ using namespace std;
 
 ParserJSON::ParserJSON(string ruta_archivo) {
 	m_ruta_archivo = ruta_archivo;
+	comandos = NULL;
 }
 
 ParserJSON::~ParserJSON() {
@@ -61,6 +62,10 @@ float ParserJSON::getRatioYPersonaje( Json::Value root_sprites, float personaje_
 	return ratio_y_personaje;
 }
 
+// Devuelve el puntero al mapa de comandos.
+map<string, int>* ParserJSON::getComandos() {
+	return comandos;
+}
 
 
 Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const char accion_sprite[], string spritesheet_accion, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color, float h_inicial, float h_final, float desplazamiento ) {
@@ -312,7 +317,7 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 
 }
 
-void ParserJSON::cargarComando(Json::Value botones, const char* accion, int comando_default) {
+int ParserJSON::cargarComando( Json::Value botones, const char* accion, int comando_default) {
 	int comando_accion;
 	if ( ! botones.isMember(accion) ) {
 		comando_accion = comando_default;
@@ -327,34 +332,42 @@ void ParserJSON::cargarComando(Json::Value botones, const char* accion, int coma
 			log( "El boton correspondiente a la accion no es un numero valido. Se setea por defecto.", LOG_ERROR );
 		}
 	}
-	comandos[accion] = comando_accion;
+	return comando_accion;
 }
 
 
 void ParserJSON::cargarMapaComandos(Json::Value root) {
+
 	if ( ! root.isMember("botones") ) {
 		log("No se especificaron parametros para el mapeo de comandos y botones. Se setean por defecto.", LOG_WARNING);
-		mapaComandosDefault();
+		mapaComandosDefault(comandos);
 		return;
 	}
 
+
 	log("Se cargara la configuracion del comando de pina baja.", LOG_DEBUG);
-	cargarComando(root["botones"], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
+	int comando_pina_baja = cargarComando(root["botones"], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de patada baja.", LOG_DEBUG);
-	cargarComando(root["botones"], "patada baja", COMANDO_PATADA_BAJA_DEFAULT);
+	int comando_patada_baja = cargarComando(root["botones"], "patada baja", COMANDO_PATADA_BAJA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de pina alta.", LOG_DEBUG);
-	cargarComando(root["botones"], "pina alta", COMANDO_PINA_ALTA_DEFAULT);
+	int comando_pina_alta = cargarComando(root["botones"], "pina alta", COMANDO_PINA_ALTA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de patada alta.", LOG_DEBUG);
-	cargarComando(root["botones"], "patada alta", COMANDO_PATADA_ALTA_DEFAULT);
+	int comando_patada_alta = cargarComando(root["botones"], "patada alta", COMANDO_PATADA_ALTA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de cubrirse.", LOG_DEBUG);
-	cargarComando(root["botones"], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
+	int comando_cubrirse = cargarComando(root["botones"], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
 
 	log("Se cargara la configuracion del comando de lanzar arma arrojable.", LOG_DEBUG);
-	cargarComando(root["botones"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
+	int comando_lanzar_arma = cargarComando(root["botones"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
+
+	map<string, int> mapa_comandos = { {string("pina baja"), comando_pina_baja}, {string("patada baja"), comando_patada_baja},
+		{string("pina alta"), comando_pina_alta}, {string("patada alta"), comando_patada_alta},
+			{string("cubrirse"), comando_cubrirse}, {string("lanzar arma"), comando_lanzar_arma} };
+
+	comandos = &mapa_comandos;
 
 	log( "Se cargo correctamente el mapa de comandos y botones del controlador.", LOG_DEBUG );
 
