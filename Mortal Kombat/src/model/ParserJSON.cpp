@@ -312,108 +312,49 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 
 }
 
+void ParserJSON::cargarComando(Json::Value botones, const char* accion, int comando_default) {
+	int comando_accion;
+	if ( ! botones.isMember(accion) ) {
+		comando_accion = comando_default;
+		log("No se especifico la configuracion del comando de la accion. Se setea por defecto.", LOG_WARNING);
+	} else {
+		try {
+			comando_accion = botones.get( accion, -1 ).asInt();
+			if ( comando_accion == -1 )
+				comando_accion = comando_default;
+		} catch ( exception &e ) {
+			comando_accion = comando_default;
+			log( "El boton correspondiente a la accion no es un numero valido. Se setea por defecto.", LOG_ERROR );
+		}
+	}
+	comandos[accion] = comando_accion;
+}
+
 
 void ParserJSON::cargarMapaComandos(Json::Value root) {
 	if ( ! root.isMember("botones") ) {
+		log("No se especificaron parametros para el mapeo de comandos y botones. Se setean por defecto.", LOG_WARNING);
 		mapaComandosDefault();
 		return;
 	}
 
-	char pina_baja;
-	if ( ! root["botones"].isMember("pina baja") ) {
-		pina_baja = COMANDO_PINA_BAJA_DEFAULT;
-	} else {
-		try {
-			string pina_baja_s;
-			pina_baja_s = root["botones"].get( "pina baja", "" ).asString();
-			if ( pina_baja_s == "" ) pina_baja = COMANDO_PINA_BAJA_DEFAULT;
-			pina_baja = pina_baja_s[0];
-		} catch ( exception &e ) {
-			pina_baja = COMANDO_PINA_BAJA_DEFAULT;
-			log( "El boton correspondiente a la pina baja no es un caracter valido.", LOG_ERROR );
-		}
-	}
-	comandos["pina baja"] = pina_baja;
+	log("Se cargara la configuracion del comando de pina baja.", LOG_DEBUG);
+	cargarComando(root["botones"], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
 
-	char pina_alta;
-	if ( ! root["botones"].isMember("pina alta") ) {
-		pina_alta = COMANDO_PINA_ALTA_DEFAULT;
-	} else {
-		try {
-			string pina_alta_s;
-			pina_alta_s = root["botones"].get( "pina alta", "" ).asString();
-			if ( pina_alta_s == "" ) pina_alta = COMANDO_PINA_ALTA_DEFAULT;
-			pina_alta = pina_alta_s[0];
-		} catch ( exception &e ) {
-			pina_alta = COMANDO_PINA_ALTA_DEFAULT;
-			log( "El boton correspondiente a la pina alta no es un caracter valido.", LOG_ERROR );
-		}
-	}
-	comandos["pina alta"] = pina_alta;
+	log("Se cargara la configuracion del comando de patada baja.", LOG_DEBUG);
+	cargarComando(root["botones"], "patada baja", COMANDO_PATADA_BAJA_DEFAULT);
 
-	char patada_baja;
-	if ( ! root["botones"].isMember("patada baja") ) {
-		patada_baja = COMANDO_PATADA_BAJA_DEFAULT;
-	} else {
-		try {
-			string patada_baja_s;
-			patada_baja_s = root["botones"].get( "patada baja", "" ).asString();
-			if ( patada_baja_s == "" ) patada_baja = COMANDO_PATADA_BAJA_DEFAULT;
-			patada_baja = patada_baja_s[0];
-		} catch ( exception &e ) {
-			patada_baja = COMANDO_PATADA_BAJA_DEFAULT;
-			log( "El boton correspondiente a la patada baja no es un caracter valido.", LOG_ERROR );
-		}
-	}
-	comandos["patada baja"] = patada_baja;
+	log("Se cargara la configuracion del comando de pina alta.", LOG_DEBUG);
+	cargarComando(root["botones"], "pina alta", COMANDO_PINA_ALTA_DEFAULT);
 
-	char patada_alta;
-	if ( ! root["botones"].isMember("patada alta") ) {
-		patada_alta = COMANDO_PATADA_ALTA_DEFAULT;
-	} else {
-		try {
-			string patada_alta_s;
-			patada_alta_s = root["botones"].get( "patada alta", "" ).asString();
-			if ( patada_alta_s == "" ) patada_alta = COMANDO_PATADA_ALTA_DEFAULT;
-			patada_alta = patada_alta_s[0];
-		} catch ( exception &e ) {
-			patada_alta = COMANDO_PATADA_ALTA_DEFAULT;
-			log( "El boton correspondiente a la patada alta no es un caracter valido.", LOG_ERROR );
-		}
-	}
-	comandos["patada alta"] = patada_alta;
+	log("Se cargara la configuracion del comando de patada alta.", LOG_DEBUG);
+	cargarComando(root["botones"], "patada alta", COMANDO_PATADA_ALTA_DEFAULT);
 
-	char cubrirse;
-	if ( ! root["botones"].isMember("cubrirse") ) {
-		cubrirse = COMANDO_CUBRIRSE_DEFAULT;
-	} else {
-		try {
-			string cubrirse_s;
-			cubrirse_s = root["botones"].get( "cubrirse", "" ).asString();
-			if ( cubrirse_s == "" ) cubrirse = COMANDO_CUBRIRSE_DEFAULT;
-			cubrirse = cubrirse_s[0];
-		} catch ( exception &e ) {
-			cubrirse = COMANDO_CUBRIRSE_DEFAULT;
-			log( "El boton correspondiente al comando de cubrirse no es un caracter valido.", LOG_ERROR );
-		}
-	}
-	comandos["cubrirse"] = cubrirse;
+	log("Se cargara la configuracion del comando de cubrirse.", LOG_DEBUG);
+	cargarComando(root["botones"], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
 
-	char lanzar_arma;
-	if ( ! root["botones"].isMember("lanzar arma") ) {
-		lanzar_arma = COMANDO_LANZAR_ARMA_DEFAULT;
-	} else {
-		try {
-			string lanzar_arma_s;
-			lanzar_arma_s = root["botones"].get( "lanzar_arma", "" ).asString();
-			if ( lanzar_arma_s == "" ) lanzar_arma = COMANDO_LANZAR_ARMA_DEFAULT;
-			lanzar_arma = lanzar_arma_s[0];
-		} catch ( exception &e ) {
-			lanzar_arma = COMANDO_LANZAR_ARMA_DEFAULT;
-			log( "El boton correspondiente al comando de lanzar el arma arrojable no es un caracter valido.", LOG_ERROR );
-		}
-	}
-	comandos["lanzar arma"] = lanzar_arma;
+	log("Se cargara la configuracion del comando de lanzar arma arrojable.", LOG_DEBUG);
+	cargarComando(root["botones"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
 
 	log( "Se cargo correctamente el mapa de comandos y botones del controlador.", LOG_DEBUG );
 

@@ -66,11 +66,11 @@
 	},
 	
 	"botones": {
-		"pina baja": "a",
-		"patada baja": "s",
-		"pina alta": "q",
-		"patada alta": "w",
-		"cubrirse": "d",
-		"lanzar arma": "e"
+		"pina baja": 97,
+		"patada baja": 115,
+		"pina alta": 113,
+		"patada alta": 119,
+		"cubrirse": 100,
+		"lanzar arma": 101
 	}
 }

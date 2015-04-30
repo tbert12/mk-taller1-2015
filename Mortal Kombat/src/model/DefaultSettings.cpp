@@ -2,7 +2,7 @@
 
 using namespace std;
 
-map<const char*, char> comandos;
+map<const char*, int> comandos;
 
 
 Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color, float h_inicial, float h_final, float h_desplazamiento ) {

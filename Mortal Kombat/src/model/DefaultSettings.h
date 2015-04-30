@@ -64,12 +64,12 @@ const char* const SPRITESHEET_RECIBIR_GOLPE_ALTO_DEFAULT = "recibeGolpeAlto.png"
 const char* const SPRITESHEET_RECIBIR_GOLPE_BAJO_DEFAULT = "recibeGolpeBajo.png";
 const char* const SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT = "recibeGolpeFuerte.png";
 
-const char COMANDO_PINA_BAJA_DEFAULT = 'a';
-const char COMANDO_PATADA_BAJA_DEFAULT = 's';
-const char COMANDO_PINA_ALTA_DEFAULT = 'q';
-const char COMANDO_PATADA_ALTA_DEFAULT = 'w';
-const char COMANDO_CUBRIRSE_DEFAULT = 'd';
-const char COMANDO_LANZAR_ARMA_DEFAULT = 'e';
+const int COMANDO_PINA_BAJA_DEFAULT = 97;
+const int COMANDO_PATADA_BAJA_DEFAULT = 115;
+const int COMANDO_PINA_ALTA_DEFAULT = 113;
+const int COMANDO_PATADA_ALTA_DEFAULT = 119;
+const int COMANDO_CUBRIRSE_DEFAULT = 100;
+const int COMANDO_LANZAR_ARMA_DEFAULT = 101;
 
 const int COLOR_H_INICIAL_DEFAULT = 40;
 const int COLOR_H_FINAL_DEFAULT = 45;
@@ -78,7 +78,7 @@ const int COLOR_DESPLAZAMIENTO_DEFAULT = 30;
 const char* const IMAGEN_CARGANDO_JUEGO = "data/img/background/inicio.png";
 
 
-extern map<const char*, char> comandos;
+extern map<const char*, int> comandos;
 
 const float PERSONAJE_VELOCIDAD = 7.0;
 
