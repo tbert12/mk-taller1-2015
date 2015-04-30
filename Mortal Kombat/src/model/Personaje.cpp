@@ -254,6 +254,7 @@ void Personaje::_cubrirseParado(){
 }
 
 void Personaje::dejarDeCubrirse() {
+	if ( !_estaCubriendose ) return;
 	spriteActual->doLoop(true);
 	spriteActual->doReverse(true);
 	_estaCubriendose = false;
