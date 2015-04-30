@@ -74,20 +74,28 @@ int main( int argc, char* args[] )
 				control->Pressed();
 
 			} catch ( std::runtime_error &e ) {
-				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_DEBUG );
+				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_WARNING );
 				free(mundo,control);
+				log ( "Refresh: se libero la memoria de lo cargado anteriormente", LOG_WARNING );
+
 
 				mundo = cargarMundo();
-				if (mundo == NULL) return 1;
-				log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
+				if (mundo == NULL){
+					log ( "No se pudo cargar el mundo luego del refresh, se cierra el programa", LOG_ERROR );
+					return 1;
+				}
+				log( "Se creo correctamente el Mundo de la partida, luego del refresh", LOG_DEBUG );
 
 				//Creo el Controlador
 				control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1));
+				printf("paso esto\n");
 			}
 		}
 
-		mundo->render();
-
+		//si no esta en pausa
+		if (!control->pausa()){
+			mundo->render();
+		}
 
 		//Sleep(Microsegundos)
 		usleep(50000);

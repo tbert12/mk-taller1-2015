@@ -20,6 +20,7 @@ private:
 	Personaje* personaje;
 	const Uint8* keystate;
 	SDL_Event* evento;
+	bool pausa;
 
 public:
 	KeyboardControl(SDL_Event* e, Personaje*);
@@ -27,6 +28,7 @@ public:
 
 	void KeyPressed();
 	void KeyState();
+	bool pause();
 };
 
 #endif /* SRC_CONTROLLER_KEYBOARDCONTROL_H_ */
