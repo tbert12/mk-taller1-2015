@@ -86,8 +86,8 @@ const float PERSONAJE_VELOCIDAD = 7.0;
 using namespace std;
 
 
-Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color = false);
-vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color = false );
+Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float h_desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT);
+vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float h_desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT );
 void mapaComandosDefault();
 Mundo* generarMundoDefault();
 

@@ -819,8 +819,9 @@ Mundo* ParserJSON::cargarMundo() {
 				try {
 					h_inicial = root["color-alternativo"].get( "h-inicial", COLOR_H_INICIAL_DEFAULT ).asFloat();
 					if ( h_inicial < 0 ) {
-						h_inicial = fabs(h_inicial);
-						log( "El hue inicial no puede ser negativo. Se le aplica modulo.", LOG_WARNING );
+						h_inicial = fmod(h_inicial, 360);
+						h_inicial = 360 - h_inicial;
+						log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
 					}
 					if ( h_inicial > 360 ) {
 						h_inicial = fmod(h_inicial, 360);
@@ -839,8 +840,9 @@ Mundo* ParserJSON::cargarMundo() {
 				try {
 					h_final = root["color-alternativo"].get( "h-final", COLOR_H_FINAL_DEFAULT ).asFloat();
 					if ( h_final < 0 ) {
-						h_final = fabs(h_final);
-						log( "El hue final no puede ser negativo. Se le aplica modulo.", LOG_WARNING );
+						h_final = fmod(h_final, 360);
+						h_final = 360 - h_final;
+						log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
 					}
 					if ( h_final > 360 ) {
 						h_final = fmod(h_final, 360);
@@ -967,6 +969,8 @@ Mundo* ParserJSON::cargarMundo() {
 			}
 			// Creo Sprites del personaje.
 			vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, personaje_ancho, personaje_alto, cambiar_color, h_inicial, h_final, desplazamiento);
+			// El color se cambia una sola vez, unicamente para el personaje 1.
+			cambiar_color = false;
 
 			// Crear personaje.
 			Personaje* personaje = new Personaje(personaje_nombre, sprites, PERSONAJE_VELOCIDAD, flipped);
