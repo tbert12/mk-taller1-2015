@@ -1,5 +1,4 @@
-/*
- * main.cpp
+/* main.cpp
  *
  *  Created on: 26/3/2015
  *      Author: tomi
@@ -18,7 +17,7 @@
 
 #include <algorithm>    // std::reverse (Tranfuguiada para que camine para atras)
 
-#include "../controller/KeyboardControl.h"
+#include "../controller/Controller.h"
 #include "../view/Ventana.h"
 #include "Personaje.h"
 
@@ -41,17 +40,14 @@ Mundo* cargarMundo(){
 	return unMundo;
 }
 
-void free(Mundo* mundo,KeyboardControl* c1/*,KeyboardControl* c2*/){
+void free(Mundo* mundo,Controller* c1){
 	delete mundo;
 	delete c1;
-	//delete c2;
 }
 
 int main( int argc, char* args[] )
 {
 
-	// ATENCION: hasta no cargar los sprites de Noob Saibot en el sprites.json por defecto,
-	// no podemos romper el json de configuración inicial (Parallax) porque pincha el programa, lógicamente.
 
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
@@ -66,35 +62,27 @@ int main( int argc, char* args[] )
 		return 1;
 	}
 
-	SDL_Event event;
-
-	//Creo los Controladores
-	KeyboardControl* control_jugador_1 = new KeyboardControl(event, comandos, mundo->getPersonaje(0));
-	//KeyboardControl* control_jugador_2 = new KeyboardControl(event, comandos, mundo->getPersonaje(1));
+	//Creo el Controlador
+	Controller* control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1));
 
 	//While Principal
-	while( !control_jugador_1->getQuit() /*&& !control_jugador_2->getQuit()*/ ){
-		control_jugador_1->KeyState();
-		//control_jugador_2->KeyState();
-		//Eventos */
-		while( control_jugador_1->PollEvent() /*or control_jugador_2->PollEvent()*/ ){
+	while( !control->Quit()){
+		control->KeyState();
+		while( control->PollEvent()){
 			try {
 
-				control_jugador_1->KeyPressed();
-				//control_jugador_2->KeyPressed();
+				control->Pressed();
 
 			} catch ( std::runtime_error &e ) {
 				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_DEBUG );
-				free(mundo,control_jugador_1/*,control_jugador_2*/);
+				free(mundo,control);
 
 				mundo = cargarMundo();
 				if (mundo == NULL) return 1;
 				log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
 
-				//Creo los Controladores
-				control_jugador_1 = new KeyboardControl(event, comandos, mundo->getPersonaje(0));
-				//control_jugador_2 = new KeyboardControl(event, comandos, mundo->getPersonaje(1));
-
+				//Creo el Controlador
+				control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1));
 			}
 		}
 
@@ -106,7 +94,7 @@ int main( int argc, char* args[] )
 	}
 
 
-	free(mundo,control_jugador_1/*,control_jugador_2*/);
+	free(mundo,control);
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 
 	return 0;
