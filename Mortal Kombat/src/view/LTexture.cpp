@@ -144,62 +144,61 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 		//Color de Imagen
 		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
+		//Dimensiones de imagen
+		mWidth = loadedSurface->w;
+		mHeight = loadedSurface->h;
+
+
+		if ( cambiar_color ) {
+
+			//If the surface must be locked
+			if( SDL_MUSTLOCK( loadedSurface ) ) {
+				//Lock the surface
+				SDL_LockSurface( loadedSurface );
+			}
+
+			//Convert the pixels to 32 bit
+			Uint32* pixels = (Uint32*)loadedSurface->pixels;
+
+			//Color key pixels
+			for( int i = 0; i < loadedSurface->pitch; ++i ) {
+
+				// Obtengo color RGB del pixel.
+				Uint8 r, g, b;
+				float h, s, v;
+				SDL_GetRGB( pixels[i], loadedSurface->format, &r, &g, &b);
+
+				// Transformo de RGB a HSV. Si el hue cae en el rango especificado, se desplaza.
+				RGBaHSV(r, g, b, &h, &s, &v);
+
+				bool hayQuePintar = false;
+				if ( h >= h_inicial && h <= h_final ) {
+					desplazarHue(&h, desplazamiento);
+					hayQuePintar = true;
+				}
+
+				// Vuelvo a transformar a coordenadas RGB.
+				HSVaRGB(h, s, v, &r, &g, &b);
+
+				// Pinto el pixel con el nuevo color.
+				if ( hayQuePintar ) {
+					Uint32 nuevoColor = SDL_MapRGB( loadedSurface->format, r, g, b );
+					pixels[i] = nuevoColor;
+				}
+
+			}
+
+			//Unlock surface
+			if( SDL_MUSTLOCK( loadedSurface ) ) {
+				SDL_UnlockSurface( loadedSurface );
+			}
+		}
+
 		//Crear textura desde Surface por pixer
 		nuevaTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
 		if( nuevaTexture == NULL ) {
 			log( string("No se puede crear textura desde") + string( ruta.c_str() ),LOG_ERROR);
 			return false;
-		} else {
-			//Dimensiones de imagen
-			mWidth = loadedSurface->w;
-			mHeight = loadedSurface->h;
-
-
-			if ( cambiar_color ) {
-
-				//If the surface must be locked
-				if( SDL_MUSTLOCK( loadedSurface ) ) {
-					//Lock the surface
-					SDL_LockSurface( loadedSurface );
-				}
-
-				//Convert the pixels to 32 bit
-				Uint32* pixels = (Uint32*)loadedSurface->pixels;
-
-				//Color key pixels
-				for( int i = 0; i < loadedSurface->pitch; ++i ) {
-
-					// Obtengo color RGB del pixel.
-					Uint8 r, g, b;
-					float h, s, v;
-					SDL_GetRGB( pixels[i], loadedSurface->format, &r, &g, &b);
-
-					// Transformo de RGB a HSV. Si el hue cae en el rango especificado, se desplaza.
-					RGBaHSV(r, g, b, &h, &s, &v);
-
-					bool hayQuePintar = false;
-					if ( h >= h_inicial && h <= h_final ) {
-						desplazarHue(&h, desplazamiento);
-						hayQuePintar = true;
-					}
-
-					// Vuelvo a transformar a coordenadas RGB.
-					HSVaRGB(h, s, v, &r, &g, &b);
-
-					// Pinto el pixel con el nuevo color.
-					if ( hayQuePintar ) {
-						Uint32 nuevoColor = SDL_MapRGB( loadedSurface->format, r, g, b );
-						pixels[i] = nuevoColor;
-					}
-
-				}
-
-				//Unlock surface
-				if( SDL_MUSTLOCK( loadedSurface ) ) {
-					SDL_UnlockSurface( loadedSurface );
-				}
-			}
-
 		}
 
 		//Liberar la imagen cargada
@@ -211,8 +210,7 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 	return true;
 }
 
-void LTexture::free()
-{
+void LTexture::free() {
 	//Free texture if it exists
 	if( mTexture != NULL )
 	{
