@@ -1,220 +1,259 @@
 {
-	"parado": {
-		"nombre": "initial.png",
+	"agachar":{
+		"nombre":"agachar.png",
 		"frames":[
-			{	
-				"x": 0,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 72
+			{
+				"x":128,
+				"y":0,
+				"Alto":107,
+				"Ancho":60
 			},
-			{	
-				"x": 72,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 72
+			{
+				"x":65,
+				"y":0,
+				"Alto":89,
+				"Ancho":62
 			},
-			{	
-				"x": 144,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 72
-			},
-			{	
-				"x": 216,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 72
-			},
-			{	
-				"x": 288,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 72
-			},
-			{	
-				"x": 360,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 72
-			},
-			{	
-				"x": 432,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 72
-			},
-			{	
-				"x": 504,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 72
-			},
-			{	
-				"x": 576,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 72
+			{
+				"x":0,
+				"y":0,
+				"Alto":71,
+				"Ancho":64
 			}
 		]
 	},
 	"caminar":{
-		"nombre": "walk.png",
+		"nombre":"caminar.png",
 		"frames":[
-			{	
-				"x": 0,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 68
+			{
+				"x":69,
+				"y":0,
+				"Alto":128,
+				"Ancho":64
 			},
-			{	
-				"x": 68,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 68
+			{
+				"x":134,
+				"y":0,
+				"Alto":133,
+				"Ancho":63
 			},
-			{	
-				"x": 136,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 68
+			{
+				"x":198,
+				"y":0,
+				"Alto":131,
+				"Ancho":63
 			},
-			{	
-				"x": 204,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 68
+			{
+				"x":262,
+				"y":0,
+				"Alto":129,
+				"Ancho":63
 			},
-			{	
-				"x": 272,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 68
+			{
+				"x":128,
+				"y":134,
+				"Alto":128,
+				"Ancho":63
 			},
-			{	
-				"x": 340,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 68
+			{
+				"x":192,
+				"y":134,
+				"Alto":128,
+				"Ancho":63
 			},
-			{	
-				"x": 408,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 68
+			{
+				"x":0,
+				"y":130,
+				"Alto":129,
+				"Ancho":63
 			},
-			{	
-				"x": 476,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 68
+			{
+				"x":64,
+				"y":130,
+				"Alto":129,
+				"Ancho":63
 			},
-			{	
-				"x": 544,
-				"y": 0,
-				"Alto": 133,
-				"Ancho": 68
+			{
+				"x":0,
+				"y":0,
+				"Alto":129,
+				"Ancho":68
+			}
+		]
+	},
+	"parado":{
+		"nombre":"parado.png",
+		"frames":[
+			{
+				"x":0,
+				"y":129,
+				"Alto":129,
+				"Ancho":63
+			},
+			{
+				"x":192,
+				"y":130,
+				"Alto":129,
+				"Ancho":62
+			},
+			{
+				"x":128,
+				"y":130,
+				"Alto":128,
+				"Ancho":63
+			},
+			{
+				"x":262,
+				"y":0,
+				"Alto":128,
+				"Ancho":64
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":128,
+				"Ancho":65
+			},
+			{
+				"x":66,
+				"y":0,
+				"Alto":128,
+				"Ancho":65
+			},
+			{
+				"x":132,
+				"y":0,
+				"Alto":129,
+				"Ancho":64
+			},
+			{
+				"x":197,
+				"y":0,
+				"Alto":129,
+				"Ancho":64
+			},
+			{
+				"x":64,
+				"y":129,
+				"Alto":129,
+				"Ancho":63
+			}
+		]
+	},
+	"patadaAlta":{
+		"nombre":"patadaAlta.png",
+		"frames":[
+			{
+				"x":103,
+				"y":123,
+				"Alto":130,
+				"Ancho":83
+			},
+			{
+				"x":198,
+				"y":0,
+				"Alto":136,
+				"Ancho":82
+			},
+			{
+				"x":281,
+				"y":0,
+				"Alto":136,
+				"Ancho":74
+			},
+			{
+				"x":0,
+				"y":133,
+				"Alto":128,
+				"Ancho":67
+			},
+			{
+				"x":103,
+				"y":0,
+				"Alto":122,
+				"Ancho":94
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":132,
+				"Ancho":102
 			}
 		]
 	},
 	"saltar":{
-		"nombre": "salto.png",
+		"nombre":"saltar.png",
 		"frames":[
-			{	
-				"x": 0,
-				"y": 0,
-				"Alto": 139,
-				"Ancho": 69
+			{
+				"x":71,
+				"y":0,
+				"Alto":139,
+				"Ancho":68
 			},
-			{	
-				"x": 71,
-				"y": 0,
-				"Alto": 96,
-				"Ancho": 70,
-				"loop": true
+			{
+				"x":0,
+				"y":0,
+				"Alto":96,
+				"Ancho":70
 			},
-			{	
-				"x": 141,
-				"y": 0,
-				"Alto": 107,
-				"Ancho": 60
+			{
+				"x":0,
+				"y":97,
+				"Alto":107,
+				"Ancho":60
 			}
 		]
 	},
 	"saltardiagonal":{
-		"nombre": "diag.png",
+		"nombre":"saltardiagonal.png",
 		"frames":[
-			{	
-				"x": 0,
-				"y": 0,
-				"Alto": 136,
-				"Ancho": 72
+			{
+				"x":0,
+				"y":112,
+				"Alto":136,
+				"Ancho":71
 			},
-			{	
-				"x": 72,
-				"y": 0,
-				"Alto": 82,
-				"Ancho": 55
+			{
+				"x":150,
+				"y":0,
+				"Alto":74,
+				"Ancho":55
 			},
-			{	
-				"x": 127,
-				"y": 0,
-				"Alto": 59,
-				"Ancho": 74
+			{
+				"x":75,
+				"y":0,
+				"Alto":52,
+				"Ancho":74
 			},
-			{	
-				"x": 208,
-				"y": 0,
-				"Alto": 55,
-				"Ancho": 74
+			{
+				"x":0,
+				"y":0,
+				"Alto":55,
+				"Ancho":74
 			},
-			{	
-				"x": 283,
-				"y": 0,
-				"Alto": 81,
-				"Ancho": 53
+			{
+				"x":150,
+				"y":75,
+				"Alto":74,
+				"Ancho":53
 			},
-			{	
-				"x": 338,
-				"y": 0,
-				"Alto": 81,
-				"Ancho": 55
+			{
+				"x":75,
+				"y":106,
+				"Alto":73,
+				"Ancho":55
 			},
-			{	
-				"x": 392,
-				"y": 0,
-				"Alto": 59,
-				"Ancho": 75
+			{
+				"x":75,
+				"y":53,
+				"Alto":52,
+				"Ancho":74
 			},
-			{	
-				"x": 472,
-				"y": 0,
-				"Alto": 62,
-				"Ancho": 74
-			}
-		]
-	},
-	"agachar":{
-		"nombre": "agachar.png",
-		"frames":[
-			{	
-				"x": 0,
-				"y": 0,
-				"Alto": 107,
-				"Ancho": 60
-			},
-			{	
-				"x": 60,
-				"y": 0,
-				"Alto": 89,
-				"Ancho": 62
-			},
-			{	
-				"x": 122,
-				"y": 0,
-				"Alto": 71,
-				"Ancho": 64,
-				"loop": true
+			{
+				"x":0,
+				"y":56,
+				"Alto":55,
+				"Ancho":74
 			}
 		]
 	},
@@ -721,8 +760,8 @@
 			}
 		]
 	},
-	"patadaAlta":{
-		"nombre":"patadaAlta.png",
+	"patadaBaja":{
+		"nombre":"patadaBaja.png",
 		"frames":[
 			{
 				"x":0,
