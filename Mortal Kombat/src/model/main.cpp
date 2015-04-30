@@ -88,7 +88,6 @@ int main( int argc, char* args[] )
 
 				//Creo el Controlador
 				control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1));
-				printf("paso esto\n");
 			}
 		}
 

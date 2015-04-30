@@ -1,17 +1,17 @@
 /*
- * Objeto.h
+ * ObjetoArrojable.h
  *
  *  Created on: 28/4/2015
  *      Author: facu
  */
 
-#ifndef SRC_MODEL_OBJETO_H_
-#define SRC_MODEL_OBJETO_H_
+#ifndef SRC_MODEL_OBJETOARROJABLE_H_
+#define SRC_MODEL_OBJETOARROJABLE_H_
 
 #include <string>
 #include "../view/Sprite.h"
 
-class Objeto {
+class ObjetoArrojable {
 private:
 	std::string nombre;
 	bool vida;
@@ -22,11 +22,14 @@ private:
 	float m_AltoMundo;
 	float m_AnchoMundo;
 
+	void _Update();
+
 public:
-	Objeto();
+	ObjetoArrojable(string un_nombre,float velocidad,std::vector<Sprite*> unos_sprites);
 	bool lanzar(float pos_x,float pos_y);
 	void renderizar(float x_dist_ventana, float posOtherPlayer);
-	virtual ~Objeto();
+	void setDimensionesMundo(float alto,float ancho);
+	virtual ~ObjetoArrojable();
 };
 
-#endif /* SRC_MODEL_OBJETO_H_ */
+#endif /* SRC_MODEL_OBJETOARROJABLE_H_ */

@@ -20,6 +20,7 @@ const int SPRITE_CUBRIRSE=        9;
 const int SPRITE_CUBRIRSE_AGACHADO=    10;
 const int SPRITE_GANCHO=         12;
 const int SPRITE_PATADA_ALTA=    14;
+//const int SPRITE_PATADA_BAJA=    15;
 const int SPRITE_PATADA_CIRCULAR=15;
 const int SPRITE_PATADA_SALTANDO=16;
 const int SPRITE_PINA_AGACHADO=  17;
@@ -27,7 +28,7 @@ const int SPRITE_PINA_ALTA=		 18;
 const int SPRITE_PINA_BAJA=		 19;
 const int SPRITE_PINA_SALTANDO=  20;
 
-const int TIEMPOTOTALDESALTO = 8;
+const int TIEMPOTOTALDESALTO = 14;
 
 #include <stdio.h>
 #include <iostream>
@@ -39,28 +40,30 @@ class Personaje {
 private:
 	std::string nombre;
 
-	float vida;
+	int vida;
+
 	float m_xActual;
 	float m_yActual;
-	float m_xInicial;
-	float m_yInicial;
+	float m_yPiso;
+
+	bool m_fliped;
+
 	float maxAlturaDeSalto;
 	int tiempoDeSalto;
+	// 0 Cae del Salto, 1 Saltando, -1 No esta Saltanto
 	short _estaSaltando;
-	bool m_fliped;
-	bool sigueAgachado;
-	bool estaAtacando;
-	bool estaCubriendose;
 
-	float velocidadAdelante;
-	float velocidadAtras;
+	bool _estaCubriendose;
+	bool _estaAgachado;
+
 	float m_velocidad;
-
-	Sprite* spriteActual;
-	std::vector<Sprite*> sprites;
+	float m_velocidadActual;
 
 	float m_AltoMundo;
 	float m_AnchoMundo;
+
+	Sprite* spriteActual;
+	std::vector<Sprite*> sprites;
 
 	void _cambiarSprite(int accion);
 
@@ -68,20 +71,24 @@ private:
 	void _SaltarDerecha();
 	void _SaltarIzquierda();
 
-	bool _estaAgachado();
-
 
 	void _parabola();
 	void _actualizarY();
 	float _yDeSalto(float currentY, float currentT);
 
 	void _pinaSaltando();
+	void _patadaSaltando();
+
 	void _pinaAgachado();
 	void _gancho();
-	void _patadaSaltando();
+
 	void _patadaAltaAgachado();
 	void _patadaBajaAgachado();
 
+	void _patadaCircular();
+
+	void _cubrirseAgachado();
+	void _cubrirseParado();
 
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad, bool fliped = false);
@@ -89,22 +96,28 @@ public:
 	std::vector<Sprite*> getSprites();
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
+
 	bool enMovimiento();
+
 	void Update(int velocidadScroll);
 	void renderizar(float x_dist_ventana, float posOtherPlayer);
 
 	void setPosition(float x, float y);
 	void setDimensionesMundo(float h, float w);
-	float getX();
-	float getY();
-	float getVida();
+
 	int getSentidoDeMovimiento();
 	float getVelocidadDerecha();
 	float getVelocidadIzquierda();
+
 	void QuitarVida(int valor);
-	std::string getNombre();
+	int getVida();
+
+	string getNombre();
 	float getAncho();
 	float getAlto();
+	float getX();
+	float getY();
+
 	bool estaAgachado();
 
 	void Inicial();
@@ -112,16 +125,14 @@ public:
 	void Saltar();
 	void Agachar();
 	void Levantarse();
-	void sacarGuardia();
 	void CaminarDerecha();
 	void CaminarIzquierda();
 	void pinaBaja();
 	void pinaAlta();
 	void patadaBaja();
 	void patadaAlta();
-	void patadaCircular();
 	void cubrirse();
-	void cubrirseAgachado();
+	void dejarDeCubrirse();
 
 	virtual ~Personaje();
 };
