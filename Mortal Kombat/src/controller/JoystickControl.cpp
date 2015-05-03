@@ -7,15 +7,44 @@
 
 #include "JoystickControl.h"
 
-JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje) {
+JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos) {
 	personaje = un_personaje;
 	evento = e;
 	pausa = false;
+	comandos = mapa_comandos;
+	//_verificarMapaComandos();
 	_Init(id_joystick);
 }
 
 bool JoystickControl::pause(){
 	return pausa;
+}
+
+void JoystickControl::_verificarMapaComandos(){
+	bool mapa_correcto = false;
+	if (comandos != NULL){
+		mapa_correcto = true;
+		for (std::map<string,int>::iterator it=comandos->begin(); it!=comandos->end(); ++it){
+			//si supera la cantidad de botones del joystick
+			if(it->second >= SDL_JoystickNumButtons(joystick))
+				mapa_correcto = false;
+			if (it->first != PINA_BAJA || it->first != PATADA_BAJA || it->first != PINA_ALTA || it->first != PATADA_ALTA || it->first != CUBRIRSE ||it->first != LANZAR_ARMA)
+				mapa_correcto = false;
+		}
+	}
+
+	//si no es correcto hago uno propio
+	if(!mapa_correcto){
+		log("Los botones del joystick especificados en el Json no son correctos, se crean unos por defecto",LOG_WARNING);
+		std::map<std::string, int>* mapita = new std::map<std::string,int>;
+		mapita->operator[](PINA_BAJA) = JOY_X;
+		mapita->operator[](PATADA_BAJA) = JOY_CIRCULO;
+		mapita->operator[](PINA_ALTA) = JOY_CUADRADO;
+		mapita->operator[](PATADA_ALTA) = JOY_TRIANGULO;
+		mapita->operator[](CUBRIRSE)= JOY_R1;
+		mapita->operator[](LANZAR_ARMA) = JOY_L1;
+		comandos = mapita;
+	}
 }
 
 void JoystickControl::_Init(int id){
@@ -72,32 +101,32 @@ void JoystickControl::JoyPressed(){
 	}
 	//Boton
 	else if (evento->type == SDL_JOYBUTTONUP){
-		switch(evento->jbutton.button){
-			case JOY_X:
-				personaje->pinaBaja();
-				break;
-			case JOY_CUADRADO:
-				personaje->pinaAlta();
-				if (SDL_JoystickGetAxis(joystick,1) > JOYSTICK_DEAD_ZONE )
-					if (joystickHaptic != NULL)
-						SDL_HapticRumblePlay( joystickHaptic, 0.75, 700 );
-				break;
-			case JOY_CIRCULO:
-				personaje->patadaBaja();
-				break;
-			case JOY_TRIANGULO:
+		int boton = evento->jbutton.button;
+		if (boton == comandos->operator[](PATADA_BAJA) )
+			personaje->pinaBaja();
+		else if( boton == comandos->operator [](PINA_ALTA)){
+			personaje->pinaAlta();
+			if (SDL_JoystickGetAxis(joystick,1) > JOYSTICK_DEAD_ZONE )
+				if (joystickHaptic != NULL)
+					SDL_HapticRumblePlay( joystickHaptic, 0.75, 700 );
+		}
+		else if ( boton == comandos->operator [](PATADA_BAJA)){
+			personaje->patadaBaja();
+		}
+		else if ( boton == comandos->operator [](PATADA_ALTA)){
 				personaje->patadaAlta();
-				break;
-			case JOY_R1:
+		}
+		else if ( boton == comandos->operator [](CUBRIRSE)){
 				personaje->cubrirse();
-				break;
-			case JOY_START:
-				pausa = !pausa;
-				break;
+		}
+		else if ( boton == comandos->operator [](LANZAR_ARMA)){
+				//personaje->lanzarObjeto();
+		}
+		else if ( boton == JOY_START){
+			pausa = !pausa;
 		}
 	}
 }
-
 void JoystickControl::JoyState(){
 	Sint16 x_mov = SDL_JoystickGetAxis(joystick,0);
 	Sint16 y_mov = SDL_JoystickGetAxis(joystick,1);
@@ -127,5 +156,7 @@ JoystickControl::~JoystickControl() {
 		SDL_HapticClose(joystickHaptic);
 		joystickHaptic = NULL;
 	}
+	if (comandos != NULL)
+		comandos->clear();
 }
 

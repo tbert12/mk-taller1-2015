@@ -22,6 +22,7 @@
 #include "Personaje.h"
 
 string ruta_archivo_configuracion = "data/config/Parallax.json";
+map<string, int>* mapa_comandos;
 
 Mundo* cargarMundo(){
 	Mundo* unMundo;
@@ -30,6 +31,7 @@ Mundo* cargarMundo(){
 			parser = new ParserJSON( ruta_archivo_configuracion );
 			unMundo = parser->cargarMundo();
 			log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
+			mapa_comandos = parser->getComandos();
 			delete parser;
 		} catch ( std::exception &e ) {
 			log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
@@ -56,14 +58,13 @@ int main( int argc, char* args[] )
 		ruta_archivo_configuracion = args[1];
 	}
 
-
 	Mundo* mundo = cargarMundo();
 	if (mundo == NULL) {
 		return 1;
 	}
 
 	//Creo el Controlador
-	Controller* control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1));
+	Controller* control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos);
 
 	//While Principal
 	while( !control->Quit()){
@@ -84,10 +85,11 @@ int main( int argc, char* args[] )
 					log ( "No se pudo cargar el mundo luego del refresh, se cierra el programa", LOG_ERROR );
 					return 1;
 				}
+
 				log( "Se creo correctamente el Mundo de la partida, luego del refresh", LOG_DEBUG );
 
 				//Creo el Controlador
-				control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1));
+				control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos);
 			}
 		}
 

@@ -26,6 +26,14 @@
 #define JOY_L3 10
 #define JOY_R3 11
 
+//mapa de comandos
+#define PINA_BAJA string("pina baja")
+#define PATADA_BAJA string("patada baja")
+#define PINA_ALTA string("pina alta")
+#define PATADA_ALTA string("patada alta")
+#define	CUBRIRSE string("cubrirse")
+#define LANZAR_ARMA string("lanzar arma")
+
 #define BUTTON_PRESSED 1
 #define BUTTON_UNPRESSED 0
 
@@ -34,10 +42,11 @@
 #include "../model/Personaje.h"
 #include <SDL2/SDL.h>
 #include <string>
+#include <map>
 
 class JoystickControl {
 public:
-	JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje);
+	JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos);
 	void JoyPressed();
 	void JoyState();
 	bool pause();
@@ -48,9 +57,11 @@ private:
 	SDL_Joystick* joystick;
 	SDL_Haptic* joystickHaptic;
 	Personaje* personaje;
+	map<string, int>* comandos;
 	bool pausa;
 
 	void _Init(int id);
+	void _verificarMapaComandos();
 };
 
 #endif /* SRC_CONTROLLER_JOYSTICKCONTROL_H_ */

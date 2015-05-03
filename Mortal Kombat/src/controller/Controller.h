@@ -24,12 +24,12 @@ private:
 	const Uint8* keystate;
 	SDL_Event evento;
 
-	void _Init();
+	void _Init(map<string, int>* mapa_comandos);
 	void _JoystickRemoved();
 	void _JoystickAdded();
 
 public:
-	Controller(Personaje* un_personaje,Personaje* otro_personaje);
+	Controller(Personaje* un_personaje,Personaje* otro_personaje,map<string, int>* mapa_comandos);
 	bool Quit();
 	bool PollEvent();
 	void Pressed();

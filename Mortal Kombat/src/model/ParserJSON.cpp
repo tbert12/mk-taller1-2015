@@ -367,12 +367,17 @@ void ParserJSON::cargarMapaComandos(Json::Value root) {
 	log("Se cargara la configuracion del comando de lanzar arma arrojable.", LOG_DEBUG);
 	int comando_lanzar_arma = cargarComando(root["botones"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
 
-	map<string, int> mapa_comandos = { {string("pina baja"), comando_pina_baja}, {string("patada baja"), comando_patada_baja},
-		{string("pina alta"), comando_pina_alta}, {string("patada alta"), comando_patada_alta},
-			{string("cubrirse"), comando_cubrirse}, {string("lanzar arma"), comando_lanzar_arma} };
 
-	comandos = &mapa_comandos;
+	std::map<std::string, int>* mapita = new std::map<std::string,int>;
+	mapita->operator[](string("pina baja")) = comando_pina_baja;
+	mapita->operator[](string("patada baja")) = comando_patada_baja;
+	mapita->operator[](string("pina alta")) = comando_pina_alta;
+	mapita->operator[](string("patada alta")) = comando_patada_alta;
+	mapita->operator[](string("cubrirse"))= comando_cubrirse;
+	mapita->operator[](string("lanzar arma")) = comando_lanzar_arma;
 
+
+	comandos = mapita;
 	log( "Se cargo correctamente el mapa de comandos y botones del controlador.", LOG_DEBUG );
 
 }
