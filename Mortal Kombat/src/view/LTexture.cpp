@@ -76,8 +76,8 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 		return false;
 	} else {
 
-		//Color de Imagen
-		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
+		//Seteo el transparenteDefault
+		SDL_SetColorKey(loadedSurface,SDL_TRUE,SDL_MapRGB(loadedSurface->format,RT,BT,GT));
 
 		//Dimensiones de imagen
 		mWidth = loadedSurface->w;
@@ -123,9 +123,6 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 			if( SDL_MUSTLOCK( loadedSurface ) ) {
 				SDL_UnlockSurface( loadedSurface );
 			}
-
-			//Seteo el transparenteDefault
-			SDL_SetColorKey(loadedSurface,SDL_TRUE,SDL_MapRGB(loadedSurface->format,RT,BT,GT));
 		}
 
 		//Crear textura desde Surface por pixer
