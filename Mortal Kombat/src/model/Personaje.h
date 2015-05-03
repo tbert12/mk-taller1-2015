@@ -9,26 +9,28 @@
 #define SRC_MODEL_PERSONAJE_H_
 
 //Constants
-const int SPRITE_INICIAL=         0;
-const int SPRITE_CAMINAR=         1;
-const int SPRITE_SALTAR=          2;
-const int SPRITE_SALTAR_DIAGONAL= 3;
-const int SPRITE_AGACHAR=         4;
+const int SPRITE_INICIAL=         		0;
+const int SPRITE_CAMINAR=         		1;
+const int SPRITE_SALTAR=          		2;
+const int SPRITE_SALTAR_DIAGONAL= 		3;
+const int SPRITE_AGACHAR=         		4;
 const int SPRITE_PATADA_ALTA_AGACHADO=  5;
 const int SPRITE_PATADA_BAJA_AGACHADO=  6;
-const int SPRITE_CUBRIRSE=        9;
-const int SPRITE_CUBRIRSE_AGACHADO=    10;
-const int SPRITE_GANCHO=         12;
-const int SPRITE_PATADA_ALTA=    14;
-const int SPRITE_PATADA_BAJA=    15;
-const int SPRITE_PATADA_CIRCULAR=16;
-const int SPRITE_PATADA_SALTANDO=17;
-const int SPRITE_PINA_AGACHADO=  18;
-const int SPRITE_PINA_ALTA=		 19;
-const int SPRITE_PINA_BAJA=		 20;
-const int SPRITE_PINA_SALTANDO=  21;
+const int SPRITE_CUBRIRSE=       		9;
+const int SPRITE_CUBRIRSE_AGACHADO=    	10;
+const int SPRITE_GANA =					11;
+const int SPRITE_GANCHO=         		12;
+const int SPRITE_MUERE=					13;
+const int SPRITE_PATADA_ALTA=			14;
+const int SPRITE_PATADA_BAJA=    		15;
+const int SPRITE_PATADA_CIRCULAR=		16;
+const int SPRITE_PATADA_SALTANDO=		17;
+const int SPRITE_PINA_AGACHADO=  		18;
+const int SPRITE_PINA_ALTA=		 		19;
+const int SPRITE_PINA_BAJA=		 		20;
+const int SPRITE_PINA_SALTANDO=  		21;
 
-const int TIEMPOTOTALDESALTO = 14;
+const int TIEMPOTOTALDESALTO = 16;
 
 #include <stdio.h>
 #include <iostream>
@@ -45,9 +47,15 @@ private:
 	float m_xActual;
 	float m_yActual;
 	float m_yPiso;
+	float m_AltoMundo;
+	float m_AnchoMundo;
+
+	float m_velocidad;
+	float m_velocidadActual;
 
 	bool m_fliped;
 
+	/* Logica de Salto */
 	float maxAlturaDeSalto;
 	int tiempoDeSalto;
 	// 0 Cae del Salto, 1 Saltando, -1 No esta Saltanto
@@ -55,27 +63,22 @@ private:
 
 	bool _estaCubriendose;
 	bool _estaAgachado;
-
-	float m_velocidad;
-	float m_velocidadActual;
-
-	float m_AltoMundo;
-	float m_AnchoMundo;
+	bool _estaAtacando;
 
 	Sprite* spriteActual;
 	std::vector<Sprite*> sprites;
-
 	void _cambiarSprite(int accion);
 
 	void _SaltarHorizontal();
+
+	/* Salto Diagonal*/
 	void _SaltarDerecha();
 	void _SaltarIzquierda();
-
-
 	void _parabola();
 	void _actualizarY();
 	float _yDeSalto(float currentY, float currentT);
 
+	/*Ataque*/
 	void _pinaSaltando();
 	void _patadaSaltando();
 
@@ -87,6 +90,7 @@ private:
 
 	void _patadaCircular();
 
+	/*Defensa*/
 	void _cubrirseAgachado();
 	void _cubrirseParado();
 
@@ -96,6 +100,9 @@ public:
 	std::vector<Sprite*> getSprites();
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
+
+	Rect_Logico* rectanguloAtaque();
+	Rect_Logico* rectanguloDefensa();
 
 	bool enMovimiento();
 

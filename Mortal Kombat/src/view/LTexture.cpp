@@ -7,10 +7,10 @@
 
 #include "LTexture.h"
 
-//Walking animation
-//const int ANIMATION_IMAGES = 9;
-//SDL_Rect gSpriteClips[ ANIMATION_IMAGES ];
-//LTexture gSpriteSheetTexture;
+//RGB Default Transparent
+Uint8 RT = 255;
+Uint8 BT = 0;
+Uint8 GT = 255;
 
 LTexture::LTexture(SDL_Renderer* Renderer)
 {
@@ -60,73 +60,6 @@ void LTexture::setVibrar(){
 bool LTexture::estaVibrando(){
 	return indice_corrimientos < corrimientos.size();
 }
-
-
-
-/*
-bool LTexture::cambiarColor( SDL_PixelFormat* format, float h_inicial, float h_final, float desplazamiento) {
-
-	bool success = true;
-
-	int mPitch = 0;
-	void* mPixels = NULL;
-
-	//Texture is already locked
-	if( mPixels != NULL ) {
-		log( "Texture is already locked!", LOG_WARNING );
-	}
-	//Lock texture
-	if( SDL_LockTexture( mTexture, NULL, &mPixels, &mPitch ) != 0 ) {
-		log( string("Unable to lock texture! SDL_Error: ") + string( SDL_GetError() ), LOG_ERROR );
-		success = false;
-		return success;
-	}
-
-
-
-	//Color key pixels
-	for( int i = 0; i < pixelCount; ++i ) {
-
-		// Obtengo color RGB del pixel.
-		Uint8 r, g, b;
-		float h, s, v;
-		SDL_GetRGB( pixels[i], format, &r, &g, &b);
-
-		// Transformo de RGB a HSV. Si el hue cae en el rango especificado, se desplaza.
-		RGBaHSV(r, g, b, &h, &s, &v);
-
-		bool hayQuePintar = false;
-		if ( h >= h_inicial && h <= h_final ) {
-			desplazarHue(&h, desplazamiento);
-			hayQuePintar = true;
-		}
-
-		// Vuelvo a transformar a coordenadas RGB.
-		HSVaRGB(h, s, v, &r, &g, &b);
-
-		// Pinto el pixel con el nuevo color.
-		if ( hayQuePintar ) {
-			Uint32 nuevoColor = SDL_MapRGB( format, r, g, b );
-			pixels[i] = nuevoColor;
-		}
-
-	}
-
-	//Texture is not locked
-	if( mPixels == NULL ) {
-		log( "Texture is not locked!", LOG_WARNING );
-	}
-	//Unlock texture
-	else SDL_UnlockTexture( mTexture );
-
-	return success;
-
-}
-*/
-
-
-
-
 
 bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inicial, float h_final, float desplazamiento ) {
 
@@ -190,6 +123,9 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 			if( SDL_MUSTLOCK( loadedSurface ) ) {
 				SDL_UnlockSurface( loadedSurface );
 			}
+
+			//Seteo el transparenteDefault
+			SDL_SetColorKey(loadedSurface,SDL_TRUE,SDL_MapRGB(loadedSurface->format,RT,BT,GT));
 		}
 
 		//Crear textura desde Surface por pixer
@@ -323,6 +259,42 @@ void LTexture::renderImagen(){
 	SDL_Rect clip = {0,0,w_ventana,h_ventana};
 	SDL_RenderCopy( gRenderer, mTexture, &clip, &camera);
 }
+
+//Para testear las colisiones
+void LTexture::renderRectangulo( Rect_Logico* clip,float x, float y, bool flip){
+	int corrimiento_x = 0;
+	int corrimiento_y = 0;
+
+	corrimiento_x = _corrimiento();
+	corrimiento_y = corrimiento_x;
+
+	int x_px = (int)(x*ratio_x_ventana + 0.5) + corrimiento_x;
+	int y_px = (int)(y*ratio_y_ventana +0.5) + corrimiento_y;
+
+	SDL_Rect Object = { x_px,y_px, mWidth, mHeight};
+	SDL_Rect clip_px;
+
+	if( clip != NULL )
+	{
+		clip_px = { 0, //posicion en pixel horizontal del objeto en la imagen
+					0, //posicion en pixel vertical del objeto en la imagen
+					mWidth,// ancho en pixel del objeto en la imagen
+					mHeight}; //alto en pixel del objeto en la imagen
+
+		Object.w = (int)(clip->w*ratio_x_ventana +0.5);	//tamaño logico del objeto por el ratio de ventana
+		Object.h = (int)(clip->h*ratio_y_ventana +0.5);
+	}
+
+
+	//Renderizar a la pantalla
+	SDL_RendererFlip flipType = SDL_FLIP_NONE;
+	if(flip)
+		flipType = SDL_FLIP_HORIZONTAL;
+
+	SDL_RenderCopyEx( gRenderer, mTexture, &clip_px, &Object,  0 , 0, flipType);
+}
+
+//FIN de cosas para TEST de colision
 
 int LTexture::getWidth()
 {

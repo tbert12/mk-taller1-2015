@@ -74,6 +74,10 @@ class LTexture
 		bool estaVibrando();
 		void renderImagen();
 
+
+		//PARA TESTS
+		void renderRectangulo( Rect_Logico* clip,float x, float y, bool flip);
+
 	private:
 		//The actual hardware texture
 		SDL_Texture* mTexture;

@@ -28,6 +28,7 @@ class Sprite {
 		bool reverse;
 		bool doloop;
 		int frameLoop;
+		int m_pong;
 
 		Rect_Objeto* spriteFrames;
 		LTexture* SpriteSheetTexture;
@@ -40,19 +41,23 @@ class Sprite {
 		void Reset();
 
 		void setLoop(int num_frame);
+		void doPongIn(int pong);
 		void doLoop(bool loop);
-
 		void doReverse(bool Reverse);
 
 		bool ultimoFrame();
 		bool proxFrameUltimo();
+		bool primerFrame();
 
 		float getAncho();
 		float getAlto();
 
-
 		void setRender(SDL_Renderer* Renderer);
 		void render(float x,float y, bool fliped);
+
+		//PARA TESTEO
+		LTexture* RectanguloTest;
+		void RENDERCOLISIONTEST(float x, float y, bool fliped,Rect_Logico* rectanguloAtaque,Rect_Logico* b);
 
 		//Rect_Logico* getFrame();
 		//LTexture* getSpriteSheetTexture();

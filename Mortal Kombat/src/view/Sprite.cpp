@@ -11,9 +11,11 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 	frameActual = 0;
 	SpriteSheetTexture = ventana->crearTextura();
 
+	//recorre los frame en sentido contrario
 	reverse = false;
+	//m_pong hace efecto espejo, llega al valor de m_pong vuelve hasta el inicial y comienza de nuevo;
+	m_pong = 0;
 
-	//Loopear en 1 Frame
 	//Si el frameLoop es 3, y estas en frameActual 0, hace 0,1,2,3 y se queda (hasta que sea false)
 	doloop = false;
 	frameLoop = 0;
@@ -36,6 +38,14 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 
 		delete frames[i];
 	}
+
+	//PARA TESTEAR EL PERSONAJE EN LAS COLISIONES
+	RectanguloTest = ventana->crearTextura();
+	if (!RectanguloTest->loadFromFile("data/img/forColisionTest/cuadrado_rojo.png")){
+		printf("No se creo Rectangulo\n");
+	}
+	RectanguloTest->setAlpha(100);
+	RectanguloTest->setColor(0,255,255);
 }
 
 Sprite::~Sprite(){
@@ -66,6 +76,9 @@ bool Sprite::Advance(){
 				frameActual++;
 		}
 	}
+	if (m_pong == frameActual){
+			reverse = true;
+	}
 	if (frameActual >= cantidadFrames or frameActual < 0){
 		Reset();
 	}
@@ -73,15 +86,17 @@ bool Sprite::Advance(){
 }
 
 void Sprite::Reset(){
-	if (reverse) frameActual = cantidadFrames - 1;
+	if (reverse) {
+		frameActual = cantidadFrames - 1;
+	}
 	else frameActual = 0;
 }
 
 void Sprite::render(float x, float y, bool fliped){
+	printf("Frame: %i [%f,%f]\n",frameActual,x,y);
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
-	float correrX;
+	float correrX = 0;
 	if (fliped) correrX = currentClip->w_log;
-	else correrX = 0;
 	SpriteSheetTexture->renderObjeto(currentClip,x - correrX ,y - currentClip->h_log, fliped);
 }
 
@@ -91,6 +106,8 @@ void Sprite::setLoop(int num_frame) {
 }
 
 void Sprite::doLoop(bool loop){
+	if (loop) printf("deLoop->Seteeate en TRUE\n");
+	else  printf("deLoop->Seteeate en FALSE\n");
 	doloop = loop;
 }
 
@@ -114,4 +131,26 @@ bool Sprite::proxFrameUltimo(){
 	return (frameActual + 1 == cantidadFrames - 1);
 }
 
+bool Sprite::primerFrame(){
+	if (doloop) return false;
+	if (reverse){
+		return (frameActual + 1 == cantidadFrames);
+	}
+	return (frameActual == 0);
+}
+
+void Sprite::doPongIn(int pong){
+	if (pong <= 0 or pong >= cantidadFrames) return;
+	m_pong = pong;
+}
+
+// Para mostrar algo y testear Colisiones //
+void Sprite::RENDERCOLISIONTEST(float x, float y, bool fliped,Rect_Logico* rectanguloAtaque,Rect_Logico* rectanguloDefensa){
+	float correrX = 0;
+	if (fliped) correrX = rectanguloAtaque->w;
+	RectanguloTest->renderRectangulo(rectanguloAtaque,x - correrX,rectanguloAtaque->y-rectanguloAtaque->h,fliped);
+	float correrX1 = 0;
+	if (fliped) correrX1 = rectanguloDefensa->w;
+	RectanguloTest->renderRectangulo(rectanguloDefensa,x - correrX1,rectanguloDefensa->y-rectanguloDefensa->h,fliped);
+}
 

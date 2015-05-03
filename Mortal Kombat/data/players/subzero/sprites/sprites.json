@@ -1,4 +1,5 @@
 {
+	"_comentario": "Color de transparencia #ff00ff",
 	"agachar":{
 		"nombre":"agachar.png",
 		"frames":[
@@ -666,7 +667,8 @@
 				"y":0,
 				"Alto":29
 ,
-				"Ancho":129
+				"Ancho":129,
+				"loop":true
 			}
 		]
 	},
