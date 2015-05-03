@@ -36,6 +36,7 @@ const int TIEMPOTOTALDESALTO = 16;
 #include <iostream>
 #include <vector>
 #include "../view/Sprite.h"
+#include "ObjetoArrojable.h"
 
 
 class Personaje {
@@ -43,6 +44,7 @@ private:
 	std::string nombre;
 
 	int vida;
+	ObjetoArrojable* poder;
 
 	float m_xActual;
 	float m_yActual;
@@ -96,7 +98,7 @@ private:
 
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad, bool fliped = false);
-
+	virtual ~Personaje();
 	std::vector<Sprite*> getSprites();
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
@@ -115,19 +117,18 @@ public:
 	int getSentidoDeMovimiento();
 	float getVelocidadDerecha();
 	float getVelocidadIzquierda();
-
-	void QuitarVida(int valor);
 	int getVida();
-
 	string getNombre();
 	float getAncho();
 	float getAlto();
 	float getX();
 	float getY();
 
-	bool estaAgachado();
-
 	void Inicial();
+	bool estaAgachado();
+	void QuitarVida(int valor);
+
+	//acciones
 	void Frenar();
 	void Saltar();
 	void Agachar();
@@ -140,8 +141,7 @@ public:
 	void patadaAlta();
 	void cubrirse();
 	void dejarDeCubrirse();
-
-	virtual ~Personaje();
+	void lanzarObjeto();
 };
 
 #endif /* SRC_MODEL_PERSONAJE_H_ */

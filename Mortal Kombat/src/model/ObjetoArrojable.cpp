@@ -44,6 +44,10 @@ void ObjetoArrojable::renderizar(float x_dist_ventana, float posOtherPlayer){
 
 }
 
+bool ObjetoArrojable::getVida(){
+	return vida;
+}
+
 ObjetoArrojable::~ObjetoArrojable() {
 	// TODO Auto-generated destructor stub
 }

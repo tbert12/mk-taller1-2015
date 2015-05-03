@@ -16,6 +16,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	m_xActual = 0;
 	m_yActual = 0;
 	m_yPiso = 0;
+	poder = NULL;
 
 	m_velocidad = 0;
 
@@ -38,6 +39,17 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 
 //-------------------------------------------------------------------------------------------------------------------------
 //Manejo de attributos logicos
+
+void Personaje::lanzarObjeto(){
+	//ya hay poder lanzado
+	if (poder != NULL){
+		if(poder->getVida())
+			return;
+	}
+	//Poner sprite del personaje para lanzar
+	//poder = new ObjetoArrojable("arma subzero",velocidad,sprites poder);
+	poder->lanzar(m_xActual,m_yActual);
+}
 
 std::vector<Sprite*> Personaje::getSprites(){
 	return sprites;
