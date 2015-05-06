@@ -12,7 +12,9 @@ Mundo::Mundo(float ancho,float alto) {
 	alto_mundo = alto;
 	tiempo = NULL;
 	ventana = NULL;
-	personaje_z_index = 0;
+	personajes_z_index = 0;
+	BarraJugador1 = NULL;
+	BarraJugador2 = NULL;
 }
 
 bool Mundo::addPersonaje(Personaje* un_personaje){
@@ -34,10 +36,10 @@ void Mundo::addCapaPrincipal( CapaPrincipal* capa_principal, int index ) {
 
 	if ( index > (int)capas.size() ) {
 		this->addCapa(capa_principal);
-		personaje_z_index = capas.size()-1;
+		personajes_z_index = capas.size()-1;
 	} else {
 		capas.insert(capas.begin()+index, capa_principal);
-		personaje_z_index = index;
+		personajes_z_index = index;
 	}
 }
 
@@ -52,13 +54,20 @@ void Mundo::setTiempo(Tiempo* unTiempo){
 }
 void Mundo::setVentana(Ventana* unaVentana){
 	ventana = unaVentana;
+	_crearBarras();
+}
+void Mundo::_crearBarras(){
+	if (ventana == NULL) return;
+	BarraJugador1 = new BarraEnergia(ventana,100);
+	BarraJugador2 = new BarraEnergia(ventana,100);
+	BarraJugador2->setFlip();
 }
 Ventana* Mundo::getVentana(){
 	return ventana;
 }
 
 int Mundo::_verificarScroll(){
-	CapaPrincipal* capa_principal = (CapaPrincipal*)capas[personaje_z_index];
+	CapaPrincipal* capa_principal = (CapaPrincipal*)capas[personajes_z_index];
 	return capa_principal->Scrollear();
 }
 
@@ -69,6 +78,13 @@ bool Mundo::mostrarImagen(string ruta){
 	}
 	log("Se muestra imagen de inicio",LOG_DEBUG);
 	return true;
+}
+
+void Mundo::_renderEstado(){
+	if (BarraJugador1 != NULL)
+		BarraJugador1->render(personajes[0]->getVida());//cambiar el get vida a int
+	if (BarraJugador2 != NULL)
+		BarraJugador2->render(personajes[1]->getVida());
 }
 
 void Mundo::render(){
@@ -84,12 +100,19 @@ void Mundo::render(){
 		capas[i]->Update(scroll);
 	}
 
-	//aca una vez actualizado todo chequeo las colisiones y demas.
+	//aca una vez actualizado to do chequeo las colisiones y demas.
+	if(personajes[0]->getX() == 200){
+		ventana->vibrar();
+	}
+	//
 
 	//renderizo las capas
 	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
 		capas[i]->Renderizar();
 	}
+
+	//actualizo el estado de la pantalla
+	_renderEstado();
 
 	//actualizo pantalla -> SDL_RenderPresent( Renderer );
 	ventana->Refresh();
@@ -108,5 +131,7 @@ Mundo::~Mundo() {
 	personajes.clear();
 	delete ventana;
 	delete tiempo;
+	delete BarraJugador1;
+	delete BarraJugador2;
 }
 

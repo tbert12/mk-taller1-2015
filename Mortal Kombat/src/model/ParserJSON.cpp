@@ -1,10 +1,10 @@
 #include "ParserJSON.h"
 
-
 using namespace std;
 
 ParserJSON::ParserJSON(string ruta_archivo) {
 	m_ruta_archivo = ruta_archivo;
+	comandos = NULL;
 }
 
 ParserJSON::~ParserJSON() {
@@ -62,14 +62,18 @@ float ParserJSON::getRatioYPersonaje( Json::Value root_sprites, float personaje_
 	return ratio_y_personaje;
 }
 
+// Devuelve el puntero al mapa de comandos.
+map<string, int>* ParserJSON::getComandos() {
+	return comandos;
+}
 
 
-Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const char accion_sprite[], string spritesheet_accion, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje ) {
+Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const char accion_sprite[], string spritesheet_accion, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color, float h_inicial, float h_final, float desplazamiento ) {
 	Sprite* sprite;
 	string spritesheet;
 	if ( ! root.isMember(accion_sprite) ) {
 		log( "No se encontro el sprite correspondiente a la accion del personaje. Se generan el sprite de la accion por defecto.", LOG_ERROR );
-		return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+		return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color);
 	} else {
 		if ( ! root[accion_sprite].isMember("nombre") ) {
 			log( "No se especifico el nombre de la imagen para el spritesheet de la accion. Se setea uno por defecto.", LOG_WARNING );
@@ -151,7 +155,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 				log( "Se creo correctamente un frame del spritesheet de la accion.", LOG_DEBUG );
 			}
 			try {
-				sprite = new Sprite( ruta_carpeta + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje );
+				sprite = new Sprite( ruta_carpeta + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 				for ( unsigned int j=0; j < frames.size(); j++ ) {
 					if ( loop_accion[j] ) sprite->setLoop(j);
 				}
@@ -169,7 +173,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 
 
 
-vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto) {
+vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
 
 	vector<Sprite*> sprites;
 
@@ -208,30 +212,176 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 
 	// Cargo uno por uno los sprites correspondientes a cada accion.
 	log( "Se cargara el sprite inicial para la accion de estar parado.", LOG_DEBUG );
-	Sprite* sprite_parado =  cargarSprite( root, ruta_carpeta, "parado", SPRITESHEET_PARADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_parado =  cargarSprite( root, ruta_carpeta, "parado", SPRITESHEET_PARADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_parado );
 
 	log( "Se cargara el sprite para la accion de caminar del personaje", LOG_DEBUG );
-	Sprite* sprite_caminar =  cargarSprite( root, ruta_carpeta, "caminar", SPRITESHEET_CAMINAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_caminar =  cargarSprite( root, ruta_carpeta, "caminar", SPRITESHEET_CAMINAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_caminar );
 
 	log( "Se cargara el sprite para la accion de saltar del personaje", LOG_DEBUG );
-	Sprite* sprite_saltar =  cargarSprite( root, ruta_carpeta, "saltar", SPRITESHEET_SALTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_saltar =  cargarSprite( root, ruta_carpeta, "saltar", SPRITESHEET_SALTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_saltar );
 
 	log( "Se cargara el sprite para la accion de saltar en diagonal del personaje", LOG_DEBUG );
-	Sprite* sprite_saltar_diagonal =  cargarSprite( root, ruta_carpeta, "saltardiagonal", SPRITESHEET_SALTAR_DIAGONAL_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_saltar_diagonal =  cargarSprite( root, ruta_carpeta, "saltardiagonal", SPRITESHEET_SALTAR_DIAGONAL_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_saltar_diagonal );
 
 	log( "Se cargara el sprite para la accion de agacharse del personaje", LOG_DEBUG );
-	Sprite* sprite_agachar =  cargarSprite( root, ruta_carpeta, "agachar", SPRITESHEET_AGACHAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+	Sprite* sprite_agachar =  cargarSprite( root, ruta_carpeta, "agachar", SPRITESHEET_AGACHAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_agachar );
+
+	log( "Se cargara el sprite para la accion de pegar patada alta estando agachado del personaje", LOG_DEBUG );
+	Sprite* sprite_agachado_patada_alta =  cargarSprite( root, ruta_carpeta, "agachadoPatadaAlta", SPRITESHEET_AGACHADO_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_agachado_patada_alta );
+
+	log( "Se cargara el sprite para la accion de pegar patada baja estando agachado del personaje", LOG_DEBUG );
+	Sprite* sprite_agachado_patada_baja =  cargarSprite( root, ruta_carpeta, "agachadoPatadaBaja", SPRITESHEET_AGACHADO_PATADA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_agachado_patada_baja );
+
+	log( "Se cargara el sprite para la accion de caerse por una barrida del personaje", LOG_DEBUG );
+	Sprite* sprite_caer_en_z =  cargarSprite( root, ruta_carpeta, "caeEnZ", SPRITESHEET_CAER_EN_Z_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_caer_en_z );
+
+	log( "Se cargara el sprite para la accion de caerse y levantarse inmediatamente del personaje", LOG_DEBUG );
+	Sprite* sprite_caer_y_levantarse =  cargarSprite( root, ruta_carpeta, "caeYSeLevanta", SPRITESHEET_CAER_Y_LEVANTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_caer_y_levantarse );
+
+	log( "Se cargara el sprite para la accion de cubrirse del personaje", LOG_DEBUG );
+	Sprite* sprite_cubrirse =  cargarSprite( root, ruta_carpeta, "cubrirse", SPRITESHEET_CUBRIRSE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_cubrirse );
+
+	log( "Se cargara el sprite para la accion de cubrirse agachado del personaje", LOG_DEBUG );
+	Sprite* sprite_cubrirse_agachado =  cargarSprite( root, ruta_carpeta, "cubrirseAgachado", SPRITESHEET_CUBRIRSE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_cubrirse_agachado );
+
+	log( "Se cargara el sprite para la pose de victoria del personaje", LOG_DEBUG );
+	Sprite* sprite_ganar =  cargarSprite( root, ruta_carpeta, "gana", SPRITESHEET_GANAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_ganar );
+
+	log( "Se cargara el sprite para la accion de gancho del personaje", LOG_DEBUG );
+	Sprite* sprite_gancho =  cargarSprite( root, ruta_carpeta, "gancho", SPRITESHEET_GANCHO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_gancho );
+
+	log( "Se cargara el sprite para la accion de morirse del personaje", LOG_DEBUG );
+	Sprite* sprite_morir =  cargarSprite( root, ruta_carpeta, "muere", SPRITESHEET_MORIR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_morir );
+
+	log( "Se cargara el sprite para la accion de patada alta del personaje", LOG_DEBUG );
+	Sprite* sprite_patada_alta =  cargarSprite( root, ruta_carpeta, "patadaAlta", SPRITESHEET_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_patada_alta );
+
+	log( "Se cargara el sprite para la accion de patada baja del personaje", LOG_DEBUG );
+	Sprite* sprite_patada_baja =  cargarSprite( root, ruta_carpeta, "patadaBaja", SPRITESHEET_PATADA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_patada_baja );
+
+	log( "Se cargara el sprite para la accion de patada circular del personaje", LOG_DEBUG );
+	Sprite* sprite_patada_circular =  cargarSprite( root, ruta_carpeta, "patadaConGiro", SPRITESHEET_PATADA_CIRCULAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_patada_circular );
+
+	log( "Se cargara el sprite para la accion de patada saltando del personaje", LOG_DEBUG );
+	Sprite* sprite_patada_saltando =  cargarSprite( root, ruta_carpeta, "patadaEnSalto", SPRITESHEET_PATADA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_patada_saltando );
+
+	log( "Se cargara el sprite para la accion de pina agachado del personaje", LOG_DEBUG );
+	Sprite* sprite_pina_agachado =  cargarSprite( root, ruta_carpeta, "pinaAgachado", SPRITESHEET_PINA_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_pina_agachado );
+
+	log( "Se cargara el sprite para la accion de pina alta del personaje", LOG_DEBUG );
+	Sprite* sprite_pina_alta =  cargarSprite( root, ruta_carpeta, "pinaAlta", SPRITESHEET_PINA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_pina_alta );
+
+	log( "Se cargara el sprite para la accion de pina baja del personaje", LOG_DEBUG );
+	Sprite* sprite_pina_baja =  cargarSprite( root, ruta_carpeta, "pinaBaja", SPRITESHEET_PINA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_pina_baja );
+
+	log( "Se cargara el sprite para la accion de pina saltando del personaje", LOG_DEBUG );
+	Sprite* sprite_pina_saltando =  cargarSprite( root, ruta_carpeta, "pinaEnSalto", SPRITESHEET_PINA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_pina_saltando );
+
+	log( "Se cargara el sprite para la accion recibir golpe agachado del personaje", LOG_DEBUG );
+	Sprite* sprite_recibir_golpe_agachado =  cargarSprite( root, ruta_carpeta, "recibeGolpeAgachado", SPRITESHEET_RECIBIR_GOLPE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_recibir_golpe_agachado );
+
+	log( "Se cargara el sprite para la accion de recibir golpe alto del personaje", LOG_DEBUG );
+	Sprite* sprite_recibir_golpe_alto =  cargarSprite( root, ruta_carpeta, "recibeGolpeAlto", SPRITESHEET_RECIBIR_GOLPE_ALTO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_recibir_golpe_alto );
+
+	log( "Se cargara el sprite para la accion de recibir golpe bajo del personaje", LOG_DEBUG );
+	Sprite* sprite_recibir_golpe_bajo =  cargarSprite( root, ruta_carpeta, "recibeGolpeBajo", SPRITESHEET_RECIBIR_GOLPE_BAJO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_recibir_golpe_bajo );
+
+	log( "Se cargara el sprite para la accion de recibir golpes fuerte del personaje", LOG_DEBUG );
+	Sprite* sprite_recibir_golpe_fuerte =  cargarSprite( root, ruta_carpeta, "recibeGolpeFuerte", SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_recibir_golpe_fuerte );
 
 
 	log( "Se crearon todos los sprites del personaje.", LOG_DEBUG );
 	return sprites;
 
 }
+
+int ParserJSON::cargarComando( Json::Value botones, const char* accion, int comando_default) {
+	int comando_accion;
+	if ( ! botones.isMember(accion) ) {
+		comando_accion = comando_default;
+		log("No se especifico la configuracion del comando de la accion. Se setea por defecto.", LOG_WARNING);
+	} else {
+		try {
+			comando_accion = botones.get( accion, -1 ).asInt();
+			if ( comando_accion == -1 )
+				comando_accion = comando_default;
+		} catch ( exception &e ) {
+			comando_accion = comando_default;
+			log( "El boton correspondiente a la accion no es un numero valido. Se setea por defecto.", LOG_ERROR );
+		}
+	}
+	return comando_accion;
+}
+
+
+void ParserJSON::cargarMapaComandos(Json::Value root) {
+
+	if ( ! root.isMember("botones") ) {
+		log("No se especificaron parametros para el mapeo de comandos y botones. Se setean por defecto.", LOG_WARNING);
+		mapaComandosDefault(comandos);
+		return;
+	}
+
+
+	log("Se cargara la configuracion del comando de pina baja.", LOG_DEBUG);
+	int comando_pina_baja = cargarComando(root["botones"], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
+
+	log("Se cargara la configuracion del comando de patada baja.", LOG_DEBUG);
+	int comando_patada_baja = cargarComando(root["botones"], "patada baja", COMANDO_PATADA_BAJA_DEFAULT);
+
+	log("Se cargara la configuracion del comando de pina alta.", LOG_DEBUG);
+	int comando_pina_alta = cargarComando(root["botones"], "pina alta", COMANDO_PINA_ALTA_DEFAULT);
+
+	log("Se cargara la configuracion del comando de patada alta.", LOG_DEBUG);
+	int comando_patada_alta = cargarComando(root["botones"], "patada alta", COMANDO_PATADA_ALTA_DEFAULT);
+
+	log("Se cargara la configuracion del comando de cubrirse.", LOG_DEBUG);
+	int comando_cubrirse = cargarComando(root["botones"], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
+
+	log("Se cargara la configuracion del comando de lanzar arma arrojable.", LOG_DEBUG);
+	int comando_lanzar_arma = cargarComando(root["botones"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
+
+
+	std::map<std::string, int>* mapita = new std::map<std::string,int>;
+	mapita->operator[](string("pina baja")) = comando_pina_baja;
+	mapita->operator[](string("patada baja")) = comando_patada_baja;
+	mapita->operator[](string("pina alta")) = comando_pina_alta;
+	mapita->operator[](string("patada alta")) = comando_patada_alta;
+	mapita->operator[](string("cubrirse"))= comando_cubrirse;
+	mapita->operator[](string("lanzar arma")) = comando_lanzar_arma;
+
+
+	comandos = mapita;
+	log( "Se cargo correctamente el mapa de comandos y botones del controlador.", LOG_DEBUG );
+
+}
+
 
 Mundo* ParserJSON::cargarMundo() {
 
@@ -396,11 +546,15 @@ Mundo* ParserJSON::cargarMundo() {
 	// Obtener las dimensiones logicas del escenario.
 	// En caso de error se setean por defecto.
 	float escenario_ancho, escenario_alto, y_piso;
+	int personajes_z_index;
+	bool z_index_ok = true;
 	if ( ! root.isMember("escenario") ) {
 		log( "No se encontraron parametros para la creacion del escenario. Se asignan valores por defecto.", LOG_ERROR );
 		escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
 		escenario_alto = ESCENARIO_ALTO_DEFAULT;
 		y_piso = Y_PISO_DEFAULT;
+		personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
+		z_index_ok = false;
 	} else {
 		if ( ! root["escenario"].isMember("ancho") ) {
 			escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
@@ -446,6 +600,24 @@ Mundo* ParserJSON::cargarMundo() {
 				log( "La altura del piso del escenario (y-piso) indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 			}
 		}
+		if ( ! root["escenario"].isMember("z-index_personajes") ) {
+			personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
+			z_index_ok = false;
+			log( "No se especifico el z-index de los personajes. Se setean delante de todas las capas por defecto.", LOG_WARNING );
+		} else {
+			try {
+				personajes_z_index = root["escenario"].get( "z-index_personajes", PERSONAJES_Z_INDEX_DEFAULT ).asInt();
+				if ( personajes_z_index < 0 ) {
+					personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
+					z_index_ok = false;
+					log( "El z-index de los personajes no puede ser negativo. Se colocan por defecto los personajes delante de todas las capas.", LOG_WARNING );
+				} else	log( "Se cargo correctamente el z-index de los personajes.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
+				z_index_ok = false;
+				log( "El z-index de los personajes indicado no es valido y no pudo ser convertido a un numero entero. Se setea por defecto.", LOG_ERROR );
+			}
+		}
 	}
 
 	// Setear alto logico de la ventana de acuerdo al alto del escenario.
@@ -459,6 +631,7 @@ Mundo* ParserJSON::cargarMundo() {
 
 	// Crear Mundo.
 	Mundo* nuevo_mundo = new Mundo(escenario_ancho, escenario_alto);
+
 	log ( "Se creo correctamente un mundo vacio.", LOG_DEBUG );
 
 	// Agregar tiempo de combate.
@@ -476,6 +649,11 @@ Mundo* ParserJSON::cargarMundo() {
 	// Asigno Ventana al Mundo.
 	nuevo_mundo->setVentana(ventana);
 	log( "Se le asigno la ventana creada al nuevo mundo.", LOG_DEBUG );
+
+	// Se va a mostrar en pantalla una imagen durante el tiempo de carga
+	if(nuevo_mundo->mostrarImagen("data/img/background/inicio.png")){
+		log("Se muestra imagen bienvenida en Ventanta durante tiempo de carga", LOG_DEBUG );
+	}
 
 	// Obtener las capas del escenario. La primera capa es el fondo del escenario.
 	// Se setea por defecto el ancho en caso de error.
@@ -556,142 +734,248 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 	}
 
-	// Obtener el personaje.
-	// Si no se especifica o no se encuentra la carpeta de sprites del personaje, se usa una por defecto.
-	// Si no se especifica el z-index se fija uno por defecto.
-	int personaje_z_index;
-	float personaje_ancho, personaje_alto;
-	string personaje_carpeta_sprites, personaje_nombre;
-	bool flipped;
-	if ( ! root.isMember("personaje") ) {
-		personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
-		personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-		personaje_nombre = PERSONAJE_NOMBRE_DEFAULT;
-		flipped = PERSONAJE_FLIPPED_DEFAULT;
+	// Verificar si se debe cambiar el color del segundo personaje y hacerlo.
+	bool cambiar_color = false;
+	string personaje_nombre_1, personaje_nombre_2;
+
+	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
+		cambiar_color = true;
+		log( "Se generaran dos personajes iguales por defecto. Como son iguales, el segundo tendrá otro color.", LOG_WARNING );
 	} else {
-		if ( ! root["personaje"].isMember("ancho") ) {
-			personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
-			log( "No se especifico el ancho logico del personaje. Se setea por defecto en 30.", LOG_WARNING );
+
+		if ( ! root["personajes"][0].isMember("nombre") ) {
+			personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
 		} else {
 			try {
-				personaje_ancho = root["personaje"].get( "ancho", PERSONAJE_ANCHO_DEFAULT ).asFloat();
-				if ( personaje_ancho < 0 ) {
-					personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
-					log( "El ancho del personaje no puede negativo. Se setea por defecto en 30.", LOG_WARNING );
-				} else if ( personaje_ancho > escenario_ancho ) {
-					personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
-					log( "El ancho del personaje no puede superar el del escenario. Se setea por defecto en 30.", LOG_WARNING );
-				} else	log( "Se cargo correctamente el ancho logico del personaje.", LOG_DEBUG );
+				personaje_nombre_1 = root["personajes"][0].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
 			} catch ( exception &e ) {
-				personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
-				log( "El ancho logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+				personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
 			}
 		}
-		if ( ! root["personaje"].isMember("alto") ) {
-			personaje_alto = PERSONAJE_ALTO_DEFAULT;
-			log( "No se especifico el alto logico del personaje. Se setea por defecto en 60.", LOG_WARNING );
+
+		if ( ! root["personajes"][1].isMember("nombre") ) {
+			personaje_nombre_2 = PERSONAJE_NOMBRE_DEFAULT;
 		} else {
 			try {
-				personaje_alto = root["personaje"].get( "alto", PERSONAJE_ALTO_DEFAULT ).asFloat();
-				if ( personaje_alto < 0 ) {
-					personaje_alto = PERSONAJE_ALTO_DEFAULT;
-					log( "El alto del personaje no puede negativo. Se setea por defecto en 60.", LOG_WARNING );
-				} else if ( personaje_alto > escenario_alto ) {
-					personaje_alto = PERSONAJE_ALTO_DEFAULT;
-					log( "El alto del personaje no puede superar el del escenario. Se setea por defecto en 60.", LOG_WARNING );
-				} else	log( "Se cargo correctamente el alto logico del personaje.", LOG_DEBUG );
+				personaje_nombre_2 = root["personajes"][0].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
 			} catch ( exception &e ) {
-				personaje_alto = PERSONAJE_ALTO_DEFAULT;
-				log( "El alto logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+				personaje_nombre_2 = PERSONAJE_NOMBRE_DEFAULT;
 			}
 		}
-		if ( ! root["personaje"].isMember("z-index") ) {
-			if ( capas_ok ) {
-				personaje_z_index = i+1;
-			} else personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
-			log( "No se especifico el z-index del personaje. Se le asigna indice 3 por defecto.", LOG_WARNING );
+
+		if ( personaje_nombre_1 == personaje_nombre_2 ) {
+			cambiar_color = true;
+			log( "Los personajes tienen el mismo nombre. Por lo tanto, se le cambiara el color al segundo personaje.", LOG_WARNING );
+		}
+	}
+
+	float h_inicial=0, h_final=0, desplazamiento=0;
+	if ( cambiar_color ) {
+
+		if ( ! root.isMember("color-alternativo") ) {
+			log( "No se especificaron parametros para el color alternativo para el segundo personaje. No se cambian los colores.", LOG_WARNING );
 		} else {
-			try {
-				personaje_z_index = root["personaje"].get( "z-index", i+1 ).asInt();
-				if(personaje_z_index < 0){
-					personaje_z_index = -personaje_z_index;
-					log("El z_index del pesonaje no puede ser negativo, se aplica modulo.",LOG_WARNING);
+			if ( ! root["color-alternativo"].isMember("h-inicial") ) {
+				h_inicial = COLOR_H_INICIAL_DEFAULT;
+				log( "No se especifico el hue inicial para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
+			} else {
+				try {
+					h_inicial = root["color-alternativo"].get( "h-inicial", COLOR_H_INICIAL_DEFAULT ).asFloat();
+					if ( h_inicial < 0 ) {
+						h_inicial = fmod(h_inicial, 360);
+						h_inicial = 360 - h_inicial;
+						log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+					}
+					if ( h_inicial > 360 ) {
+						h_inicial = fmod(h_inicial, 360);
+						log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+					}
+					log( "Se cargo el hue inicial para el desplazamiento al color alternativo.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					h_inicial = COLOR_H_INICIAL_DEFAULT;
+					log( "El hue inicial especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
 				}
-				log ( "Se cargo correctamente el z-index del personaje.", LOG_DEBUG );
-			} catch ( exception &e ) {
-				if ( capas_ok ) {
-					personaje_z_index = i+1;
-				} else personaje_z_index = PERSONAJE_Z_INDEX_DEFAULT;
-				log( "El z-index del personaje indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 			}
-		}
-		if ( ! root["personaje"].isMember("sprites") ) {
-			personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-			log( "No se especifico la carpeta contenedora de los sprites del personaje. Se utiliza carpeta por defecto.", LOG_ERROR );
-		} else {
-			try {
-				personaje_carpeta_sprites = root["personaje"].get( "sprites", PERSONAJE_CARPETA_SPRITES_DEFAULT ).asString();
-				struct stat sb;
-				if ( stat(personaje_carpeta_sprites.c_str(), &sb) != 0 ) {
-					log( "La ruta a la carpeta de sprites del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
-					personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-				} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sprites del personaje.", LOG_DEBUG );
-			} catch ( exception &e ) {
-				personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-				log( "La ruta a la carpeta contenedora de los sprites del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+			if ( ! root["color-alternativo"].isMember("h-final") ) {
+				h_final = COLOR_H_FINAL_DEFAULT;
+				log( "No se especifico el hue final para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
+			} else {
+				try {
+					h_final = root["color-alternativo"].get( "h-final", COLOR_H_FINAL_DEFAULT ).asFloat();
+					if ( h_final < 0 ) {
+						h_final = fmod(h_final, 360);
+						h_final = 360 - h_final;
+						log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+					}
+					if ( h_final > 360 ) {
+						h_final = fmod(h_final, 360);
+						log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+					}
+					log( "Se cargo el hue final para el desplazamiento al color alternativo.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					h_final = COLOR_H_FINAL_DEFAULT;
+					log( "El hue final especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
+				}
 			}
-		}
-		if ( ! root["personaje"].isMember("nombre") ) {
-			personaje_nombre = PERSONAJE_NOMBRE_DEFAULT;
-			log( "No se especifico el nombre del personaje. Se llama Jugador por defecto.", LOG_ERROR );
-		} else {
-			try {
-				personaje_nombre = root["personaje"].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
-				log ( "Se cargo el nombre del personaje.", LOG_DEBUG );
-			} catch ( exception &e ) {
-				personaje_nombre = PERSONAJE_NOMBRE_DEFAULT;
-				log( "El nombre del personaje indicado no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
-			}
-		}
-		if ( ! root["personaje"].isMember("flipped") ) {
-			flipped = PERSONAJE_FLIPPED_DEFAULT;
-			log( "No se especifico si el personaje debe estar flippeado o no. Por defecto, se setea flipped = false, es decir que el personaje mira hacia la derecha.", LOG_WARNING );
-		} else {
-			try {
-				flipped = root["personaje"].get( "flipped", PERSONAJE_FLIPPED_DEFAULT ).asBool();
-				log( "Se cargo el booleano flipped que indica si el personaje inicia mirando hacia la derecha (false) o hacia la izquierda (true).", LOG_DEBUG );
-			} catch ( exception &e ) {
-				flipped = PERSONAJE_FLIPPED_DEFAULT;
-				log( "El valor de flipped del personaje no es un booleano valido. Se setea por defecto.", LOG_ERROR );
+			if ( ! root["color-alternativo"].isMember("desplazamiento") ) {
+				desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
+				log( "No se especificaron los grados de desplazamiento hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
+			} else {
+				try {
+					desplazamiento = root["color-alternativo"].get( "desplazamiento", COLOR_DESPLAZAMIENTO_DEFAULT ).asFloat();
+					log( "Se cargaron los grados de el desplazamiento hacia el color alternativo.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
+					log( "Los grados de desplazameinto hacia el color alternativo especificados no son un numero valido. Se setea por defecto.", LOG_ERROR );
+				}
 			}
 		}
 	}
 
-	// Creo Sprites del personaje.
-	vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, personaje_ancho, personaje_alto);
+	// Creo vector de personajes.
+	vector<Personaje*> personajes;
 
-	// Crear personaje.
-	Personaje* personaje = new Personaje(personaje_nombre, sprites, PERSONAJE_VELOCIDAD, flipped);
-	log( "Se creo correctamente el personaje.", LOG_DEBUG );
+	// Obtener el personaje.
+	// Si no se especifica o no se encuentra la carpeta de sprites del personaje, se usa una por defecto.
+	// Si no se especifica el z-index se fija uno por defecto.
+	float personaje_ancho, personaje_alto;
+	float rpos = PERSONAJE_POS_RESPECTO_CAM;
+	string personaje_carpeta_sprites, personaje_nombre;
+	bool flipped;
+	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
+		Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
+		personaje_default->setPosition((escenario_ancho/2) - (ventana_ancho/2)*rpos,Y_PISO_DEFAULT);
+		Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, !PERSONAJE_FLIPPED_DEFAULT);
+		personaje2_default->setPosition((escenario_ancho/2) + (ventana_ancho/2)*rpos,Y_PISO_DEFAULT);
+		nuevo_mundo->addPersonaje(personaje_default);
+		nuevo_mundo->addPersonaje(personaje2_default);
+		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan dos personajes iguales por defecto.", LOG_ERROR );
+	} else {
+		for ( int k=0; k < (int)root["personajes"].size(); k++ ) {
+			if ( ! root["personajes"][k].isMember("ancho") ) {
+				personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
+				log( "No se especifico el ancho logico del personaje. Se setea por defecto en 30.", LOG_WARNING );
+			} else {
+				try {
+					personaje_ancho = root["personajes"][k].get( "ancho", PERSONAJE_ANCHO_DEFAULT ).asFloat();
+					if ( personaje_ancho < 0 ) {
+						personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
+						log( "El ancho del personaje no puede negativo. Se setea por defecto en 30.", LOG_WARNING );
+					} else if ( personaje_ancho > escenario_ancho ) {
+						personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
+						log( "El ancho del personaje no puede superar el del escenario. Se setea por defecto en 30.", LOG_WARNING );
+					} else	log( "Se cargo correctamente el ancho logico del personaje.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
+					log( "El ancho logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+				}
+			}
+			if ( ! root["personajes"][k].isMember("alto") ) {
+				personaje_alto = PERSONAJE_ALTO_DEFAULT;
+				log( "No se especifico el alto logico del personaje. Se setea por defecto en 60.", LOG_WARNING );
+			} else {
+				try {
+					personaje_alto = root["personajes"][k].get( "alto", PERSONAJE_ALTO_DEFAULT ).asFloat();
+					if ( personaje_alto < 0 ) {
+						personaje_alto = PERSONAJE_ALTO_DEFAULT;
+						log( "El alto del personaje no puede negativo. Se setea por defecto en 60.", LOG_WARNING );
+					} else if ( personaje_alto > escenario_alto ) {
+						personaje_alto = PERSONAJE_ALTO_DEFAULT;
+						log( "El alto del personaje no puede superar el del escenario. Se setea por defecto en 60.", LOG_WARNING );
+					} else	log( "Se cargo correctamente el alto logico del personaje.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					personaje_alto = PERSONAJE_ALTO_DEFAULT;
+					log( "El alto logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+				}
+			}
+			if ( ! root["personajes"][k].isMember("sprites") ) {
+				personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+				log( "No se especifico la carpeta contenedora de los sprites del personaje. Se utiliza carpeta por defecto.", LOG_ERROR );
+			} else {
+				try {
+					personaje_carpeta_sprites = root["personajes"][k].get( "sprites", PERSONAJE_CARPETA_SPRITES_DEFAULT ).asString();
+					struct stat sb;
+					if ( stat(personaje_carpeta_sprites.c_str(), &sb) != 0 ) {
+						log( "La ruta a la carpeta de sprites del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
+						personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+					} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sprites del personaje.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+					log( "La ruta a la carpeta contenedora de los sprites del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+				}
+			}
+			if ( ! root["personajes"][k].isMember("nombre") ) {
+				personaje_nombre = PERSONAJE_NOMBRE_DEFAULT;
+				log( "No se especifico el nombre del personaje. Se llama Jugador por defecto.", LOG_ERROR );
+			} else {
+				try {
+					personaje_nombre = root["personajes"][k].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
+					log ( "Se cargo el nombre del personaje.", LOG_DEBUG );
+				} catch ( exception &e ) {
+					personaje_nombre = PERSONAJE_NOMBRE_DEFAULT;
+					log( "El nombre del personaje indicado no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+				}
+			}
+			if ( ! root["personajes"][k].isMember("flipped") ) {
+				if ( k % 2 == 0 ) flipped = PERSONAJE_FLIPPED_DEFAULT;
+				else flipped = ! PERSONAJE_FLIPPED_DEFAULT;
+				log( "No se especifico si el personaje debe estar flippeado o no. Se setea por defecto.", LOG_WARNING );
+			} else {
+				try {
+					flipped = root["personajes"][k].get( "flipped", PERSONAJE_FLIPPED_DEFAULT ).asBool();
+					log( "Se cargo el booleano flipped que indica si el personaje inicia mirando hacia la derecha (false) o hacia la izquierda (true).", LOG_DEBUG );
+				} catch ( exception &e ) {
+					if ( k % 2 == 0 ) flipped = PERSONAJE_FLIPPED_DEFAULT;
+					else flipped = ! PERSONAJE_FLIPPED_DEFAULT;
+					log( "El valor de flipped del personaje no es un booleano valido. Se setea por defecto.", LOG_ERROR );
+				}
+			}
+			// Creo Sprites del personaje.
+			vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, personaje_ancho, personaje_alto, cambiar_color, h_inicial, h_final, desplazamiento);
+			// El color se cambia una sola vez, unicamente para el personaje 1.
+			cambiar_color = false;
 
-	// Indico posicion inicial del personaje.
-	personaje->setPosition( (escenario_ancho/2), y_piso );
-	log( "Se seteo la posicion inicial en el escenario del personaje.", LOG_DEBUG );
+			// Crear personaje.
+			Personaje* personaje = new Personaje(personaje_nombre, sprites, PERSONAJE_VELOCIDAD, flipped);
+			log( "Se creo correctamente el personaje.", LOG_DEBUG );
 
-	// Agrego Personaje al mundo.
-	nuevo_mundo->addPersonaje(personaje);
-	log( "Se agrego el personaje al mundo", LOG_DEBUG );
+			// Agrego personaje al vector de personajes.
+			personajes.push_back(personaje);
+
+			// Indico posicion inicial del personaje.
+			float position;
+			if (k == 0){
+				position = (escenario_ancho/2) - (ventana_ancho/2)*rpos;
+			}
+			else{
+				position = (escenario_ancho/2) + (ventana_ancho/2)*rpos;
+			}
+			personaje->setPosition( position , y_piso );
+			log( "Seteada Posicion en escenario de Personaje", LOG_DEBUG );
+
+			// Agrego Personaje al mundo.
+			nuevo_mundo->addPersonaje(personaje);
+			log( "Se agrego el personaje al mundo", LOG_DEBUG );
+		}
+	}
+
 
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
-	if ( personaje_z_index > i+1 ) personaje_z_index = i+1;
-	CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personaje_z_index, escenario_ancho, ventana_ancho, PERSONAJE_VELOCIDAD, personaje );
+	// Validaciones para el z-index de los personajes.
+	if ( capas_ok && (! z_index_ok) ) personajes_z_index = i+1;
+	CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personajes_z_index, escenario_ancho, ventana_ancho, PERSONAJE_VELOCIDAD, personajes );
 	log( "Se creo correctamente la capa principal.", LOG_DEBUG );
 
 	// Agrego capa principal al mundo.
-	nuevo_mundo->addCapaPrincipal( capa_principal, personaje_z_index );
+	nuevo_mundo->addCapaPrincipal( capa_principal, personajes_z_index );
 	log( "Se agrego la capa principal al mundo.", LOG_DEBUG );
 
+	// Obtener hash de comandos.
+	this->cargarMapaComandos(root);
+
+
 	return nuevo_mundo;
+
 
 }
 

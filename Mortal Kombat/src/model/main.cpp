@@ -1,5 +1,4 @@
-/*
- * main.cpp
+/* main.cpp
  *
  *  Created on: 26/3/2015
  *      Author: tomi
@@ -18,11 +17,35 @@
 
 #include <algorithm>    // std::reverse (Tranfuguiada para que camine para atras)
 
+#include "../controller/Controller.h"
 #include "../view/Ventana.h"
-#include "../controller/KeyboardControl.h"
 #include "Personaje.h"
 
 string ruta_archivo_configuracion = "data/config/Parallax.json";
+map<string, int>* mapa_comandos;
+
+Mundo* cargarMundo(){
+	Mundo* unMundo;
+	ParserJSON* parser;
+	try {
+			parser = new ParserJSON( ruta_archivo_configuracion );
+			unMundo = parser->cargarMundo();
+			log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
+			mapa_comandos = parser->getComandos();
+			delete parser;
+		} catch ( std::exception &e ) {
+			log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
+			delete parser;
+			delete unMundo;
+			return NULL;
+	}
+	return unMundo;
+}
+
+void free(Mundo* mundo,Controller* c1){
+	delete mundo;
+	delete c1;
+}
 
 int main( int argc, char* args[] )
 {
@@ -35,76 +58,54 @@ int main( int argc, char* args[] )
 		ruta_archivo_configuracion = args[1];
 	}
 
-
-	ParserJSON* parser;
-	Mundo* mundo;
-
-	try {
-		parser = new ParserJSON( ruta_archivo_configuracion );
-		mundo = parser->cargarMundo();
-		//mundo = CrearMundoDefault();
-		log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
-	} catch ( std::exception &e ) {
-		log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
-		delete parser;
-		delete mundo;
+	Mundo* mundo = cargarMundo();
+	if (mundo == NULL) {
 		return 1;
 	}
 
-	//Creo el Personaje
-	Personaje* luchador = mundo->getPersonaje();
-
-
-	//mostrar imagen inicio
-	if(mundo->mostrarImagen("data/img/background/inicio.png")){
-		//3 segundos
-		usleep(3000000);
-	}
-
 	//Creo el Controlador
-	KeyboardControl* control_jugador_1 = new KeyboardControl(luchador);
+	Controller* control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos);
 
 	//While Principal
-	while( !control_jugador_1->getQuit() ){
-		control_jugador_1->KeyState();
-		//Eventos */
-		while( control_jugador_1->PollEvent() ){
+	while( !control->Quit()){
+		control->KeyState();
+		while( control->PollEvent()){
 			try {
-				control_jugador_1->KeyPressed();
-			// RELOAD
-			// ESTA HECHO A LO VILLA PORQUE TOTAL DESPUES ESTO VUELA A LA MIERDA.
+
+				control->Pressed();
+
 			} catch ( std::runtime_error &e ) {
-				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_DEBUG );
-				delete parser;
-				delete control_jugador_1;
-				delete mundo;
+				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_WARNING );
+				free(mundo,control);
+				log ( "Refresh: se libero la memoria de lo cargado anteriormente", LOG_WARNING );
 
-				try {
-					parser = new ParserJSON( ruta_archivo_configuracion );
-					mundo = parser->cargarMundo();
-					//mundo = CrearMundoDefault();
-					log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
-					//Creo el Personaje
-					luchador = mundo->getPersonaje();
-					//Creo el Controlador
-					control_jugador_1 = new KeyboardControl(luchador);
-				} catch ( std::runtime_error &e ) {
-					log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
+
+				mundo = cargarMundo();
+				if (mundo == NULL){
+					log ( "No se pudo cargar el mundo luego del refresh, se cierra el programa", LOG_ERROR );
 					return 1;
-
 				}
 
+				log( "Se creo correctamente el Mundo de la partida, luego del refresh", LOG_DEBUG );
+
+				//Creo el Controlador
+				control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos);
 			}
 		}
-		mundo->render();
+
+		//si no esta en pausa
+		if (!control->pausa()){
+			mundo->render();
+		}
+
 		//Sleep(Microsegundos)
 		usleep(50000);
-
 	}
-	delete parser;
-	delete control_jugador_1;
-	delete mundo;
+
+
+	free(mundo,control);
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 
 	return 0;
+	//
 }

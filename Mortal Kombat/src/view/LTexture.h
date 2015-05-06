@@ -13,6 +13,7 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include "../model/logging.h"
+#include "../model/Color.h"
 
 typedef struct Rect_Logico
 {
@@ -37,8 +38,11 @@ class LTexture
 		//Deallocates memory
 		~LTexture();
 
+		// Cambiar el matiz de la textura de acuerdo a ciertos parametros.
+		//bool cambiarColor(SDL_PixelFormat* format, float, float, float);
+
 		//Loads image at specified path
-		bool loadFromFile( std::string path );
+		bool loadFromFile( std::string path, bool cambiar_color = false, float h_inicial = 0, float h_final = 0, float desplazamiento = 0 );
 
 		//Deallocates texture
 		void free();
@@ -58,6 +62,7 @@ class LTexture
 		//Renders texture at given point
 		void renderObjeto(Rect_Objeto* clip, float x = 0, float y = 0, bool flip = false);
 
+
 		//Gets image dimensions
 		int getWidth();
 		int getHeight();
@@ -65,7 +70,13 @@ class LTexture
 		void setRatio(float ratiox,float ratioy);
 
 		void setDimensionesVentana(int w,int h);
+		void setVibrar();
+		bool estaVibrando();
 		void renderImagen();
+
+
+		//PARA TESTS
+		void renderRectangulo( Rect_Logico* clip,float x, float y, bool flip);
 
 	private:
 		//The actual hardware texture
@@ -81,6 +92,11 @@ class LTexture
 
 		//The window renderer
 		SDL_Renderer* gRenderer;
+
+		//Vibrar
+		std::vector<int> corrimientos;
+		size_t indice_corrimientos;
+		int _corrimiento();
 };
 
 

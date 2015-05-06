@@ -28,29 +28,36 @@ class Sprite {
 		bool reverse;
 		bool doloop;
 		int frameLoop;
+		int m_pong;
 
 		Rect_Objeto* spriteFrames;
 		LTexture* SpriteSheetTexture;
 
 	public:
-		Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y);
+		Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y, bool cambiar_color = false, float h_inicial = 0, float h_final = 0, float desplazamiento = 0);
 		~Sprite();
 
 		bool Advance();
 		void Reset();
 
 		void setLoop(int num_frame);
+		void doPongIn(int pong);
 		void doLoop(bool loop);
-
 		void doReverse(bool Reverse);
 
 		bool ultimoFrame();
+		bool proxFrameUltimo();
+		bool primerFrame();
 
 		float getAncho();
 		float getAlto();
 
 		void setRender(SDL_Renderer* Renderer);
 		void render(float x,float y, bool fliped);
+
+		//PARA TESTEO
+		LTexture* RectanguloTest;
+		void RENDERCOLISIONTEST(float x, float y, bool fliped,Rect_Logico* rectanguloAtaque,Rect_Logico* b);
 
 		//Rect_Logico* getFrame();
 		//LTexture* getSpriteSheetTexture();

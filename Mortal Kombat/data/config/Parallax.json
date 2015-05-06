@@ -1,6 +1,6 @@
 {
 
-	"loglvl": 2,
+	"loglvl": 1,
 	
 	"tiempo": 180,
 
@@ -13,7 +13,8 @@
 	"escenario": {
 		"ancho": 1000,
 		"alto": 334.3,
-		"y-piso": 325
+		"y-piso": 325,
+		"z-index_personajes": 5
 	},
 	
 	"capas": [
@@ -43,12 +44,33 @@
 		}
 	],
 	
-	"personaje": {
-		"ancho": 85,
-		"alto": 160,
-		"z-index": 5,
+	"personajes": [
+		{
+		"ancho": 65,
+		"alto": 150,
 		"sprites": "data/players/subzero/sprites/",
-		"nombre": "Sub-Zero",
-		"flipped": false
+		"nombre": "Sub-Zero"
+		},
+		{
+		"ancho": 65,
+		"alto": 150,
+		"sprites": "data/players/subzero/sprites/",
+		"nombre": "Sub-Zero"
+		}
+	],
+	
+	"color-alternativo": {
+		"h-inicial": 180,
+		"h-final": 240,
+		"desplazamiento": 235
+	},
+	
+	"botones": {
+		"pina baja": 2,
+		"patada baja": 1,
+		"pina alta": 3,
+		"patada alta": 0,
+		"cubrirse": 6,
+		"lanzar arma": 4
 	}
 }

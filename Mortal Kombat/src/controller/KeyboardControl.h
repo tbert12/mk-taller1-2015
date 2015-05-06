@@ -11,26 +11,24 @@
 #include<SDL2/SDL.h>
 #include "../model/Personaje.h"
 #include <exception>
+#include <map>
+
+using namespace std;
 
 class KeyboardControl {
 private:
 	Personaje* personaje;
-	bool quit;
-	bool agachado;
 	const Uint8* keystate;
-	SDL_Event evento;
+	SDL_Event* evento;
+	bool pausa;
 
 public:
-
-	KeyboardControl(Personaje*);
+	KeyboardControl(SDL_Event* e, Personaje*);
 	virtual ~KeyboardControl();
-
-	bool PollEvent();
 
 	void KeyPressed();
 	void KeyState();
-	bool getQuit();
-	bool recargar();
+	bool pause();
 };
 
 #endif /* SRC_CONTROLLER_KEYBOARDCONTROL_H_ */

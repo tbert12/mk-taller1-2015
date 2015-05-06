@@ -7,10 +7,10 @@
 
 #include "LTexture.h"
 
-//Walking animation
-//const int ANIMATION_IMAGES = 9;
-//SDL_Rect gSpriteClips[ ANIMATION_IMAGES ];
-//LTexture gSpriteSheetTexture;
+//RGB Default Transparent
+Uint8 RT = 255;
+Uint8 BT = 0;
+Uint8 GT = 255;
 
 LTexture::LTexture(SDL_Renderer* Renderer)
 {
@@ -23,6 +23,18 @@ LTexture::LTexture(SDL_Renderer* Renderer)
 	ratio_y_ventana = 1;
 	w_ventana = 0;
 	h_ventana = 0;
+	corrimientos = {-5,5,-2,2,-1,1};
+	indice_corrimientos = corrimientos.size();
+}
+
+int LTexture::_corrimiento(){
+	if (indice_corrimientos >= corrimientos.size() ){
+			//No Vibrar
+			return 0;
+	}
+	int corr = corrimientos[indice_corrimientos];
+	indice_corrimientos += 1;
+	return corr;
 }
 
 LTexture::~LTexture()
@@ -41,8 +53,16 @@ void LTexture::setDimensionesVentana(int w,int h){
 	h_ventana = h;
 }
 
-bool LTexture::loadFromFile( std::string ruta )
-{
+void LTexture::setVibrar(){
+	indice_corrimientos = 0;
+}
+
+bool LTexture::estaVibrando(){
+	return indice_corrimientos < corrimientos.size();
+}
+
+bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inicial, float h_final, float desplazamiento ) {
+
 	//Get rid of preexisting texture
 	free();
 
@@ -51,28 +71,65 @@ bool LTexture::loadFromFile( std::string ruta )
 
 	//Cargar imagen desde ruta
 	SDL_Surface* loadedSurface = IMG_Load( ruta.c_str() );
-	if( loadedSurface == NULL )
-	{
-		log( string("No se puede cargar imagen %s! SDL_image Error: %s\n", ruta.c_str()),LOG_ERROR);
+	if( loadedSurface == NULL ) {
+		log( string("No se puede cargar imagen: ") + string( ruta.c_str() ) + string(" SDL_image Error: ") + string(SDL_GetError()),LOG_ERROR);
 		return false;
-	}
-	else
-	{
-		//Color de Imagen
-		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
+	} else {
+
+		//Seteo el transparenteDefault
+		SDL_SetColorKey(loadedSurface,SDL_TRUE,SDL_MapRGB(loadedSurface->format,RT,BT,GT));
+
+		//Dimensiones de imagen
+		mWidth = loadedSurface->w;
+		mHeight = loadedSurface->h;
+
+
+		if ( cambiar_color ) {
+
+			//If the surface must be locked
+			if( SDL_MUSTLOCK( loadedSurface ) ) {
+				//Lock the surface
+				SDL_LockSurface( loadedSurface );
+			}
+
+			Uint32* pixels = (Uint32*) loadedSurface->pixels;
+			for (int i=0; i < ((loadedSurface->pitch)/4 * loadedSurface->h); i++ ) {
+
+				// Obtengo color RGB del pixel.
+				Uint8 r, g, b, a;
+				float h, s, v;
+				SDL_GetRGBA( pixels[i], loadedSurface->format, &r, &g, &b, &a);
+
+				// Transformo de RGB a HSV. Si el hue cae en el rango especificado, se desplaza.
+				RGBaHSV(r, g, b, &h, &s, &v);
+
+				bool hayQuePintar = false;
+				if ( h >= h_inicial && h <= h_final ) {
+					desplazarHue(&h, desplazamiento);
+					hayQuePintar = true;
+				}
+
+				// Vuelvo a transformar a coordenadas RGB.
+				HSVaRGB(h, s, v, &r, &g, &b);
+
+				// Pinto el pixel con el nuevo color.
+				if ( hayQuePintar ) {
+					Uint32 nuevoColor = SDL_MapRGBA( loadedSurface->format, r, g, b, a );
+					pixels[i] = nuevoColor;
+				}
+			}
+
+			//Unlock surface
+			if( SDL_MUSTLOCK( loadedSurface ) ) {
+				SDL_UnlockSurface( loadedSurface );
+			}
+		}
 
 		//Crear textura desde Surface por pixer
 		nuevaTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
-		if( nuevaTexture == NULL )
-		{
-			log( string("No se puede crear textura desde %s!", ruta.c_str()),LOG_ERROR);
+		if( nuevaTexture == NULL ) {
+			log( string("No se puede crear textura desde") + string( ruta.c_str() ),LOG_ERROR);
 			return false;
-		}
-		else
-		{
-			//Dimensiones de imagen
-			mWidth = loadedSurface->w;
-			mHeight = loadedSurface->h;
 		}
 
 		//Liberar la imagen cargada
@@ -84,8 +141,7 @@ bool LTexture::loadFromFile( std::string ruta )
 	return true;
 }
 
-void LTexture::free()
-{
+void LTexture::free() {
 	//Free texture if it exists
 	if( mTexture != NULL )
 	{
@@ -121,8 +177,15 @@ void LTexture::setAlpha( Uint8 alpha )
 
 void LTexture::renderObjeto( Rect_Objeto* clip,float x, float y, bool flip)
 {
-	int x_px = (int)(x*ratio_x_ventana);
-	int y_px = (int)(y*ratio_y_ventana);
+	int corrimiento_x = 0;
+	int corrimiento_y = 0;
+
+	corrimiento_x = _corrimiento();
+	corrimiento_y = corrimiento_x;
+
+
+	int x_px = (int)(x*ratio_x_ventana + 0.5) + corrimiento_x;
+	int y_px = (int)(y*ratio_y_ventana +0.5) + corrimiento_y;
 
 	SDL_Rect Object = { x_px,y_px, mWidth, mHeight};
 	SDL_Rect clip_px;
@@ -134,8 +197,8 @@ void LTexture::renderObjeto( Rect_Objeto* clip,float x, float y, bool flip)
 				clip->w,// ancho en pixel del objeto en la imagen
 				clip->h}; //alto en pixel del objeto en la imagen
 
-		Object.w = clip->w_log*ratio_x_ventana;	//tamaño logico del objeto por el ratio de ventana
-		Object.h = clip->h_log*ratio_y_ventana;
+		Object.w = (int)(clip->w_log*ratio_x_ventana +0.5);	//tamaño logico del objeto por el ratio de ventana
+		Object.h = (int)(clip->h_log*ratio_y_ventana +0.5);
 	}
 
 	//Renderizar a la pantalla
@@ -148,6 +211,12 @@ void LTexture::renderObjeto( Rect_Objeto* clip,float x, float y, bool flip)
 
 void LTexture::renderFondo( Rect_Logico* clip)
 {
+	int corrimiento_x = 0;
+	int corrimiento_y = 0;
+
+	corrimiento_x = _corrimiento();
+	corrimiento_y = corrimiento_x;
+
 	SDL_Rect camera = { 0,0, w_ventana, h_ventana};
 	SDL_Rect clip_px;
 
@@ -165,6 +234,8 @@ void LTexture::renderFondo( Rect_Logico* clip)
 				ancho_px_ventana,//w_ventana , // ancho de la ventana
 				alto_px_ventana }; //alto de la ventana
 
+		clip_px.x += corrimiento_x;
+		clip_px.y += corrimiento_y;
 
 		int ancho = (int)(clip->w*ratio_x_img + 0.5);
 		if(clip_px.x > (ancho - ancho_px_ventana))clip_px.x = ancho - ancho_px_ventana;
@@ -178,11 +249,49 @@ void LTexture::renderFondo( Rect_Logico* clip)
 	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &camera );
 }
 
+
+
 void LTexture::renderImagen(){
 	SDL_Rect camera = { 0,0, w_ventana, h_ventana};
 	SDL_Rect clip = {0,0,w_ventana,h_ventana};
 	SDL_RenderCopy( gRenderer, mTexture, &clip, &camera);
 }
+
+//Para testear las colisiones
+void LTexture::renderRectangulo( Rect_Logico* clip,float x, float y, bool flip){
+	int corrimiento_x = 0;
+	int corrimiento_y = 0;
+
+	corrimiento_x = _corrimiento();
+	corrimiento_y = corrimiento_x;
+
+	int x_px = (int)(x*ratio_x_ventana + 0.5) + corrimiento_x;
+	int y_px = (int)(y*ratio_y_ventana +0.5) + corrimiento_y;
+
+	SDL_Rect Object = { x_px,y_px, mWidth, mHeight};
+	SDL_Rect clip_px;
+
+	if( clip != NULL )
+	{
+		clip_px = { 0, //posicion en pixel horizontal del objeto en la imagen
+					0, //posicion en pixel vertical del objeto en la imagen
+					mWidth,// ancho en pixel del objeto en la imagen
+					mHeight}; //alto en pixel del objeto en la imagen
+
+		Object.w = (int)(clip->w*ratio_x_ventana +0.5);	//tamaño logico del objeto por el ratio de ventana
+		Object.h = (int)(clip->h*ratio_y_ventana +0.5);
+	}
+
+
+	//Renderizar a la pantalla
+	SDL_RendererFlip flipType = SDL_FLIP_NONE;
+	if(flip)
+		flipType = SDL_FLIP_HORIZONTAL;
+
+	SDL_RenderCopyEx( gRenderer, mTexture, &clip_px, &Object,  0 , 0, flipType);
+}
+
+//FIN de cosas para TEST de colision
 
 int LTexture::getWidth()
 {

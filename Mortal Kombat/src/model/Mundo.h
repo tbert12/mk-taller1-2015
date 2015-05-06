@@ -18,6 +18,7 @@
 #include "../view/Sprite.h"
 #include "../view/Frame.h"
 #include "../view/Ventana.h"
+#include "../view/BarraEnergia.h"
 #include <vector>
 #include <algorithm>
 #include "logging.h"
@@ -31,9 +32,12 @@ private:
 	std::vector<Personaje*> personajes;
 	Tiempo* tiempo;
 	Ventana* ventana;
-	int personaje_z_index;
+	int personajes_z_index;
 	int _verificarScroll();
-
+	void _crearBarras();
+	void _renderEstado();
+	BarraEnergia* BarraJugador1;
+	BarraEnergia* BarraJugador2;
 public:
 	Mundo(float AnchoMundo,float AltoMundo);
 	bool addPersonaje(Personaje* un_personaje);

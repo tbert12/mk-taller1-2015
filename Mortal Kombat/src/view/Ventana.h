@@ -6,6 +6,8 @@
 #include <string>
 #include "LTexture.h"
 
+#define RUTA_ICONO "data/img/etc/icono.png"
+
 class Ventana
 {
 private:
@@ -13,20 +15,28 @@ private:
 	int m_alto_px;
 	float ratio_x;
 	float ratio_y;
+	bool m_vibrar;
 	SDL_Window* Window;
 	SDL_Renderer* Renderer;
+	std::vector<LTexture*> texturas;
 
 public:
 
 	Ventana(int screenWidth, int screenHeight,float ratiox,float ratioy);
 	~Ventana();
 	float obtenerAncho();
-
+	float obtenerAlto();
+	float obtenerRatioX();
+	float obtenerRatioY();
 	//Starts up SDL and creates window
 	bool create_window();
 
+	SDL_Window* getWindow();
+
 	//Refrescar el mundo (la pantalla, para cada ciclo)
 	void Refresh();
+
+	void vibrar();
 
 	//Frees media and shuts down SDL
 	void close_window();

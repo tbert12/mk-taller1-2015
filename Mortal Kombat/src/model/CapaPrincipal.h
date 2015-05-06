@@ -15,17 +15,22 @@
 class CapaPrincipal: public Capa {
 
 public:
-	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personaje);
+	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personajeUno, Personaje* personajeDos);
+	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, vector<Personaje*> personajes);
 	int Scrollear(); //0 no scrollea , 1 para la derecha -1 para la izquierda!
+	int CheckSegundoJugador(int estadoSegundoJugador);
 	virtual ~CapaPrincipal();
 	virtual void Renderizar();
 	virtual void Update(int scroll);
 
 private:
+	int _NadieScrollea();
 	Personaje* m_Personaje;
+	Personaje* m_PersonajeDos;
 	void _actualizarX();
 	float m_velocidad_derecha;
 	float m_velocidad_izquierda;
+	int m_PersonajeQueScrollea; //0 no scrollea ninguno, 1 scrollea el 1, 2 el 2
 };
 
 
