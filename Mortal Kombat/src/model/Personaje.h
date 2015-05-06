@@ -107,6 +107,7 @@ public:
 	void setFlip(bool flip);
 
 	Rect_Logico* rectanguloAtaque();
+	Rect_Logico* nextRectAtaque();
 	Rect_Logico* rectanguloDefensa();
 
 	bool enMovimiento();

@@ -203,6 +203,13 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	return rectangulo;
 }
 
+Rect_Logico* Personaje::nextRectAtaque(){
+	if(!_estaAtacando)
+		return this->rectanguloAtaque();
+	Rect_Logico* rectangulo = new Rect_Logico;
+	return rectangulo;
+}
+
 Rect_Logico* Personaje::rectanguloDefensa(){
 	Rect_Logico* rectangulo = new Rect_Logico;
 	rectangulo->x=m_xActual;
