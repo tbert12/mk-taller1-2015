@@ -29,6 +29,7 @@ public:
 	bool lanzar(float pos_x,float pos_y);
 	void renderizar(float x_dist_ventana, float posOtherPlayer);
 	void setDimensionesMundo(float alto,float ancho);
+	bool getVida();
 	virtual ~ObjetoArrojable();
 };
 

@@ -12,8 +12,8 @@ JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_pers
 	evento = e;
 	pausa = false;
 	comandos = mapa_comandos;
-	//_verificarMapaComandos();
 	_Init(id_joystick);
+	_verificarMapaComandos();
 }
 
 bool JoystickControl::pause(){
@@ -22,9 +22,9 @@ bool JoystickControl::pause(){
 
 void JoystickControl::_verificarMapaComandos(){
 	bool mapa_correcto = false;
-	if (comandos != NULL){
+	if (comandos != NULL && joystick != NULL){
 		mapa_correcto = true;
-		for (std::map<string,int>::iterator it=comandos->begin(); it!=comandos->end(); ++it){
+		for (std::map<string,int>::const_iterator it=comandos->begin(); it!=comandos->end(); ++it){
 			//si supera la cantidad de botones del joystick
 			if(it->second >= SDL_JoystickNumButtons(joystick))
 				mapa_correcto = false;
