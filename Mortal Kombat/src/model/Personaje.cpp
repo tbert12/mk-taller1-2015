@@ -26,6 +26,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	m_fliped = fliped;
 
 	m_velocidad = velocidad;
+	m_mover = true;
 
 	//Es igual a SpriteActual->getAlto();
 	maxAlturaDeSalto = 1.20 * getAlto();
@@ -89,6 +90,11 @@ float Personaje::getY()
 	return m_yActual;
 }
 
+bool Personaje::getFlipState()
+{
+	return m_fliped;
+}
+
 void Personaje::QuitarVida(int valor){
 	vida = vida - valor;
 	if(vida <= 0){
@@ -99,19 +105,28 @@ void Personaje::QuitarVida(int valor){
 	}
 }
 
-void Personaje::Update(int velocidadScroll){
-	velocidadScroll = 0;
-	float renderX = m_xActual;
-	if(velocidadScroll != 0)
-			renderX += velocidadScroll;
-		else
-			renderX += m_velocidadActual;
+void Personaje::setScroll(bool scrollear){
+	m_mover = scrollear;
+}
 
-		if (renderX <= (m_AnchoMundo - spriteActual->getAncho()) and renderX >= 0){
-			if ( !_estaAgachado and !_estaAtacando){
-				m_xActual += (velocidadScroll!=0? velocidadScroll : m_velocidadActual);
-			}
+void Personaje::setFlip(bool flip){
+	m_fliped= flip;
+}
+
+void Personaje::Update(int velocidadScroll){
+	//velocidadScroll = 0;
+	float renderX = m_xActual;
+	if(m_mover)
+		renderX += m_velocidadActual;
+
+
+	if (renderX <= (m_AnchoMundo - spriteActual->getAncho()) and renderX >= 0){
+		if ( !_estaAgachado and !_estaAtacando){
+			if(m_mover)
+				m_xActual += (m_velocidadActual);
+		}
 	}
+
 	if(m_xActual > m_AnchoMundo - spriteActual->getAncho()*1.3f)
 			m_xActual = m_AnchoMundo - spriteActual->getAncho()*1.3f;
 
@@ -127,11 +142,13 @@ void Personaje::Update(int velocidadScroll){
 		_estaSaltando = -1;
 	}
 
+	m_mover = true;
+
 }
 
 void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
 	//HORRIBLE ASQUEROSO DESASTROSO
-	m_fliped = posOtherPlayer - getAncho() < m_xActual;
+	//m_fliped = posOtherPlayer - getAncho() < m_xActual;
 	spriteActual->render(m_xActual-x_dist_ventana,m_yActual,m_fliped);
 
 	//* Para test de colisiones *//

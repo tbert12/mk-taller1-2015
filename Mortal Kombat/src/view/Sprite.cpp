@@ -93,7 +93,7 @@ void Sprite::Reset(){
 }
 
 void Sprite::render(float x, float y, bool fliped){
-	printf("Frame: %i [%f,%f]\n",frameActual,x,y);
+	//printf("Frame: %i [%f,%f]\n",frameActual,x,y);
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
 	float correrX = 0;
 	if (fliped) correrX = currentClip->w_log;

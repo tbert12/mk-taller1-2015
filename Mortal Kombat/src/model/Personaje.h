@@ -54,6 +54,7 @@ private:
 
 	float m_velocidad;
 	float m_velocidadActual;
+	bool m_mover;
 
 	bool m_fliped;
 
@@ -102,6 +103,8 @@ public:
 	std::vector<Sprite*> getSprites();
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
+	void setScroll(bool scrollear);
+	void setFlip(bool flip);
 
 	Rect_Logico* rectanguloAtaque();
 	Rect_Logico* rectanguloDefensa();
@@ -123,6 +126,7 @@ public:
 	float getAlto();
 	float getX();
 	float getY();
+	bool getFlipState();
 
 	void Inicial();
 	bool estaAgachado();

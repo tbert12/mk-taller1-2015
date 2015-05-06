@@ -44,6 +44,22 @@ void CapaPrincipal::Update(int scroll){
 	if (scroll > 0)this->Mover(true);
 	else if (scroll < 0) this->Mover(false);
 	this->_actualizarX();
+	bool isFlipped = false;
+	Personaje* personaje;
+	Personaje* personajeFlippeado;
+
+	if(m_Personaje->getFlipState()){
+		personaje = m_PersonajeDos;
+		personajeFlippeado = m_Personaje;
+	}
+	else{
+		personajeFlippeado = m_PersonajeDos;
+		personaje = m_Personaje;
+	}
+	if(personaje->getX() > personajeFlippeado->getX() ){
+		personaje->setFlip(true);
+		personajeFlippeado->setFlip(false);
+	}
 
 	if(m_PersonajeQueScrollea==2){
 		if (m_Personaje->getX() >= (getX() + m_ancho_ventana*0.80f)) {
@@ -96,17 +112,20 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 
 
 	switch (estadoJugador1) {
-		case 1:			if ((m_PersonajeDos->getX() <= (getX() + m_ancho_ventana*0.02f)) and (m_PersonajeDos->getSentidoDeMovimiento() < 0)){
-				m_PersonajeQueScrollea = 2;
-				return -1;
+		case 1:
+			if ((m_PersonajeDos->getX() <= (getX() + m_ancho_ventana*0.02f))){
+				m_Personaje->setScroll(false);
+				m_PersonajeDos->setScroll(false);
+				return 0;
 			}
 			m_PersonajeQueScrollea = 1;
 			return 1;
 			break;
 		case -1:
-			if ((m_PersonajeDos->getX() >= (getX() + m_ancho_ventana*0.80f)) and (m_PersonajeDos->getSentidoDeMovimiento() > 0) ){
-				m_PersonajeQueScrollea = 2;
-				return 1;
+			if ((m_PersonajeDos->getX() >= (getX() + m_ancho_ventana*0.90f))){
+				m_Personaje->setScroll(false);
+				m_PersonajeDos->setScroll(false);
+				return 0;
 			}
 			m_PersonajeQueScrollea = 1;
 			return -1;
@@ -115,12 +134,14 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 			if(getX() == 0 and (m_PersonajeDos->getSentidoDeMovimiento() < 0))return this->_NadieScrollea();
 			if(getX() == rect->w and (m_PersonajeDos->getSentidoDeMovimiento() > 0)) return this->_NadieScrollea();
 			if ((m_PersonajeDos->getX() <= (getX() + m_ancho_ventana*0.02f)) and (m_PersonajeDos->getSentidoDeMovimiento() < 0)){
-				m_PersonajeQueScrollea = 2;
-				return -1;
+				m_Personaje->setScroll(false);
+				m_PersonajeDos->setScroll(false);
+				return 0;
 			}
 			if ((m_PersonajeDos->getX() >= (getX() + m_ancho_ventana*0.80f)) and (m_PersonajeDos->getSentidoDeMovimiento() > 0) ){
-				m_PersonajeQueScrollea = 2;
-				return 1;
+				m_Personaje->setScroll(false);
+				m_PersonajeDos->setScroll(false);
+				return 0;
 			}
 			return this->_NadieScrollea();
 			break;
