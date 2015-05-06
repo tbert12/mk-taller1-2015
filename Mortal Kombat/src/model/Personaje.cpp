@@ -17,7 +17,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	m_yActual = 0;
 	m_yPiso = 0;
 
-	m_velocidad = 0;
+	m_velocidadActual = 0;
 
 	m_AltoMundo = 0;
 	m_AnchoMundo = 0;
@@ -93,7 +93,7 @@ void Personaje::Update(int velocidadScroll){
 	if(velocidadScroll != 0)
 			renderX += velocidadScroll;
 		else
-			renderX += m_velocidad;
+			renderX += m_velocidadActual;
 
 		if (renderX <= (m_AnchoMundo - spriteActual->getAncho()) and renderX >= 0){
 			if ( !_estaAgachado and !_estaAtacando){
@@ -130,7 +130,7 @@ void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
 }
 
 bool Personaje::enMovimiento(){
-	return (m_velocidad != 0);
+	return (m_velocidadActual != 0);
 }
 
 float Personaje::getAncho(){
@@ -321,14 +321,14 @@ void Personaje::_actualizarY(){
 	if(tiempoDeSalto > TIEMPOTOTALDESALTO){
 		tiempoDeSalto = 0;
 		_estaSaltando = 0;
-		if (m_velocidad) {
+		if (m_velocidadActual) {
 			spriteActual->Reset();
 		}
 		spriteActual->doLoop(false);
 		return;
 	}
 
-	if(tiempoDeSalto == TIEMPOTOTALDESALTO and !m_velocidad){
+	if(tiempoDeSalto == TIEMPOTOTALDESALTO and !m_velocidadActual){
 		tiempoDeSalto = 0;
 		_estaSaltando = 0;
 		spriteActual->doLoop(false);
