@@ -149,10 +149,14 @@ void Personaje::Update(int velocidadScroll){
 void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
 	//HORRIBLE ASQUEROSO DESASTROSO
 	//m_fliped = posOtherPlayer - getAncho() < m_xActual;
-	spriteActual->render(m_xActual-x_dist_ventana,m_yActual,m_fliped);
+	float PosX = 0;
+	if (m_fliped){
+		PosX -= getAncho();
+	}
+	spriteActual->render(m_xActual-x_dist_ventana-PosX,m_yActual,m_fliped);
 
 	//* Para test de colisiones *//
-	spriteActual->RENDERCOLISIONTEST(m_xActual-x_dist_ventana,m_yActual,m_fliped,rectanguloAtaque(),rectanguloDefensa());
+	spriteActual->RENDERCOLISIONTEST(m_xActual-x_dist_ventana-PosX,m_yActual,m_fliped,rectanguloAtaque(),rectanguloDefensa());
 	//* Fin de test para mostrar colisiones *//
 
 	AvanzarSprite();
