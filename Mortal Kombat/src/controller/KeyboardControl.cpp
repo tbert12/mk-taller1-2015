@@ -53,6 +53,9 @@ void KeyboardControl::KeyPressed(){
 			case SDLK_d:
 				personaje->cubrirse();
 				break;
+			case SDLK_z:
+				personaje->lanzarObjeto();
+				break;
 			case SDLK_p:
 				pausa = !pausa;
 				break;

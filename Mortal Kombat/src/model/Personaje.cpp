@@ -48,8 +48,8 @@ void Personaje::lanzarObjeto(){
 			return;
 	}
 	//Poner sprite del personaje para lanzar
-	//poder = new ObjetoArrojable("arma subzero",velocidad,sprites poder);
-	poder->lanzar(m_xActual,m_yActual);
+	//poder = new ObjetoArrojable("arma subzero",velocidad_poder,sprites poder);
+	//poder->lanzar(m_xActual,m_yActual,m_fliped);
 }
 
 std::vector<Sprite*> Personaje::getSprites(){

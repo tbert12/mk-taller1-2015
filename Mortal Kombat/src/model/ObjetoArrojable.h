@@ -17,19 +17,25 @@ private:
 	bool vida;
 	float m_xActual;
 	float m_yActual;
-	float m_velocidad;
+	float m_velocidad_x;
+	float m_velocidad_y;
 	std::vector<Sprite*> sprites;
 	float m_AltoMundo;
 	float m_AnchoMundo;
+	int sprite_actual;
+	bool flip;
 
 	void _Update();
+	void _render(float x_dist_ventana);
 
 public:
 	ObjetoArrojable(string un_nombre,float velocidad,std::vector<Sprite*> unos_sprites);
-	bool lanzar(float pos_x,float pos_y);
-	void renderizar(float x_dist_ventana, float posOtherPlayer);
+	bool lanzar(float pos_x,float pos_y,bool flipeo);
+	void renderizar(float x_dist_ventana);
 	void setDimensionesMundo(float alto,float ancho);
 	bool getVida();
+	void destruir();
+	float getPosX();
 	virtual ~ObjetoArrojable();
 };
 

@@ -112,6 +112,10 @@ bool Ventana::create_window()
 					log(string( "SDL_image no pudo inicializarse! SDL_image Errors: %s\n", IMG_GetError() ),LOG_ERROR);
 					success = false;
 				}
+				if( TTF_Init() < 0 ){
+					log("No se pudo inicializar SDL_TTF",LOG_ERROR);
+					success = false;
+				}
 			}
 
 			//agrego icono
@@ -146,6 +150,7 @@ void Ventana::close_window()
 
 	//Cerrar SDL
 	IMG_Quit();
+	TTF_Quit();
 	SDL_Quit();
 }
 

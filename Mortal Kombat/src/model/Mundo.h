@@ -19,6 +19,7 @@
 #include "../view/Frame.h"
 #include "../view/Ventana.h"
 #include "../view/BarraEnergia.h"
+#include "../view/TiempoPartida.h"
 #include <vector>
 #include <algorithm>
 #include "logging.h"
@@ -31,10 +32,12 @@ private:
 	std::vector<Capa*> capas;
 	std::vector<Personaje*> personajes;
 	Tiempo* tiempo;
+	TiempoPartida* tiempo_pantalla;
 	Ventana* ventana;
 	int personajes_z_index;
 	int _verificarScroll();
 	void _crearBarras();
+	void _crearTiempo();
 	void _renderEstado();
 	BarraEnergia* BarraJugador1;
 	BarraEnergia* BarraJugador2;
@@ -51,6 +54,7 @@ public:
 	void render();
 	virtual ~Mundo();
 	bool mostrarImagen(string ruta);
+	void start();
 };
 
 #endif /* SRC_MODEL_MUNDO_H_ */

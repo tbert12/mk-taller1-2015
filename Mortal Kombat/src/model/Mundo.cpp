@@ -15,6 +15,12 @@ Mundo::Mundo(float ancho,float alto) {
 	personajes_z_index = 0;
 	BarraJugador1 = NULL;
 	BarraJugador2 = NULL;
+	tiempo_pantalla = NULL;
+}
+
+void Mundo::start(){
+	if (tiempo != NULL)
+		tiempo->start();
 }
 
 bool Mundo::addPersonaje(Personaje* un_personaje){
@@ -55,7 +61,14 @@ void Mundo::setTiempo(Tiempo* unTiempo){
 void Mundo::setVentana(Ventana* unaVentana){
 	ventana = unaVentana;
 	_crearBarras();
+	_crearTiempo();
 }
+
+void Mundo::_crearTiempo(){
+	if (ventana == NULL || tiempo == NULL) return;
+	tiempo_pantalla = new TiempoPartida(ventana,tiempo);
+}
+
 void Mundo::_crearBarras(){
 	if (ventana == NULL) return;
 	BarraJugador1 = new BarraEnergia(ventana,100);
@@ -82,9 +95,11 @@ bool Mundo::mostrarImagen(string ruta){
 
 void Mundo::_renderEstado(){
 	if (BarraJugador1 != NULL)
-		BarraJugador1->render(personajes[0]->getVida());//cambiar el get vida a int
+		BarraJugador1->render(personajes[0]->getVida());
 	if (BarraJugador2 != NULL)
 		BarraJugador2->render(personajes[1]->getVida());
+	if (tiempo_pantalla != NULL)
+		tiempo_pantalla->render();
 }
 
 void Mundo::render(){
@@ -129,9 +144,10 @@ Mundo::~Mundo() {
 		delete personajes[i];
 	}
 	personajes.clear();
-	delete ventana;
-	delete tiempo;
-	delete BarraJugador1;
-	delete BarraJugador2;
+	if(ventana)delete ventana;
+	if(tiempo)delete tiempo;
+	if(BarraJugador1)delete BarraJugador1;
+	if(BarraJugador2)delete BarraJugador2;
+	if(tiempo_pantalla)delete tiempo_pantalla;
 }
 
