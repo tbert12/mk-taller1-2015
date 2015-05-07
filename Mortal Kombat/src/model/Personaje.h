@@ -30,7 +30,7 @@ const int SPRITE_PINA_ALTA=		 		19;
 const int SPRITE_PINA_BAJA=		 		20;
 const int SPRITE_PINA_SALTANDO=  		21;
 
-const int TIEMPOTOTALDESALTO = 16;
+const int TIEMPOTOTALDESALTO = 15;
 
 #include <stdio.h>
 #include <iostream>

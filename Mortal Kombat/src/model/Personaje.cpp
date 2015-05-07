@@ -110,6 +110,7 @@ void Personaje::setScroll(bool scrollear){
 }
 
 void Personaje::setFlip(bool flip){
+	if (_estaSaltando > 0) return;
 	m_fliped= flip;
 }
 
@@ -121,9 +122,14 @@ void Personaje::Update(int velocidadScroll){
 
 
 	if (renderX <= (m_AnchoMundo - spriteActual->getAncho()) and renderX >= 0){
-		if ( !_estaAgachado and !_estaAtacando){
-			if(m_mover)
-				m_xActual += (m_velocidadActual);
+		if ( !_estaAgachado and !_estaCubriendose){
+			if (_estaAtacando){
+				if (_estaSaltando > 0)
+					if(m_mover) m_xActual += (m_velocidadActual);
+
+			} else {
+				if(m_mover) m_xActual += (m_velocidadActual);
+			}
 		}
 	}
 
@@ -144,22 +150,6 @@ void Personaje::Update(int velocidadScroll){
 
 	m_mover = true;
 
-}
-
-void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
-	//HORRIBLE ASQUEROSO DESASTROSO
-	//m_fliped = posOtherPlayer - getAncho() < m_xActual;
-	float PosX = 0;
-	if (m_fliped){
-		PosX -= getAncho();
-	}
-	spriteActual->render(m_xActual-x_dist_ventana-PosX,m_yActual,m_fliped);
-
-	//* Para test de colisiones *//
-	spriteActual->RENDERCOLISIONTEST(m_xActual-x_dist_ventana-PosX,m_yActual,m_fliped,rectanguloAtaque(),rectanguloDefensa());
-	//* Fin de test para mostrar colisiones *//
-
-	AvanzarSprite();
 }
 
 bool Personaje::enMovimiento(){
@@ -187,19 +177,29 @@ float Personaje::getVelocidadIzquierda(){
 	return -m_velocidad;
 }
 
+void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
+	//HORRIBLE ASQUEROSO DESASTROSO
+	//m_fliped = posOtherPlayer - getAncho() < m_xActual;
+	spriteActual->render(m_xActual - x_dist_ventana,m_yActual ,m_fliped);
+
+	//* Para test de colisiones *//
+	spriteActual->RENDERCOLISIONTEST(m_xActual - x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
+	//* Fin de test para mostrar colisiones *//
+
+	AvanzarSprite();
+}
+
 //-------------------------------------------------------------------------------------------------------------------------
 //Rectangulo para Colisiones
 
 Rect_Logico* Personaje::rectanguloAtaque(){
+	if (!_estaAtacando) return NULL;
 	Rect_Logico* rectangulo = new Rect_Logico;
-	rectangulo->x=m_xActual;
-	rectangulo->y=m_yActual;
+	rectangulo->x= m_xActual;
+	rectangulo->y= m_yActual;
 	rectangulo->w = spriteActual->getAncho();
-	rectangulo->h = spriteActual->getAlto();
-	if (_estaAtacando){
-			rectangulo->y -= rectangulo->h/2;
-			rectangulo->h = rectangulo->h/2;
-	}
+	rectangulo->h = getAlto()/2;
+	rectangulo->y -= rectangulo->h;
 	return rectangulo;
 }
 
@@ -212,12 +212,9 @@ Rect_Logico* Personaje::nextRectAtaque(){
 
 Rect_Logico* Personaje::rectanguloDefensa(){
 	Rect_Logico* rectangulo = new Rect_Logico;
-	rectangulo->x=m_xActual;
-	rectangulo->y=m_yActual;
-	rectangulo->w = spriteActual->getAncho();
-	if (_estaAtacando){
-		rectangulo->w = sprites[SPRITE_CUBRIRSE]->getAncho();
-	}
+	rectangulo->x = m_xActual + getAncho()*0.25;
+	rectangulo->y=  m_yActual;
+	rectangulo->w = sprites[SPRITE_CUBRIRSE]->getAncho() - getAncho()*0.25; //El mas Angosto
 	rectangulo->h = spriteActual->getAlto();
 	return rectangulo;
 }
@@ -226,36 +223,46 @@ Rect_Logico* Personaje::rectanguloDefensa(){
 //Manejo de Sprites
 
 void Personaje::AvanzarSprite(){
-	if ( _estaAtacando and spriteActual->ultimoFrame() ){
-		if (m_velocidadActual == 0){
-			_cambiarSprite(SPRITE_INICIAL);
-		} else {
-			_cambiarSprite(SPRITE_CAMINAR);
+	if (spriteActual->ultimoFrame() or !_estaSaltando ){
+		if ((_estaAtacando and !_estaAgachado) or (_estaAgachado and !_estaCubriendose and !_estaAtacando) or !_estaSaltando ){
+			if (m_velocidadActual == 0){
+				_cambiarSprite(SPRITE_INICIAL);
+			} else {
+				_cambiarSprite(SPRITE_CAMINAR);
+			}
+			if (_estaAtacando) _estaAtacando = false;
+			if (_estaAgachado and !_estaCubriendose) _estaAgachado = false;
 		}
-		_estaAtacando = false;
 	}
-	if ( (_estaAgachado and spriteActual->ultimoFrame() ) or !_estaSaltando){
-		if (m_velocidadActual == 0){
-			_cambiarSprite(SPRITE_INICIAL);
-		} else {
-			_cambiarSprite(SPRITE_CAMINAR);
-		}
-		_estaAgachado = false;
-	}
-	else if ( (_estaCubriendose) and spriteActual->ultimoFrame() ) {
+	if ( (_estaCubriendose or _estaAtacando) and spriteActual->ultimoFrame() ) {
 		if ( !_estaAgachado ) {
 			_cambiarSprite(SPRITE_INICIAL);
 		} else {
 			_cambiarSprite(SPRITE_AGACHAR);
 			spriteActual->doLoop(true);
+			spriteActual->Advance();
 		}
-		_estaCubriendose = false;
+		if (_estaCubriendose) _estaCubriendose = false;
+		if (_estaAtacando) _estaAtacando = false;
 	}
 	if ( _estaSaltando > 0){
 		//Salteo en el Aire el impulso del salto diagonal
-		if ( (m_velocidadActual > 0 and spriteActual->ultimoFrame()) or
-			 (m_velocidadActual < 0 and spriteActual->proxFrameUltimo() and _estaSaltando > 0) ){
-			spriteActual->Advance();
+		if (m_velocidadActual > 0){
+			if (!m_fliped){
+				if ( spriteActual->ultimoFrame() )
+					spriteActual->Advance();
+			} else {
+				if (spriteActual->proxFrameUltimo() )
+					spriteActual->Advance();
+			}
+		} else if (m_velocidadActual < 0){
+			if (!m_fliped){
+				if (spriteActual->proxFrameUltimo() )
+					spriteActual->Advance();
+			} else {
+				if ( spriteActual->ultimoFrame() )
+					spriteActual->Advance();
+			}
 		}
 	}
 
@@ -294,12 +301,11 @@ void Personaje::_cambiarSprite(int SpriteAccion){
 
 void Personaje::Inicial(){
 	//Solo se mueve al sprite Inicial (Parado)
-	if (_estaSaltando > 0) return;
 	this->_cambiarSprite(SPRITE_INICIAL);
 }
 
 void Personaje::Frenar(){
-	if (_estaSaltando > 0) return;
+	if (_estaSaltando > 0 or _estaAgachado) return;
 	m_velocidadActual = 0;
 	Inicial();
 }
@@ -362,16 +368,11 @@ void Personaje::_actualizarY(){
 		tiempoDeSalto = 0;
 		_estaSaltando = 0;
 		if (m_velocidadActual) {
+			spriteActual->doReverse(false);
 			spriteActual->Reset();
 		}
 		spriteActual->doLoop(false);
-		return;
-	}
-
-	if(tiempoDeSalto == TIEMPOTOTALDESALTO and !m_velocidadActual){
-		tiempoDeSalto = 0;
-		_estaSaltando = 0;
-		spriteActual->doLoop(false);
+		if (!m_velocidadActual) spriteActual->Advance();
 		return;
 	}
 }
@@ -393,7 +394,7 @@ void Personaje::Agachar(){
 	spriteActual->doLoop(true);
 
 	//Quitar Vida Prueba Barra
-	this->QuitarVida(38);
+	this->QuitarVida(13);
 
 }
 
@@ -407,7 +408,7 @@ void Personaje::Levantarse(){
 //+++++++++++CUBRIRSE++++++++++++++++++++++++++++++++++++++++++++++++
 
 void Personaje::cubrirse() {
-	if ( _estaCubriendose or _estaSaltando > 0 ) return;
+	if ( _estaCubriendose or _estaSaltando > 0 or _estaAtacando) return;
 
 	if ( _estaAgachado ) {
 		_cubrirseAgachado();
@@ -430,9 +431,9 @@ void Personaje::_cubrirseParado(){
 
 void Personaje::dejarDeCubrirse() {
 	if ( !_estaCubriendose ) return;
-	spriteActual->doLoop(true);
+	spriteActual->doLoop(false);
 	spriteActual->doReverse(true);
-	_estaCubriendose = false;
+
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -449,34 +450,41 @@ void Personaje::pinaBaja() {
 		if (spriteActual == sprites[SPRITE_PINA_BAJA]) pong = 5;
 		else pong = 2;
 		_cambiarSprite(SPRITE_PINA_BAJA);
-		spriteActual->doPongIn(pong);
+		spriteActual->doPongIn(pong); //HACERLO DESDE EL JSON O PARSER
 	}
 	_estaAtacando = true;
 }
 
 void Personaje::_pinaAgachado() {
 	_cambiarSprite(SPRITE_PINA_AGACHADO);
+	spriteActual->doPongIn(2); //HACERLO DESDE JSON O PARSER
 }
 
 void Personaje::pinaAlta() {
-	Frenar();
 	if ( _estaAgachado ) {
 		_gancho();
 	} else if ( _estaSaltando > 0 ) {
 		_pinaSaltando();
 	} else {
+		int pong;
+		if (spriteActual == sprites[SPRITE_PINA_ALTA]) pong = 5;
+		else pong = 2;
 		_cambiarSprite(SPRITE_PINA_ALTA);
+		spriteActual->doPongIn(pong); //PARSER
 	}
+	_estaAtacando = true;
 }
 
 void Personaje::_gancho() {
 	//Destrabarlo
 	_cambiarSprite(SPRITE_GANCHO);
+	spriteActual->setFrezeeFrame(4,5); //Frizarlo en el frame 4 por 5 segundos .HACERLO EN EL PARSER y EN EL JSON
+	spriteActual->frezeeSprite();
+	spriteActual->doPongIn(4); //Hacerlo en el Parser
 }
 
 void Personaje::_pinaSaltando() {
 	_cambiarSprite(SPRITE_PINA_SALTANDO);
-	spriteActual->doReverse(SPRITE_PINA_SALTANDO);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -489,12 +497,15 @@ void Personaje::patadaBaja() {
 		_patadaSaltando();
 	} else {
 		_cambiarSprite(SPRITE_PATADA_BAJA);
+		spriteActual->doPongIn(5); //PARSER
 	}
+	_estaAtacando = true;
 }
 
 void Personaje::_patadaBajaAgachado() {
 	//Destrabarlo
-	this->_cambiarSprite(SPRITE_PATADA_BAJA_AGACHADO);
+	_cambiarSprite(SPRITE_PATADA_BAJA_AGACHADO);
+	spriteActual->doPongIn(2); //HACERLO EN EL PARSER
 }
 
 void Personaje::patadaAlta() {
@@ -506,7 +517,9 @@ void Personaje::patadaAlta() {
 		_patadaCircular();
 	} else {
 		_cambiarSprite(SPRITE_PATADA_ALTA);
+		spriteActual->doPongIn(5); //HACERLO EN EL PARSER
 	}
+	_estaAtacando = true;
 }
 
 void Personaje::_patadaCircular() {
@@ -522,7 +535,8 @@ void Personaje::_patadaSaltando() {
 
 void Personaje::_patadaAltaAgachado() {
 	//Destrabarlo
-	this->_cambiarSprite(SPRITE_PATADA_ALTA_AGACHADO);
+	_cambiarSprite(SPRITE_PATADA_ALTA_AGACHADO);
+	spriteActual->doPongIn(3); //HACERLO EN EL PARSER
 }
 
 //-------------------------------------------------------------------------------------------------------------------------

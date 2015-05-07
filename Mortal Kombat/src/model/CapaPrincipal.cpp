@@ -99,9 +99,10 @@ void CapaPrincipal::_CheckearColisiones(){
 	Rect_Logico* rectDefensa2 = m_PersonajeDos->rectanguloDefensa();
 
 	//printf("actual: %f, anterior: %f, defensa: %f\n",rectAtaque1->x + rectAtaque1->w ,rectAtaqueAnterior1->x + rectAtaqueAnterior1->w,rectDefensa2->x );
-
-	if(rectAtaque1->x + rectAtaque1->w >= rectDefensa2->x and rectAtaqueAnterior1->x + rectAtaqueAnterior1->w < rectDefensa2->x  )
-		printf("hubo colision\n");
+	if (rectAtaque1 != NULL and rectAtaqueAnterior1 != NULL){
+		if(rectAtaque1->x + rectAtaque1->w >= rectDefensa2->x and rectAtaqueAnterior1->x + rectAtaqueAnterior1->w < rectDefensa2->x  )
+			printf("hubo colision Personaje1 Ataco y personaje 2 recibio\n");
+	}
 
 	rectAtaqueAnterior1 = rectAtaque1;
 	rectAtaqueAnterior2 = rectAtaque2;

@@ -21,13 +21,14 @@ private:
 	const Uint8* keystate;
 	SDL_Event* evento;
 	bool pausa;
+	int sleep;
 
 public:
 	KeyboardControl(SDL_Event* e, Personaje*);
 	virtual ~KeyboardControl();
-
 	void KeyPressed();
 	void KeyState();
+	int getSleep();
 	bool pause();
 };
 

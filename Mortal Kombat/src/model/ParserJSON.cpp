@@ -948,7 +948,7 @@ Mundo* ParserJSON::cargarMundo() {
 				position = (escenario_ancho/2) - (ventana_ancho/2)*rpos;
 			}
 			else{
-				position = (escenario_ancho/2) + (ventana_ancho/2)*rpos;
+				position = (escenario_ancho/2) ;//+ (ventana_ancho/2)*rpos;
 			}
 			personaje->setPosition( position , y_piso );
 			log( "Seteada Posicion en escenario de Personaje", LOG_DEBUG );

@@ -35,7 +35,7 @@ public:
 	void Pressed();
 	void KeyState();
 	bool pausa();
-
+	int getSleep();
 	virtual ~Controller();
 };
 
