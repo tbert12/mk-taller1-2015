@@ -19,17 +19,19 @@ private:
 	float m_yActual;
 	float m_velocidad_x;
 	float m_velocidad_y;
-	std::vector<Sprite*> sprites;
+	Sprite* sprite;
 	float m_AltoMundo;
 	float m_AnchoMundo;
-	int sprite_actual;
 	bool flip;
+	bool m_destruir;
+	void _avanzarSprite();
+	void _terminar();
 
 	void _Update();
 	void _render(float x_dist_ventana);
 
 public:
-	ObjetoArrojable(string un_nombre,float velocidad,std::vector<Sprite*> unos_sprites);
+	ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_sprites);
 	bool lanzar(float pos_x,float pos_y,bool flipeo);
 	void renderizar(float x_dist_ventana);
 	void setDimensionesMundo(float alto,float ancho);

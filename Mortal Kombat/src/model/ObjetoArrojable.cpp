@@ -7,18 +7,19 @@
 
 #include "ObjetoArrojable.h"
 
-ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,std::vector<Sprite*> unos_sprites) {
+ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_sprites) {
 	nombre = un_nombre;
 	vida = false;
 	m_xActual = 0;
 	m_yActual = 0;
 	m_velocidad_x = velocidad;
 	m_velocidad_y = velocidad;//por ahora
-	sprites = unos_sprites;
+	sprite = un_sprites;
+	if(sprite != NULL) sprite->doLoop(true);
 	m_AltoMundo = 0;
 	m_AnchoMundo = 0;
-	sprite_actual = 0;
 	flip = false;
+	m_destruir = false;
 }
 void ObjetoArrojable::setDimensionesMundo(float alto,float ancho){
 	m_AltoMundo = alto;
@@ -35,18 +36,38 @@ bool ObjetoArrojable::lanzar(float pos_x, float pos_y,bool flipeo){
 }
 
 void ObjetoArrojable::_Update(){
+	if(m_destruir) return;
 	if (!flip) m_xActual += m_velocidad_x;
 	else m_xActual -= m_velocidad_x;
 }
 
 void ObjetoArrojable::_render(float pos_ventana){
-	sprites[sprite_actual]->render(m_xActual - pos_ventana,m_yActual,flip);
+	int x = m_xActual;
+	if (flip)
+		x -= sprite->getAncho();
+	sprite->render(m_xActual - pos_ventana,m_yActual,flip);
+	_avanzarSprite();
+}
+
+void ObjetoArrojable::_avanzarSprite(){
+	sprite->Advance();
+	if (!m_destruir)
+		sprite->doLoop(false);
+	if(sprite->ultimoFrame()){
+		//llego al final
+		_terminar();
+	}
+}
+
+void ObjetoArrojable::_terminar(){
+	vida = false;
+	m_destruir = false;
+	m_xActual = 0;
+	m_yActual = 0;
 }
 
 void ObjetoArrojable::destruir(){
-	vida = false;
-	m_xActual = 0;
-	m_yActual = 0;
+	m_destruir = true;
 }
 
 float ObjetoArrojable::getPosX(){
@@ -68,8 +89,7 @@ bool ObjetoArrojable::getVida(){
 }
 
 ObjetoArrojable::~ObjetoArrojable() {
-	for (size_t i=0; i < sprites.size() ; i++){
-			delete sprites[i];
-		}
+	if(sprite != NULL)
+		delete sprite;
 }
 
