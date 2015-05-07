@@ -17,7 +17,7 @@ TiempoPartida::TiempoPartida(Ventana* una_ventana, Tiempo* un_tiempo) {
 	m_textura = NULL;
 	ancho = 0;
 	alto = 0;
-	textColor = { 255, 255, 255 };
+	textColor = { 0, 255, 0 };
 }
 
 bool TiempoPartida::loadFromRenderedText( std::string textureText){
@@ -55,7 +55,7 @@ bool TiempoPartida::loadFromRenderedText( std::string textureText){
 
 
 void TiempoPartida::render(){
-	int numero = 99;//m_tiempo->getTiempo();
+	int numero = m_tiempo->getTiempo();
 	loadFromRenderedText(to_string(numero));
 
 	int pos_x = ( (int)(m_ventana->obtenerAncho()*m_ventana->obtenerRatioX() + 0.5) - ancho ) / 2;

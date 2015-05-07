@@ -3,14 +3,11 @@
 Tiempo::Tiempo(int segundos) {
 	m_tiempoLimite = segundos;
 	m_tiempoRestante = segundos;
-	//time(&m_time);
-	m_tiempo_de_inicio = m_time;
-	m_tiempo_anterior = m_time;
+	time(&tiempo);
 }
 
 void Tiempo::start(){
-	//time(&m_tiempo_de_inicio);
-	m_tiempoLimite = m_tiempo_de_inicio + m_tiempoRestante;
+	time(&tiempo);
 }
 
 int Tiempo::getTiempo(){
@@ -18,23 +15,15 @@ int Tiempo::getTiempo(){
 }
 
 void Tiempo::actualizar(){
-	time(&m_time);
-	if (m_time - m_tiempo_anterior > 1)
+	std::time_t tiempo_actual;
+	time(&tiempo_actual);
+	double transcurrido = difftime(tiempo_actual,tiempo);
+	if (transcurrido >= 1.0){
 		m_tiempoRestante -= 1;
+		tiempo = tiempo_actual;
+	}
 	if (m_tiempoRestante < 0)
 		m_tiempoRestante = 0;
-}
-
-bool Tiempo::transcurrir(int segundos) {
-	if ( ! this->tiempoTerminado() ) {
-		m_tiempoRestante = m_tiempoRestante - segundos;
-		if ( m_tiempoRestante < 0 ) {
-			m_tiempoRestante = 0;
-		}
-		return true;
-	} else {
-		return false;
-	}
 }
 
 bool Tiempo::tiempoTerminado() {
@@ -51,6 +40,6 @@ float Tiempo::tiempoEnMinutos() {
 }
 
 Tiempo::~Tiempo() {
-	// TODO Auto-generated destructor stub
+
 }
 
