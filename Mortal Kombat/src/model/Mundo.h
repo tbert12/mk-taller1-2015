@@ -35,6 +35,8 @@ private:
 	TiempoPartida* tiempo_pantalla;
 	Ventana* ventana;
 	int personajes_z_index;
+	bool empezar;
+	void start();
 	int _verificarScroll();
 	void _crearBarras();
 	void _crearTiempo();
@@ -54,7 +56,6 @@ public:
 	void render();
 	virtual ~Mundo();
 	bool mostrarImagen(string ruta);
-	void start();
 };
 
 #endif /* SRC_MODEL_MUNDO_H_ */

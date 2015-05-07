@@ -16,6 +16,7 @@ Mundo::Mundo(float ancho,float alto) {
 	BarraJugador1 = NULL;
 	BarraJugador2 = NULL;
 	tiempo_pantalla = NULL;
+	empezar = false;
 }
 
 void Mundo::start(){
@@ -103,12 +104,21 @@ void Mundo::_renderEstado(){
 }
 
 void Mundo::render(){
+	if(!empezar){
+		start();
+		empezar = true;
+	}
 	//limpio pantalla
 	ventana->clear();
 
+	//verifico el tiempo
+	tiempo->actualizar();
+	if (tiempo->tiempoTerminado()){
+		//se termino el tiempo
+	}
+
 	//verifico scroll
 	int scroll = _verificarScroll();
-
 
 	//actualizo los estados
 	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
