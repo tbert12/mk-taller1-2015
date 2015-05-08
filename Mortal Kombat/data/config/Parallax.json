@@ -46,14 +46,14 @@
 	
 	"personajes": [
 		{
-		"ancho": 65,
-		"alto": 150,
+		"ancho": 80,
+		"alto": 170,
 		"sprites": "data/players/subzero/sprites/",
 		"nombre": "Sub-Zero"
 		},
 		{
-		"ancho": 65,
-		"alto": 150,
+		"ancho": 80,
+		"alto": 170,
 		"sprites": "data/players/subzero/sprites/",
 		"nombre": "Sub-Zero"
 		}
@@ -62,7 +62,7 @@
 	"color-alternativo": {
 		"h-inicial": 180,
 		"h-final": 240,
-		"desplazamiento": 150
+		"desplazamiento": 200
 	},
 	
 	"botones": {

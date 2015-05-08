@@ -174,7 +174,7 @@ void Sprite::frezeeSprite(){
 // Para mostrar algo y testear Colisiones //
 void Sprite::RENDERCOLISIONTEST(float x_ventana, float y, bool fliped,Rect_Logico* rectanguloAtaque,Rect_Logico* rectanguloDefensa){
 	if (rectanguloAtaque != NULL){
-		RectanguloTest1->renderRectangulo(rectanguloAtaque,rectanguloAtaque->x -  x_ventana, rectanguloAtaque->y-rectanguloAtaque->h, fliped);
+		RectanguloTest1->renderRectangulo(rectanguloAtaque,rectanguloAtaque->x -  x_ventana, rectanguloAtaque->y - rectanguloAtaque->h, fliped);
 	}
 	RectanguloTest2->renderRectangulo(rectanguloDefensa,rectanguloDefensa->x - x_ventana, rectanguloDefensa->y - rectanguloDefensa->h, fliped);
 }

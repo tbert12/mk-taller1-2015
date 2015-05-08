@@ -30,13 +30,23 @@ const int SPRITE_PINA_ALTA=		 		19;
 const int SPRITE_PINA_BAJA=		 		20;
 const int SPRITE_PINA_SALTANDO=  		21;
 
+const int SPRITE_RECIBE_PATADA_GIRA=    7;
+const int SPRITE_RECIBE_GANCHO = 		8; //CaeYSeLevanta
+const int SPRITE_RECIBE_AGACHADO =      22;
+const int SPRITE_RECIBE_ALTO = 			23;
+const int SPRITE_RECIBE_BAJO =			24;
+const int SPRITE_RECIBE_FUERTE = 		25;
+
 const int TIEMPOTOTALDESALTO = 15;
 
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include <map>
 #include "../view/Sprite.h"
 #include "ObjetoArrojable.h"
+
+
 
 
 class Personaje {
@@ -131,6 +141,8 @@ public:
 
 	void Inicial();
 	bool estaAgachado();
+
+	void recibirGolpe(int CodigoGolpe, int Danio);
 	void QuitarVida(int valor);
 
 	//acciones

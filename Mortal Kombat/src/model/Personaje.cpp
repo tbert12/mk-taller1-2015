@@ -181,7 +181,8 @@ void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
 	//HORRIBLE ASQUEROSO DESASTROSO
 	//m_fliped = posOtherPlayer - getAncho() < m_xActual;
 	spriteActual->render(m_xActual - x_dist_ventana,m_yActual ,m_fliped);
-
+	printf("->Esta atacnado: %s\n", _estaAtacando ? "True" : "False");
+	printf("->Esta Cubriendose: %s\n", _estaCubriendose ? "True" : "False");
 	//* Para test de colisiones *//
 	spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
 	//* Fin de test para mostrar colisiones *//
@@ -271,11 +272,17 @@ void Personaje::AvanzarSprite(){
 }
 
 void Personaje::_cambiarSprite(int SpriteAccion){
-	if(_estaSaltando > 0) return;
+	if(_estaSaltando > 0) {
+		if (SpriteAccion != SPRITE_PINA_SALTANDO)
+			printf("Salis\n");
+			return;
+	}
 	if (spriteActual == sprites[SPRITE_MUERE]) return;
 	if (sprites[SpriteAccion] == spriteActual and SpriteAccion != SPRITE_CAMINAR) return;
-	spriteActual = sprites[SpriteAccion];
 
+	if (SpriteAccion == SPRITE_PINA_SALTANDO) printf("ESTOY ACA2\n");
+
+	spriteActual = sprites[SpriteAccion];
 	if (SpriteAccion == SPRITE_CAMINAR or
 		SpriteAccion == SPRITE_SALTAR_DIAGONAL){
 		bool doReverse;
@@ -537,6 +544,50 @@ void Personaje::_patadaAltaAgachado() {
 	//Destrabarlo
 	_cambiarSprite(SPRITE_PATADA_ALTA_AGACHADO);
 	spriteActual->doPongIn(3); //HACERLO EN EL PARSER
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++RECIBE-GOLPES+++++++++++++++++++++++++++++++++++++++++++
+
+void Personaje::recibirGolpe(int CodigoGolpe, int Danio){
+	//El Codigo de golpe esta seteados en todos el mismo
+	/*
+		--->SPRITE_RECIBE_GANCHO<---
+		GANCHO=         	   12;
+
+		--->SPRITE_RECIBE_FUERTE<--
+
+		--->SPRITE_RECIBE_ALTO
+		PINA_ALTA=		 	   19;
+		PATADA_ALTA=		   14;
+		PATADA_SALTANDO=	   17;
+		PINA_SALTANDO=  	   21;
+
+		--->SPRITE_RECIBE_BAJO || SPRITE_RECIBE_AGACHADO<---
+		PINA_AGACHADO=  	   18;
+		PATADA_ALTA_AGACHADO=  5;
+		PINA_BAJA=		 	   20;
+		PATADA_BAJA_AGACHADO=  6;
+		PATADA_BAJA=    	   15;
+
+		--->SPRITE_RECIBE_PATADA_GIRA<--
+		PATADA_CIRCULAR=       16;
+
+	*/
+	std::map<int, int> reaccionesAGolpes;
+	reaccionesAGolpes[SPRITE_GANCHO] = SPRITE_RECIBE_GANCHO;
+	reaccionesAGolpes[SPRITE_PINA_ALTA] = SPRITE_RECIBE_ALTO;
+	reaccionesAGolpes[SPRITE_PATADA_ALTA] = SPRITE_RECIBE_ALTO;
+	reaccionesAGolpes[SPRITE_PATADA_SALTANDO] = SPRITE_RECIBE_ALTO;
+	reaccionesAGolpes[SPRITE_PINA_SALTANDO] = SPRITE_RECIBE_ALTO;
+	reaccionesAGolpes[SPRITE_PATADA_ALTA_AGACHADO] = _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
+	reaccionesAGolpes[SPRITE_PATADA_BAJA_AGACHADO] = _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
+	reaccionesAGolpes[SPRITE_PINA_AGACHADO] = _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;;
+	reaccionesAGolpes[SPRITE_PATADA_BAJA] = SPRITE_RECIBE_BAJO;
+	reaccionesAGolpes[SPRITE_PINA_BAJA] = SPRITE_RECIBE_BAJO;
+	reaccionesAGolpes[SPRITE_PATADA_CIRCULAR] = SPRITE_RECIBE_PATADA_GIRA;
+
+	//_cambiarSprite(reaccionesAGolpes[CodigoGolpe]);
 }
 
 //-------------------------------------------------------------------------------------------------------------------------
