@@ -17,6 +17,7 @@ KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje) {
 	evento = e;
 	pausa = false;
 	keystate = SDL_GetKeyboardState(NULL);
+	sleep = 50000;
 }
 bool KeyboardControl::pause(){
 	return pausa;
@@ -59,7 +60,19 @@ void KeyboardControl::KeyPressed(){
 			case SDLK_p:
 				pausa = !pausa;
 				break;
+			case SDLK_F1:
+				sleep+=10000;
+				break;
+			case SDLK_F2:
+				sleep-=10000;
+				if (sleep < 0) sleep = 0;
+				break;
 		}
+}
+
+int KeyboardControl::getSleep(){
+
+	return sleep;
 }
 
 void KeyboardControl::KeyState(){

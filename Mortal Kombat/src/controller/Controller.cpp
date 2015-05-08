@@ -122,6 +122,13 @@ void Controller::KeyState(){
 		Teclado->KeyState();
 }
 
+int Controller::getSleep(){
+	if (Teclado != NULL){
+		return Teclado->getSleep();
+	}
+	return 50000;
+}
+
 Controller::~Controller() {
 	personaje_1 = NULL;
 	personaje_2 = NULL;
@@ -138,4 +145,6 @@ Controller::~Controller() {
 		Joystick_2 = NULL;
 	}
 }
+
+
 

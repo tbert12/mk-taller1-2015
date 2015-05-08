@@ -20,6 +20,12 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 	doloop = false;
 	frameLoop = 0;
 
+	//Dejar congelado un frame
+	frezee = false; //Hay que Congelar el Sprite
+	frezeeCount = 0;//Cronometro para controlarl el tiempo congelado
+	frezeeTime = 0; //Congelarlo por frezeeTime whiles
+	frezeeFrame = 0;//Congelarlo en el Frame frezeeFrame
+
 	if( !SpriteSheetTexture->loadFromFile( ruta, cambiar_color, h_inicial, h_final, desplazamiento ) ){
 		log( "Error al intentar abrir la imagen del sprite.", LOG_ERROR );
 		throw CargarImagenException( "No se pudo cargar la imagen del sprite como textura SDL" );
@@ -40,12 +46,19 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 	}
 
 	//PARA TESTEAR EL PERSONAJE EN LAS COLISIONES
-	RectanguloTest = ventana->crearTextura();
-	if (!RectanguloTest->loadFromFile("data/img/forColisionTest/cuadrado_rojo.png")){
+	RectanguloTest1 = ventana->crearTextura();
+	if (!RectanguloTest1->loadFromFile("data/img/forColisionTest/cuadrado_rojo.png")){
 		printf("No se creo Rectangulo\n");
 	}
-	RectanguloTest->setAlpha(100);
-	RectanguloTest->setColor(0,255,255);
+	RectanguloTest1->setAlpha(100);
+	RectanguloTest1->setColor(100,0,255);
+
+	RectanguloTest2 = ventana->crearTextura();
+	if (!RectanguloTest2->loadFromFile("data/img/forColisionTest/cuadrado_rojo.png")){
+		printf("No se creo Rectangulo\n");
+	}
+	RectanguloTest2->setAlpha(100);
+	RectanguloTest2->setColor(100,255,0);
 }
 
 Sprite::~Sprite(){
@@ -63,6 +76,14 @@ float Sprite::getAlto(){
 }
 
 bool Sprite::Advance(){
+	if (frezee and (frezeeFrame == frameActual) ){
+		frezeeCount++;
+		if (frezeeCount >= frezeeTime){
+			frezeeCount = 0;
+			frezee = false;
+		}
+		return true;
+	}
 	if (!doloop){
 		if (reverse)
 			frameActual--;
@@ -95,9 +116,7 @@ void Sprite::Reset(){
 void Sprite::render(float x, float y, bool fliped){
 	//printf("Frame: %i [%f,%f]\n",frameActual,x,y);
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
-	float correrX = 0;
-	if (fliped) correrX = currentClip->w_log;
-	SpriteSheetTexture->renderObjeto(currentClip,x - correrX ,y - currentClip->h_log, fliped);
+	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h_log, fliped);
 }
 
 void Sprite::setLoop(int num_frame) {
@@ -106,8 +125,6 @@ void Sprite::setLoop(int num_frame) {
 }
 
 void Sprite::doLoop(bool loop){
-	if (loop) printf("deLoop->Seteeate en TRUE\n");
-	else  printf("deLoop->Seteeate en FALSE\n");
 	doloop = loop;
 }
 
@@ -144,13 +161,21 @@ void Sprite::doPongIn(int pong){
 	m_pong = pong;
 }
 
+void Sprite::setFrezeeFrame(int frame,int time){
+	if (frame < 0 or frame >= cantidadFrames) return;
+	frezeeTime = time;
+	frezeeFrame = frame;
+}
+
+void Sprite::frezeeSprite(){
+	frezee = true;
+}
+
 // Para mostrar algo y testear Colisiones //
-void Sprite::RENDERCOLISIONTEST(float x, float y, bool fliped,Rect_Logico* rectanguloAtaque,Rect_Logico* rectanguloDefensa){
-	float correrX = 0;
-	if (fliped) correrX = rectanguloAtaque->w;
-	RectanguloTest->renderRectangulo(rectanguloAtaque,x - correrX,rectanguloAtaque->y-rectanguloAtaque->h,fliped);
-	float correrX1 = 0;
-	if (fliped) correrX1 = rectanguloDefensa->w;
-	RectanguloTest->renderRectangulo(rectanguloDefensa,x - correrX1,rectanguloDefensa->y-rectanguloDefensa->h,fliped);
+void Sprite::RENDERCOLISIONTEST(float x_ventana, float y, bool fliped,Rect_Logico* rectanguloAtaque,Rect_Logico* rectanguloDefensa){
+	if (rectanguloAtaque != NULL){
+		RectanguloTest1->renderRectangulo(rectanguloAtaque,rectanguloAtaque->x -  x_ventana, rectanguloAtaque->y - rectanguloAtaque->h, fliped);
+	}
+	RectanguloTest2->renderRectangulo(rectanguloDefensa,rectanguloDefensa->x - x_ventana, rectanguloDefensa->y - rectanguloDefensa->h, fliped);
 }
 

@@ -30,6 +30,12 @@ class Sprite {
 		int frameLoop;
 		int m_pong;
 
+		bool frezee;
+		int frezeeTime;
+		int frezeeCount;
+		int frezeeFrame;
+
+
 		Rect_Objeto* spriteFrames;
 		LTexture* SpriteSheetTexture;
 
@@ -41,6 +47,8 @@ class Sprite {
 		void Reset();
 
 		void setLoop(int num_frame);
+		void setFrezeeFrame(int frame,int time);
+		void frezeeSprite();
 		void doPongIn(int pong);
 		void doLoop(bool loop);
 		void doReverse(bool Reverse);
@@ -56,7 +64,8 @@ class Sprite {
 		void render(float x,float y, bool fliped);
 
 		//PARA TESTEO
-		LTexture* RectanguloTest;
+		LTexture* RectanguloTest1;
+		LTexture* RectanguloTest2;
 		void RENDERCOLISIONTEST(float x, float y, bool fliped,Rect_Logico* rectanguloAtaque,Rect_Logico* b);
 
 		//Rect_Logico* getFrame();

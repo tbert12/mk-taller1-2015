@@ -99,7 +99,7 @@ int main( int argc, char* args[] )
 		}
 
 		//Sleep(Microsegundos)
-		usleep(500000);
+		usleep(control->getSleep());
 	}
 
 
