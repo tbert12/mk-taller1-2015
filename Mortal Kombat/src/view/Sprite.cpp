@@ -84,6 +84,13 @@ bool Sprite::Advance(){
 		}
 		return true;
 	}
+	if (m_pong and (m_pong != frameActual) ){
+		if ( ultimoFrame() ){
+			reverse = !reverse;
+			Reset();
+
+		}
+	}
 	if (!doloop){
 		if (reverse)
 			frameActual--;
@@ -98,7 +105,7 @@ bool Sprite::Advance(){
 		}
 	}
 	if (m_pong == frameActual){
-			reverse = true;
+			reverse = !reverse;
 	}
 	if (frameActual >= cantidadFrames or frameActual < 0){
 		Reset();

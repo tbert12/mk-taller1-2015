@@ -12,6 +12,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	vida = 100;
 	sprites = Sprites;
 	spriteActual = sprites[SPRITE_INICIAL];
+	//spriteActual->doPongIn(8);
 
 	m_xActual = 0;
 	m_yActual = 0;
