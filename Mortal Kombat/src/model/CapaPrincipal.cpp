@@ -90,6 +90,11 @@ void CapaPrincipal::Update(int scroll){
 
 }
 
+bool floatIsBetween(float x, float border1, float deltaX){
+	//printf("x:%f, border1: %f, border2: %f\n",x,border1,border1+deltaX);
+	return x>=border1 and x<= border1+deltaX;
+}
+
 void CapaPrincipal::_CheckearColisiones(){
 
 	Rect_Logico* rectAtaque1 = m_Personaje->rectanguloAtaque();
@@ -99,14 +104,26 @@ void CapaPrincipal::_CheckearColisiones(){
 	Rect_Logico* rectDefensa2 = m_PersonajeDos->rectanguloDefensa();
 
 	//printf("actual: %f, anterior: %f, defensa: %f\n",rectAtaque1->x + rectAtaque1->w ,rectAtaqueAnterior1->x + rectAtaqueAnterior1->w,rectDefensa2->x );
+<<<<<<< HEAD
+
+	bool colisionaX = rectAtaque1->x + rectAtaque1->w >= rectDefensa2->x and rectAtaqueAnterior1->x + rectAtaqueAnterior1->w < rectDefensa2->x ;
+	//printf("rectA1x+rA1w: %f,rectAA1x+rAA1w: %f, rD2x: %f\n ",rectAtaque1->x + rectAtaque1->w )
+	bool colisionaY = (floatIsBetween(rectDefensa2->y, rectAtaque1->y-rectAtaque1->h , rectAtaque1->h) and floatIsBetween(rectDefensa2->y, rectAtaqueAnterior1->y-rectAtaqueAnterior1->h, rectAtaqueAnterior1->h)) or
+			(floatIsBetween(rectAtaque1->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectAtaqueAnterior1->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
+
+	if(colisionaX and colisionaY ){
+		printf("hubo colision\n");
+=======
 	if (rectAtaque1 != NULL and rectAtaqueAnterior1 != NULL){
 		if(rectAtaque1->x + rectAtaque1->w >= rectDefensa2->x and rectAtaqueAnterior1->x + rectAtaqueAnterior1->w < rectDefensa2->x  )
 			printf("hubo colision Personaje1 Ataco y personaje 2 recibio\n");
+>>>>>>> 09ad11a1d6d94d92faad71e5ff880c6e94eccfeb
 	}
 
 	rectAtaqueAnterior1 = rectAtaque1;
 	rectAtaqueAnterior2 = rectAtaque2;
 }
+
 
 void CapaPrincipal::Renderizar()
 {
