@@ -34,7 +34,7 @@ private:
 	float m_velocidad_izquierda;
 	int m_PersonajeQueScrollea; //0 no scrollea ninguno, 1 scrollea el 1, 2 el 2
 
-	void _CheckearColisiones();
+	void _CheckearColisiones(Personaje*,Personaje*);
 };
 
 

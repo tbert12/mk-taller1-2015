@@ -49,7 +49,6 @@ void CapaPrincipal::Update(int scroll){
 	Personaje* personaje;
 	Personaje* personajeFlippeado;
 
-	this->_CheckearColisiones();
 
 	if(m_Personaje->getFlipState()){
 		personaje = m_PersonajeDos;
@@ -59,6 +58,9 @@ void CapaPrincipal::Update(int scroll){
 		personajeFlippeado = m_PersonajeDos;
 		personaje = m_Personaje;
 	}
+
+	this->_CheckearColisiones(personaje,personajeFlippeado);
+
 	if(personaje->getX() > personajeFlippeado->getX() ){
 		personaje->setFlip(true);
 		personajeFlippeado->setFlip(false);
@@ -95,27 +97,44 @@ bool floatIsBetween(float x, float border1, float deltaX){
 	return x>=border1 and x<= border1+deltaX;
 }
 
-void CapaPrincipal::_CheckearColisiones(){
+void CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personajeFlippeado){
 
-	Rect_Logico* rectAtaque1 = m_Personaje->rectanguloAtaque();
-	Rect_Logico* rectDefensa1 = m_Personaje->rectanguloDefensa();
+	Rect_Logico* rectAtaque1 = personaje->rectanguloAtaque();
+	Rect_Logico* rectDefensa1 = personaje->rectanguloDefensa();
 
-	Rect_Logico* rectAtaque2 = m_PersonajeDos->rectanguloAtaque();
-	Rect_Logico* rectDefensa2 = m_PersonajeDos->rectanguloDefensa();
+	Rect_Logico* rectAtaque2 = personajeFlippeado->rectanguloAtaque();
+	Rect_Logico* rectDefensa2 = personajeFlippeado->rectanguloDefensa();
 
 	//printf("actual: %f, anterior: %f, defensa: %f\n",rectAtaque1->x + rectAtaque1->w ,rectAtaqueAnterior1->x + rectAtaqueAnterior1->w,rectDefensa2->x );
 
-	if (rectAtaque1 != NULL and rectAtaqueAnterior1 != NULL){
-		bool colisionaX = rectAtaque1->x + rectAtaque1->w >= rectDefensa2->x and rectAtaqueAnterior1->x + rectAtaqueAnterior1->w < rectDefensa2->x ;
-		//printf("rectA1x+rA1w: %f,rectAA1x+rAA1w: %f, rD2x: %f\n ",rectAtaque1->x + rectAtaque1->w )
+	if (rectAtaque1 != NULL ){
+
+		if(!rectAtaqueAnterior1){
+			printf("uso rect defensa \n");
+			rectAtaqueAnterior1 = rectDefensa1;
+		}
+		bool colisionaAtaquePersonajeSinFlipX = floatIsBetween(rectDefensa2->x,rectAtaque1->x,rectAtaque1->w) and
+				!floatIsBetween(rectDefensa2->x,rectAtaqueAnterior1->x,rectAtaqueAnterior1->w);
+		printf("fiB anterior %i\n",floatIsBetween(rectDefensa2->x,rectAtaqueAnterior1->x,rectAtaqueAnterior1->w) );
 		bool colisionaY = (floatIsBetween(rectDefensa2->y, rectAtaque1->y-rectAtaque1->h , rectAtaque1->h) and floatIsBetween(rectDefensa2->y, rectAtaqueAnterior1->y-rectAtaqueAnterior1->h, rectAtaqueAnterior1->h)) or
 				(floatIsBetween(rectAtaque1->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectAtaqueAnterior1->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
 
-		if(colisionaX and colisionaY ){
+		if( colisionaAtaquePersonajeSinFlipX and colisionaY ){
+			printf("rectAtaqueEnd: %f \n",rectAtaque1->x + rectAtaque1->w);
+			printf("rectAtaqueAnteriorEnd: %f \n",rectAtaqueAnterior1->x + rectAtaqueAnterior1->w);
+			printf("rectDefensaStart: %f \n",rectDefensa2->x);
 			printf("hubo colision\n");
 		}
-			if(rectAtaque1->x + rectAtaque1->w >= rectDefensa2->x and rectAtaqueAnterior1->x + rectAtaqueAnterior1->w < rectDefensa2->x  )
-				printf("hubo colision Personaje1 Ataco y personaje 2 recibio\n");
+		/*
+		else
+		{
+			printf("rectAtaqueEnd: %f \n",rectAtaque1->x + rectAtaque1->w);
+			printf("rectAtaqueAnteriorEnd: %f \n",rectAtaqueAnterior1->x );
+			printf("rectDefensaStart: %f \n",rectDefensa2->x);
+		}
+		*/
+			//if(rectAtaque1->x + rectAtaque1->w >= rectDefensa2->x and rectAtaqueAnterior1->x + rectAtaqueAnterior1->w < rectDefensa2->x  )
+			//	printf("hubo colision Personaje1 Ataco y personaje 2 recibio\n");
 	}
 
 	rectAtaqueAnterior1 = rectAtaque1;
