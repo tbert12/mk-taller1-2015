@@ -1,6 +1,6 @@
 {
 
-	"loglvl": 1,
+	"loglvl": 2,
 	
 	"tiempo": 99,
 
@@ -46,23 +46,21 @@
 	
 	"personajes": [
 		{
-		"ancho": 65,
-		"alto": 150,
+		"nombre": "Sub-Zero",
 		"sprites": "data/players/subzero/sprites/",
-		"nombre": "Sub-Zero"
+		"color-alternativo": {
+			"h-inicial": 180,
+			"h-final": 240,
+			"desplazamiento": 150
 		},
-		{
 		"ancho": 65,
-		"alto": 150,
-		"sprites": "data/players/subzero/sprites/",
-		"nombre": "Sub-Zero"
+		"alto": 150
 		}
 	],
 	
-	"color-alternativo": {
-		"h-inicial": 180,
-		"h-final": 240,
-		"desplazamiento": 150
+	"pelea": {
+		"luchador1": "Sub-Zero",
+		"luchador2": "Sub-Zero"
 	},
 	
 	"botones": {

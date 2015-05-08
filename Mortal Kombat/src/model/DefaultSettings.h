@@ -72,9 +72,9 @@ const int COMANDO_PATADA_ALTA_DEFAULT = 0;
 const int COMANDO_CUBRIRSE_DEFAULT = 6;
 const int COMANDO_LANZAR_ARMA_DEFAULT = 4;
 
-const int COLOR_H_INICIAL_DEFAULT = 40;
-const int COLOR_H_FINAL_DEFAULT = 45;
-const int COLOR_DESPLAZAMIENTO_DEFAULT = 30;
+const int COLOR_H_INICIAL_DEFAULT = 0;
+const int COLOR_H_FINAL_DEFAULT = 360;
+const int COLOR_DESPLAZAMIENTO_DEFAULT = 0;
 
 const char* const IMAGEN_CARGANDO_JUEGO = "data/img/background/inicio.png";
 
@@ -88,6 +88,8 @@ using namespace std;
 Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float h_desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT);
 vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float h_desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT );
 void mapaComandosDefault(map<string, int>* comandos);
+Personaje* generarPersonajeDefault(int nro_personaje, Ventana* ventana, bool cambiar_color, bool flipped);
+vector<Personaje*> generarPersonajesDefault(Ventana* ventana);
 Mundo* generarMundoDefault();
 
 

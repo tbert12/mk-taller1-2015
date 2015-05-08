@@ -382,6 +382,185 @@ void ParserJSON::cargarMapaComandos(Json::Value root) {
 
 }
 
+vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
+	float h_inicial, h_final, desplazamiento;
+	vector<float> color;
+
+	if ( ! personaje.isMember("color-alternativo") ) {
+		log( "No se especificaron parametros para el color alternativo para el personaje. No se cambiarian los colores.", LOG_WARNING );
+	} else {
+		if ( ! personaje["color-alternativo"].isMember("h-inicial") ) {
+			h_inicial = COLOR_H_INICIAL_DEFAULT;
+			log( "No se especifico el hue inicial para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
+		} else {
+			try {
+				h_inicial = personaje["color-alternativo"].get( "h-inicial", COLOR_H_INICIAL_DEFAULT ).asFloat();
+				if ( h_inicial < 0 ) {
+					h_inicial = fmod(h_inicial, 360);
+					h_inicial = 360 - h_inicial;
+					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				}
+				if ( h_inicial > 360 ) {
+					h_inicial = fmod(h_inicial, 360);
+					log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				}
+				log( "Se cargo el hue inicial para el desplazamiento al color alternativo.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				h_inicial = COLOR_H_INICIAL_DEFAULT;
+				log( "El hue inicial especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! personaje["color-alternativo"].isMember("h-final") ) {
+			h_final = COLOR_H_FINAL_DEFAULT;
+			log( "No se especifico el hue final para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
+		} else {
+			try {
+				h_final = personaje["color-alternativo"].get( "h-final", COLOR_H_FINAL_DEFAULT ).asFloat();
+				if ( h_final < 0 ) {
+					h_final = fmod(h_final, 360);
+					h_final = 360 - h_final;
+					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				}
+				if ( h_final > 360 ) {
+					h_final = fmod(h_final, 360);
+					log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				}
+				log( "Se cargo el hue final para el desplazamiento al color alternativo.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				h_final = COLOR_H_FINAL_DEFAULT;
+				log( "El hue final especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! personaje["color-alternativo"].isMember("desplazamiento") ) {
+			desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
+			log( "No se especificaron los grados de desplazamiento hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
+		} else {
+			try {
+				desplazamiento = personaje["color-alternativo"].get( "desplazamiento", COLOR_DESPLAZAMIENTO_DEFAULT ).asFloat();
+				log( "Se cargaron los grados de el desplazamiento hacia el color alternativo.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
+				log( "Los grados de desplazamiento hacia el color alternativo especificados no son un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+	}
+	color.push_back(h_inicial);
+	color.push_back(h_final);
+	color.push_back(desplazamiento);
+
+	return color;
+}
+
+
+Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaje, Json::Value root, bool flipped_default, Ventana* ventana, bool cambiar_color, float escenario_ancho, float escenario_alto, float ventana_ancho, float y_piso) {
+
+	Personaje* personaje;
+	float personaje_ancho, personaje_alto;
+	float rpos = PERSONAJE_POS_RESPECTO_CAM;
+	string personaje_carpeta_sprites, personaje_nombre;
+	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
+		personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, flipped_default);
+		personaje->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2)*rpos,Y_PISO_DEFAULT);
+		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan el personaje por defecto.", LOG_ERROR );
+	} else {
+		for ( int k=0; k < (int)root["personajes"].size(); k++ ) {
+
+			if ( ! root["personajes"][k].isMember("nombre") ) {
+				continue;
+			} else {
+				try {
+					personaje_nombre = root["personajes"][k].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
+					if ( personaje_nombre == nombre_personaje ) {
+						log ( "Se encontro el personaje con el nombre indicado.", LOG_DEBUG );
+						if ( ! root["personajes"][k].isMember("ancho") ) {
+							personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
+							log( "No se especifico el ancho logico del personaje. Se setea por defecto en 30.", LOG_WARNING );
+						} else {
+							try {
+								personaje_ancho = root["personajes"][k].get( "ancho", PERSONAJE_ANCHO_DEFAULT ).asFloat();
+								if ( personaje_ancho < 0 ) {
+									personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
+									log( "El ancho del personaje no puede ser negativo. Se setea por defecto en 30.", LOG_WARNING );
+								} else if ( personaje_ancho > escenario_ancho ) {
+									personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
+									log( "El ancho del personaje no puede superar el del escenario. Se setea por defecto en 30.", LOG_WARNING );
+								} else	log( "Se cargo correctamente el ancho logico del personaje.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
+								log( "El ancho logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+							}
+						}
+						if ( ! root["personajes"][k].isMember("alto") ) {
+							personaje_alto = PERSONAJE_ALTO_DEFAULT;
+							log( "No se especifico el alto logico del personaje. Se setea por defecto en 60.", LOG_WARNING );
+						} else {
+							try {
+								personaje_alto = root["personajes"][k].get( "alto", PERSONAJE_ALTO_DEFAULT ).asFloat();
+								if ( personaje_alto < 0 ) {
+									personaje_alto = PERSONAJE_ALTO_DEFAULT;
+									log( "El alto del personaje no puede negativo. Se setea por defecto en 60.", LOG_WARNING );
+								} else if ( personaje_alto > escenario_alto ) {
+									personaje_alto = PERSONAJE_ALTO_DEFAULT;
+									log( "El alto del personaje no puede superar el del escenario. Se setea por defecto en 60.", LOG_WARNING );
+								} else	log( "Se cargo correctamente el alto logico del personaje.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								personaje_alto = PERSONAJE_ALTO_DEFAULT;
+								log( "El alto logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+							}
+						}
+						if ( ! root["personajes"][k].isMember("sprites") ) {
+							personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+							log( "No se especifico la carpeta contenedora de los sprites del personaje. Se utiliza carpeta por defecto.", LOG_ERROR );
+						} else {
+							try {
+								personaje_carpeta_sprites = root["personajes"][k].get( "sprites", PERSONAJE_CARPETA_SPRITES_DEFAULT ).asString();
+								struct stat sb;
+								if ( stat(personaje_carpeta_sprites.c_str(), &sb) != 0 ) {
+									log( "La ruta a la carpeta de sprites del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
+									personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+								} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sprites del personaje.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
+								log( "La ruta a la carpeta contenedora de los sprites del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+							}
+						}
+
+						vector<float> colorAlternativo = cargarColorAlternativo(root["personajes"][k]);
+
+						// Creo Sprites del personaje.
+						vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
+
+						// Crear personaje.
+						Personaje* personaje = new Personaje(personaje_nombre, sprites, PERSONAJE_VELOCIDAD, flipped_default);
+						log( "Se creo correctamente el personaje.", LOG_DEBUG );
+
+						// Indico posicion inicial del personaje.
+						float position;
+						if ( nro_personaje == 1 ) {
+							position = (escenario_ancho/2) - (ventana_ancho/2)*rpos;
+						}
+						else if ( nro_personaje == 2 ) {
+							position = (escenario_ancho/2) + (ventana_ancho/2)*rpos;
+						}
+						personaje->setPosition( position , y_piso );
+						log( "Seteada Posicion en escenario de Personaje", LOG_DEBUG );
+
+						return personaje;
+
+					}
+				} catch ( exception &e ) {
+					continue;
+				}
+			}
+		}
+
+		personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, flipped_default);
+		personaje->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2)*rpos,Y_PISO_DEFAULT);
+		log( "No se encontro el personaje con el nombre indicado en el vector de personajes. Se genera personaje por defecto.", LOG_ERROR );
+	}
+	return personaje;
+}
+
 
 Mundo* ParserJSON::cargarMundo() {
 
@@ -734,230 +913,61 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 	}
 
-	// Verificar si se debe cambiar el color del segundo personaje y hacerlo.
-	bool cambiar_color = false;
+
+
 	string personaje_nombre_1, personaje_nombre_2;
-
-	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
+	Personaje *personaje_1, *personaje_2;
+	bool fallo_personaje_1 = false;
+	bool cambiar_color = false;
+	if ( ! root.isMember("pelea") ) {
+		personaje_1 = generarPersonajeDefault(1, ventana, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
 		cambiar_color = true;
-		log( "Se generaran dos personajes iguales por defecto. Como son iguales, el segundo tendrá otro color.", LOG_WARNING );
+		personaje_2 = generarPersonajeDefault(2, ventana, cambiar_color, !PERSONAJE_FLIPPED_DEFAULT);
+		log( "No se especificaron correctamente los parametros para los dos luchadores de la pelea. Se setean ambos como el personaje por defecto.", LOG_ERROR );
 	} else {
-
-		if ( ! root["personajes"][0].isMember("nombre") ) {
-			personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
+		if ( ! root["pelea"].isMember("luchador1") ) {
+			personaje_1 = generarPersonajeDefault(1, ventana, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
+			fallo_personaje_1 = true;
+			log("No se especifico el luchador 1, se setea por defecto.", LOG_ERROR);
 		} else {
 			try {
-				personaje_nombre_1 = root["personajes"][0].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
+				personaje_nombre_1 = root["pelea"].get("luchador1", PERSONAJE_NOMBRE_DEFAULT).asString();
+				personaje_1 = cargarPersonaje(personaje_nombre_1, 1, root, PERSONAJE_FLIPPED_DEFAULT, ventana, cambiar_color, escenario_ancho, escenario_alto, ventana_ancho, y_piso);
+				log( "El nombre del personaje 1 fue cargado correctamente.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
+				personaje_1 = generarPersonajeDefault(1, ventana, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
+				fallo_personaje_1 = true;
+				log( "El nombre del personaje 1 no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-
-		if ( ! root["personajes"][1].isMember("nombre") ) {
-			personaje_nombre_2 = PERSONAJE_NOMBRE_DEFAULT;
+		if ( ! root["pelea"].isMember("luchador2") ) {
+			if ( fallo_personaje_1 )
+				cambiar_color = true;
+			personaje_2 = generarPersonajeDefault(2, ventana, cambiar_color, !PERSONAJE_FLIPPED_DEFAULT);
+			log("No se especifico el luchador 2, se setea por defecto.", LOG_ERROR);
 		} else {
 			try {
-				personaje_nombre_2 = root["personajes"][0].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
+				personaje_nombre_2 = root["pelea"].get("luchador2", PERSONAJE_NOMBRE_DEFAULT).asString();
+				if (personaje_nombre_1 == personaje_nombre_1)
+					cambiar_color = true;
+				personaje_2 = cargarPersonaje(personaje_nombre_2, 2, root, !PERSONAJE_FLIPPED_DEFAULT, ventana, cambiar_color, escenario_ancho, escenario_alto, ventana_ancho, y_piso);
+				log( "El nombre del personaje 2 fue cargado correctamente.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				personaje_nombre_2 = PERSONAJE_NOMBRE_DEFAULT;
-			}
-		}
-
-		if ( personaje_nombre_1 == personaje_nombre_2 ) {
-			cambiar_color = true;
-			log( "Los personajes tienen el mismo nombre. Por lo tanto, se le cambiara el color al segundo personaje.", LOG_WARNING );
-		}
-	}
-
-	float h_inicial=0, h_final=0, desplazamiento=0;
-	if ( cambiar_color ) {
-
-		if ( ! root.isMember("color-alternativo") ) {
-			log( "No se especificaron parametros para el color alternativo para el segundo personaje. No se cambian los colores.", LOG_WARNING );
-		} else {
-			if ( ! root["color-alternativo"].isMember("h-inicial") ) {
-				h_inicial = COLOR_H_INICIAL_DEFAULT;
-				log( "No se especifico el hue inicial para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
-			} else {
-				try {
-					h_inicial = root["color-alternativo"].get( "h-inicial", COLOR_H_INICIAL_DEFAULT ).asFloat();
-					if ( h_inicial < 0 ) {
-						h_inicial = fmod(h_inicial, 360);
-						h_inicial = 360 - h_inicial;
-						log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-					}
-					if ( h_inicial > 360 ) {
-						h_inicial = fmod(h_inicial, 360);
-						log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-					}
-					log( "Se cargo el hue inicial para el desplazamiento al color alternativo.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					h_inicial = COLOR_H_INICIAL_DEFAULT;
-					log( "El hue inicial especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-			if ( ! root["color-alternativo"].isMember("h-final") ) {
-				h_final = COLOR_H_FINAL_DEFAULT;
-				log( "No se especifico el hue final para desplazar hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
-			} else {
-				try {
-					h_final = root["color-alternativo"].get( "h-final", COLOR_H_FINAL_DEFAULT ).asFloat();
-					if ( h_final < 0 ) {
-						h_final = fmod(h_final, 360);
-						h_final = 360 - h_final;
-						log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-					}
-					if ( h_final > 360 ) {
-						h_final = fmod(h_final, 360);
-						log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-					}
-					log( "Se cargo el hue final para el desplazamiento al color alternativo.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					h_final = COLOR_H_FINAL_DEFAULT;
-					log( "El hue final especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-			if ( ! root["color-alternativo"].isMember("desplazamiento") ) {
-				desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
-				log( "No se especificaron los grados de desplazamiento hacia otro color alternativo. Se setea por defecto.", LOG_ERROR );
-			} else {
-				try {
-					desplazamiento = root["color-alternativo"].get( "desplazamiento", COLOR_DESPLAZAMIENTO_DEFAULT ).asFloat();
-					log( "Se cargaron los grados de el desplazamiento hacia el color alternativo.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT;
-					log( "Los grados de desplazameinto hacia el color alternativo especificados no son un numero valido. Se setea por defecto.", LOG_ERROR );
-				}
+				if ( fallo_personaje_1 )
+					cambiar_color = true;
+				personaje_2 = generarPersonajeDefault(2, ventana, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
+				log( "El nombre del personaje 2 no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 			}
 		}
 	}
-
-	// Creo vector de personajes.
 	vector<Personaje*> personajes;
-
-	// Obtener el personaje.
-	// Si no se especifica o no se encuentra la carpeta de sprites del personaje, se usa una por defecto.
-	// Si no se especifica el z-index se fija uno por defecto.
-	float personaje_ancho, personaje_alto;
-	float rpos = PERSONAJE_POS_RESPECTO_CAM;
-	string personaje_carpeta_sprites, personaje_nombre;
-	bool flipped;
-	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
-		Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
-		personaje_default->setPosition((escenario_ancho/2) - (ventana_ancho/2)*rpos,Y_PISO_DEFAULT);
-		Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, !PERSONAJE_FLIPPED_DEFAULT);
-		personaje2_default->setPosition((escenario_ancho/2) + (ventana_ancho/2)*rpos,Y_PISO_DEFAULT);
-		nuevo_mundo->addPersonaje(personaje_default);
-		nuevo_mundo->addPersonaje(personaje2_default);
-		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan dos personajes iguales por defecto.", LOG_ERROR );
-	} else {
-		for ( int k=0; k < (int)root["personajes"].size(); k++ ) {
-			if ( ! root["personajes"][k].isMember("ancho") ) {
-				personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
-				log( "No se especifico el ancho logico del personaje. Se setea por defecto en 30.", LOG_WARNING );
-			} else {
-				try {
-					personaje_ancho = root["personajes"][k].get( "ancho", PERSONAJE_ANCHO_DEFAULT ).asFloat();
-					if ( personaje_ancho < 0 ) {
-						personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
-						log( "El ancho del personaje no puede negativo. Se setea por defecto en 30.", LOG_WARNING );
-					} else if ( personaje_ancho > escenario_ancho ) {
-						personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
-						log( "El ancho del personaje no puede superar el del escenario. Se setea por defecto en 30.", LOG_WARNING );
-					} else	log( "Se cargo correctamente el ancho logico del personaje.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
-					log( "El ancho logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-			if ( ! root["personajes"][k].isMember("alto") ) {
-				personaje_alto = PERSONAJE_ALTO_DEFAULT;
-				log( "No se especifico el alto logico del personaje. Se setea por defecto en 60.", LOG_WARNING );
-			} else {
-				try {
-					personaje_alto = root["personajes"][k].get( "alto", PERSONAJE_ALTO_DEFAULT ).asFloat();
-					if ( personaje_alto < 0 ) {
-						personaje_alto = PERSONAJE_ALTO_DEFAULT;
-						log( "El alto del personaje no puede negativo. Se setea por defecto en 60.", LOG_WARNING );
-					} else if ( personaje_alto > escenario_alto ) {
-						personaje_alto = PERSONAJE_ALTO_DEFAULT;
-						log( "El alto del personaje no puede superar el del escenario. Se setea por defecto en 60.", LOG_WARNING );
-					} else	log( "Se cargo correctamente el alto logico del personaje.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					personaje_alto = PERSONAJE_ALTO_DEFAULT;
-					log( "El alto logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-			if ( ! root["personajes"][k].isMember("sprites") ) {
-				personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-				log( "No se especifico la carpeta contenedora de los sprites del personaje. Se utiliza carpeta por defecto.", LOG_ERROR );
-			} else {
-				try {
-					personaje_carpeta_sprites = root["personajes"][k].get( "sprites", PERSONAJE_CARPETA_SPRITES_DEFAULT ).asString();
-					struct stat sb;
-					if ( stat(personaje_carpeta_sprites.c_str(), &sb) != 0 ) {
-						log( "La ruta a la carpeta de sprites del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
-						personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-					} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sprites del personaje.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
-					log( "La ruta a la carpeta contenedora de los sprites del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-			if ( ! root["personajes"][k].isMember("nombre") ) {
-				personaje_nombre = PERSONAJE_NOMBRE_DEFAULT;
-				log( "No se especifico el nombre del personaje. Se llama Jugador por defecto.", LOG_ERROR );
-			} else {
-				try {
-					personaje_nombre = root["personajes"][k].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
-					log ( "Se cargo el nombre del personaje.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					personaje_nombre = PERSONAJE_NOMBRE_DEFAULT;
-					log( "El nombre del personaje indicado no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-			if ( ! root["personajes"][k].isMember("flipped") ) {
-				if ( k % 2 == 0 ) flipped = PERSONAJE_FLIPPED_DEFAULT;
-				else flipped = ! PERSONAJE_FLIPPED_DEFAULT;
-				log( "No se especifico si el personaje debe estar flippeado o no. Se setea por defecto.", LOG_WARNING );
-			} else {
-				try {
-					flipped = root["personajes"][k].get( "flipped", PERSONAJE_FLIPPED_DEFAULT ).asBool();
-					log( "Se cargo el booleano flipped que indica si el personaje inicia mirando hacia la derecha (false) o hacia la izquierda (true).", LOG_DEBUG );
-				} catch ( exception &e ) {
-					if ( k % 2 == 0 ) flipped = PERSONAJE_FLIPPED_DEFAULT;
-					else flipped = ! PERSONAJE_FLIPPED_DEFAULT;
-					log( "El valor de flipped del personaje no es un booleano valido. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-			// Creo Sprites del personaje.
-			vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, personaje_ancho, personaje_alto, cambiar_color, h_inicial, h_final, desplazamiento);
-			// El color se cambia una sola vez, unicamente para el personaje 1.
-			cambiar_color = false;
-
-			// Crear personaje.
-			Personaje* personaje = new Personaje(personaje_nombre, sprites, PERSONAJE_VELOCIDAD, flipped);
-			log( "Se creo correctamente el personaje.", LOG_DEBUG );
-
-			// Agrego personaje al vector de personajes.
-			personajes.push_back(personaje);
-
-			// Indico posicion inicial del personaje.
-			float position;
-			if (k == 0){
-				position = (escenario_ancho/2) - (ventana_ancho/2)*rpos;
-			}
-			else{
-				position = (escenario_ancho/2) + (ventana_ancho/2)*rpos;
-			}
-			personaje->setPosition( position , y_piso );
-			log( "Seteada Posicion en escenario de Personaje", LOG_DEBUG );
-
-			// Agrego Personaje al mundo.
-			nuevo_mundo->addPersonaje(personaje);
-			log( "Se agrego el personaje al mundo", LOG_DEBUG );
-		}
-	}
+	nuevo_mundo->addPersonaje(personaje_1);
+	nuevo_mundo->addPersonaje(personaje_2);
+	personajes.push_back(personaje_1);
+	personajes.push_back(personaje_2);
+	log( "Se agregaron los dos personajes al nuevo mundo de la partida.", LOG_DEBUG );
 
 
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.

@@ -158,6 +158,29 @@ vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, 
 	return sprites;
 }
 
+Personaje* generarPersonajeDefault( int nro_personaje, Ventana* ventana, bool cambiar_color, bool flipped ) {
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, cambiar_color, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), PERSONAJE_VELOCIDAD, flipped);
+	if ( nro_personaje == 1 )
+		personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
+	else if ( nro_personaje == 2 )
+		personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) + (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
+	return personaje_default;
+}
+
+vector<Personaje*> generarPersonajesDefault( Ventana* ventana) {
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, false, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
+	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
+
+	Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, true, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), PERSONAJE_VELOCIDAD, !PERSONAJE_FLIPPED_DEFAULT);
+	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) + (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
+
+	vector<Personaje*> personajes;
+	personajes.push_back(personaje_default);
+	personajes.push_back(personaje2_default);
+
+	return personajes;
+}
+
 void mapaComandosDefault(map<string, int>* comandos) {
 
 	*comandos = { {string("pina baja"), COMANDO_PINA_BAJA_DEFAULT},
@@ -179,21 +202,13 @@ Mundo* generarMundoDefault() {
 		throw runtime_error( "No se pudo abrir la ventana del programa." );
 	}
 
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, false, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
-	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
-
-	Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, true, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), PERSONAJE_VELOCIDAD, !PERSONAJE_FLIPPED_DEFAULT);
-	personaje2_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) + (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
+	vector<Personaje*> personajes = generarPersonajesDefault(ventana);
 
 	mundo->setVentana(ventana);
 	mundo->setTiempo(new Tiempo(TIEMPO_DEFAULT));
 
-	mundo->addPersonaje(personaje_default);
-	mundo->addPersonaje(personaje2_default);
-
-	vector<Personaje*> personajes;
-	personajes.push_back(personaje_default);
-	personajes.push_back(personaje2_default);
+	mundo->addPersonaje(personajes[0]);
+	mundo->addPersonaje(personajes[1]);
 
 	CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_0_BACKGROUND_DEFAULT,ventana);
 	mundo->addCapa(capa_0);
