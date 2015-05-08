@@ -395,16 +395,6 @@ vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
 		} else {
 			try {
 				h_inicial = personaje["color-alternativo"].get( "h-inicial", COLOR_H_INICIAL_DEFAULT ).asFloat();
-				if ( h_inicial < 0 ) {
-					h_inicial = fmod(h_inicial, 360);
-					h_inicial = fabs(h_inicial);
-					h_inicial = 360 - h_inicial;
-					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
-				if ( h_inicial > 360 ) {
-					h_inicial = fmod(h_inicial, 360);
-					log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
 				log( "Se cargo el hue inicial para el desplazamiento al color alternativo.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				h_inicial = COLOR_H_INICIAL_DEFAULT;
@@ -417,16 +407,6 @@ vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
 		} else {
 			try {
 				h_final = personaje["color-alternativo"].get( "h-final", COLOR_H_FINAL_DEFAULT ).asFloat();
-				if ( h_final < 0 ) {
-					h_final = fmod(h_final, 360);
-					h_final = fabs(h_final);
-					h_final = 360 - h_final;
-					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
-				if ( h_final > 360 ) {
-					h_final = fmod(h_final, 360);
-					log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
 				log( "Se cargo el hue final para el desplazamiento al color alternativo.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				h_final = COLOR_H_FINAL_DEFAULT;
@@ -462,7 +442,11 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaj
 	string personaje_carpeta_sprites, personaje_nombre;
 	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
 		personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, flipped_default);
-		personaje->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2)*rpos,Y_PISO_DEFAULT);
+		if ( nro_personaje == 1 ) {
+			personaje->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2)*rpos,Y_PISO_DEFAULT);
+		} else if ( nro_personaje == 2 ) {
+			personaje->setPosition((ESCENARIO_ANCHO_DEFAULT/2) + (VENTANA_ANCHO_DEFAULT/2)*rpos,Y_PISO_DEFAULT);
+		}
 		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan el personaje por defecto.", LOG_ERROR );
 	} else {
 		for ( int k=0; k < (int)root["personajes"].size(); k++ ) {
@@ -557,7 +541,11 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaj
 		}
 
 		personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, flipped_default);
-		personaje->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2)*rpos,Y_PISO_DEFAULT);
+		if ( nro_personaje == 1 ) {
+			personaje->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2)*rpos,Y_PISO_DEFAULT);
+		} else if ( nro_personaje == 2 ) {
+			personaje->setPosition((ESCENARIO_ANCHO_DEFAULT/2) + (VENTANA_ANCHO_DEFAULT/2)*rpos,Y_PISO_DEFAULT);
+		}
 		log( "No se encontro el personaje con el nombre indicado en el vector de personajes. Se genera personaje por defecto.", LOG_ERROR );
 	}
 	return personaje;
@@ -915,8 +903,6 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 	}
 
-
-
 	string personaje_nombre_1, personaje_nombre_2;
 	Personaje *personaje_1, *personaje_2;
 	bool fallo_personaje_1 = false;
@@ -952,8 +938,9 @@ Mundo* ParserJSON::cargarMundo() {
 			try {
 				personaje_nombre_2 = root["pelea"].get("luchador2", PERSONAJE_NOMBRE_DEFAULT).asString();
 				log( "El nombre del personaje 2 fue cargado correctamente.", LOG_DEBUG );
-				if (personaje_nombre_1 == personaje_nombre_1)
+				if ( ! personaje_nombre_1.string::compare(personaje_nombre_2) ) {
 					cambiar_color = true;
+				}
 				personaje_2 = cargarPersonaje(personaje_nombre_2, 2, root, !PERSONAJE_FLIPPED_DEFAULT, ventana, cambiar_color, escenario_ancho, escenario_alto, ventana_ancho, y_piso);
 			} catch ( exception &e ) {
 				personaje_nombre_2 = PERSONAJE_NOMBRE_DEFAULT;
