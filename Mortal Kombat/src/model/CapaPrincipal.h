@@ -25,12 +25,16 @@ public:
 
 private:
 	int _NadieScrollea();
+	Rect_Logico* rectAtaqueAnterior1;
+	Rect_Logico* rectAtaqueAnterior2;
 	Personaje* m_Personaje;
 	Personaje* m_PersonajeDos;
 	void _actualizarX();
 	float m_velocidad_derecha;
 	float m_velocidad_izquierda;
 	int m_PersonajeQueScrollea; //0 no scrollea ninguno, 1 scrollea el 1, 2 el 2
+
+	void _CheckearColisiones();
 };
 
 
