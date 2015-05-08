@@ -397,6 +397,7 @@ vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
 				h_inicial = personaje["color-alternativo"].get( "h-inicial", COLOR_H_INICIAL_DEFAULT ).asFloat();
 				if ( h_inicial < 0 ) {
 					h_inicial = fmod(h_inicial, 360);
+					h_inicial = fabs(h_inicial);
 					h_inicial = 360 - h_inicial;
 					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
 				}
@@ -418,6 +419,7 @@ vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
 				h_final = personaje["color-alternativo"].get( "h-final", COLOR_H_FINAL_DEFAULT ).asFloat();
 				if ( h_final < 0 ) {
 					h_final = fmod(h_final, 360);
+					h_final = fabs(h_final);
 					h_final = 360 - h_final;
 					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
 				}
@@ -932,8 +934,8 @@ Mundo* ParserJSON::cargarMundo() {
 		} else {
 			try {
 				personaje_nombre_1 = root["pelea"].get("luchador1", PERSONAJE_NOMBRE_DEFAULT).asString();
-				personaje_1 = cargarPersonaje(personaje_nombre_1, 1, root, PERSONAJE_FLIPPED_DEFAULT, ventana, cambiar_color, escenario_ancho, escenario_alto, ventana_ancho, y_piso);
 				log( "El nombre del personaje 1 fue cargado correctamente.", LOG_DEBUG );
+				personaje_1 = cargarPersonaje(personaje_nombre_1, 1, root, PERSONAJE_FLIPPED_DEFAULT, ventana, cambiar_color, escenario_ancho, escenario_alto, ventana_ancho, y_piso);
 			} catch ( exception &e ) {
 				personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
 				personaje_1 = generarPersonajeDefault(1, ventana, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
@@ -949,10 +951,10 @@ Mundo* ParserJSON::cargarMundo() {
 		} else {
 			try {
 				personaje_nombre_2 = root["pelea"].get("luchador2", PERSONAJE_NOMBRE_DEFAULT).asString();
+				log( "El nombre del personaje 2 fue cargado correctamente.", LOG_DEBUG );
 				if (personaje_nombre_1 == personaje_nombre_1)
 					cambiar_color = true;
 				personaje_2 = cargarPersonaje(personaje_nombre_2, 2, root, !PERSONAJE_FLIPPED_DEFAULT, ventana, cambiar_color, escenario_ancho, escenario_alto, ventana_ancho, y_piso);
-				log( "El nombre del personaje 2 fue cargado correctamente.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				personaje_nombre_2 = PERSONAJE_NOMBRE_DEFAULT;
 				if ( fallo_personaje_1 )

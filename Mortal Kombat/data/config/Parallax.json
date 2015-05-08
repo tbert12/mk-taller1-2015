@@ -55,12 +55,23 @@
 		},
 		"ancho": 65,
 		"alto": 150
+		},
+		{
+		"nombre": "Liu Kang",
+		"sprites": "data/players/liukang/sprites/",
+		"color-alternativo": {
+			"h-inicial": -30,
+			"h-final": 30,
+			"desplazamiento": 240
+		},
+		"ancho": 65,
+		"alto": 150
 		}
 	],
 	
 	"pelea": {
 		"luchador1": "Sub-Zero",
-		"luchador2": "Sub-Zero"
+		"luchador2": "Liu Kang"
 	},
 	
 	"botones": {
