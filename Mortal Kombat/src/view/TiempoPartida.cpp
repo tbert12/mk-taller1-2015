@@ -74,7 +74,7 @@ TiempoPartida::~TiempoPartida() {
 		SDL_DestroyTexture( m_textura );
 		m_textura = NULL;
 	}
-	//TTF_CloseFont( font );
+	TTF_CloseFont( font );
 	m_tiempo = NULL;
 	m_ventana = NULL;
 }

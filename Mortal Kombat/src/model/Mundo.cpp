@@ -154,10 +154,12 @@ Mundo::~Mundo() {
 		delete personajes[i];
 	}
 	personajes.clear();
-	if(ventana)delete ventana;
-	if(tiempo)delete tiempo;
-	if(BarraJugador1)delete BarraJugador1;
-	if(BarraJugador2)delete BarraJugador2;
-	if(tiempo_pantalla)delete tiempo_pantalla;
+
+	if(tiempo) delete tiempo;
+	if(BarraJugador1) delete BarraJugador1;
+	if(BarraJugador2) delete BarraJugador2;
+	if(tiempo_pantalla) delete tiempo_pantalla;
+
+	if(ventana) delete ventana; //Siempre eliminarlo Ultimo (Hace SDL_Quit)
 }
 
