@@ -114,7 +114,7 @@ bool BarraEnergia::_loadRelleno(){
 
 		//Success
 		textura_relleno = nuevaTexture;
-		log("Se cargo correctamente la textura relleno de la barra de energia");
+		log("Se cargo correctamente la textura relleno de la barra de energia", LOG_DEBUG);
 		return true;
 
 }

@@ -109,7 +109,7 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 				}
 
 				if ( h_inicial < 0 ) {
-					h_inicial = fabs(h_inicial);
+					h_inicial = -h_inicial;
 					h_inicial = fmod(h_inicial, 360);
 					h_inicial = 360 - h_inicial;
 					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
@@ -120,7 +120,7 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 				}
 
 				if ( h_final < 0 ) {
-					h_final = fabs(h_final);
+					h_final = -h_final;
 					h_final = fmod(h_final, 360);
 					h_final = 360 - h_final;
 					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
@@ -135,9 +135,11 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 					if ( h >= h_inicial && h <= h_final ) {
 						desplazarHue(&h, desplazamiento);
 						hayQuePintar = true;
-					} else if ( h >= h_inicial || h <= h_final ) {
-						desplazarHue(&h, desplazamiento);
-						hayQuePintar = true;
+					} else if ( h_inicial > h_final ) {
+						if ( (h >= h_inicial && h > h_final) || (h < h_inicial && h <= h_final) ) {
+							desplazarHue(&h, desplazamiento);
+							hayQuePintar = true;
+						}
 					}
 				}
 

@@ -456,7 +456,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaj
 			} else {
 				try {
 					personaje_nombre = root["personajes"][k].get ( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
-					if ( personaje_nombre == nombre_personaje ) {
+					if ( ! personaje_nombre.string::compare(nombre_personaje) ) {
 						log ( "Se encontro el personaje con el nombre indicado.", LOG_DEBUG );
 						if ( ! root["personajes"][k].isMember("ancho") ) {
 							personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
