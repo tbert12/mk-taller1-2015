@@ -181,8 +181,8 @@ void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
 	//HORRIBLE ASQUEROSO DESASTROSO
 	//m_fliped = posOtherPlayer - getAncho() < m_xActual;
 	spriteActual->render(m_xActual - x_dist_ventana,m_yActual ,m_fliped);
-	printf("->Esta atacnado: %s\n", _estaAtacando ? "True" : "False");
-	printf("->Esta Cubriendose: %s\n", _estaCubriendose ? "True" : "False");
+	//printf("->Esta atacnado: %s\n", _estaAtacando ? "True" : "False");
+	//printf("->Esta Cubriendose: %s\n", _estaCubriendose ? "True" : "False");
 	//* Para test de colisiones *//
 	spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
 	//* Fin de test para mostrar colisiones *//
@@ -193,6 +193,14 @@ void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
 //-------------------------------------------------------------------------------------------------------------------------
 //Rectangulo para Colisiones
 
+Rect_Logico* devolverRectangulo(bool flip, Rect_Logico* rectSinFlip){
+	if(!flip)
+		return rectSinFlip;
+	rectSinFlip->x -= 2*rectSinFlip->w;
+	return rectSinFlip;
+}
+
+
 Rect_Logico* Personaje::rectanguloAtaque(){
 	if (!_estaAtacando) return NULL;
 	Rect_Logico* rectangulo = new Rect_Logico;
@@ -201,14 +209,14 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	rectangulo->w = spriteActual->getAncho();
 	rectangulo->h = getAlto()/2;
 	rectangulo->y -= rectangulo->h;
-	return rectangulo;
+	return devolverRectangulo(m_fliped,rectangulo);
 }
 
 Rect_Logico* Personaje::nextRectAtaque(){
 	if(!_estaAtacando)
 		return this->rectanguloAtaque();
 	Rect_Logico* rectangulo = new Rect_Logico;
-	return rectangulo;
+	return devolverRectangulo(m_fliped,rectangulo);
 }
 
 Rect_Logico* Personaje::rectanguloDefensa(){
@@ -217,7 +225,7 @@ Rect_Logico* Personaje::rectanguloDefensa(){
 	rectangulo->y=  m_yActual;
 	rectangulo->w = sprites[SPRITE_CUBRIRSE]->getAncho() - getAncho()*0.25; //El mas Angosto
 	rectangulo->h = spriteActual->getAlto();
-	return rectangulo;
+	return devolverRectangulo(m_fliped,rectangulo);
 }
 
 //-------------------------------------------------------------------------------------------------------------------------
