@@ -62,7 +62,7 @@
 		"color-alternativo": {
 			"h-inicial": -30,
 			"h-final": 30,
-			"desplazamiento": 240
+			"desplazamiento": 230
 		},
 		"ancho": 65,
 		"alto": 150
