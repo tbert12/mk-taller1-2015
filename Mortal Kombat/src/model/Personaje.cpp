@@ -45,8 +45,8 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 
 void Personaje::lanzarObjeto(){
 	//ya hay poder lanzado
-	if (poder != NULL){
-		if(poder->getVida())
+	if (poderes[0] != NULL){
+		if(poderes[0]->getVida())
 			return;
 	}
 	//Poner sprite del personaje para lanzar
@@ -58,7 +58,7 @@ void Personaje::lanzarObjeto(){
 	else{
 		x = m_xActual - spriteActual->getAncho();
 	}
-	poder->lanzar(x,m_yActual,m_fliped);
+	poderes[0]->lanzar(x,m_yActual,m_fliped);
 	*/
 }
 

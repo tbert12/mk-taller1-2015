@@ -54,7 +54,6 @@ private:
 	std::string nombre;
 
 	int vida;
-	ObjetoArrojable* poder;
 
 	float m_xActual;
 	float m_yActual;
