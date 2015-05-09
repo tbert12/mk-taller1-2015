@@ -106,6 +106,7 @@ private:
 	/*Defensa*/
 	void _cubrirseAgachado();
 	void _cubrirseParado();
+	Rect_Logico* _devolverRectangulo(bool flip, Rect_Logico* rectSinFlip);
 
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad, bool fliped = false);
@@ -138,6 +139,8 @@ public:
 	float getX();
 	float getY();
 	bool getFlipState();
+
+	int getAccionDeAtaque();
 
 	void Inicial();
 	bool estaAgachado();

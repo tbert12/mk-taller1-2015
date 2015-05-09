@@ -178,6 +178,16 @@ void Sprite::freezeSprite(){
 	frezee = true;
 }
 
+void Sprite::hardReset(){
+	reverse = false;
+	doloop = false;
+	frezee = false;
+	frezeeCount = 0;
+	m_pong = 0;
+
+	Reset();
+}
+
 // Para mostrar algo y testear Colisiones //
 void Sprite::RENDERCOLISIONTEST(float x_ventana, float y, bool fliped,Rect_Logico* rectanguloAtaque,Rect_Logico* rectanguloDefensa){
 	if (rectanguloAtaque != NULL){

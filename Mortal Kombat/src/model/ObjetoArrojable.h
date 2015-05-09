@@ -26,6 +26,7 @@ private:
 	bool m_destruir;
 	void _avanzarSprite();
 	void _terminar();
+	Rect_Logico* _devolverRectangulo(bool flip, Rect_Logico* rectSinFlip);
 
 	void _Update();
 	void _render(float x_dist_ventana);
@@ -38,6 +39,7 @@ public:
 	bool getVida();
 	void destruir();
 	float getPosX();
+	Rect_Logico* rectanguloDefensa();
 	virtual ~ObjetoArrojable();
 };
 
