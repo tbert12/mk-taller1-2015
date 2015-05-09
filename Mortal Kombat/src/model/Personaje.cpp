@@ -510,6 +510,7 @@ void Personaje::pinaBaja() {
 		_pinaSaltando();
 	} else {
 		_cambiarSprite(SPRITE_PINA_BAJA);
+		spriteActual->doPongIn(2);
 	}
 	_estaAtacando = true;
 }
@@ -525,6 +526,7 @@ void Personaje::pinaAlta() {
 		_pinaSaltando();
 	} else {
 		_cambiarSprite(SPRITE_PINA_ALTA);
+		spriteActual->doPongIn(2);
 	}
 	_estaAtacando = true;
 }
