@@ -90,7 +90,7 @@ void desplazarHue(float* h, float desplazamiento) {
 	(*h) += desplazamiento;
 	*h = fmod(*h, 360);
 	if ( (*h) < 0 ) {
-		(*h) = -(*h);
+		(*h) = - (*h);
 		(*h) = 360 - (*h);
 	}
 }
