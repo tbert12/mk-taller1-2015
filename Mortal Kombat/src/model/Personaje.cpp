@@ -12,7 +12,6 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 	vida = 100;
 	sprites = Sprites;
 	spriteActual = sprites[SPRITE_INICIAL];
-	//spriteActual->doPongIn(8);
 
 	m_xActual = 0;
 	m_yActual = 0;
@@ -510,7 +509,6 @@ void Personaje::pinaBaja() {
 		_pinaSaltando();
 	} else {
 		_cambiarSprite(SPRITE_PINA_BAJA);
-		spriteActual->doPongIn(2);
 	}
 	_estaAtacando = true;
 }
@@ -526,7 +524,6 @@ void Personaje::pinaAlta() {
 		_pinaSaltando();
 	} else {
 		_cambiarSprite(SPRITE_PINA_ALTA);
-		spriteActual->doPongIn(2);
 	}
 	_estaAtacando = true;
 }
