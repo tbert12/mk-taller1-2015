@@ -49,8 +49,16 @@ void Personaje::lanzarObjeto(){
 			return;
 	}
 	//Poner sprite del personaje para lanzar
-	//poder = new ObjetoArrojable("arma subzero",velocidad_poder,sprites poder);
-	//poder->lanzar(m_xActual,m_yActual,m_fliped);
+	/*poder = new ObjetoArrojable("arma subzero",velocidad_poder,sprites poder);
+	int x;
+	if (m_fliped){
+		x = m_xActual + spriteActual->getAncho();
+	}
+	else{
+		x = m_xActual - spriteActual->getAncho();
+	}
+	poder->lanzar(x,m_yActual,m_fliped);
+	*/
 }
 
 std::vector<Sprite*> Personaje::getSprites(){
@@ -183,7 +191,7 @@ float Personaje::getAlto(){
 int Personaje::getAccionDeAtaque(){
 	//Devuelve -1 si no encuentra la Accion del Sprite
 	//Nunca va a pasar, pero por el compilador
-	for (int i=0; i < sprites.size(); i++){
+	for (int i=0; i < (int)sprites.size(); i++){
 		if (sprites[i] == spriteActual){
 			return i;
 		}
@@ -220,10 +228,10 @@ void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
 //-------------------------------------------------------------------------------------------------------------------------
 //Rectangulo para Colisiones
 
-Rect_Logico* devolverRectangulo(bool flip, Rect_Logico* rectSinFlip){
+Rect_Logico* Personaje::_devolverRectangulo(bool flip, Rect_Logico* rectSinFlip){
 	if(!flip)
 		return rectSinFlip;
-	rectSinFlip->x -= 2*rectSinFlip->w;
+	//rectSinFlip->x -= 2*rectSinFlip->w;
 	return rectSinFlip;
 }
 
@@ -231,28 +239,33 @@ Rect_Logico* devolverRectangulo(bool flip, Rect_Logico* rectSinFlip){
 Rect_Logico* Personaje::rectanguloAtaque(){
 	if (!_estaAtacando) return NULL;
 	Rect_Logico* rectangulo = new Rect_Logico;
+	if(m_fliped)
+		rectangulo->x = m_xActual - spriteActual->getAncho() + sprites[SPRITE_CUBRIRSE]->getAncho()*0.25;
+	else rectangulo->x = m_xActual + sprites[SPRITE_CUBRIRSE]->getAncho()*0.25;
 	rectangulo->x= m_xActual;
 	rectangulo->y= m_yActual;
 	rectangulo->w = spriteActual->getAncho();
 	rectangulo->h = getAlto()/2;
 	rectangulo->y -= rectangulo->h;
-	return devolverRectangulo(m_fliped,rectangulo);
+	return _devolverRectangulo(m_fliped,rectangulo);
 }
 
 Rect_Logico* Personaje::nextRectAtaque(){
 	if(!_estaAtacando)
 		return this->rectanguloAtaque();
 	Rect_Logico* rectangulo = new Rect_Logico;
-	return devolverRectangulo(m_fliped,rectangulo);
+	return _devolverRectangulo(m_fliped,rectangulo);
 }
 
 Rect_Logico* Personaje::rectanguloDefensa(){
 	Rect_Logico* rectangulo = new Rect_Logico;
-	rectangulo->x = m_xActual + getAncho()*0.25;
+	if(m_fliped)
+		rectangulo->x = m_xActual - spriteActual->getAncho();
+	else rectangulo->x = m_xActual + getAncho()*0.25;
 	rectangulo->y=  m_yActual;
 	rectangulo->w = sprites[SPRITE_CUBRIRSE]->getAncho() - getAncho()*0.25; //El mas Angosto
 	rectangulo->h = spriteActual->getAlto();
-	return devolverRectangulo(m_fliped,rectangulo);
+	return _devolverRectangulo(m_fliped,rectangulo);
 }
 
 //-------------------------------------------------------------------------------------------------------------------------
