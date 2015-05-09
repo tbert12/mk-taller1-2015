@@ -320,7 +320,7 @@ void LTexture::renderRectangulo( Rect_Logico* clip,float x, float y, bool flip){
 		Object.h = (int)(clip->h*ratio_y_ventana +0.5);
 		if(flip) {
 			flipType = SDL_FLIP_HORIZONTAL;
-			Object.x += Object.w;
+			//Object.x += Object.w;
 		}
 	}
 

@@ -122,6 +122,7 @@ void Personaje::setScroll(bool scrollear){
 void Personaje::setFlip(bool flip){
 	if (_estaSaltando > 0 || (flip == m_fliped)) return;
 		m_fliped= flip;
+		printf("x_anterior:%f  , ancho:%f \n",m_xActual,spriteActual->getAncho());
 		if (flip){
 			//Le sumamos el ancho para que la x siga quedando en la cabeza
 			m_xActual += spriteActual->getAncho();
@@ -129,6 +130,7 @@ void Personaje::setFlip(bool flip){
 		else{
 			m_xActual -= spriteActual->getAncho();
 		}
+		printf("x_actual:%f  , ancho:%f \n",m_xActual,spriteActual->getAncho());
 }
 
 void Personaje::Update(int velocidadScroll){
@@ -229,44 +231,33 @@ void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
 //-------------------------------------------------------------------------------------------------------------------------
 //Rectangulo para Colisiones
 
-Rect_Logico* Personaje::_devolverRectangulo(bool flip, Rect_Logico* rectSinFlip){
-	if(!flip)
-		return rectSinFlip;
-	//rectSinFlip->x -= 2*rectSinFlip->w;
-	return rectSinFlip;
-}
-
-
 Rect_Logico* Personaje::rectanguloAtaque(){
 	if (!_estaAtacando) return NULL;
 	Rect_Logico* rectangulo = new Rect_Logico;
 	if(m_fliped)
 		rectangulo->x = m_xActual - spriteActual->getAncho() + sprites[SPRITE_CUBRIRSE]->getAncho()*0.25;
 	else rectangulo->x = m_xActual + sprites[SPRITE_CUBRIRSE]->getAncho()*0.25;
-	rectangulo->x= m_xActual;
-	rectangulo->y= m_yActual;
 	rectangulo->w = spriteActual->getAncho();
 	rectangulo->h = getAlto()/2;
-	rectangulo->y -= rectangulo->h;
-	return _devolverRectangulo(m_fliped,rectangulo);
+	rectangulo->y = m_yActual - rectangulo->h;
+	return rectangulo;
 }
 
 Rect_Logico* Personaje::nextRectAtaque(){
 	if(!_estaAtacando)
 		return this->rectanguloAtaque();
 	Rect_Logico* rectangulo = new Rect_Logico;
-	return _devolverRectangulo(m_fliped,rectangulo);
+	return rectangulo;
 }
 
 Rect_Logico* Personaje::rectanguloDefensa(){
 	Rect_Logico* rectangulo = new Rect_Logico;
-	if(m_fliped)
-		rectangulo->x = m_xActual - spriteActual->getAncho();
-	else rectangulo->x = m_xActual + getAncho()*0.25;
 	rectangulo->y=  m_yActual;
 	rectangulo->w = sprites[SPRITE_CUBRIRSE]->getAncho() - getAncho()*0.25; //El mas Angosto
+	if(m_fliped) rectangulo->x = m_xActual - rectangulo->w;
+	else rectangulo->x = m_xActual + getAncho()*0.25;
 	rectangulo->h = spriteActual->getAlto();
-	return _devolverRectangulo(m_fliped,rectangulo);
+	return rectangulo;
 }
 
 //-------------------------------------------------------------------------------------------------------------------------
