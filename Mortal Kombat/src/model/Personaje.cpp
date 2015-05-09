@@ -533,6 +533,7 @@ void Personaje::pinaAlta() {
 void Personaje::_gancho() {
 	//Destrabarlo
 	_cambiarSprite(SPRITE_GANCHO);
+	spriteActual->freezeSprite();
 }
 
 void Personaje::_pinaSaltando() {

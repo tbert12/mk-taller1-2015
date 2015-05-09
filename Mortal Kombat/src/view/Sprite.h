@@ -51,6 +51,7 @@ class Sprite {
 		void setFrezeeFrame(int frame,int time);
 		void freezeSprite();
 		void doPongIn(int pong);
+		void doFullPong();
 		void doLoop(bool loop);
 		void doReverse(bool Reverse);
 

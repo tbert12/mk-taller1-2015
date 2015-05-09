@@ -168,6 +168,14 @@ void Sprite::doPongIn(int pong){
 	m_pong = pong;
 }
 
+void Sprite::doFullPong(){
+	if (reverse){
+		m_pong = 0;
+		return;
+	}
+	m_pong = cantidadFrames - 1;
+}
+
 void Sprite::setFrezeeFrame(int frame,int time){
 	if (frame < 0 or frame >= cantidadFrames) return;
 	frezeeTime = time;
@@ -183,7 +191,6 @@ void Sprite::hardReset(){
 	doloop = false;
 	frezee = false;
 	frezeeCount = 0;
-	m_pong = 0;
 
 	Reset();
 }
