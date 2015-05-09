@@ -36,7 +36,8 @@ Mundo* cargarMundo(){
 		} catch ( std::exception &e ) {
 			log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
 			delete parser;
-			delete unMundo;
+			if (unMundo)
+				delete unMundo;
 			return NULL;
 	}
 	return unMundo;
