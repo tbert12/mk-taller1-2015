@@ -54,6 +54,8 @@ Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float
 	const Json::Value frames_accion = root[accion_sprite]["frames"];
 	vector<Frame*> frames( frames_accion.size() );
 	vector<bool> loop_accion(frames.size(), false);
+	vector<bool> pong_accion(frames.size(), false);
+	vector<int> freeze_accion(frames.size(), 0);
 	for ( unsigned int i=0; i < frames_accion.size(); i++ ) {
 		int x, y, alto, ancho;
 		try {
@@ -103,15 +105,37 @@ Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float
 			log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite por defecto de la accion. Se setea en false por defecto.", LOG_WARNING );
 			loop = false;
 		}
-		if ( loop ) {
-			loop_accion[i] = true;
+		loop_accion[i] = loop;
+
+		bool pong;
+		try {
+			pong = frames_accion[i].get( "pong", false ).asBool();
+		} catch (exception &e) {
+			log ( "No se reconoce como booleano el parametro pasado para determinar si se debe hacer pong o no a un frame del sprite por defecto de la accion. Se setea en false por defecto.", LOG_ERROR );
+			pong = false;
 		}
+		pong_accion[i] = pong;
+
+		int freezeTime; // Numero de bucles iterados.
+		try {
+			freezeTime = frames_accion[i].get( "freeze", 0 ).asInt();
+		} catch ( exception &e ) {
+			log( "La cantidad de bucles de freeze no es un numero valido. Se setea por defecto en 0 (no hay freeze).", LOG_ERROR );
+			freezeTime = 0;
+		}
+		freeze_accion[i] = freezeTime;
+
 		frames[i] = new Frame(x, y, alto, ancho);
 	}
 	try {
 		sprite = new Sprite(string(PERSONAJE_CARPETA_SPRITES_DEFAULT) + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento );
 		for ( unsigned int j=0; j < frames.size(); j++ ) {
 			if ( loop_accion[j] ) sprite->setLoop(j);
+			if ( pong_accion[j] ) sprite->doPongIn(j);
+			if( freeze_accion[j] != 0 ) {
+				sprite->setFrezeeFrame(j, freeze_accion[j]);
+				sprite->freezeSprite();
+			}
 		}
 	} catch ( CargarImagenException &e ) {
 		delete sprite;

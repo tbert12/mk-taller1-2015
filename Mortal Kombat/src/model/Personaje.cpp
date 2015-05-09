@@ -509,18 +509,13 @@ void Personaje::pinaBaja() {
 	}else if ( _estaSaltando > 0 )  {
 		_pinaSaltando();
 	} else {
-		int pong;
-		if (spriteActual == sprites[SPRITE_PINA_BAJA]) pong = 5;
-		else pong = 2;
 		_cambiarSprite(SPRITE_PINA_BAJA);
-		spriteActual->doPongIn(pong); //HACERLO DESDE EL JSON O PARSER
 	}
 	_estaAtacando = true;
 }
 
 void Personaje::_pinaAgachado() {
 	_cambiarSprite(SPRITE_PINA_AGACHADO);
-	spriteActual->doPongIn(2); //HACERLO DESDE JSON O PARSER
 }
 
 void Personaje::pinaAlta() {
@@ -529,11 +524,7 @@ void Personaje::pinaAlta() {
 	} else if ( _estaSaltando > 0 ) {
 		_pinaSaltando();
 	} else {
-		int pong;
-		if (spriteActual == sprites[SPRITE_PINA_ALTA]) pong = 5;
-		else pong = 2;
 		_cambiarSprite(SPRITE_PINA_ALTA);
-		spriteActual->doPongIn(pong); //PARSER
 	}
 	_estaAtacando = true;
 }
@@ -541,9 +532,6 @@ void Personaje::pinaAlta() {
 void Personaje::_gancho() {
 	//Destrabarlo
 	_cambiarSprite(SPRITE_GANCHO);
-	spriteActual->setFrezeeFrame(4,5); //Frizarlo en el frame 4 por 5 segundos .HACERLO EN EL PARSER y EN EL JSON
-	spriteActual->frezeeSprite();
-	spriteActual->doPongIn(4); //Hacerlo en el Parser
 }
 
 void Personaje::_pinaSaltando() {
@@ -563,7 +551,6 @@ void Personaje::patadaBaja() {
 		_patadaSaltando();
 	} else {
 		_cambiarSprite(SPRITE_PATADA_BAJA);
-		spriteActual->doPongIn(5); //PARSER
 	}
 	_estaAtacando = true;
 }
@@ -571,7 +558,6 @@ void Personaje::patadaBaja() {
 void Personaje::_patadaBajaAgachado() {
 	//Destrabarlo
 	_cambiarSprite(SPRITE_PATADA_BAJA_AGACHADO);
-	spriteActual->doPongIn(2); //HACERLO EN EL PARSER
 }
 
 void Personaje::patadaAlta() {
@@ -583,7 +569,6 @@ void Personaje::patadaAlta() {
 		_patadaCircular();
 	} else {
 		_cambiarSprite(SPRITE_PATADA_ALTA);
-		spriteActual->doPongIn(5); //HACERLO EN EL PARSER
 	}
 	_estaAtacando = true;
 }
@@ -602,7 +587,6 @@ void Personaje::_patadaSaltando() {
 void Personaje::_patadaAltaAgachado() {
 	//Destrabarlo
 	_cambiarSprite(SPRITE_PATADA_ALTA_AGACHADO);
-	spriteActual->doPongIn(3); //HACERLO EN EL PARSER
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

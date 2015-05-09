@@ -49,7 +49,7 @@ class Sprite {
 
 		void setLoop(int num_frame);
 		void setFrezeeFrame(int frame,int time);
-		void frezeeSprite();
+		void freezeSprite();
 		void doPongIn(int pong);
 		void doLoop(bool loop);
 		void doReverse(bool Reverse);

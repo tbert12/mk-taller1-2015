@@ -99,6 +99,8 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 			const Json::Value frames_accion = root[accion_sprite]["frames"];
 			vector<Frame*> frames( frames_accion.size() );
 			vector<bool> loop_accion(frames.size(), false);
+			vector<bool> pong_accion(frames.size(), false);
+			vector<int> freeze_accion(frames.size(), 0);
 			for ( unsigned int i=0; i < frames_accion.size(); i++ ) {
 				int x, y, alto, ancho;
 				try {
@@ -141,6 +143,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 					log ( "El ancho del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de la accion por defecto.", LOG_ERROR );
 					return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 				}
+
 				bool loop;
 				try {
 					loop = frames_accion[i].get( "loop", false ).asBool();
@@ -148,16 +151,45 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite de la accion. Se setea en false por defecto.", LOG_ERROR );
 					loop = false;
 				}
-				if ( loop ) {
-					loop_accion[i] = true;
+				loop_accion[i] = loop;
+
+				bool pong;
+				try {
+					pong = frames_accion[i].get( "pong", false ).asBool();
+				} catch (exception &e) {
+					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe hacer pong o no a un frame del sprite de la accion. Se setea en false por defecto.", LOG_ERROR );
+					pong = false;
 				}
+				pong_accion[i] = pong;
+
+				int freezeTime; // Numero de bucles iterados.
+				try {
+					freezeTime = frames_accion[i].get( "freeze", 0 ).asInt();
+				} catch ( exception &e ) {
+					log( "La cantidad de bucles de freeze no es un numero valido. Se setea por defecto en 0 (no hay freeze).", LOG_ERROR );
+					freezeTime = 0;
+				}
+				freeze_accion[i] = freezeTime;
+
 				frames[i] = new Frame(x, y, alto, ancho);
 				log( "Se creo correctamente un frame del spritesheet de la accion.", LOG_DEBUG );
 			}
 			try {
 				sprite = new Sprite( ruta_carpeta + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 				for ( unsigned int j=0; j < frames.size(); j++ ) {
-					if ( loop_accion[j] ) sprite->setLoop(j);
+					if ( loop_accion[j] ) {
+						sprite->setLoop(j);
+						log( "Se seteo en loop el frame recien creado.", LOG_DEBUG );
+					}
+					if( freeze_accion[j] != 0 ) {
+						sprite->setFrezeeFrame(j, freeze_accion[j]);
+						sprite->freezeSprite();
+						log( "Se seteo un tiempo de freeze para el frame recien creado.", LOG_DEBUG );
+					}
+					if ( pong_accion[j] ) {
+						sprite->doPongIn(j);
+						log( "Se seteo como frame pong el frame recien creado.", LOG_DEBUG );
+					}
 				}
 				log( "Se creo correctamente el sprite para la accion del personaje.", LOG_DEBUG );
 			} catch ( CargarImagenException &e ) {
