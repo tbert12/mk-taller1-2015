@@ -528,7 +528,7 @@
 				"Alto":141
 ,
 				"Ancho":61,
-				"frezee" : 5,
+				"freeze" : 5,
 				"pong": true
 			}
 		]
@@ -872,7 +872,7 @@
 				"Alto":91
 ,
 				"Ancho":108,
-				"freeze": 5
+				"loop": true
 			}
 		]
 	},
@@ -1029,7 +1029,7 @@
 				"Alto":102
 ,
 				"Ancho":146,
-				"freeze": 5
+				"loop": true
 			}
 		]
 	},

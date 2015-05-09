@@ -1,5 +1,5 @@
 {
-	"_comentario": "Color de transparencia #ff00ff",
+
 	"agachar":{
 		"nombre":"agachar.png",
 		"frames":[
@@ -179,7 +179,8 @@
 				"x":0,
 				"y":0,
 				"Alto":132,
-				"Ancho":102
+				"Ancho":102,
+				"pong": true
 			}
 		]
 	},
@@ -289,7 +290,8 @@
                 "y":0,
                 "Alto":80
 ,
-                "Ancho":101
+                "Ancho":101,
+                "pong": true
             }
 		]
 	},
@@ -315,7 +317,8 @@
                 "y":0,
                 "Alto":74
 ,
-                "Ancho":102
+                "Ancho":102,
+                "pong": true
             }
 		]
 	},
@@ -580,7 +583,8 @@
 				"y":0,
 				"Alto":169
 ,
-				"Ancho":40
+				"Ancho":40,
+				"loop": true
 			}
 		]
 	},
@@ -620,7 +624,9 @@
                 "y":90,
                 "Alto":160
 ,
-                "Ancho":50
+                "Ancho":50,
+                "freeze": 5,
+                "pong": true
             }
 		]
 	},
@@ -715,7 +721,8 @@
                 "y":0,
                 "Alto":121
 ,
-                "Ancho":116
+                "Ancho":116,
+                "pong": true
             }
 		]
 	},
@@ -829,7 +836,8 @@
                 "y":0,
                 "Alto":89
 ,
-                "Ancho":99
+                "Ancho":99,
+                "pong": true
             }
 		]
 	},
@@ -883,7 +891,8 @@
                 "y":137,
                 "Alto":134
 ,
-                "Ancho":66
+                "Ancho":66,
+                "pong": true
             }
 		]
 	},
@@ -930,7 +939,8 @@
                 "y":0,
                 "Alto":127
 ,
-                "Ancho":106
+                "Ancho":106,
+                "pong": true
             }
 		]
 	},

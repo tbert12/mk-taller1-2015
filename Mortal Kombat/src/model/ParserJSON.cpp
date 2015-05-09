@@ -181,14 +181,14 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 						sprite->setLoop(j);
 						log( "Se seteo en loop el frame recien creado.", LOG_DEBUG );
 					}
-					if ( pong_accion[j] ) {
-						sprite->doPongIn(j);
-						log( "Se seteo como frame pong el frame recien creado.", LOG_DEBUG );
-					}
 					if( freeze_accion[j] != 0 ) {
 						sprite->setFrezeeFrame(j, freeze_accion[j]);
 						sprite->freezeSprite();
 						log( "Se seteo un tiempo de freeze para el frame recien creado.", LOG_DEBUG );
+					}
+					if ( pong_accion[j] ) {
+						sprite->doPongIn(j);
+						log( "Se seteo como frame pong el frame recien creado.", LOG_DEBUG );
 					}
 				}
 				log( "Se creo correctamente el sprite para la accion del personaje.", LOG_DEBUG );
