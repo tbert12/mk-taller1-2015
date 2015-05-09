@@ -50,16 +50,18 @@ void Personaje::lanzarObjeto(){
 			return;
 	}
 	//Poner sprite del personaje para lanzar
-	/*poder = new ObjetoArrojable("arma subzero",velocidad_poder,sprites poder);
-	int x;
+	//poderes.push_back(new ObjetoArrojable("arma subzero",m_velocidad,sprites[SPRITE_AGACHAR]));
+	float x;
+	float y;
 	if (m_fliped){
-		x = m_xActual + spriteActual->getAncho();
-	}
-	else{
 		x = m_xActual - spriteActual->getAncho();
 	}
-	poderes[0]->lanzar(x,m_yActual,m_fliped);
-	*/
+	else{
+		x = m_xActual + spriteActual->getAncho();
+	}
+	y = m_yActual - getAlto()/2;
+	poderes[0]->lanzar(x,y,m_fliped);
+
 }
 
 std::vector<Sprite*> Personaje::getSprites(){
@@ -122,7 +124,6 @@ void Personaje::setScroll(bool scrollear){
 void Personaje::setFlip(bool flip){
 	if (_estaSaltando > 0 || (flip == m_fliped)) return;
 		m_fliped= flip;
-		printf("x_anterior:%f  , ancho:%f \n",m_xActual,spriteActual->getAncho());
 		if (flip){
 			//Le sumamos el ancho para que la x siga quedando en la cabeza
 			m_xActual += spriteActual->getAncho();
@@ -130,11 +131,9 @@ void Personaje::setFlip(bool flip){
 		else{
 			m_xActual -= spriteActual->getAncho();
 		}
-		printf("x_actual:%f  , ancho:%f \n",m_xActual,spriteActual->getAncho());
 }
 
 void Personaje::Update(int velocidadScroll){
-	//velocidadScroll = 0;
 	float renderX = m_xActual;
 	if(m_mover)
 		renderX += m_velocidadActual;
@@ -177,6 +176,19 @@ void Personaje::Update(int velocidadScroll){
 
 	m_mover = true;
 
+	_UpdatePoder();
+
+}
+
+void Personaje::_UpdatePoder(){
+	if(poderes.size() <= 0) return;
+	else{
+		for(int j= 0;j< (int)poderes.size();j++){
+			poderes[j]->update();
+			if(poderes[j]->getPosX() < 0 || poderes[j]->getPosX() > m_AnchoMundo)
+				poderes[j]->destruir();
+		}
+	}
 }
 
 bool Personaje::enMovimiento(){
@@ -216,11 +228,15 @@ float Personaje::getVelocidadIzquierda(){
 }
 
 void Personaje::renderizar(float x_dist_ventana, float posOtherPlayer){
-	//HORRIBLE ASQUEROSO DESASTROSO
-	//m_fliped = posOtherPlayer - getAncho() < m_xActual;
 	spriteActual->render(m_xActual - x_dist_ventana,m_yActual ,m_fliped);
-	//printf("->Esta atacnado: %s\n", _estaAtacando ? "True" : "False");
-	//printf("->Esta Cubriendose: %s\n", _estaCubriendose ? "True" : "False");
+
+	//render poderes
+	if(poderes.size() > 0){
+		for(int j= 0;j< (int)poderes.size();j++){
+			poderes[j]->renderizar(x_dist_ventana);
+		}
+	}
+
 	//* Para test de colisiones *//
 	spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
 	//* Fin de test para mostrar colisiones *//

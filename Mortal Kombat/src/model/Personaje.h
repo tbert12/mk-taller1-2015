@@ -81,6 +81,7 @@ private:
 	std::vector<Sprite*> sprites;
 	std::vector<ObjetoArrojable*> poderes;
 	void _cambiarSprite(int accion);
+	void _UpdatePoder();
 
 	void _SaltarHorizontal();
 

@@ -13,7 +13,11 @@ ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_spr
 	m_xActual = 0;
 	m_yActual = 0;
 	m_velocidad_x = velocidad;
+	if(m_velocidad_x <= 0)
+		m_velocidad_x = VELOCIDAD_DEFAULT;
 	m_velocidad_y = velocidad;//por ahora
+	if(m_velocidad_y <= 0)
+		m_velocidad_y = VELOCIDAD_DEFAULT;
 	sprite = un_sprites;
 	if(sprite != NULL) sprite->doLoop(true);
 	m_AltoMundo = 0;
@@ -22,20 +26,13 @@ ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_spr
 	m_destruir = false;
 }
 
-Rect_Logico* ObjetoArrojable::_devolverRectangulo(bool flip, Rect_Logico* rectSinFlip){
-	if(!flip)
-		return rectSinFlip;
-	rectSinFlip->x -= 2*rectSinFlip->w;
-	return rectSinFlip;
-}
-
-Rect_Logico* ObjetoArrojable::rectanguloDefensa(){
+Rect_Logico* ObjetoArrojable::rectanguloAtaque(){
 	Rect_Logico* rectangulo = new Rect_Logico;
 	rectangulo->x = m_xActual;
 	rectangulo->y=  m_yActual;
 	rectangulo->w = sprite->getAncho();
 	rectangulo->h = sprite->getAlto();
-	return _devolverRectangulo(flip,rectangulo);
+	return rectangulo;
 }
 
 
@@ -69,7 +66,7 @@ void ObjetoArrojable::_render(float pos_ventana){
 
 void ObjetoArrojable::_avanzarSprite(){
 	sprite->Advance();
-	if (!m_destruir)
+	if (m_destruir)
 		sprite->doLoop(false);
 	if(sprite->ultimoFrame()){
 		//llego al final
@@ -82,6 +79,8 @@ void ObjetoArrojable::_terminar(){
 	m_destruir = false;
 	m_xActual = 0;
 	m_yActual = 0;
+	sprite->Reset();
+	sprite->doLoop(true);
 }
 
 void ObjetoArrojable::destruir(){
@@ -92,11 +91,13 @@ float ObjetoArrojable::getPosX(){
 	return m_xActual;
 }
 
+void ObjetoArrojable::update(){
+	_Update();
+}
+
 void ObjetoArrojable::renderizar(float x_dist_ventana){
 	//si no tiene vida no lo renderizo
 	if (!vida) return;
-
-	_Update();
 
 	_render(x_dist_ventana);
 }
