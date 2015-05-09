@@ -802,7 +802,8 @@
 				"y":0,
 				"Alto":95
 ,
-				"Ancho":110
+				"Ancho":110,
+				"loop":true
 			}
 		]
 	},
@@ -955,7 +956,8 @@
 				"y":0,
 				"Alto":95
 ,
-				"Ancho":125
+				"Ancho":125,
+				"loop":true
 			}
 		]
 	},
