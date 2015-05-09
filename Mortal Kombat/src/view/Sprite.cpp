@@ -174,7 +174,7 @@ void Sprite::setFrezeeFrame(int frame,int time){
 	frezeeFrame = frame;
 }
 
-void Sprite::frezeeSprite(){
+void Sprite::freezeSprite(){
 	frezee = true;
 }
 

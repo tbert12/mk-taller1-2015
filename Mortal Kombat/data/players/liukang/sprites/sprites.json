@@ -21,7 +21,8 @@
 				"y":0,
 				"Alto":90
 ,
-				"Ancho":90
+				"Ancho":90,
+				"pong": true
 			}
 		]
 	},
@@ -47,7 +48,8 @@
 				"y":0,
 				"Alto":70
 ,
-				"Ancho":93
+				"Ancho":93,
+				"pong": true
 			}
 		]
 	},
@@ -484,7 +486,8 @@
 				"y":311,
 				"Alto":115
 ,
-				"Ancho":46
+				"Ancho":46,
+				"loop": true
 			}
 		]
 	},
@@ -525,7 +528,8 @@
 				"Alto":141
 ,
 				"Ancho":61,
-				"frezee" : 5
+				"frezee" : 5,
+				"pong": true
 			}
 		]
 	},
@@ -655,7 +659,8 @@
 				"y":129,
 				"Alto":125
 ,
-				"Ancho":59
+				"Ancho":59,
+				"pong": true
 			}
 		]
 	},
@@ -866,7 +871,8 @@
 				"y":0,
 				"Alto":91
 ,
-				"Ancho":108
+				"Ancho":108,
+				"freeze": 5
 			}
 		]
 	},
@@ -940,7 +946,8 @@
 				"y":0,
 				"Alto":126
 ,
-				"Ancho":92
+				"Ancho":92,
+				"pong": true
 			}
 		]
 	},
@@ -994,7 +1001,8 @@
 				"y":0,
 				"Alto":120
 ,
-				"Ancho":100
+				"Ancho":100,
+				"pong": true
 			}
 		]
 	},
@@ -1020,7 +1028,8 @@
 				"y":0,
 				"Alto":102
 ,
-				"Ancho":146
+				"Ancho":146,
+				"freeze": 5
 			}
 		]
 	},

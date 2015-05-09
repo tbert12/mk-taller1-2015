@@ -495,7 +495,7 @@ void Personaje::_gancho() {
 	//Destrabarlo
 	_cambiarSprite(SPRITE_GANCHO);
 	spriteActual->setFrezeeFrame(4,5); //Frizarlo en el frame 4 por 5 segundos .HACERLO EN EL PARSER y EN EL JSON
-	spriteActual->frezeeSprite();
+	spriteActual->freezeSprite();
 	spriteActual->doPongIn(4); //Hacerlo en el Parser
 }
 
