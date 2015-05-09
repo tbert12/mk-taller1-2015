@@ -45,6 +45,7 @@ class Sprite {
 
 		bool Advance();
 		void Reset();
+		void hardReset();
 
 		void setLoop(int num_frame);
 		void setFrezeeFrame(int frame,int time);

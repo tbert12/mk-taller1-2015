@@ -139,6 +139,8 @@ public:
 	float getY();
 	bool getFlipState();
 
+	int getAccionDeAtaque();
+
 	void Inicial();
 	bool estaAgachado();
 

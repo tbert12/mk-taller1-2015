@@ -79,7 +79,7 @@ const int COLOR_DESPLAZAMIENTO_DEFAULT = 0;
 const char* const IMAGEN_CARGANDO_JUEGO = "data/img/background/inicio.png";
 
 
-const float PERSONAJE_VELOCIDAD = 7.0;
+const float PERSONAJE_VELOCIDAD = 5.5;
 
 
 using namespace std;

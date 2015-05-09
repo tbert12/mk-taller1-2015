@@ -21,6 +21,24 @@ ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_spr
 	flip = false;
 	m_destruir = false;
 }
+
+Rect_Logico* ObjetoArrojable::_devolverRectangulo(bool flip, Rect_Logico* rectSinFlip){
+	if(!flip)
+		return rectSinFlip;
+	rectSinFlip->x -= 2*rectSinFlip->w;
+	return rectSinFlip;
+}
+
+Rect_Logico* ObjetoArrojable::rectanguloDefensa(){
+	Rect_Logico* rectangulo = new Rect_Logico;
+	rectangulo->x = m_xActual;
+	rectangulo->y=  m_yActual;
+	rectangulo->w = sprite->getAncho();
+	rectangulo->h = sprite->getAlto();
+	return _devolverRectangulo(flip,rectangulo);
+}
+
+
 void ObjetoArrojable::setDimensionesMundo(float alto,float ancho){
 	m_AltoMundo = alto;
 	m_AnchoMundo = ancho;

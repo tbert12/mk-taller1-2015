@@ -84,6 +84,13 @@ bool Sprite::Advance(){
 		}
 		return true;
 	}
+	if (m_pong and (m_pong != frameActual) ){
+		if ( ultimoFrame() ){
+			reverse = !reverse;
+			Reset();
+
+		}
+	}
 	if (!doloop){
 		if (reverse)
 			frameActual--;
@@ -98,7 +105,7 @@ bool Sprite::Advance(){
 		}
 	}
 	if (m_pong == frameActual){
-			reverse = true;
+			reverse = !reverse;
 	}
 	if (frameActual >= cantidadFrames or frameActual < 0){
 		Reset();
@@ -169,6 +176,16 @@ void Sprite::setFrezeeFrame(int frame,int time){
 
 void Sprite::frezeeSprite(){
 	frezee = true;
+}
+
+void Sprite::hardReset(){
+	reverse = false;
+	doloop = false;
+	frezee = false;
+	frezeeCount = 0;
+	m_pong = 0;
+
+	Reset();
 }
 
 // Para mostrar algo y testear Colisiones //
