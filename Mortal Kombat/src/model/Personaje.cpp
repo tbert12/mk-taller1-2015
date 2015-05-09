@@ -7,16 +7,17 @@
 
 #include "Personaje.h"
 
-Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad, bool fliped) {
+Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, std::vector<ObjetoArrojable*> arrojables ,float velocidad, bool fliped) {
 	nombre = nombre_personaje;
 	vida = 100;
 	sprites = Sprites;
 	spriteActual = sprites[SPRITE_INICIAL];
+	poderes = arrojables;
+
 
 	m_xActual = 0;
 	m_yActual = 0;
 	m_yPiso = 0;
-	poder = NULL;
 
 	m_velocidadActual = 0;
 
@@ -40,6 +41,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,f
 
 //-------------------------------------------------------------------------------------------------------------------------
 //Manejo de attributos logicos
+
 
 void Personaje::lanzarObjeto(){
 	//ya hay poder lanzado

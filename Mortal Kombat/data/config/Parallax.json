@@ -48,6 +48,7 @@
 		{
 		"nombre": "Sub-Zero",
 		"sprites": "data/players/subzero/sprites/",
+		"poderes": "data/players/subzero/poderes/",
 		"color-alternativo": {
 			"h-inicial": 180,
 			"h-final": 200,
@@ -59,6 +60,7 @@
 		{
 		"nombre": "Liu Kang",
 		"sprites": "data/players/liukang/sprites/",
+		"poderes": "data/players/liukang/poderes/",
 		"color-alternativo": {
 			"h-inicial": -30,
 			"h-final": 20,
@@ -70,8 +72,8 @@
 	],
 	
 	"pelea": {
-		"luchador1": "Sub-Zero",
-		"luchador2": "Sub-Zero"
+		"luchador1": "Liu Kang",
+		"luchador2": "Liu Kang"
 	},
 	
 	"botones": {

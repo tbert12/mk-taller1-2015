@@ -1,6 +1,6 @@
 {
-	"Poder":{
-		"nombre":"Poder.png",
+	"objetoArrojable":{
+		"nombre":"dragonDeFuego.png",
 		"frames":[
 			{
 				"x":0,
@@ -28,5 +28,8 @@
 				"loop":true
 			}
 		]
+	},
+	"nombre": "Poder",
+	"velocidad": 10
 	}
 }

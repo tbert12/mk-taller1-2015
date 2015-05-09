@@ -80,6 +80,7 @@ private:
 
 	Sprite* spriteActual;
 	std::vector<Sprite*> sprites;
+	std::vector<ObjetoArrojable*> poderes;
 	void _cambiarSprite(int accion);
 
 	void _SaltarHorizontal();
@@ -109,7 +110,7 @@ private:
 	Rect_Logico* _devolverRectangulo(bool flip, Rect_Logico* rectSinFlip);
 
 public:
-	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites,float velocidad, bool fliped = false);
+	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, std::vector<ObjetoArrojable*> arrojables,float velocidad, bool fliped = false);
 	virtual ~Personaje();
 	std::vector<Sprite*> getSprites();
 	Sprite* getSpriteActual();

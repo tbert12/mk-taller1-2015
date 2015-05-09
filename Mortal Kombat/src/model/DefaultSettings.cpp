@@ -5,7 +5,7 @@ using namespace std;
 map<const char*, int> comandos;
 
 
-Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color, float h_inicial, float h_final, float h_desplazamiento ) {
+Sprite* crearSpritePorDefecto(const char* archivo_json, const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color, float h_inicial, float h_final, float h_desplazamiento ) {
 	Sprite* sprite;
 
 	Json::Value root;
@@ -13,7 +13,7 @@ Sprite* crearSpritePorDefecto(const char* accion_sprite, Ventana* ventana, float
 
 	// Abrir archivo.
 	ifstream json_sprites;
-	json_sprites.open( JSON_SPRITES_DEFAULT );
+	json_sprites.open( archivo_json );
 
 	if ( ! json_sprites.is_open() ) {
 		// Informar al usuario la falla y la resolucion tomada.
@@ -153,37 +153,108 @@ vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, 
 	float ratio_x_personaje = PERSONAJE_ANCHO_PX_DEFAULT / personaje_ancho;
 	float ratio_y_personaje = PERSONAJE_ALTO_PX_DEFAULT / personaje_alto;
 
-	sprites.push_back( crearSpritePorDefecto("parado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("caminar", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("saltar", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("saltardiagonal", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("agachar", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("agachadoPatadaAlta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("agachadoPatadaBaja", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("caeEnZ", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("caeYSeLevanta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("cubrirse", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("cubrirseAgachado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("gana", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("gancho", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("muere", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("patadaAlta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("patadaConGiro", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("patadaEnSalto", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("pinaAgachado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("pinaAlta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("pinaBaja", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("pinaEnSalto", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("recibeGolpeAgachado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("recibeGolpeAlto", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("recibeGolpeBajo", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
-	sprites.push_back( crearSpritePorDefecto("recibeGolpeFuerte", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "parado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "caminar", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "saltar", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "saltardiagonal", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "agachar", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "agachadoPatadaAlta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "agachadoPatadaBaja", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "caeEnZ", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "caeYSeLevanta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "cubrirse", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "cubrirseAgachado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "gana", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "gancho", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "muere", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "patadaAlta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "patadaConGiro", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "patadaEnSalto", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "pinaAgachado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "pinaAlta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "pinaBaja", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "pinaEnSalto", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "recibeGolpeAgachado", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "recibeGolpeAlto", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "recibeGolpeBajo", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "recibeGolpeFuerte", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
 
 	return sprites;
 }
 
+vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
+	Json::Value root;
+	Json::Reader reader;
+
+	// Abrir archivo.
+	ifstream archivoArrojable;
+	string ruta_archivo_json = string(PERSONAJE_CARPETA_ARROJABLES_DEFAULT) + "poderes.json";
+	archivoArrojable.open(ruta_archivo_json.c_str());
+
+	if ( ! archivoArrojable.is_open() ) {
+		// Informar al usuario la falla y la resolucion tomada.
+		log( "No se pudo abrir el archivo JSON de poderes por defecto. Se aborta el programa.", LOG_ERROR );
+		throw runtime_error("No se pudo abrir el archivo JSON del objeto arrojable por defecto.");
+	}
+
+	bool exito = reader.parse( archivoArrojable, root, false );
+	if ( ! exito ) {
+	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
+	    log( "No se pudo interpretar el JSON de poderes por defecto. Se aborta el programa." + reader.getFormattedErrorMessages(), LOG_ERROR );
+	    throw runtime_error("No se pudo interpretar el JSON de poderes por defecto.");
+	}
+
+	// Cerrar archivo.
+	archivoArrojable.close();
+
+	// Calculo los ratios del personaje.
+	float ratio_x_personaje = PERSONAJE_ANCHO_PX_DEFAULT / PERSONAJE_ANCHO_DEFAULT;
+	float ratio_y_personaje = PERSONAJE_ALTO_PX_DEFAULT / PERSONAJE_ALTO_DEFAULT;
+
+	vector<ObjetoArrojable*> objetosArrojables;
+	if ( ! root.isMember("poderes") || ! root["poderes"].isArray() ) {
+		log( "No se encuentran especificaciones para los poderes por defecto. Se aborta el programa. ", LOG_ERROR );
+		throw runtime_error("No se encuentran especificaciones para los poderes por defecto.");
+	}
+	Json::Value arrojables = root["poderes"];
+	for ( int i=0; i < (int)arrojables.size(); i++ ) {
+
+		Sprite* sprite_objeto_arrojable =  crearSpritePorDefecto( JSON_PODERES_DEFAULT, "objetoArrojable", ventana, ratio_x_personaje, ratio_y_personaje );
+
+		string arrojable_nombre;
+		float arrojable_velocidad;
+		if ( ! arrojables[i].isMember("nombre") ) {
+			arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
+			log( "No se especifico el nombre del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
+			} catch ( exception &e ) {
+				arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
+				log( "El nombre indicado para el objeto arrojable no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("velocidad") ) {
+			arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
+			log( "No se especifico la velocidad del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
+				log( "Se cargo correctamente la velocidad del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
+				log( "La velocidad indicada para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+
+		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable);
+		objetosArrojables.push_back(arrojable);
+	}
+	return objetosArrojables;
+}
+
 Personaje* generarPersonajeDefault( int nro_personaje, Ventana* ventana, bool cambiar_color, bool flipped ) {
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, cambiar_color, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), PERSONAJE_VELOCIDAD, flipped);
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, cambiar_color, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD, flipped);
 	if ( nro_personaje == 1 )
 		personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
 	else if ( nro_personaje == 2 )
@@ -192,10 +263,10 @@ Personaje* generarPersonajeDefault( int nro_personaje, Ventana* ventana, bool ca
 }
 
 vector<Personaje*> generarPersonajesDefault( Ventana* ventana) {
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, false, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, false, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
 	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
 
-	Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, true, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), PERSONAJE_VELOCIDAD, !PERSONAJE_FLIPPED_DEFAULT);
+	Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, true, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD, !PERSONAJE_FLIPPED_DEFAULT);
 	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) + (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
 
 	vector<Personaje*> personajes;

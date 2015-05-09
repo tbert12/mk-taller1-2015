@@ -73,7 +73,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 	string spritesheet;
 	if ( ! root.isMember(accion_sprite) ) {
 		log( "No se encontro el sprite correspondiente a la accion del personaje. Se generan el sprite de la accion por defecto.", LOG_ERROR );
-		return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color);
+		return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color);
 	} else {
 		if ( ! root[accion_sprite].isMember("nombre") ) {
 			log( "No se especifico el nombre de la imagen para el spritesheet de la accion. Se setea uno por defecto.", LOG_WARNING );
@@ -94,7 +94,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 		}
 		if ( ! root[accion_sprite].isMember("frames") || ! root[accion_sprite]["frames"].isArray() ) {
 			log( "No se encontraron especificaciones sobre los frames del spritesheet de la accion. Se genera el sprite por defecto.", LOG_ERROR );
-			return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+			return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 		} else {
 			const Json::Value frames_accion = root[accion_sprite]["frames"];
 			vector<Frame*> frames( frames_accion.size() );
@@ -107,41 +107,41 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 					x = frames_accion[i].get( "x", -100 ).asInt();
 					if ( x < 0 ) {
 						log( "No se especifico la posicion X del frame o es negativa. Se genera el sprite de la accion por defecto.", LOG_ERROR );
-						return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+						return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 					}
 				} catch (exception &e) {
 					log ( "La posicion X del frame indicada no es valida y no puede ser convertida a un numero. Se genera el sprite de la accion por defecto.", LOG_ERROR );
-					return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+					return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 				}
 				try {
 					y = frames_accion[i].get( "y", -100 ).asInt();
 					if ( y < 0 ) {
 						log( "No se especifico la posicion Y del frame o es negativa. Se genera el sprite de la accion por defecto", LOG_ERROR );
-						return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+						return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 					}
 				} catch (exception &e) {
 					log ( "La posicion Y del frame indicada es invalida y no puede ser convertida a un numero. Se genera el sprite de la accion por defecto.", LOG_ERROR );
-					return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+					return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 				}
 				try {
 					alto = frames_accion[i].get( "Alto", -100 ).asInt();
 					if ( alto < 0 ) {
 						log( "No se especifico el alto del frame o es negativo. Se genera el sprite de la accion por defecto.", LOG_ERROR );
-						return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+						return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 					}
 				} catch (exception &e) {
 					log ( "El alto del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de la accion por defecto.", LOG_ERROR );
-					return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+					return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 				}
 				try {
 					ancho = frames_accion[i].get( "Ancho", -100 ).asInt();
 					if ( ancho < 0 ) {
 						log( "No se especifico el ancho del frame o es negativo. Se genera el sprite de la accion por defecto.", LOG_ERROR );
-						return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+						return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 					}
 				} catch (exception &e) {
 					log ( "El ancho del frame indicado es invalido y no puede ser convertido a un numero. Se genera el sprite de la accion por defecto.", LOG_ERROR );
-					return crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+					return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 				}
 
 				bool loop;
@@ -194,7 +194,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 				log( "Se creo correctamente el sprite para la accion del personaje.", LOG_DEBUG );
 			} catch ( CargarImagenException &e ) {
 				delete sprite;
-				sprite = crearSpritePorDefecto(accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
+				sprite = crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 				log( "No se pudo abrir el spritesheet de la accion. Se genera el sprite por defecto. " + string(e.what()), LOG_ERROR );
 			}
 		}
@@ -203,6 +203,82 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 }
 
 
+vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
+
+	Json::Value root;
+	Json::Reader reader;
+
+	// Abrir archivo.
+	ifstream archivoArrojable;
+	string ruta_archivo_json = ruta_carpeta + "poderes.json";
+	archivoArrojable.open(ruta_archivo_json.c_str());
+
+	if ( ! archivoArrojable.is_open() ) {
+		// Informar al usuario la falla y la resolucion tomada.
+		log( "No se pudo abrir el archivo del objeto arrojable JSON, se genera el objeto por defecto.", LOG_ERROR );
+		return generarArrojableDefault(ventana);
+	}
+	log ( "Se abrio el archivo JSON del objeto arrojable.", LOG_DEBUG );
+
+	bool exito = reader.parse( archivoArrojable, root, false );
+	if ( ! exito ) {
+	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
+	    log( "No se pudo interpretar el JSON, se genera el objeto arrojable por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
+	    return generarArrojableDefault(ventana);
+	} else log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
+
+	// Cerrar archivo.
+	archivoArrojable.close();
+	log ( "Se cerro el archivo JSON del objeto arrojable.", LOG_DEBUG );
+
+
+	// Calculo los ratios del personaje.
+	float ratio_x_personaje = getRatioXPersonaje(root, personaje_ancho);
+	float ratio_y_personaje = getRatioYPersonaje(root, personaje_alto);
+
+	vector<ObjetoArrojable*> objetosArrojables;
+	if ( ! root.isMember("poderes") || ! root["poderes"].isArray() ) {
+		log( "No se encuentran especificaciones para los poderes. Se setean los objetos por defecto. ", LOG_ERROR );
+		return generarArrojableDefault(ventana);
+	}
+	Json::Value arrojables = root["poderes"];
+	for ( int i=0; i < (int)arrojables.size(); i++ ) {
+
+		log( "Se cargara el sprite para el objeto arrojable del personaje", LOG_DEBUG );
+		Sprite* sprite_objeto_arrojable =  cargarSprite( arrojables[i], ruta_carpeta, "objetoArrojable", SPRITESHEET_OBJETO_ARROJABLE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
+
+		string arrojable_nombre;
+		float arrojable_velocidad;
+		if ( ! arrojables[i].isMember("nombre") ) {
+			arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
+			log( "No se especifico el nombre del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
+				log( "Se cargo correctamente el nombre del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
+				log( "El nombre indicado para el objeto arrojable no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("velocidad") ) {
+			arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
+			log( "No se especifico la velocidad del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
+				log( "Se cargo correctamente la velocidad del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
+				log( "La velocidad indicada para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+
+		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable);
+		objetosArrojables.push_back(arrojable);
+	}
+	return objetosArrojables;
+}
 
 
 vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
@@ -471,9 +547,9 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaj
 	Personaje* personaje;
 	float personaje_ancho, personaje_alto;
 	float rpos = PERSONAJE_POS_RESPECTO_CAM;
-	string personaje_carpeta_sprites, personaje_nombre;
+	string personaje_carpeta_sprites, personaje_carpeta_arrojables, personaje_nombre;
 	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
-		personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, flipped_default);
+		personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD, flipped_default);
 		if ( nro_personaje == 1 ) {
 			personaje->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2)*rpos,Y_PISO_DEFAULT);
 		} else if ( nro_personaje == 2 ) {
@@ -542,14 +618,33 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaj
 								log( "La ruta a la carpeta contenedora de los sprites del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 							}
 						}
+						if ( ! root["personajes"][k].isMember("poderes") ) {
+							personaje_carpeta_arrojables = PERSONAJE_CARPETA_ARROJABLES_DEFAULT;
+							log( "No se especifico la carpeta contenedora de los poderes arrojables del personaje. Se utiliza carpeta por defecto.", LOG_ERROR );
+						} else {
+							try {
+								personaje_carpeta_arrojables = root["personajes"][k].get( "poderes", PERSONAJE_CARPETA_ARROJABLES_DEFAULT ).asString();
+								struct stat sb;
+								if ( stat(personaje_carpeta_arrojables.c_str(), &sb) != 0 ) {
+									log( "La ruta a la carpeta de poderes del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
+									personaje_carpeta_arrojables = PERSONAJE_CARPETA_ARROJABLES_DEFAULT;
+								} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los poderes del personaje.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								personaje_carpeta_arrojables = PERSONAJE_CARPETA_ARROJABLES_DEFAULT;
+								log( "La ruta a la carpeta contenedora de los poderes del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+							}
+						}
 
 						vector<float> colorAlternativo = cargarColorAlternativo(root["personajes"][k]);
 
 						// Creo Sprites del personaje.
 						vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
 
+						// Creo objetos arrojables (poderes).
+						vector<ObjetoArrojable*> arrojables = cargarArrojables(personaje_carpeta_arrojables, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
+
 						// Crear personaje.
-						Personaje* personaje = new Personaje(personaje_nombre, sprites, PERSONAJE_VELOCIDAD, flipped_default);
+						Personaje* personaje = new Personaje(personaje_nombre, sprites, arrojables, PERSONAJE_VELOCIDAD, flipped_default);
 						log( "Se creo correctamente el personaje.", LOG_DEBUG );
 
 						// Indico posicion inicial del personaje.
@@ -564,7 +659,6 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaj
 						log( "Seteada Posicion en escenario de Personaje", LOG_DEBUG );
 
 						return personaje;
-
 					}
 				} catch ( exception &e ) {
 					continue;
@@ -572,7 +666,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaj
 			}
 		}
 
-		personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), PERSONAJE_VELOCIDAD, flipped_default);
+		personaje = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD, flipped_default);
 		if ( nro_personaje == 1 ) {
 			personaje->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2)*rpos,Y_PISO_DEFAULT);
 		} else if ( nro_personaje == 2 ) {
