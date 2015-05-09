@@ -111,8 +111,15 @@ void Personaje::setScroll(bool scrollear){
 }
 
 void Personaje::setFlip(bool flip){
-	if (_estaSaltando > 0) return;
-	m_fliped= flip;
+	if (_estaSaltando > 0 || (flip == m_fliped)) return;
+		m_fliped= flip;
+		if (flip){
+			//Le sumamos el ancho para que la x siga quedando en la cabeza
+			m_xActual += spriteActual->getAncho();
+		}
+		else{
+			m_xActual -= spriteActual->getAncho();
+		}
 }
 
 void Personaje::Update(int velocidadScroll){
@@ -121,8 +128,16 @@ void Personaje::Update(int velocidadScroll){
 	if(m_mover)
 		renderX += m_velocidadActual;
 
-
-	if (renderX <= (m_AnchoMundo - spriteActual->getAncho()) and renderX >= 0){
+	float maximo,minimo;
+	if(m_fliped){
+		maximo = m_AnchoMundo;
+		minimo = spriteActual->getAncho();
+	}
+	else{
+		maximo = (m_AnchoMundo - spriteActual->getAncho());
+		minimo = 0;
+	}
+	if (renderX <= maximo and renderX >= minimo){
 		if ( !_estaAgachado and !_estaCubriendose){
 			if (_estaAtacando){
 				if (_estaSaltando > 0)
@@ -134,11 +149,11 @@ void Personaje::Update(int velocidadScroll){
 		}
 	}
 
-	if(m_xActual > m_AnchoMundo - spriteActual->getAncho()*1.3f)
-			m_xActual = m_AnchoMundo - spriteActual->getAncho()*1.3f;
+	if(m_xActual > maximo)
+			m_xActual = maximo;
 
-	else if(m_xActual < 0)
-			m_xActual = 0;
+	else if(m_xActual < minimo)
+			m_xActual = minimo;
 
 	if(_estaSaltando > 0){
 			_actualizarY();
