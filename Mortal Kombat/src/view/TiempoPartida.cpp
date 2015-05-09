@@ -17,7 +17,7 @@ TiempoPartida::TiempoPartida(Ventana* una_ventana, Tiempo* un_tiempo) {
 	m_textura = NULL;
 	ancho = 0;
 	alto = 0;
-	textColor = { 0, 255, 0 };
+	textColor = { 255, 247, 0 };
 }
 
 bool TiempoPartida::loadFromRenderedText( std::string textureText){
