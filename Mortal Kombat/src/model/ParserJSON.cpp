@@ -511,6 +511,13 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	Sprite* sprite_recibir_golpe_fuerte =  cargarSprite( root, ruta_carpeta, "recibeGolpeFuerte", SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_recibir_golpe_fuerte );
 
+	log( "Se cargara el sprite para la accion de combo de pina baja del personaje", LOG_DEBUG );
+	Sprite* sprite_combo_pina_baja =  cargarSprite( root, ruta_carpeta, "comboPinaBaja", SPRITESHEET_COMBO_PINA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_combo_pina_baja );
+
+	log( "Se cargara el sprite para la accion de combo de pina alta del personaje", LOG_DEBUG );
+	Sprite* sprite_combo_pina_alta =  cargarSprite( root, ruta_carpeta, "comboPinaAlta", SPRITESHEET_COMBO_PINA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_combo_pina_alta );
 
 	log( "Se crearon todos los sprites del personaje.", LOG_DEBUG );
 	return sprites;

@@ -178,6 +178,8 @@ vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, 
 	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "recibeGolpeAlto", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
 	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "recibeGolpeBajo", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
 	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "recibeGolpeFuerte", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "comboPinaBaja", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "comboPinaAlta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
 
 	return sprites;
 }
