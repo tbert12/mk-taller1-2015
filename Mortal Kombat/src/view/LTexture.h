@@ -76,7 +76,7 @@ class LTexture
 
 
 		//PARA TESTS
-		void renderRectangulo( Rect_Logico* clip,float x, float y, bool flip);
+		void renderRectangulo( Rect_Logico* clip,float x, float y);
 
 	private:
 		//The actual hardware texture
