@@ -279,8 +279,8 @@ vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
 		}
 
 		// Calculo ratios para el arrojable.
-		float ratio_x_arrojable = ARROJABLE_ANCHO_PX_DEFAULT / ARROJABLE_ANCHO_DEFAULT;
-		float ratio_y_arrojable = ARROJABLE_ALTO_PX_DEFAULT / ARROJABLE_ALTO_DEFAULT;
+		float ratio_x_arrojable = ARROJABLE_ANCHO_PX_DEFAULT / arrojable_ancho;
+		float ratio_y_arrojable = ARROJABLE_ALTO_PX_DEFAULT / arrojable_alto;
 
 		Sprite* sprite_objeto_arrojable =  crearSpritePorDefecto( JSON_PODERES_DEFAULT, "objetoArrojable", ventana, ratio_x_arrojable, ratio_y_arrojable );
 
