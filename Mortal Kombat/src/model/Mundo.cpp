@@ -15,6 +15,7 @@ Mundo::Mundo(float ancho,float alto) {
 	personajes_z_index = 0;
 	BarraJugador1 = NULL;
 	BarraJugador2 = NULL;
+	capaPrincipal = NULL;
 	tiempo_pantalla = NULL;
 	empezar = false;
 }
@@ -48,6 +49,7 @@ void Mundo::addCapaPrincipal( CapaPrincipal* capa_principal, int index ) {
 		capas.insert(capas.begin()+index, capa_principal);
 		personajes_z_index = index;
 	}
+	capaPrincipal = capa_principal;
 }
 
 Capa* Mundo::getCapa(int indice){
@@ -129,7 +131,8 @@ void Mundo::render(){
 	if(personajes[0]->getX() == 200){
 		ventana->vibrar();
 	}
-	//
+	//capaPrincipal->chequeo_colisiones
+
 
 	//renderizo las capas
 	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){

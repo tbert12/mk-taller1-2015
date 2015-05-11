@@ -30,6 +30,7 @@ private:
 	float ancho_mundo;
 	float alto_mundo;
 	std::vector<Capa*> capas;
+	CapaPrincipal* capaPrincipal;
 	std::vector<Personaje*> personajes;
 	Tiempo* tiempo;
 	TiempoPartida* tiempo_pantalla;

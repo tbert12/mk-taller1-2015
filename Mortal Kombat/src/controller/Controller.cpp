@@ -51,7 +51,7 @@ void Controller::_Init(map<string, int>* mapa_comandos){
 		log("Hay mas de dos joystick conectados, se setean al jugador 1 y 2 .Ademas se crea el teclado para el personaje 1",LOG_DEBUG);
 		if (personaje_1 != NULL)
 			Joystick_1 = new JoystickControl(&evento,0,personaje_1,mapa_comandos);
-			Teclado = new KeyboardControl(&evento,personaje_1);
+			Teclado = new KeyboardControl(&evento,personaje_1,false);
 		if(personaje_2 != NULL)
 			Joystick_2 = new JoystickControl(&evento,1,personaje_2,mapa_comandos);
 	}
@@ -61,13 +61,13 @@ void Controller::_Init(map<string, int>* mapa_comandos){
 		if (personaje_1 != NULL)
 			Joystick_1 = new JoystickControl(&evento,0,personaje_1,mapa_comandos);
 		if(personaje_2 != NULL)
-			Teclado = new KeyboardControl(&evento,personaje_2);
+			Teclado = new KeyboardControl(&evento,personaje_2,true);
 	}
 	//no hay joystick conectados, solo teclado
 	else{
 		log("No hay joystick conectado, se setea el teclado al jugador 1",LOG_DEBUG);
 		if(personaje_1 != NULL)
-			Teclado = new KeyboardControl(&evento,personaje_1);
+			Teclado = new KeyboardControl(&evento,personaje_1,true);
 	}
 }
 

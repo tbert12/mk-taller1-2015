@@ -28,6 +28,7 @@ ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_spr
 Rect_Logico* ObjetoArrojable::rectanguloAtaque(){
 	Rect_Logico* rectangulo = new Rect_Logico;
 	rectangulo->x = m_xActual;
+	if (flip) rectangulo->x -= sprite->getAncho()/1.6;
 	rectangulo->y=  m_yActual;
 	rectangulo->w = sprite->getAncho();
 	rectangulo->h = sprite->getAlto();
@@ -67,10 +68,9 @@ void ObjetoArrojable::_Update(){
 }
 
 void ObjetoArrojable::_render(float pos_ventana){
-	int x = m_xActual;
-	if (flip)
-		x -= sprite->getAncho();
 	sprite->render(m_xActual - pos_ventana,m_yActual,flip);
+	//render colision test
+	sprite->RENDERCOLISIONTEST(pos_ventana,m_yActual,flip,rectanguloAtaque(),NULL);
 	_avanzarSprite();
 }
 

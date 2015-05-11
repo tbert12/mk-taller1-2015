@@ -20,6 +20,8 @@ CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeF
 	m_velocidad_derecha = m_Personaje->getVelocidadDerecha();
 	m_velocidad_izquierda = m_Personaje->getVelocidadIzquierda();
 	m_PersonajeQueScrollea = 0;
+	rectAtaqueAnterior2 = NULL;
+	rectAtaqueAnterior1 = NULL;
 }
 
 CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, vector<Personaje*> personajes)

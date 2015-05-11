@@ -38,8 +38,8 @@ const float PERSONAJE_ALTO_DEFAULT = 70.0;
 const float PERSONAJE_POS_RESPECTO_CAM = 0.8;
 const float ARROJABLE_ANCHO_DEFAULT = 50.0;
 const float ARROJABLE_ALTO_DEFAULT = 20.0;
-const float ARROJABLE_ANCHO_PX_DEFAULT = 42.0;
-const float ARROJABLE_ALTO_PX_DEFAULT = 34.0;
+const float ARROJABLE_ANCHO_PX_DEFAULT = 191.0;
+const float ARROJABLE_ALTO_PX_DEFAULT = 24.0;
 
 const char* const JSON_SPRITES_DEFAULT = "data/players/default/sprites/sprites.json";
 const char* const JSON_PODERES_DEFAULT = "data/players/default/poderes/poderes.json";
