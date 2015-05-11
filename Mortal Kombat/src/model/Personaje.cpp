@@ -144,7 +144,7 @@ void Personaje::Update(int velocidadScroll){
 		minimo = spriteActual->getAncho();
 	}
 	else{
-		maximo = (m_AnchoMundo - spriteActual->getAncho());
+		maximo = (m_AnchoMundo + spriteActual->getAncho());
 		minimo = 0;
 	}
 	if (renderX <= maximo and renderX >= minimo){

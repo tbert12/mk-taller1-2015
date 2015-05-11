@@ -39,6 +39,7 @@ public:
 	void destruir();
 	float getPosX();
 	Rect_Logico* rectanguloAtaque();
+	Rect_Logico* nextRectAtaque();
 	void update();
 	virtual ~ObjetoArrojable();
 };
