@@ -207,10 +207,6 @@ vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
 	// Cerrar archivo.
 	archivoArrojable.close();
 
-	// Calculo los ratios del personaje.
-	float ratio_x_personaje = PERSONAJE_ANCHO_PX_DEFAULT / PERSONAJE_ANCHO_DEFAULT;
-	float ratio_y_personaje = PERSONAJE_ALTO_PX_DEFAULT / PERSONAJE_ALTO_DEFAULT;
-
 	vector<ObjetoArrojable*> objetosArrojables;
 	if ( ! root.isMember("poderes") || ! root["poderes"].isArray() ) {
 		log( "No se encuentran especificaciones para los poderes por defecto. Se aborta el programa. ", LOG_ERROR );
@@ -219,16 +215,15 @@ vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
 	Json::Value arrojables = root["poderes"];
 	for ( int i=0; i < (int)arrojables.size(); i++ ) {
 
-		Sprite* sprite_objeto_arrojable =  crearSpritePorDefecto( JSON_PODERES_DEFAULT, "objetoArrojable", ventana, ratio_x_personaje, ratio_y_personaje );
-
 		string arrojable_nombre;
-		float arrojable_velocidad;
+		float arrojable_velocidad, arrojable_ancho, arrojable_alto;
+		int arrojable_danio;
 		if ( ! arrojables[i].isMember("nombre") ) {
 			arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
 			log( "No se especifico el nombre del objeto arrojable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
+				arrojable_nombre = arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
 			} catch ( exception &e ) {
 				arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
 				log( "El nombre indicado para el objeto arrojable no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
@@ -239,15 +234,57 @@ vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
 			log( "No se especifico la velocidad del objeto arrojable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
+				arrojable_velocidad = arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
 				log( "Se cargo correctamente la velocidad del objeto arrojable.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
 				log( "La velocidad indicada para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
 			}
 		}
+		if ( ! arrojables[i].isMember("danio") ) {
+			arrojable_danio = ARROJABLE_DANIO_DEFAULT;
+			log( "No se especifico el danio del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_danio = arrojables[i].get("danio", ARROJABLE_DANIO_DEFAULT).asInt();
+				log( "Se cargo correctamente el danio del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_danio = ARROJABLE_DANIO_DEFAULT;
+				log( "El danio indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("ancho") ) {
+			arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
+			log( "No se especifico el ancho logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_ancho = arrojables[i].get("ancho", ARROJABLE_ANCHO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el ancho logico del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
+				log( "El ancho logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("alto") ) {
+			arrojable_alto = ARROJABLE_ALTO_DEFAULT;
+			log( "No se especifico el alto logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_alto = arrojables[i].get("alto", ARROJABLE_ALTO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el alto logico del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_alto = ARROJABLE_ALTO_DEFAULT;
+				log( "El alto logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
 
-		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable);
+		// Calculo ratios para el arrojable.
+		float ratio_x_arrojable = ARROJABLE_ANCHO_PX_DEFAULT / arrojable_ancho;
+		float ratio_y_arrojable = ARROJABLE_ALTO_PX_DEFAULT / arrojable_alto;
+
+		Sprite* sprite_objeto_arrojable =  crearSpritePorDefecto( JSON_PODERES_DEFAULT, "objetoArrojable", ventana, ratio_x_arrojable, ratio_y_arrojable );
+
+		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable, arrojable_danio);
 		objetosArrojables.push_back(arrojable);
 	}
 	return objetosArrojables;

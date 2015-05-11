@@ -33,6 +33,7 @@
 		},
 		"nombre": "Poder",
 		"velocidad": 10,
+		"danio": 10,
 		"ancho": 50,
 		"alto": 20
 		}

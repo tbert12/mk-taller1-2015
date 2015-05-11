@@ -293,12 +293,13 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 
 		string arrojable_nombre;
 		float arrojable_velocidad, arrojable_ancho, arrojable_alto;
+		int arrojable_danio;
 		if ( ! arrojables[i].isMember("nombre") ) {
 			arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
 			log( "No se especifico el nombre del objeto arrojable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
+				arrojable_nombre = arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
 				log( "Se cargo correctamente el nombre del objeto arrojable.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
@@ -310,11 +311,23 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 			log( "No se especifico la velocidad del objeto arrojable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
+				arrojable_velocidad = arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
 				log( "Se cargo correctamente la velocidad del objeto arrojable.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
 				log( "La velocidad indicada para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("danio") ) {
+			arrojable_danio = ARROJABLE_DANIO_DEFAULT;
+			log( "No se especifico el danio del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_danio = arrojables[i].get("danio", ARROJABLE_DANIO_DEFAULT).asInt();
+				log( "Se cargo correctamente el danio del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_danio = ARROJABLE_DANIO_DEFAULT;
+				log( "El danio indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
 			}
 		}
 		if ( ! arrojables[i].isMember("ancho") ) {
@@ -322,7 +335,7 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 			log( "No se especifico el ancho logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojables[i].get("ancho", ARROJABLE_ANCHO_DEFAULT).asFloat();
+				arrojable_ancho = arrojables[i].get("ancho", ARROJABLE_ANCHO_DEFAULT).asFloat();
 				log( "Se cargo correctamente el ancho logico del objeto arrojable.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
@@ -334,7 +347,7 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 			log( "No se especifico el alto logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojables[i].get("alto", ARROJABLE_ALTO_DEFAULT).asFloat();
+				arrojable_alto = arrojables[i].get("alto", ARROJABLE_ALTO_DEFAULT).asFloat();
 				log( "Se cargo correctamente el alto logico del objeto arrojable.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				arrojable_alto = ARROJABLE_ALTO_DEFAULT;
@@ -349,7 +362,7 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 		log( "Se cargara el sprite para el objeto arrojable del personaje", LOG_DEBUG );
 		Sprite* sprite_objeto_arrojable =  cargarSprite( arrojables[i], ruta_carpeta, "objetoArrojable", SPRITESHEET_OBJETO_ARROJABLE_DEFAULT, ventana, ratio_x_arrojable, ratio_y_arrojable );
 
-		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable);
+		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable, arrojable_danio);
 		objetosArrojables.push_back(arrojable);
 	}
 	return objetosArrojables;
