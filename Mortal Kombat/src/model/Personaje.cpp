@@ -564,6 +564,8 @@ void Personaje::patadaBaja() {
 		_patadaBajaAgachado();
 	} else if ( _estaSaltando > 0 ) {
 		_patadaSaltando();
+	} else if ( (m_velocidadActual < 0 and !m_fliped) or (m_velocidadActual > 0 and m_fliped) ) {
+		_patadaCircular();
 	} else {
 		_cambiarSprite(SPRITE_PATADA_BAJA);
 	}
@@ -580,8 +582,6 @@ void Personaje::patadaAlta() {
 		_patadaAltaAgachado();
 	} else if ( _estaSaltando > 0 ) {
 		_patadaSaltando();
-	} else if (m_velocidadActual < 0) {
-		_patadaCircular();
 	} else {
 		_cambiarSprite(SPRITE_PATADA_ALTA);
 	}

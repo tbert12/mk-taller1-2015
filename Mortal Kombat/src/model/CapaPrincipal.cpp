@@ -110,6 +110,14 @@ void CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* persona
 	ObjetoArrojable* objetoConFlip = personajeFlippeado->getPoderActivo();
 	//printf("actual: %f, anterior: %f, defensa: %f\n",rectAtaque1->x + rectAtaque1->w ,rectAtaqueAnterior1->x + rectAtaqueAnterior1->w,rectDefensa2->x );
 
+
+	bool colisionaDefensaPersonajes = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w));
+	if(colisionaDefensaPersonajes){
+		personajeFlippeado->recibirGolpe( personaje->getAccionDeAtaque() , 0 );
+		printf("colisionan defensas\n");
+		return;
+	}
+
 	if (rectAtaque1 != NULL ){
 
 		if(!rectAtaqueAnterior1){
