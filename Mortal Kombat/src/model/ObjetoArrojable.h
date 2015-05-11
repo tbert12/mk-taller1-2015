@@ -35,6 +35,7 @@ public:
 	bool lanzar(float pos_x,float pos_y,bool flipeo);
 	void renderizar(float x_dist_ventana);
 	void setDimensionesMundo(float alto,float ancho);
+	float getVelocidadX();
 	bool getVida();
 	void destruir();
 	float getPosX();

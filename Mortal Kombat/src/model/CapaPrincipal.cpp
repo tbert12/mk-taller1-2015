@@ -122,7 +122,8 @@ void CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* persona
 				(floatIsBetween(rectAtaque1->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectAtaqueAnterior1->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
 
 		if( colisionaAtaquePersonajeSinFlipX and colisionaY){
-			printf("hubo colision ppsf\n");
+			personajeFlippeado->recibirGolpe( personaje->getAccionDeAtaque() , 0 );
+			printf("hubo colision  ppsf\n");
 		}
 	}else if (rectAtaque2 != NULL ){
 		if(!rectAtaqueAnterior2){
@@ -137,6 +138,7 @@ void CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* persona
 				(floatIsBetween(rectAtaque2->y, rectDefensa1->y-rectDefensa1->h , rectDefensa1->h) and floatIsBetween(rectAtaqueAnterior2->y, rectDefensa1->y-rectDefensa1->h, rectDefensa1->h));
 		//and colisionaY
 		if( colisionAtaquePersonajeConFlipX  and colisionaY){
+			personaje->recibirGolpe( personajeFlippeado->getAccionDeAtaque() , 0 );
 			printf("hubo colision  ppcf\n");
 		}
 	}
@@ -146,13 +148,10 @@ void CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* persona
 		Rect_Logico* rectPoder = objetoSinFlip->rectanguloAtaque();
 		if(rectPoder->x>rectDefensa2->x)
 			return;
-		bool colisionaAtaquePersonajeSinFlipX = (floatIsBetween(rectDefensa2->x ,rectPoder->x,rectPoder->w) and
-				!floatIsBetween(rectDefensa2->x,rectPoder->x,rectPoder->w));
+		bool colisionaAtaquePersonajeSinFlipX = floatIsBetween(rectDefensa2->x,rectPoder->x + objetoSinFlip->getVelocidadX() ,rectPoder->w) and
+				!floatIsBetween(rectDefensa2->x ,rectPoder->x,rectPoder->w);
 
-		printf("RectAtaqueX :%f\n",rectPoder->x);
-		printf("RectAtaquew :%f\n",rectPoder->w);
-		printf("RectdefensaPos :%f\n",rectDefensa2->x);
-
+		printf("RectAtaqueXEnd :%f      RectdefensaPos :%f \n",rectPoder->x+rectPoder->w,rectDefensa2->x);
 		bool colisionaY = (floatIsBetween(rectDefensa2->y, rectPoder->y-rectPoder->h , rectPoder->h) and floatIsBetween(rectDefensa2->y, rectPoder->y-rectPoder->h, rectPoder->h)) or
 				(floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
 

@@ -100,6 +100,10 @@ float ObjetoArrojable::getPosX(){
 	return m_xActual;
 }
 
+float ObjetoArrojable::getVelocidadX(){
+	return m_velocidad_x;
+}
+
 void ObjetoArrojable::update(){
 	_Update();
 }
