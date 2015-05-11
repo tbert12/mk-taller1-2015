@@ -42,6 +42,13 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 //-------------------------------------------------------------------------------------------------------------------------
 //Manejo de attributos logicos
 
+ObjetoArrojable* Personaje::getPoderActivo(){
+	if (poderes[0] != NULL){
+		if(poderes[0]->getVida())
+			return poderes[0];
+	}
+	return NULL;
+}
 
 void Personaje::lanzarObjeto(){
 	//ya hay poder lanzado

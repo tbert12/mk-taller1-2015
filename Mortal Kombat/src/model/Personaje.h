@@ -121,6 +121,8 @@ public:
 	Rect_Logico* nextRectAtaque();
 	Rect_Logico* rectanguloDefensa();
 
+	ObjetoArrojable* getPoderActivo();
+
 	bool enMovimiento();
 
 	void Update(int velocidadScroll);
