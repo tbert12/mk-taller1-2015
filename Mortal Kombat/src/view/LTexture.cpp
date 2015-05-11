@@ -237,7 +237,7 @@ void LTexture::renderObjeto( Rect_Objeto* clip,float x, float y, bool flip)
 		Object.h = (int)(clip->h_log*ratio_y_ventana +0.5);
 		if(flip) {
 			flipType = SDL_FLIP_HORIZONTAL;
-			Object.x -= clip->w;
+			Object.x -= Object.w;
 		}
 	}
 
@@ -295,7 +295,7 @@ void LTexture::renderImagen(){
 }
 
 //Para testear las colisiones
-void LTexture::renderRectangulo( Rect_Logico* clip,float x, float y, bool flip){
+void LTexture::renderRectangulo( Rect_Logico* clip,float x, float y){
 	int corrimiento_x = 0;
 	int corrimiento_y = 0;
 
@@ -307,7 +307,6 @@ void LTexture::renderRectangulo( Rect_Logico* clip,float x, float y, bool flip){
 
 	SDL_Rect Object = { x_px,y_px, mWidth, mHeight};
 	SDL_Rect clip_px;
-	SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
 	if( clip != NULL )
 	{
@@ -318,15 +317,11 @@ void LTexture::renderRectangulo( Rect_Logico* clip,float x, float y, bool flip){
 
 		Object.w = (int)(clip->w*ratio_x_ventana +0.5);	//tamaño logico del objeto por el ratio de ventana
 		Object.h = (int)(clip->h*ratio_y_ventana +0.5);
-		if(flip) {
-			flipType = SDL_FLIP_HORIZONTAL;
-			//Object.x += Object.w;
-		}
 	}
 
 
 	//Renderizar a la pantalla
-	SDL_RenderCopyEx( gRenderer, mTexture, &clip_px, &Object,  0 , 0, flipType);
+	SDL_RenderCopyEx( gRenderer, mTexture, &clip_px, &Object,  0 , 0, SDL_FLIP_NONE);
 }
 
 //FIN de cosas para TEST de colision
