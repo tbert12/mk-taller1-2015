@@ -57,14 +57,13 @@ void Personaje::lanzarObjeto(){
 			return;
 	}
 	//Poner sprite del personaje para lanzar
-	//poderes.push_back(new ObjetoArrojable("arma subzero",m_velocidad,sprites[SPRITE_AGACHAR]));
 	float x;
 	float y;
 	if (m_fliped){
-		x = m_xActual - spriteActual->getAncho();
+		x = m_xActual - spriteActual->getAncho()*0.6;
 	}
 	else{
-		x = m_xActual + spriteActual->getAncho();
+		x = m_xActual + spriteActual->getAncho()*0.6;
 	}
 	y = m_yActual - getAlto()/2;
 	poderes[0]->lanzar(x,y,m_fliped);
