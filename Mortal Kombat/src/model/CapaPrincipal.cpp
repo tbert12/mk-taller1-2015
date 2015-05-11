@@ -62,7 +62,7 @@ void CapaPrincipal::Update(int scroll){
 	}
 
 	this->_CheckearColisiones(personaje,personajeFlippeado);
-
+	//printf("personajex");
 	if(personaje->getX() + personaje->getAncho()*.5f > personajeFlippeado->getX() - personajeFlippeado->getAncho()*.5f){
 		personaje->setFlip(true);
 		personajeFlippeado->setFlip(false);
@@ -223,13 +223,13 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 			if(getX() == rect->w and (m_PersonajeDos->getSentidoDeMovimiento() > 0)) return this->_NadieScrollea();
 			if ((m_PersonajeDos->getX() <= (getX() + m_ancho_ventana*0.02f)) and (m_PersonajeDos->getSentidoDeMovimiento() < 0)){
 				m_Personaje->setScroll(false);
-				m_PersonajeDos->setScroll(false);
-				return 0;
+				m_PersonajeDos->setScroll(true);
+				return -1;
 			}
 			if ((m_PersonajeDos->getX() >= (getX() + m_ancho_ventana*0.80f)) and (m_PersonajeDos->getSentidoDeMovimiento() > 0) ){
 				m_Personaje->setScroll(false);
-				m_PersonajeDos->setScroll(false);
-				return 0;
+				m_PersonajeDos->setScroll(true);
+				return 1;
 			}
 			return this->_NadieScrollea();
 			break;
