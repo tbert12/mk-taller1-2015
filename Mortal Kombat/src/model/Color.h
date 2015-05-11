@@ -17,7 +17,7 @@
 using namespace std;
 
 
-void RGBaHSV(Uint8 r, Uint8 g, Uint8 b, float* h, float* s, float* v);
+void RGBaHSV(Uint8 r, Uint8 g, Uint8 b, float *h, float *s, float *v);
 void HSVaRGB(float h, float s, float v, Uint8* r, Uint8* g, Uint8* b);
 
 void desplazarHue(float* h, float desplazamiento);

@@ -92,6 +92,33 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 				SDL_LockSurface( loadedSurface );
 			}
 
+			bool rangoValido = false;
+			if ( h_inicial < h_final ) {
+				rangoValido = true;
+			}
+
+			if ( h_inicial < 0 ) {
+				h_inicial = - h_inicial;
+				h_inicial = fmod(h_inicial, 360);
+				h_inicial = 360 - h_inicial;
+				log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+			}
+			if ( h_inicial > 360 ) {
+				h_inicial = fmod(h_inicial, 360);
+				log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+			}
+
+			if ( h_final < 0 ) {
+				h_final = - h_final;
+				h_final = fmod(h_final, 360);
+				h_final = 360 - h_final;
+				log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+			}
+			if ( h_final > 360 ) {
+				h_final = fmod(h_final, 360);
+				log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+			}
+
 			Uint32* pixels = (Uint32*) loadedSurface->pixels;
 			for (int i=0; i < ((loadedSurface->pitch)/4 * loadedSurface->h); i++ ) {
 
@@ -102,33 +129,6 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 
 				// Transformo de RGB a HSV. Si el hue cae en el rango especificado, se desplaza.
 				RGBaHSV(r, g, b, &h, &s, &v);
-
-				bool rangoValido = false;
-				if ( h_inicial < h_final ) {
-					rangoValido = true;
-				}
-
-				if ( h_inicial < 0 ) {
-					h_inicial = - h_inicial;
-					h_inicial = fmod(h_inicial, 360);
-					h_inicial = 360 - h_inicial;
-					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
-				if ( h_inicial > 360 ) {
-					h_inicial = fmod(h_inicial, 360);
-					log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
-
-				if ( h_final < 0 ) {
-					h_final = - h_final;
-					h_final = fmod(h_final, 360);
-					h_final = 360 - h_final;
-					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
-				if ( h_final > 360 ) {
-					h_final = fmod(h_final, 360);
-					log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
 
 				bool hayQuePintar = false;
 				if ( rangoValido ) {
