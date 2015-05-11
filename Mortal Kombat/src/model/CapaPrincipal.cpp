@@ -224,11 +224,13 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 			if ((m_PersonajeDos->getX() <= (getX() + m_ancho_ventana*0.02f)) and (m_PersonajeDos->getSentidoDeMovimiento() < 0)){
 				m_Personaje->setScroll(true);
 				m_PersonajeDos->setScroll(true);
+				m_PersonajeQueScrollea = 2;
 				return -1;
 			}
 			if ((m_PersonajeDos->getX() >= (getX() + m_ancho_ventana*0.80f)) and (m_PersonajeDos->getSentidoDeMovimiento() > 0) ){
 				m_Personaje->setScroll(true);
 				m_PersonajeDos->setScroll(true);
+				m_PersonajeQueScrollea = 2;
 				return 1;
 			}
 			return this->_NadieScrollea();
