@@ -7,11 +7,12 @@
 
 #include "ObjetoArrojable.h"
 
-ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_sprites) {
+ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_sprites,int un_danio) {
 	nombre = un_nombre;
 	vida = false;
 	m_xActual = 0;
 	m_yActual = 0;
+	danio = un_danio;
 	m_velocidad_x = velocidad;
 	if(m_velocidad_x <= 0)
 		m_velocidad_x = VELOCIDAD_DEFAULT;
@@ -45,6 +46,9 @@ Rect_Logico* ObjetoArrojable::nextRectAtaque(){
 	return rectangulo;
 }
 
+int ObjetoArrojable::getDanio(){
+	return danio;
+}
 
 void ObjetoArrojable::setDimensionesMundo(float alto,float ancho){
 	m_AltoMundo = alto;
@@ -89,7 +93,7 @@ void ObjetoArrojable::_terminar(){
 	m_xActual = 0;
 	m_yActual = 0;
 	flip = false;
-	sprite->Reset();
+	sprite->hardReset();
 }
 
 void ObjetoArrojable::destruir(){

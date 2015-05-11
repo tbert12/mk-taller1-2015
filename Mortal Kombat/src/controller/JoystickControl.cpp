@@ -114,13 +114,10 @@ void JoystickControl::JoyPressed(){
 			personaje->patadaBaja();
 		}
 		else if ( boton == comandos->operator [](PATADA_ALTA)){
-				personaje->patadaAlta();
-		}
-		else if ( boton == comandos->operator [](CUBRIRSE)){
-				personaje->cubrirse();
+			personaje->patadaAlta();
 		}
 		else if ( boton == comandos->operator [](LANZAR_ARMA)){
-				personaje->lanzarObjeto();
+			personaje->lanzarObjeto();
 		}
 		else if ( boton == JOY_START){
 			pausa = !pausa;
@@ -141,9 +138,14 @@ void JoystickControl::JoyState(){
 		personaje->Levantarse();
 
 	//se deja de cubrir si no esta apretado
-	if (SDL_JoystickGetButton(joystick,comandos->operator [](CUBRIRSE)) == BUTTON_UNPRESSED)
-		personaje->dejarDeCubrirse();
-
+	switch ( SDL_JoystickGetButton(joystick,comandos->operator [](CUBRIRSE)) ){
+		case BUTTON_PRESSED:
+			personaje->cubrirse();
+			break;
+		case BUTTON_UNPRESSED:
+			personaje->dejarDeCubrirse();
+			break;
+	}
 }
 
 JoystickControl::~JoystickControl() {
