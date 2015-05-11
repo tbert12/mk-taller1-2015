@@ -73,7 +73,8 @@ const char* const SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT = "recibeGolpeFuerte.
 
 const char* const SPRITESHEET_OBJETO_ARROJABLE_DEFAULT = "objetoArrojable.png";
 const char* const ARROJABLE_NOMBRE_DEFAULT = "Poder";
-const int ARROJABLE_VELOCIDAD_DEFAULT = 10;
+const float ARROJABLE_VELOCIDAD_DEFAULT = 10;
+const int ARROJABLE_DANIO_DEFAULT = 10;
 
 const int COMANDO_PINA_BAJA_DEFAULT = 2;
 const int COMANDO_PATADA_BAJA_DEFAULT = 1;

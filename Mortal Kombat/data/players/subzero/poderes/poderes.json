@@ -105,6 +105,7 @@
 		},
 		"nombre": "Hielo",
 		"velocidad": 8,
+		"danio": 0,
 		"ancho": 50,
 		"alto": 20
 		}
