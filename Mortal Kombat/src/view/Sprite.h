@@ -53,6 +53,7 @@ class Sprite {
 		void doPongIn(int pong);
 		void doFullPong();
 		void doLoop(bool loop);
+		bool loop();
 		void doReverse(bool Reverse);
 
 		bool ultimoFrame();

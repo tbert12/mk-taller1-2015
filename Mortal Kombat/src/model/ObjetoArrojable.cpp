@@ -29,7 +29,7 @@ ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_spr
 Rect_Logico* ObjetoArrojable::rectanguloAtaque(){
 	Rect_Logico* rectangulo = new Rect_Logico;
 	rectangulo->x = m_xActual;
-	if (flip) rectangulo->x -= sprite->getAncho()/1.6;
+	if (flip) rectangulo->x -= sprite->getAncho();
 	rectangulo->y=  m_yActual;
 	rectangulo->w = sprite->getAncho();
 	rectangulo->h = sprite->getAlto();
@@ -115,7 +115,7 @@ void ObjetoArrojable::update(){
 void ObjetoArrojable::renderizar(float x_dist_ventana){
 	//si no tiene vida no lo renderizo
 	if (!vida) return;
-
+	if(!sprite->loop()) printf("DOO LOOOP false\n");
 	_render(x_dist_ventana);
 }
 

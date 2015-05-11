@@ -61,6 +61,10 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 	RectanguloTest2->setColor(100,255,0);
 }
 
+bool Sprite::loop(){
+	return doloop;
+}
+
 Sprite::~Sprite(){
 	delete SpriteSheetTexture;
 	delete []spriteFrames;
