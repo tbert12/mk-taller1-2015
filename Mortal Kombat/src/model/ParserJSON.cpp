@@ -62,6 +62,58 @@ float ParserJSON::getRatioYPersonaje( Json::Value root_sprites, float personaje_
 	return ratio_y_personaje;
 }
 
+float ParserJSON::getRatioXArrojable( Json::Value root_arrojables, float arrojable_ancho ) {
+	if ( ! root_arrojables.isMember("objetoArrojable") ) {
+		log( "No se encontro la etiqueta para la creacion del objeto arrojable del personaje. Se setea el ratio_x del arrojable del personaje por defecto.", LOG_ERROR );
+		return ARROJABLE_ANCHO_PX_DEFAULT / arrojable_ancho;
+	}
+	if ( ! root_arrojables["objetoArrojable"].isMember("frames") || ! root_arrojables["objetoArrojable"]["frames"].isArray() ) {
+		log( "No se encontraron especificaciones en un vector para la creacion del sprite del objeto arrojable del personaje. Se setea el ratio_x del arrojable por defecto.", LOG_ERROR );
+		return ARROJABLE_ANCHO_PX_DEFAULT / arrojable_ancho;
+	}
+	int ancho_px;
+	try {
+		ancho_px = root_arrojables["objetoArrojable"]["frames"][0].get( "Ancho", -100 ).asInt();
+		if ( ancho_px < 0 ) {
+			log( "No se especifico el ancho en pixeles del objeto arrojable o es negativo. No se puede calcular el ratio_x del arrojable. Se setea por defecto.", LOG_ERROR );
+			return ARROJABLE_ANCHO_PX_DEFAULT / arrojable_ancho;
+		}
+	} catch ( exception &e ) {
+		log( "El ancho en pixeles indicado del objeto arrojable no puede ser convertido a numero. Se setea el ratio_x del arrojable por defecto.", LOG_ERROR );
+		return ARROJABLE_ANCHO_PX_DEFAULT / arrojable_ancho;
+	}
+
+	float ratio_x_arrojable = ancho_px / arrojable_ancho;
+	log( "Se calculo el ratio_x del objeto arrojable del personaje.", LOG_DEBUG );
+	return ratio_x_arrojable;
+}
+
+float ParserJSON::getRatioYArrojable( Json::Value root_arrojables, float arrojable_alto ) {
+	if ( ! root_arrojables.isMember("objetoArrojable") ) {
+		log( "No se encontro la etiqueta para la creacion del objeto arrojable del personaje. Se setea el ratio_y del arrojable del personaje por defecto.", LOG_ERROR );
+		return ARROJABLE_ALTO_PX_DEFAULT / arrojable_alto;
+	}
+	if ( ! root_arrojables["objetoArrojable"].isMember("frames") || ! root_arrojables["objetoArrojable"]["frames"].isArray() ) {
+		log( "No se encontraron especificaciones en un vector para la creacion del sprite del objeto arrojable del personaje. Se setea el ratio_y del arrojable por defecto.", LOG_ERROR );
+		return ARROJABLE_ALTO_PX_DEFAULT / arrojable_alto;
+	}
+	int alto_px;
+	try {
+		alto_px = root_arrojables["objetoArrojable"]["frames"][0].get( "Alto", -100 ).asInt();
+		if ( alto_px < 0 ) {
+			log( "No se especifico el alto en pixeles del objeto arrojable o es negativo. No se puede calcular el ratio_y del arrojable. Se setea por defecto.", LOG_ERROR );
+			return ARROJABLE_ALTO_PX_DEFAULT / arrojable_alto;
+		}
+	} catch ( exception &e ) {
+		log( "El alto en pixeles indicado del objeto arrojable no puede ser convertido a numero. Se setea el ratio_y del arrojable por defecto.", LOG_ERROR );
+		return ARROJABLE_ALTO_PX_DEFAULT / arrojable_alto;
+	}
+
+	float ratio_y_arrojable = alto_px / arrojable_alto;
+	log( "Se calculo el ratio_y del objeto arrojable del personaje.", LOG_DEBUG );
+	return ratio_y_arrojable;
+}
+
 // Devuelve el puntero al mapa de comandos.
 map<string, int>* ParserJSON::getComandos() {
 	return comandos;
@@ -231,11 +283,6 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 	archivoArrojable.close();
 	log ( "Se cerro el archivo JSON del objeto arrojable.", LOG_DEBUG );
 
-
-	// Calculo los ratios del personaje.
-	float ratio_x_personaje = getRatioXPersonaje(root, personaje_ancho);
-	float ratio_y_personaje = getRatioYPersonaje(root, personaje_alto);
-
 	vector<ObjetoArrojable*> objetosArrojables;
 	if ( ! root.isMember("poderes") || ! root["poderes"].isArray() ) {
 		log( "No se encuentran especificaciones para los poderes. Se setean los objetos por defecto. ", LOG_ERROR );
@@ -244,11 +291,8 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 	Json::Value arrojables = root["poderes"];
 	for ( int i=0; i < (int)arrojables.size(); i++ ) {
 
-		log( "Se cargara el sprite para el objeto arrojable del personaje", LOG_DEBUG );
-		Sprite* sprite_objeto_arrojable =  cargarSprite( arrojables[i], ruta_carpeta, "objetoArrojable", SPRITESHEET_OBJETO_ARROJABLE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
-
 		string arrojable_nombre;
-		float arrojable_velocidad;
+		float arrojable_velocidad, arrojable_ancho, arrojable_alto;
 		if ( ! arrojables[i].isMember("nombre") ) {
 			arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
 			log( "No se especifico el nombre del objeto arrojable. Se setea por defecto.", LOG_WARNING );
@@ -273,6 +317,37 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 				log( "La velocidad indicada para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
 			}
 		}
+		if ( ! arrojables[i].isMember("ancho") ) {
+			arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
+			log( "No se especifico el ancho logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojables[i].get("ancho", ARROJABLE_ANCHO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el ancho logico del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
+				log( "El ancho logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("alto") ) {
+			arrojable_alto = ARROJABLE_ALTO_DEFAULT;
+			log( "No se especifico el alto logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojables[i].get("alto", ARROJABLE_ALTO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el alto logico del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_alto = ARROJABLE_ALTO_DEFAULT;
+				log( "El alto logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+
+		// Calculo los ratios del arrojable.
+		float ratio_x_arrojable = getRatioXArrojable(root, arrojable_ancho);
+		float ratio_y_arrojable = getRatioYArrojable(root, arrojable_alto);
+
+		log( "Se cargara el sprite para el objeto arrojable del personaje", LOG_DEBUG );
+		Sprite* sprite_objeto_arrojable =  cargarSprite( arrojables[i], ruta_carpeta, "objetoArrojable", SPRITESHEET_OBJETO_ARROJABLE_DEFAULT, ventana, ratio_x_arrojable, ratio_y_arrojable );
 
 		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable);
 		objetosArrojables.push_back(arrojable);
