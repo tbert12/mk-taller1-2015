@@ -83,8 +83,7 @@ Ventana* Mundo::getVentana(){
 }
 
 int Mundo::_verificarScroll(){
-	CapaPrincipal* capa_principal = (CapaPrincipal*)capas[personajes_z_index];
-	return capa_principal->Scrollear();
+	return capaPrincipal->Scrollear();
 }
 
 bool Mundo::mostrarImagen(string ruta){

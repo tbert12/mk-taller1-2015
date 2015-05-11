@@ -259,7 +259,6 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	if(m_fliped)
 		rectangulo->x = m_xActual - spriteActual->getAncho() + sprites[SPRITE_CUBRIRSE]->getAncho()*0.25;
 	else rectangulo->x = m_xActual + sprites[SPRITE_CUBRIRSE]->getAncho()*0.25;
-	rectangulo->w = spriteActual->getAncho();
 	rectangulo->h = getAlto()/2;
 	rectangulo->y = m_yActual - rectangulo->h;
 	return rectangulo;
@@ -276,7 +275,8 @@ Rect_Logico* Personaje::rectanguloDefensa(){
 	Rect_Logico* rectangulo = new Rect_Logico;
 	rectangulo->y=  m_yActual;
 	rectangulo->w = sprites[SPRITE_CUBRIRSE]->getAncho() - getAncho()*0.25; //El mas Angosto
-	if(m_fliped) rectangulo->x = m_xActual - rectangulo->w;
+	if(m_fliped) rectangulo->x = m_xActual - getAncho()*0.75;
+
 	else rectangulo->x = m_xActual + getAncho()*0.25;
 	rectangulo->h = spriteActual->getAlto();
 	return rectangulo;
