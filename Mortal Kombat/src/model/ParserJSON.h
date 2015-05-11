@@ -16,6 +16,8 @@ public:
 	 ~ParserJSON();
 	 float getRatioXPersonaje( Json::Value root_sprites, float personaje_ancho );
 	 float getRatioYPersonaje( Json::Value root_sprites, float personaje_alto );
+	 float getRatioXArrojable( Json::Value root_arrojables, float arrojable_ancho );
+	 float getRatioYArrojable( Json::Value root_arrojables, float arrojable_alto );
 	 map<string, int>* getComandos();
 	 Mundo* cargarMundo();
 	 int cargarComando(Json::Value root, const char* accion, int comando_default);
