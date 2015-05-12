@@ -168,24 +168,30 @@ void Mundo::_verificarColisiones(){
 			break;
 		case COLISION_PERSONAJE_PERSONAJE_SIN_FLIP:
 			//personaje ataca a personaje_flipeado
-			personaje_flipeado->recibirGolpe(personaje->getAccionDeAtaque(),10);
-			if(personaje->getAccionDeAtaque() == SPRITE_GANCHO)
+			int accion = personaje->getAccionDeAtaque();
+			personaje_flipeado->recibirGolpe(accion);
+			if(accion == SPRITE_GANCHO || accion == SPRITE_PATADA_SALTANDO || accion == SPRITE_PINA_SALTANDO)
 				ventana->vibrar();
 			break;
 		case COLISION_PERSONAJE_PERSONAJE_CON_FLIP:
 			//personaje_flipeado ataca a personaje
-			personaje->recibirGolpe(personaje_flipeado->getAccionDeAtaque(),10);
-			if(personaje_flipeado->getAccionDeAtaque() == SPRITE_GANCHO)
+			int accion = personaje_flipeado->getAccionDeAtaque();
+			personaje->recibirGolpe(accion);
+			if(accion == SPRITE_GANCHO || accion == SPRITE_PATADA_SALTANDO || accion == SPRITE_PINA_SALTANDO)
 				ventana->vibrar();
 			break;
 		case COLISION_PERSONAJE_OBJETO_SIN_FLIP:
 			//objeto de personaje choco a personaje_flipeado
-			personaje_flipeado->recibirGolpe(1,personaje->getPoderActivo()->getDanio());
+			personaje_flipeado->recibirGolpe(GOLPE_DE_PODER,personaje->getPoderActivo()->getDanio());
+			if(personaje->getPoderActivo()->getDanio() > MIN_VIBRAR)
+				ventana->vibrar();
 			personaje->getPoderActivo()->destruir();
 			break;
 		case COLISION_PERSONAJE_OBJETO_CON_FLIP:
 			//objeto de personaje_flipeado choco a personaje
-			personaje->recibirGolpe(1,personaje_flipeado->getPoderActivo()->getDanio());
+			personaje->recibirGolpe(GOLPE_DE_PODER,personaje_flipeado->getPoderActivo()->getDanio());
+			if(personaje_flipeado->getPoderActivo()->getDanio() > MIN_VIBRAR)
+				ventana->vibrar();
 			personaje_flipeado->getPoderActivo()->destruir();
 			break;
 		case COLISION_OBJETO_OBJETO:

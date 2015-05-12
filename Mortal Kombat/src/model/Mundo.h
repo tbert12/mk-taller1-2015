@@ -25,6 +25,8 @@
 #include <algorithm>
 #include "logging.h"
 
+#define MIN_VIBRAR 3
+
 
 class Mundo {
 private:
