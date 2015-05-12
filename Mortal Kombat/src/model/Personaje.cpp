@@ -639,7 +639,7 @@ void Personaje::_patadaAltaAgachado() {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++RECIBE-GOLPES+++++++++++++++++++++++++++++++++++++++++++
 
-bool Personaje::recibirGolpe(int CodigoGolpe, int Danio = 0){
+bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	if (_recibioGolpe) return false;
 	if (_estaCubriendose){
 		QuitarVida(1);
