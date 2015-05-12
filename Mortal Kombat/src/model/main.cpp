@@ -37,8 +37,6 @@ Mundo* cargarMundo(){
 			log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
 			mapa_comandos1 = parser->getComandos1();
 			mapa_comandos2 = parser->getComandos2();
-			mapa_comandos1 = parser->getComandos();
-			mapa_comandos2 = mapa_comandos1;
 			delete parser;
 		} catch ( std::exception &e ) {
 			log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
@@ -71,7 +69,6 @@ bool _recargarMundo(){
 
 	//Creo el Controlador
 	control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos1, mapa_comandos2);
-	control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos1,mapa_comandos2);
 	return true;
 }
 
@@ -93,7 +90,6 @@ int main( int argc, char* args[] )
 
 	//Creo el Controlador
 	control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos1, mapa_comandos2);
-	control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos1,mapa_comandos2);
 
 	//While Principal
 	while( !control->Quit()){

@@ -559,28 +559,28 @@ void ParserJSON::cargarMapaComandos(Json::Value root) {
 
 
 	log("Se cargara la configuracion del comando de pina baja.", LOG_DEBUG);
-	int comando_pina_baja1 = cargarComando(root["comandos"][0], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
-	int comando_pina_baja2 = cargarComando(root["comandos"][1], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
+	int comando_pina_baja1 = cargarComando(root["comandos"]["luchador1"], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
+	int comando_pina_baja2 = cargarComando(root["comandos"]["luchador2"], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de patada baja.", LOG_DEBUG);
-	int comando_patada_baja1 = cargarComando(root["comandos"][0], "patada baja", COMANDO_PATADA_BAJA_DEFAULT);
-	int comando_patada_baja2 = cargarComando(root["comandos"][1], "patada baja", COMANDO_PATADA_BAJA_DEFAULT);
+	int comando_patada_baja1 = cargarComando(root["comandos"]["luchador1"], "patada baja", COMANDO_PATADA_BAJA_DEFAULT);
+	int comando_patada_baja2 = cargarComando(root["comandos"]["luchador2"], "patada baja", COMANDO_PATADA_BAJA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de pina alta.", LOG_DEBUG);
-	int comando_pina_alta1 = cargarComando(root["comandos"][0], "pina alta", COMANDO_PINA_ALTA_DEFAULT);
-	int comando_pina_alta2 = cargarComando(root["comandos"][1], "pina alta", COMANDO_PINA_ALTA_DEFAULT);
+	int comando_pina_alta1 = cargarComando(root["comandos"]["luchador1"], "pina alta", COMANDO_PINA_ALTA_DEFAULT);
+	int comando_pina_alta2 = cargarComando(root["comandos"]["luchador2"], "pina alta", COMANDO_PINA_ALTA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de patada alta.", LOG_DEBUG);
-	int comando_patada_alta1 = cargarComando(root["comandos"][0], "patada alta", COMANDO_PATADA_ALTA_DEFAULT);
-	int comando_patada_alta2 = cargarComando(root["comandos"][1], "patada alta", COMANDO_PATADA_ALTA_DEFAULT);
+	int comando_patada_alta1 = cargarComando(root["comandos"]["luchador1"], "patada alta", COMANDO_PATADA_ALTA_DEFAULT);
+	int comando_patada_alta2 = cargarComando(root["comandos"]["luchador2"], "patada alta", COMANDO_PATADA_ALTA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de cubrirse.", LOG_DEBUG);
-	int comando_cubrirse1 = cargarComando(root["comandos"][0], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
-	int comando_cubrirse2 = cargarComando(root["comandos"][1], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
+	int comando_cubrirse1 = cargarComando(root["comandos"]["luchador1"], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
+	int comando_cubrirse2 = cargarComando(root["comandos"]["luchador2"], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
 
 	log("Se cargara la configuracion del comando de lanzar arma arrojable.", LOG_DEBUG);
-	int comando_lanzar_arma1 = cargarComando(root["comandos"][0], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
-	int comando_lanzar_arma2 = cargarComando(root["comandos"][1], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
+	int comando_lanzar_arma1 = cargarComando(root["comandos"]["luchador1"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
+	int comando_lanzar_arma2 = cargarComando(root["comandos"]["luchador2"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
 
 
 	std::map<std::string, int>* mapita1 = new std::map<std::string,int>;
