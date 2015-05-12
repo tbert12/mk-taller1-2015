@@ -282,7 +282,7 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 
 	Rect_Logico* rectangulo = new Rect_Logico;
 	if(m_fliped)
-		rectangulo->x = m_xActual - sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
+		rectangulo->x = m_xActual - getAncho();
 	else
 		rectangulo->x = m_xActual + sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
 
@@ -295,6 +295,9 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	} else if (Accion == SPRITE_PATADA_CIRCULAR or Accion == SPRITE_PATADA_SALTANDO or Accion == SPRITE_PATADA_BAJA_AGACHADO){
 		propH = 2;
 		propY = propH;
+	} else if (Accion == SPRITE_PINA_SALTANDO){
+		propH = 3;
+		propY = 2;
 	} else if (Accion == SPRITE_GANCHO){
 		if (!spriteActual->proxFrameUltimo()){
 			propH = 0; //Por lo que veo C++ sabe dividir por 0
@@ -304,8 +307,10 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	}
 	if (propH) rectangulo->h = getAlto()/propH;
 	else rectangulo->h = 0;
+
 	rectangulo->y = m_yActual - getAlto() + rectangulo->h*propY;
 	rectangulo->w = spriteActual->getAncho() - sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
+
 	return rectangulo;
 }
 
@@ -321,10 +326,13 @@ Rect_Logico* Personaje::rectanguloDefensa(){
 	float MinAncho = sprites[SPRITE_CUBRIRSE]->getAncho();
 	rectangulo->y=  m_yActual;
 	if(m_fliped)
-		rectangulo->x = m_xActual - MinAncho*0.75;
+		rectangulo->x = m_xActual - MinAncho*0.95;
 	else
 		rectangulo->x = m_xActual + MinAncho*0.35;
 	rectangulo->w = MinAncho - getAncho()*0.25; //El mas Angosto
+	if (_estaSaltando > 0 and _estaAtacando){
+		rectangulo->w = MinAncho;
+	}
 	rectangulo->h = spriteActual->getAlto();
 	return rectangulo;
 }
