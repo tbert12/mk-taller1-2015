@@ -13,8 +13,7 @@
 #include <SDL2/SDL.h>
 
 //Constants
-const int NO_COLISION = 						-1;
-const int COLISION_NO_COLISION = 				 5;
+const int COLISION_NO_COLISION = 				-1;
 const int COLISION_PERSONAJE_PERSONAJE_DEFENSA = 0;
 const int COLISION_PERSONAJE_PERSONAJE_SIN_FLIP= 1;
 const int COLISION_PERSONAJE_PERSONAJE_CON_FLIP= 2;
