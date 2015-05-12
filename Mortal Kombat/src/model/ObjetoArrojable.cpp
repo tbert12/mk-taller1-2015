@@ -37,12 +37,9 @@ Rect_Logico* ObjetoArrojable::rectanguloAtaque(){
 }
 
 Rect_Logico* ObjetoArrojable::nextRectAtaque(){
-	Rect_Logico* rectangulo = new Rect_Logico;
-	if (flip)rectangulo->x = m_xActual - m_velocidad_x;
-	else rectangulo->x = m_xActual + m_velocidad_x;
-	rectangulo->y=  m_yActual;
-	rectangulo->w = sprite->getAncho();
-	rectangulo->h = sprite->getAlto();
+	Rect_Logico* rectangulo = rectanguloAtaque();
+	if (flip)rectangulo->x -= m_velocidad_x;
+	else rectangulo->x += m_velocidad_x;
 	return rectangulo;
 }
 
@@ -59,7 +56,10 @@ bool ObjetoArrojable::lanzar(float pos_x, float pos_y,bool flipeo){
 	if (vida) return false;
 	m_xActual = pos_x;
 	m_yActual = pos_y;
-	if(sprite != NULL) sprite->doLoop(true);
+	if(sprite != NULL){
+		sprite->hardReset();
+		sprite->doLoop(true);
+	}
 	vida = true;
 	flip = flipeo;
 	return true;
@@ -98,6 +98,8 @@ void ObjetoArrojable::_terminar(){
 
 void ObjetoArrojable::destruir(){
 	m_destruir = true;
+	_avanzarSprite();
+	_avanzarSprite();
 }
 
 float ObjetoArrojable::getPosX(){
@@ -115,7 +117,6 @@ void ObjetoArrojable::update(){
 void ObjetoArrojable::renderizar(float x_dist_ventana){
 	//si no tiene vida no lo renderizo
 	if (!vida) return;
-	if(!sprite->loop()) printf("DOO LOOOP false\n");
 	_render(x_dist_ventana);
 }
 

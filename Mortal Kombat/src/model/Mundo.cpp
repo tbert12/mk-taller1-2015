@@ -127,6 +127,8 @@ void Mundo::render(){
 	}
 
 	//aca una vez actualizado to do chequeo las colisiones y demas.
+	_verificarColisiones();
+
 	if(personajes[0]->getX() == 200){
 		ventana->vibrar();
 	}
@@ -145,6 +147,20 @@ void Mundo::render(){
 	ventana->Refresh();
 }
 
+void Mundo::_verificarColisiones(){
+	Personaje* personaje;
+	Personaje* personaje_flipeado;
+	/*COLISION CAPA PRINCIPAL*/
+	/*
+	switch (){
+		case COLISION_OBJETO_OBJETO:
+			//asdasd
+			break;
+		case COLISION_PERSONAJE_OBJETO:
+			//asd
+			break;
+	}*/
+}
 
 Mundo::~Mundo() {
 	//fijar si hay que liberar cada uno de los contenidos de los vectores

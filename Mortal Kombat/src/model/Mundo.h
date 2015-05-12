@@ -39,6 +39,7 @@ private:
 	bool empezar;
 	void start();
 	int _verificarScroll();
+	void _verificarColisiones();
 	void _crearBarras();
 	void _crearTiempo();
 	void _renderEstado();
