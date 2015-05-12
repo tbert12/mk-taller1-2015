@@ -92,6 +92,29 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 				SDL_LockSurface( loadedSurface );
 			}
 
+			bool rangoValido = false;
+			if ( h_inicial < h_final ) {
+				rangoValido = true;
+			}
+
+			if ( h_inicial < 0 ) {
+				h_inicial = - h_inicial;
+				h_inicial = fmod(h_inicial, 360);
+				h_inicial = 360 - h_inicial;
+			}
+			if ( h_inicial > 360 ) {
+				h_inicial = fmod(h_inicial, 360);
+			}
+
+			if ( h_final < 0 ) {
+				h_final = - h_final;
+				h_final = fmod(h_final, 360);
+				h_final = 360 - h_final;
+			}
+			if ( h_final > 360 ) {
+				h_final = fmod(h_final, 360);
+			}
+
 			Uint32* pixels = (Uint32*) loadedSurface->pixels;
 			for (int i=0; i < ((loadedSurface->pitch)/4 * loadedSurface->h); i++ ) {
 
@@ -102,33 +125,6 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 
 				// Transformo de RGB a HSV. Si el hue cae en el rango especificado, se desplaza.
 				RGBaHSV(r, g, b, &h, &s, &v);
-
-				bool rangoValido = false;
-				if ( h_inicial < h_final ) {
-					rangoValido = true;
-				}
-
-				if ( h_inicial < 0 ) {
-					h_inicial = - h_inicial;
-					h_inicial = fmod(h_inicial, 360);
-					h_inicial = 360 - h_inicial;
-					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
-				if ( h_inicial > 360 ) {
-					h_inicial = fmod(h_inicial, 360);
-					log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
-
-				if ( h_final < 0 ) {
-					h_final = - h_final;
-					h_final = fmod(h_final, 360);
-					h_final = 360 - h_final;
-					log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
-				if ( h_final > 360 ) {
-					h_final = fmod(h_final, 360);
-					log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
-				}
 
 				bool hayQuePintar = false;
 				if ( rangoValido ) {
@@ -237,7 +233,7 @@ void LTexture::renderObjeto( Rect_Objeto* clip,float x, float y, bool flip)
 		Object.h = (int)(clip->h_log*ratio_y_ventana +0.5);
 		if(flip) {
 			flipType = SDL_FLIP_HORIZONTAL;
-			Object.x -= clip->w;
+			Object.x -= Object.w;
 		}
 	}
 
@@ -295,7 +291,7 @@ void LTexture::renderImagen(){
 }
 
 //Para testear las colisiones
-void LTexture::renderRectangulo( Rect_Logico* clip,float x, float y, bool flip){
+void LTexture::renderRectangulo( Rect_Logico* clip,float x, float y){
 	int corrimiento_x = 0;
 	int corrimiento_y = 0;
 
@@ -307,7 +303,6 @@ void LTexture::renderRectangulo( Rect_Logico* clip,float x, float y, bool flip){
 
 	SDL_Rect Object = { x_px,y_px, mWidth, mHeight};
 	SDL_Rect clip_px;
-	SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
 	if( clip != NULL )
 	{
@@ -318,15 +313,11 @@ void LTexture::renderRectangulo( Rect_Logico* clip,float x, float y, bool flip){
 
 		Object.w = (int)(clip->w*ratio_x_ventana +0.5);	//tamaño logico del objeto por el ratio de ventana
 		Object.h = (int)(clip->h*ratio_y_ventana +0.5);
-		if(flip) {
-			flipType = SDL_FLIP_HORIZONTAL;
-			//Object.x += Object.w;
-		}
 	}
 
 
 	//Renderizar a la pantalla
-	SDL_RenderCopyEx( gRenderer, mTexture, &clip_px, &Object,  0 , 0, flipType);
+	SDL_RenderCopyEx( gRenderer, mTexture, &clip_px, &Object,  0 , 0, SDL_FLIP_NONE);
 }
 
 //FIN de cosas para TEST de colision

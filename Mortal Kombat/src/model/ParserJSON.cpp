@@ -62,6 +62,58 @@ float ParserJSON::getRatioYPersonaje( Json::Value root_sprites, float personaje_
 	return ratio_y_personaje;
 }
 
+float ParserJSON::getRatioXArrojable( Json::Value root_arrojables, float arrojable_ancho ) {
+	if ( ! root_arrojables.isMember("objetoArrojable") ) {
+		log( "No se encontro la etiqueta para la creacion del objeto arrojable del personaje. Se setea el ratio_x del arrojable del personaje por defecto.", LOG_ERROR );
+		return ARROJABLE_ANCHO_PX_DEFAULT / arrojable_ancho;
+	}
+	if ( ! root_arrojables["objetoArrojable"].isMember("frames") || ! root_arrojables["objetoArrojable"]["frames"].isArray() ) {
+		log( "No se encontraron especificaciones en un vector para la creacion del sprite del objeto arrojable del personaje. Se setea el ratio_x del arrojable por defecto.", LOG_ERROR );
+		return ARROJABLE_ANCHO_PX_DEFAULT / arrojable_ancho;
+	}
+	int ancho_px;
+	try {
+		ancho_px = root_arrojables["objetoArrojable"]["frames"][0].get( "Ancho", -100 ).asInt();
+		if ( ancho_px < 0 ) {
+			log( "No se especifico el ancho en pixeles del objeto arrojable o es negativo. No se puede calcular el ratio_x del arrojable. Se setea por defecto.", LOG_ERROR );
+			return ARROJABLE_ANCHO_PX_DEFAULT / arrojable_ancho;
+		}
+	} catch ( exception &e ) {
+		log( "El ancho en pixeles indicado del objeto arrojable no puede ser convertido a numero. Se setea el ratio_x del arrojable por defecto.", LOG_ERROR );
+		return ARROJABLE_ANCHO_PX_DEFAULT / arrojable_ancho;
+	}
+
+	float ratio_x_arrojable = ancho_px / arrojable_ancho;
+	log( "Se calculo el ratio_x del objeto arrojable del personaje.", LOG_DEBUG );
+	return ratio_x_arrojable;
+}
+
+float ParserJSON::getRatioYArrojable( Json::Value root_arrojables, float arrojable_alto ) {
+	if ( ! root_arrojables.isMember("objetoArrojable") ) {
+		log( "No se encontro la etiqueta para la creacion del objeto arrojable del personaje. Se setea el ratio_y del arrojable del personaje por defecto.", LOG_ERROR );
+		return ARROJABLE_ALTO_PX_DEFAULT / arrojable_alto;
+	}
+	if ( ! root_arrojables["objetoArrojable"].isMember("frames") || ! root_arrojables["objetoArrojable"]["frames"].isArray() ) {
+		log( "No se encontraron especificaciones en un vector para la creacion del sprite del objeto arrojable del personaje. Se setea el ratio_y del arrojable por defecto.", LOG_ERROR );
+		return ARROJABLE_ALTO_PX_DEFAULT / arrojable_alto;
+	}
+	int alto_px;
+	try {
+		alto_px = root_arrojables["objetoArrojable"]["frames"][0].get( "Alto", -100 ).asInt();
+		if ( alto_px < 0 ) {
+			log( "No se especifico el alto en pixeles del objeto arrojable o es negativo. No se puede calcular el ratio_y del arrojable. Se setea por defecto.", LOG_ERROR );
+			return ARROJABLE_ALTO_PX_DEFAULT / arrojable_alto;
+		}
+	} catch ( exception &e ) {
+		log( "El alto en pixeles indicado del objeto arrojable no puede ser convertido a numero. Se setea el ratio_y del arrojable por defecto.", LOG_ERROR );
+		return ARROJABLE_ALTO_PX_DEFAULT / arrojable_alto;
+	}
+
+	float ratio_y_arrojable = alto_px / arrojable_alto;
+	log( "Se calculo el ratio_y del objeto arrojable del personaje.", LOG_DEBUG );
+	return ratio_y_arrojable;
+}
+
 // Devuelve el puntero al mapa de comandos.
 map<string, int>* ParserJSON::getComandos() {
 	return comandos;
@@ -231,11 +283,6 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 	archivoArrojable.close();
 	log ( "Se cerro el archivo JSON del objeto arrojable.", LOG_DEBUG );
 
-
-	// Calculo los ratios del personaje.
-	float ratio_x_personaje = getRatioXPersonaje(root, personaje_ancho);
-	float ratio_y_personaje = getRatioYPersonaje(root, personaje_alto);
-
 	vector<ObjetoArrojable*> objetosArrojables;
 	if ( ! root.isMember("poderes") || ! root["poderes"].isArray() ) {
 		log( "No se encuentran especificaciones para los poderes. Se setean los objetos por defecto. ", LOG_ERROR );
@@ -244,17 +291,15 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 	Json::Value arrojables = root["poderes"];
 	for ( int i=0; i < (int)arrojables.size(); i++ ) {
 
-		log( "Se cargara el sprite para el objeto arrojable del personaje", LOG_DEBUG );
-		Sprite* sprite_objeto_arrojable =  cargarSprite( arrojables[i], ruta_carpeta, "objetoArrojable", SPRITESHEET_OBJETO_ARROJABLE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje );
-
 		string arrojable_nombre;
-		float arrojable_velocidad;
+		float arrojable_velocidad, arrojable_ancho, arrojable_alto;
+		int arrojable_danio;
 		if ( ! arrojables[i].isMember("nombre") ) {
 			arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
 			log( "No se especifico el nombre del objeto arrojable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
+				arrojable_nombre = arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
 				log( "Se cargo correctamente el nombre del objeto arrojable.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
@@ -266,15 +311,58 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 			log( "No se especifico la velocidad del objeto arrojable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
+				arrojable_velocidad = arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
 				log( "Se cargo correctamente la velocidad del objeto arrojable.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
 				log( "La velocidad indicada para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
 			}
 		}
+		if ( ! arrojables[i].isMember("danio") ) {
+			arrojable_danio = ARROJABLE_DANIO_DEFAULT;
+			log( "No se especifico el danio del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_danio = arrojables[i].get("danio", ARROJABLE_DANIO_DEFAULT).asInt();
+				log( "Se cargo correctamente el danio del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_danio = ARROJABLE_DANIO_DEFAULT;
+				log( "El danio indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("ancho") ) {
+			arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
+			log( "No se especifico el ancho logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_ancho = arrojables[i].get("ancho", ARROJABLE_ANCHO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el ancho logico del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
+				log( "El ancho logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("alto") ) {
+			arrojable_alto = ARROJABLE_ALTO_DEFAULT;
+			log( "No se especifico el alto logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_alto = arrojables[i].get("alto", ARROJABLE_ALTO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el alto logico del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_alto = ARROJABLE_ALTO_DEFAULT;
+				log( "El alto logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
 
-		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable);
+		// Calculo los ratios del arrojable.
+		float ratio_x_arrojable = getRatioXArrojable(arrojables[i], arrojable_ancho);
+		float ratio_y_arrojable = getRatioYArrojable(arrojables[i], arrojable_alto);
+
+		log( "Se cargara el sprite para el objeto arrojable del personaje", LOG_DEBUG );
+		Sprite* sprite_objeto_arrojable =  cargarSprite( arrojables[i], ruta_carpeta, "objetoArrojable", SPRITESHEET_OBJETO_ARROJABLE_DEFAULT, ventana, ratio_x_arrojable, ratio_y_arrojable );
+
+		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable, arrojable_danio);
 		objetosArrojables.push_back(arrojable);
 	}
 	return objetosArrojables;
@@ -423,6 +511,13 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 	Sprite* sprite_recibir_golpe_fuerte =  cargarSprite( root, ruta_carpeta, "recibeGolpeFuerte", SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_recibir_golpe_fuerte );
 
+	log( "Se cargara el sprite para la accion de combo de pina baja del personaje", LOG_DEBUG );
+	Sprite* sprite_combo_pina_baja =  cargarSprite( root, ruta_carpeta, "comboPinaBaja", SPRITESHEET_COMBO_PINA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_combo_pina_baja );
+
+	log( "Se cargara el sprite para la accion de combo de pina alta del personaje", LOG_DEBUG );
+	Sprite* sprite_combo_pina_alta =  cargarSprite( root, ruta_carpeta, "comboPinaAlta", SPRITESHEET_COMBO_PINA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_combo_pina_alta );
 
 	log( "Se crearon todos los sprites del personaje.", LOG_DEBUG );
 	return sprites;
@@ -503,7 +598,9 @@ vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
 		} else {
 			try {
 				h_inicial = personaje["color-alternativo"].get( "h-inicial", COLOR_H_INICIAL_DEFAULT ).asFloat();
-				log( "Se cargo el hue inicial para el desplazamiento al color alternativo.", LOG_DEBUG );
+				if (h_inicial < 0) log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				else if (h_inicial > 360) log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				else log( "Se cargo el hue inicial para el desplazamiento al color alternativo.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				h_inicial = COLOR_H_INICIAL_DEFAULT;
 				log( "El hue inicial especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
@@ -515,7 +612,9 @@ vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
 		} else {
 			try {
 				h_final = personaje["color-alternativo"].get( "h-final", COLOR_H_FINAL_DEFAULT ).asFloat();
-				log( "Se cargo el hue final para el desplazamiento al color alternativo.", LOG_DEBUG );
+				if (h_final < 0) log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				else if (h_final > 360) log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				else log( "Se cargo el hue final para el desplazamiento al color alternativo.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				h_final = COLOR_H_FINAL_DEFAULT;
 				log( "El hue final especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );

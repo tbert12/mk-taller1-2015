@@ -36,6 +36,10 @@ const int PERSONAJE_ALTO_PX_DEFAULT = 133;
 const float PERSONAJE_ANCHO_DEFAULT = 40.0;
 const float PERSONAJE_ALTO_DEFAULT = 70.0;
 const float PERSONAJE_POS_RESPECTO_CAM = 0.8;
+const float ARROJABLE_ANCHO_DEFAULT = 50.0;
+const float ARROJABLE_ALTO_DEFAULT = 20.0;
+const float ARROJABLE_ANCHO_PX_DEFAULT = 191.0;
+const float ARROJABLE_ALTO_PX_DEFAULT = 24.0;
 
 const char* const JSON_SPRITES_DEFAULT = "data/players/default/sprites/sprites.json";
 const char* const JSON_PODERES_DEFAULT = "data/players/default/poderes/poderes.json";
@@ -66,10 +70,13 @@ const char* const SPRITESHEET_RECIBIR_GOLPE_AGACHADO_DEFAULT = "recibeGolpeAgach
 const char* const SPRITESHEET_RECIBIR_GOLPE_ALTO_DEFAULT = "recibeGolpeAlto.png";
 const char* const SPRITESHEET_RECIBIR_GOLPE_BAJO_DEFAULT = "recibeGolpeBajo.png";
 const char* const SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT = "recibeGolpeFuerte.png";
+const char* const SPRITESHEET_COMBO_PINA_BAJA_DEFAULT = "PinaBaja";
+const char* const SPRITESHEET_COMBO_PINA_ALTA_DEFAULT = "PinaAlta";
 
 const char* const SPRITESHEET_OBJETO_ARROJABLE_DEFAULT = "objetoArrojable.png";
 const char* const ARROJABLE_NOMBRE_DEFAULT = "Poder";
-const int ARROJABLE_VELOCIDAD_DEFAULT = 10;
+const float ARROJABLE_VELOCIDAD_DEFAULT = 10;
+const int ARROJABLE_DANIO_DEFAULT = 10;
 
 const int COMANDO_PINA_BAJA_DEFAULT = 2;
 const int COMANDO_PATADA_BAJA_DEFAULT = 1;
@@ -92,6 +99,7 @@ using namespace std;
 
 
 Sprite* crearSpritePorDefecto(const char* archivo_json, const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float h_desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT);
+Sprite* crearSpriteArrojablePorDefecto(Json::Value root_poderes, const char* accion_sprite, Ventana* ventana, float ratio_x_arrojable, float ratio_y_arrojable, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float h_desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT);
 vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float h_desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT );
 void mapaComandosDefault(map<string, int>* comandos);
 vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana);

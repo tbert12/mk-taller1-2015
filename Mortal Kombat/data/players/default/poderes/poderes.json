@@ -1,35 +1,41 @@
 {
-	"objetoArrojable":{
-		"nombre":"poder.png",
-		"frames":[
-			{
-				"x":0,
-				"y":65,
-				"Alto":34,
-				"Ancho":42
-			},
-			{
-				"x":0,
-				"y":42,
-				"Alto":22,
-				"Ancho":110
-			},
-			{
-				"x":0,
-				"y":25,
-				"Alto":16,
-				"Ancho":147
-			},
-			{
-				"x":0,
-				"y":0,
-				"Alto":24,
-				"Ancho":191,
-				"loop":true
-			}
-		]
-	},
-	"nombre": "Poder",
-	"velocidad": 10
-	}
+	"poderes": [
+		{
+		"objetoArrojable":{
+			"nombre":"poder.png",
+			"frames":[
+				{
+					"x":0,
+					"y":65,
+					"Alto":34,
+					"Ancho":42
+				},
+				{
+					"x":0,
+					"y":42,
+					"Alto":22,
+					"Ancho":110
+				},
+				{
+					"x":0,
+					"y":25,
+					"Alto":16,
+					"Ancho":147
+				},
+				{
+					"x":0,
+					"y":0,
+					"Alto":24,
+					"Ancho":191,
+					"loop":true
+				}
+			]
+		},
+		"nombre": "Poder",
+		"velocidad": 10,
+		"danio": 10,
+		"ancho": 50,
+		"alto": 20
+		}
+	]
 }

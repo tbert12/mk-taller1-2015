@@ -2,37 +2,112 @@
 	"poderes": [
 		{
 		"objetoArrojable":{
-			"nombre":"bolaDeHielo.png",
+			"nombre":"hielo.png",
 			"frames":[
 				{
 					"x":0,
-					"y":65,
-					"Alto":34,
-					"Ancho":42
+					"y":347,
+					"Alto":35,
+					"Ancho":20
+				},
+				{
+					"x":102,
+					"y":334,
+					"Alto":59,
+					"Ancho":47
+				},
+				{
+					"x":191,
+					"y":275,
+					"Alto":73,
+					"Ancho":83
+				},
+				{
+					"x":254,
+					"y":125,
+					"Alto":59,
+					"Ancho":111
 				},
 				{
 					"x":0,
-					"y":42,
-					"Alto":22,
-					"Ancho":110
-				},
-				{
-					"x":0,
-					"y":25,
-					"Alto":16,
-					"Ancho":147
+					"y":29,
+					"Alto":35,
+					"Ancho":133
 				},
 				{
 					"x":0,
 					"y":0,
-					"Alto":24,
-					"Ancho":191,
-					"loop":true
+					"Alto":28,
+					"Ancho":174
+				},
+				{
+					"x":0,
+					"y":205,
+					"Alto":27,
+					"Ancho":118,
+					"loop": true
+				},
+				{
+					"x":129,
+					"y":162,
+					"Alto":51,
+					"Ancho":114
+				},
+				{
+					"x":191,
+					"y":214,
+					"Alto":60,
+					"Ancho":87
+				},
+				{
+					"x":275,
+					"y":275,
+					"Alto":75,
+					"Ancho":71
+				},
+				{
+					"x":279,
+					"y":185,
+					"Alto":87,
+					"Ancho":71
+				},
+				{
+					"x":102,
+					"y":233,
+					"Alto":100,
+					"Ancho":88
+				},
+				{
+					"x":0,
+					"y":233,
+					"Alto":113,
+					"Ancho":101
+				},	
+				{
+					"x":254,
+					"y":0,
+					"Alto":124,
+					"Ancho":111
+				},
+				{
+					"x":134,
+					"y":29,
+					"Alto":132,
+					"Ancho":119
+				},
+				{
+					"x":0,
+					"y":65,
+					"Alto":139,
+					"Ancho":128
 				}
 			]
 		},
-		"nombre": "Bola de hielo",
-		"velocidad": 10
+		"nombre": "Hielo",
+		"velocidad": 8,
+		"danio": 0,
+		"ancho": 50,
+		"alto": 20
 		}
-		]
+	]
 }

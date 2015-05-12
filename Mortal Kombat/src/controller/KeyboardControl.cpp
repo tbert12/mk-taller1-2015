@@ -12,9 +12,10 @@
 
 using namespace std;
 
-KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje) {
+KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador) {
 	personaje = un_personaje;
 	evento = e;
+	como_jugador = comoJugador;
 	pausa = false;
 	keystate = SDL_GetKeyboardState(NULL);
 	sleep = 50000;
@@ -25,36 +26,46 @@ bool KeyboardControl::pause(){
 void KeyboardControl::KeyPressed(){
 	switch( evento->key.keysym.sym ){
 			case  SDLK_UP:
+				if(!como_jugador) return;
 				personaje->Saltar();
 				break;
 			case SDLK_DOWN:
+				if(!como_jugador) return;
 				personaje->Agachar();
 				break;
 			case SDLK_LEFT:
+				if(!como_jugador) return;
 				personaje->CaminarIzquierda();
 				break;
 			case SDLK_RIGHT:
+				if(!como_jugador) return;
 				personaje->CaminarDerecha();
 				break;
 			case SDLK_r:
 				throw std::runtime_error( "Hay que recargar el archivo JSON." );
 				break;
 			case SDLK_a:
+				if(!como_jugador) return;
 				personaje->pinaBaja();
 				break;
 			case SDLK_s:
+				if(!como_jugador) return;
 				personaje->patadaBaja();
 				break;
 			case SDLK_q:
+				if(!como_jugador) return;
 				personaje->pinaAlta();
 				break;
 			case SDLK_w:
+				if(!como_jugador) return;
 				personaje->patadaAlta();
 				break;
 			case SDLK_d:
+				if(!como_jugador) return;
 				personaje->cubrirse();
 				break;
 			case SDLK_z:
+				if(!como_jugador) return;
 				personaje->lanzarObjeto();
 				break;
 			case SDLK_p:
@@ -76,6 +87,9 @@ int KeyboardControl::getSleep(){
 }
 
 void KeyboardControl::KeyState(){
+	//si no esta como jugador no verifica nada
+	if(!como_jugador) return;
+
 	//Teclas que deben estar apretadas
 	if ((!keystate[SDL_SCANCODE_RIGHT] && (personaje->getSentidoDeMovimiento() > 0))|| (!keystate[SDL_SCANCODE_LEFT] && (personaje->getSentidoDeMovimiento() < 0)) )
 		personaje->Frenar();

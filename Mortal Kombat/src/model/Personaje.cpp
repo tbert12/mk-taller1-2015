@@ -42,6 +42,13 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 //-------------------------------------------------------------------------------------------------------------------------
 //Manejo de attributos logicos
 
+ObjetoArrojable* Personaje::getPoderActivo(){
+	if (poderes[0] != NULL){
+		if(poderes[0]->getVida())
+			return poderes[0];
+	}
+	return NULL;
+}
 
 void Personaje::lanzarObjeto(){
 	//ya hay poder lanzado
@@ -50,14 +57,13 @@ void Personaje::lanzarObjeto(){
 			return;
 	}
 	//Poner sprite del personaje para lanzar
-	//poderes.push_back(new ObjetoArrojable("arma subzero",m_velocidad,sprites[SPRITE_AGACHAR]));
 	float x;
 	float y;
 	if (m_fliped){
-		x = m_xActual - spriteActual->getAncho();
+		x = m_xActual - spriteActual->getAncho()*0.6;
 	}
 	else{
-		x = m_xActual + spriteActual->getAncho();
+		x = m_xActual + spriteActual->getAncho()*0.6;
 	}
 	y = m_yActual - getAlto()/2;
 	poderes[0]->lanzar(x,y,m_fliped);
@@ -251,11 +257,11 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	if (!_estaAtacando) return NULL;
 	Rect_Logico* rectangulo = new Rect_Logico;
 	if(m_fliped)
-		rectangulo->x = m_xActual - spriteActual->getAncho() + sprites[SPRITE_CUBRIRSE]->getAncho()*0.25;
-	else rectangulo->x = m_xActual + sprites[SPRITE_CUBRIRSE]->getAncho()*0.25;
-	rectangulo->w = spriteActual->getAncho();
+		rectangulo->x = m_xActual - spriteActual->getAncho();
+	else rectangulo->x = m_xActual + sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
 	rectangulo->h = getAlto()/2;
 	rectangulo->y = m_yActual - rectangulo->h;
+	rectangulo->w = spriteActual->getAncho() - sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
 	return rectangulo;
 }
 
@@ -270,7 +276,7 @@ Rect_Logico* Personaje::rectanguloDefensa(){
 	Rect_Logico* rectangulo = new Rect_Logico;
 	rectangulo->y=  m_yActual;
 	rectangulo->w = sprites[SPRITE_CUBRIRSE]->getAncho() - getAncho()*0.25; //El mas Angosto
-	if(m_fliped) rectangulo->x = m_xActual - rectangulo->w;
+	if(m_fliped) rectangulo->x = m_xActual - getAncho()*0.75;
 	else rectangulo->x = m_xActual + getAncho()*0.25;
 	rectangulo->h = spriteActual->getAlto();
 	return rectangulo;
@@ -558,6 +564,8 @@ void Personaje::patadaBaja() {
 		_patadaBajaAgachado();
 	} else if ( _estaSaltando > 0 ) {
 		_patadaSaltando();
+	} else if ( (m_velocidadActual < 0 and !m_fliped) or (m_velocidadActual > 0 and m_fliped) ) {
+		_patadaCircular();
 	} else {
 		_cambiarSprite(SPRITE_PATADA_BAJA);
 	}
@@ -574,8 +582,6 @@ void Personaje::patadaAlta() {
 		_patadaAltaAgachado();
 	} else if ( _estaSaltando > 0 ) {
 		_patadaSaltando();
-	} else if (m_velocidadActual < 0) {
-		_patadaCircular();
 	} else {
 		_cambiarSprite(SPRITE_PATADA_ALTA);
 	}

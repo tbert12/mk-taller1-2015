@@ -7,11 +7,12 @@
 
 #include "ObjetoArrojable.h"
 
-ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_sprites) {
+ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_sprites,int un_danio) {
 	nombre = un_nombre;
 	vida = false;
 	m_xActual = 0;
 	m_yActual = 0;
+	danio = un_danio;
 	m_velocidad_x = velocidad;
 	if(m_velocidad_x <= 0)
 		m_velocidad_x = VELOCIDAD_DEFAULT;
@@ -28,6 +29,7 @@ ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_spr
 Rect_Logico* ObjetoArrojable::rectanguloAtaque(){
 	Rect_Logico* rectangulo = new Rect_Logico;
 	rectangulo->x = m_xActual;
+	if (flip) rectangulo->x -= sprite->getAncho();
 	rectangulo->y=  m_yActual;
 	rectangulo->w = sprite->getAncho();
 	rectangulo->h = sprite->getAlto();
@@ -44,6 +46,9 @@ Rect_Logico* ObjetoArrojable::nextRectAtaque(){
 	return rectangulo;
 }
 
+int ObjetoArrojable::getDanio(){
+	return danio;
+}
 
 void ObjetoArrojable::setDimensionesMundo(float alto,float ancho){
 	m_AltoMundo = alto;
@@ -67,10 +72,9 @@ void ObjetoArrojable::_Update(){
 }
 
 void ObjetoArrojable::_render(float pos_ventana){
-	int x = m_xActual;
-	if (flip)
-		x -= sprite->getAncho();
 	sprite->render(m_xActual - pos_ventana,m_yActual,flip);
+	//render colision test
+	sprite->RENDERCOLISIONTEST(pos_ventana,m_yActual,flip,rectanguloAtaque(),NULL);
 	_avanzarSprite();
 }
 
@@ -89,7 +93,7 @@ void ObjetoArrojable::_terminar(){
 	m_xActual = 0;
 	m_yActual = 0;
 	flip = false;
-	sprite->Reset();
+	sprite->hardReset();
 }
 
 void ObjetoArrojable::destruir(){
@@ -100,6 +104,10 @@ float ObjetoArrojable::getPosX(){
 	return m_xActual;
 }
 
+float ObjetoArrojable::getVelocidadX(){
+	return m_velocidad_x;
+}
+
 void ObjetoArrojable::update(){
 	_Update();
 }
@@ -107,7 +115,7 @@ void ObjetoArrojable::update(){
 void ObjetoArrojable::renderizar(float x_dist_ventana){
 	//si no tiene vida no lo renderizo
 	if (!vida) return;
-
+	if(!sprite->loop()) printf("DOO LOOOP false\n");
 	_render(x_dist_ventana);
 }
 

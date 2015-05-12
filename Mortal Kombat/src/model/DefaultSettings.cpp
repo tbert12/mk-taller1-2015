@@ -145,6 +145,123 @@ Sprite* crearSpritePorDefecto(const char* archivo_json, const char* accion_sprit
 	return sprite;
 }
 
+Sprite* crearSpriteArrojablePorDefecto(Json::Value root_poderes, const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color, float h_inicial, float h_final, float h_desplazamiento ) {
+	Sprite* sprite;
+
+	string spritesheet;
+	try {
+		if ( ! root_poderes[accion_sprite].isMember("nombre") ) {
+			log( "No se encontro el nombre de la imagen del spritesheet de la accion por defecto. Se aborta el programa", LOG_ERROR );
+			throw runtime_error( "No se encontro el nombre de la imagen del spritesheet de la accion por defecto." );
+		}
+		spritesheet = root_poderes[accion_sprite].get( "nombre", "" ).asString();
+		struct stat sb;
+		if ( stat((string(PERSONAJE_CARPETA_ARROJABLES_DEFAULT) + spritesheet).c_str(), &sb) != 0 ) {
+			log( "La ruta al spritesheet por defecto de la accion no existe. Se aborta el programa", LOG_ERROR );
+			throw runtime_error( "La ruta al spritesheet por defecto de la accion no existe." );
+		}
+	} catch (exception &e) {
+		log( "La ruta al spritesheet por defecto de la accion no es una cadena de texto valida. Se aborta el programa.", LOG_ERROR );
+		throw runtime_error( "La ruta al spritesheet por defecto de la accion no es una cadena de texto valida." );
+	}
+	if ( ! root_poderes[accion_sprite].isMember("frames") || ! root_poderes[accion_sprite]["frames"].isArray() ) {
+		log( "No se especificaron parametros en un vector para los frames del sprite por defecto de la accion. Se aborta el programa.", LOG_ERROR );
+		throw runtime_error( "No se especificaron parametros para los frames del sprite por defecto de la accion." );
+	}
+	const Json::Value frames_accion = root_poderes[accion_sprite]["frames"];
+	vector<Frame*> frames( frames_accion.size() );
+	vector<bool> loop_accion(frames.size(), false);
+	vector<bool> pong_accion(frames.size(), false);
+	vector<int> freeze_accion(frames.size(), 0);
+	for ( unsigned int i=0; i < frames_accion.size(); i++ ) {
+		int x, y, alto, ancho;
+		try {
+			x = frames_accion[i].get( "x", -100 ).asInt();
+			if ( x < 0 ) {
+				log( "No se especifico la posicion X de un frame del sprite por defecto de la accion o es negativa. Se aborta el programa.", LOG_ERROR );
+				throw runtime_error( "No se especifico la posicion X de un frame del sprite por defecto de la accion." );
+			}
+		} catch (exception &e) {
+			log ( "La posicion X de un frame del sprite por defecto indicada no es valida y no puede ser convertida a un numero. Se aborta el programa.", LOG_ERROR );
+			throw runtime_error( "La posicion X de un frame del sprite por defecto de la accion no pudo ser convertida a numero." );
+		}
+		try {
+			y = frames_accion[i].get( "y", -100 ).asInt();
+			if ( y < 0 ) {
+				log( "No se especifico la posicion Y de un frame del sprite por defecto de la accion o es negativa. Se aborta el programa.", LOG_ERROR );
+				throw runtime_error( "No se especifico la posicion Y de un frame del sprite por defecto de la accion." );
+			}
+		} catch (exception &e) {
+			log ( "La posicion Y de un frame del sprite por defecto de la accion indicada no es valida y no puede ser convertida a un numero. Se aborta el programa.", LOG_ERROR );
+			throw runtime_error( "La posicion Y de un frame del sprite por defecto de la accion no pudo ser convertida a numero." );
+		}
+		try {
+			alto = frames_accion[i].get( "Alto", -100 ).asInt();
+			if ( alto < 0 ) {
+				log( "No se especifico el alto de un frame del sprite por defecto de la accion o es negativo. Se aborta el programa.", LOG_ERROR );
+				throw runtime_error( "No se especifico el alto de un frame del sprite por defecto de la accion." );
+			}
+		} catch (exception &e) {
+			log ( "El alto de un frame del sprite por defecto de la accion indicada no es valido y no puede ser convertido a un numero. Se aborta el programa.", LOG_ERROR );
+			throw runtime_error( "El alto de un frame del sprite por defecto de la accion no pudo ser convertido a numero." );
+		}
+		try {
+			ancho = frames_accion[i].get( "Ancho", -100 ).asInt();
+			if ( ancho < 0 ) {
+				log( "No se especifico el ancho de un frame del sprite por defecto de la accion o es negativo. Se aborta el programa.", LOG_ERROR );
+				throw runtime_error( "No se especifico el ancho de un frame del sprite por defecto de la accion." );
+			}
+		} catch (exception &e) {
+			log ( "El ancho de un frame del sprite por defecto de la accion indicada no es valido y no puede ser convertido a un numero. Se aborta el programa.", LOG_ERROR );
+			throw runtime_error( "El ancho de un frame del sprite por defecto de la accion no pudo ser convertido a numero." );
+		}
+		bool loop;
+		try {
+			loop = frames_accion[i].get( "loop", false ).asBool();
+		} catch (exception &e) {
+			log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite por defecto de la accion. Se setea en false por defecto.", LOG_WARNING );
+			loop = false;
+		}
+		loop_accion[i] = loop;
+
+		bool pong;
+		try {
+			pong = frames_accion[i].get( "pong", false ).asBool();
+		} catch (exception &e) {
+			log ( "No se reconoce como booleano el parametro pasado para determinar si se debe hacer pong o no a un frame del sprite por defecto de la accion. Se setea en false por defecto.", LOG_ERROR );
+			pong = false;
+		}
+		pong_accion[i] = pong;
+
+		int freezeTime; // Numero de bucles iterados.
+		try {
+			freezeTime = frames_accion[i].get( "freeze", 0 ).asInt();
+		} catch ( exception &e ) {
+			log( "La cantidad de bucles de freeze no es un numero valido. Se setea por defecto en 0 (no hay freeze).", LOG_ERROR );
+			freezeTime = 0;
+		}
+		freeze_accion[i] = freezeTime;
+
+		frames[i] = new Frame(x, y, alto, ancho);
+	}
+	try {
+		sprite = new Sprite(string(PERSONAJE_CARPETA_ARROJABLES_DEFAULT) + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento );
+		for ( unsigned int j=0; j < frames.size(); j++ ) {
+			if ( loop_accion[j] ) sprite->setLoop(j);
+			if ( pong_accion[j] ) sprite->doPongIn(j);
+			if( freeze_accion[j] != 0 ) {
+				sprite->setFrezeeFrame(j, freeze_accion[j]);
+				sprite->freezeSprite();
+			}
+		}
+	} catch ( CargarImagenException &e ) {
+		delete sprite;
+		log( "No se pudo abrir el spritesheet por defecto de la accion. Se aborta el programa. " + string(e.what()), LOG_ERROR );
+		throw runtime_error( "No se pudo abrir el spritesheet por defecto de la accion." );
+	}
+	return sprite;
+}
+
 vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float h_desplazamiento ) {
 
 	vector<Sprite*> sprites;
@@ -178,6 +295,8 @@ vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, 
 	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "recibeGolpeAlto", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
 	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "recibeGolpeBajo", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
 	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "recibeGolpeFuerte", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "comboPinaBaja", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
+	sprites.push_back( crearSpritePorDefecto(JSON_SPRITES_DEFAULT, "comboPinaAlta", ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, h_desplazamiento) );
 
 	return sprites;
 }
@@ -207,10 +326,6 @@ vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
 	// Cerrar archivo.
 	archivoArrojable.close();
 
-	// Calculo los ratios del personaje.
-	float ratio_x_personaje = PERSONAJE_ANCHO_PX_DEFAULT / PERSONAJE_ANCHO_DEFAULT;
-	float ratio_y_personaje = PERSONAJE_ALTO_PX_DEFAULT / PERSONAJE_ALTO_DEFAULT;
-
 	vector<ObjetoArrojable*> objetosArrojables;
 	if ( ! root.isMember("poderes") || ! root["poderes"].isArray() ) {
 		log( "No se encuentran especificaciones para los poderes por defecto. Se aborta el programa. ", LOG_ERROR );
@@ -219,16 +334,15 @@ vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
 	Json::Value arrojables = root["poderes"];
 	for ( int i=0; i < (int)arrojables.size(); i++ ) {
 
-		Sprite* sprite_objeto_arrojable =  crearSpritePorDefecto( JSON_PODERES_DEFAULT, "objetoArrojable", ventana, ratio_x_personaje, ratio_y_personaje );
-
 		string arrojable_nombre;
-		float arrojable_velocidad;
+		float arrojable_velocidad, arrojable_ancho, arrojable_alto;
+		int arrojable_danio;
 		if ( ! arrojables[i].isMember("nombre") ) {
 			arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
 			log( "No se especifico el nombre del objeto arrojable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
+				arrojable_nombre = arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
 			} catch ( exception &e ) {
 				arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
 				log( "El nombre indicado para el objeto arrojable no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
@@ -239,15 +353,57 @@ vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
 			log( "No se especifico la velocidad del objeto arrojable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
+				arrojable_velocidad = arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
 				log( "Se cargo correctamente la velocidad del objeto arrojable.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
 				log( "La velocidad indicada para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
 			}
 		}
+		if ( ! arrojables[i].isMember("danio") ) {
+			arrojable_danio = ARROJABLE_DANIO_DEFAULT;
+			log( "No se especifico el danio del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_danio = arrojables[i].get("danio", ARROJABLE_DANIO_DEFAULT).asInt();
+				log( "Se cargo correctamente el danio del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_danio = ARROJABLE_DANIO_DEFAULT;
+				log( "El danio indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("ancho") ) {
+			arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
+			log( "No se especifico el ancho logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_ancho = arrojables[i].get("ancho", ARROJABLE_ANCHO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el ancho logico del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
+				log( "El ancho logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("alto") ) {
+			arrojable_alto = ARROJABLE_ALTO_DEFAULT;
+			log( "No se especifico el alto logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_alto = arrojables[i].get("alto", ARROJABLE_ALTO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el alto logico del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_alto = ARROJABLE_ALTO_DEFAULT;
+				log( "El alto logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
 
-		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable);
+		// Calculo ratios para el arrojable.
+		float ratio_x_arrojable = ARROJABLE_ANCHO_PX_DEFAULT / arrojable_ancho;
+		float ratio_y_arrojable = ARROJABLE_ALTO_PX_DEFAULT / arrojable_alto;
+
+		Sprite* sprite_objeto_arrojable =  crearSpriteArrojablePorDefecto( arrojables[i], "objetoArrojable", ventana, ratio_x_arrojable, ratio_y_arrojable );
+
+		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable, arrojable_danio);
 		objetosArrojables.push_back(arrojable);
 	}
 	return objetosArrojables;

@@ -61,6 +61,10 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 	RectanguloTest2->setColor(100,255,0);
 }
 
+bool Sprite::loop(){
+	return doloop;
+}
+
 Sprite::~Sprite(){
 	delete SpriteSheetTexture;
 	delete []spriteFrames;
@@ -132,6 +136,7 @@ void Sprite::setLoop(int num_frame) {
 }
 
 void Sprite::doLoop(bool loop){
+	if (doloop == loop) return;
 	doloop = loop;
 }
 
@@ -198,8 +203,10 @@ void Sprite::hardReset(){
 // Para mostrar algo y testear Colisiones //
 void Sprite::RENDERCOLISIONTEST(float x_ventana, float y, bool fliped,Rect_Logico* rectanguloAtaque,Rect_Logico* rectanguloDefensa){
 	if (rectanguloAtaque != NULL){
-		RectanguloTest1->renderRectangulo(rectanguloAtaque,rectanguloAtaque->x -  x_ventana, rectanguloAtaque->y - rectanguloAtaque->h, fliped);
+		RectanguloTest1->renderRectangulo(rectanguloAtaque,rectanguloAtaque->x -  x_ventana, rectanguloAtaque->y - rectanguloAtaque->h);
 	}
-	RectanguloTest2->renderRectangulo(rectanguloDefensa,rectanguloDefensa->x - x_ventana, rectanguloDefensa->y - rectanguloDefensa->h, fliped);
+	if (rectanguloDefensa != NULL){
+		RectanguloTest2->renderRectangulo(rectanguloDefensa,rectanguloDefensa->x - x_ventana, rectanguloDefensa->y - rectanguloDefensa->h);
+	}
 }
 

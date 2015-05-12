@@ -20,6 +20,8 @@ CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeF
 	m_velocidad_derecha = m_Personaje->getVelocidadDerecha();
 	m_velocidad_izquierda = m_Personaje->getVelocidadIzquierda();
 	m_PersonajeQueScrollea = 0;
+	rectAtaqueAnterior2 = NULL;
+	rectAtaqueAnterior1 = NULL;
 }
 
 CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, vector<Personaje*> personajes)
@@ -60,7 +62,7 @@ void CapaPrincipal::Update(int scroll){
 	}
 
 	this->_CheckearColisiones(personaje,personajeFlippeado);
-
+	//printf("personajex");
 	if(personaje->getX() + personaje->getAncho()*.5f > personajeFlippeado->getX() - personajeFlippeado->getAncho()*.5f){
 		personaje->setFlip(true);
 		personajeFlippeado->setFlip(false);
@@ -104,7 +106,17 @@ void CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* persona
 	Rect_Logico* rectAtaque2 = personajeFlippeado->rectanguloAtaque();
 	Rect_Logico* rectDefensa2 = personajeFlippeado->rectanguloDefensa();
 
+	ObjetoArrojable* objetoSinFlip = personaje->getPoderActivo();
+	ObjetoArrojable* objetoConFlip = personajeFlippeado->getPoderActivo();
 	//printf("actual: %f, anterior: %f, defensa: %f\n",rectAtaque1->x + rectAtaque1->w ,rectAtaqueAnterior1->x + rectAtaqueAnterior1->w,rectDefensa2->x );
+
+
+	bool colisionaDefensaPersonajes = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w));
+	if(colisionaDefensaPersonajes){
+		personajeFlippeado->recibirGolpe( personaje->getAccionDeAtaque() , 0 );
+		printf("colisionan defensas\n");
+		return;
+	}
 
 	if (rectAtaque1 != NULL ){
 
@@ -113,42 +125,48 @@ void CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* persona
 			rectAtaqueAnterior1 = rectDefensa1;
 		}
 
-		bool colisionaAtaquePersonajeSinFlipX = (floatIsBetween(rectDefensa2->x - rectDefensa2->w,rectAtaque1->x,rectAtaque1->w) and
-				!floatIsBetween(rectDefensa2->x - rectDefensa2->w,rectAtaqueAnterior1->x,rectAtaqueAnterior1->w));
+		bool colisionaAtaquePersonajeSinFlipX = (floatIsBetween(rectDefensa2->x ,rectAtaque1->x,rectAtaque1->w) and
+				!floatIsBetween(rectDefensa2->x,rectAtaqueAnterior1->x,rectAtaqueAnterior1->w));
 
 		bool colisionaY = (floatIsBetween(rectDefensa2->y, rectAtaque1->y-rectAtaque1->h , rectAtaque1->h) and floatIsBetween(rectDefensa2->y, rectAtaqueAnterior1->y-rectAtaqueAnterior1->h, rectAtaqueAnterior1->h)) or
 				(floatIsBetween(rectAtaque1->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectAtaqueAnterior1->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
 
 		if( colisionaAtaquePersonajeSinFlipX and colisionaY){
-			printf("hubo colision\n");
+			personajeFlippeado->recibirGolpe( personaje->getAccionDeAtaque() , 0 );
+			printf("hubo colision  ppsf\n");
 		}
-		/*
-		else
-		{
-			printf("rectAtaqueEnd: %f \n",rectAtaque1->x + rectAtaque1->w);
-			printf("rectAtaqueAnteriorEnd: %f \n",rectAtaqueAnterior1->x );
-			printf("rectDefensaStart: %f \n",rectDefensa2->x);
-		}
-		*/
-			//if(rectAtaque1->x + rectAtaque1->w >= rectDefensa2->x and rectAtaqueAnterior1->x + rectAtaqueAnterior1->w < rectDefensa2->x  )
-			//	printf("hubo colision Personaje1 Ataco y personaje 2 recibio\n");
 	}else if (rectAtaque2 != NULL ){
 		if(!rectAtaqueAnterior2){
 			printf("uso rect defensa \n");
 			rectAtaqueAnterior2 = rectDefensa2;
 		}
+		bool colisionAtaquePersonajeConFlipX = (floatIsBetween(rectDefensa1->x  + rectDefensa1->w, rectAtaque2->x , rectAtaque2->w) and
+						!floatIsBetween(rectDefensa1->x + rectDefensa1->w, rectAtaqueAnterior2->x, rectAtaqueAnterior2->w));
 
-		bool colisionAtaquePersonajeConFlipX = (floatIsBetween(rectDefensa1->x , rectAtaque2->x - rectAtaque2->w, rectAtaque2->w) and
-				!floatIsBetween(rectDefensa1->x, rectAtaqueAnterior2->x - rectAtaqueAnterior2->w, rectAtaqueAnterior2->w));
-		printf("colisionAtaquePersonajeConFlip: %i \n",colisionAtaquePersonajeConFlipX);
+		//printf("colisionAtaquePersonajeConFlip: %i \n",colisionAtaquePersonajeConFlipX);
 		bool colisionaY = (floatIsBetween(rectDefensa1->y, rectAtaque2->y-rectAtaque2->h , rectAtaque2->h) and floatIsBetween(rectDefensa1->y, rectAtaqueAnterior2->y-rectAtaqueAnterior2->h, rectAtaqueAnterior2->h)) or
 				(floatIsBetween(rectAtaque2->y, rectDefensa1->y-rectDefensa1->h , rectDefensa1->h) and floatIsBetween(rectAtaqueAnterior2->y, rectDefensa1->y-rectDefensa1->h, rectDefensa1->h));
 		//and colisionaY
 		if( colisionAtaquePersonajeConFlipX  and colisionaY){
-			//printf("rectAtaqueStart: %f \n",rectAtaque2->x - rectAtaque2->w);
-			//printf("rectAtaqueAnteriorStart: %f \n",rectAtaqueAnterior2->x - rectAtaqueAnterior2->w);
-			//printf("rectDefensaEnd: %f \n",rectDefensa1->x + rectDefensa1->w);
-			printf("hubo colision\n");
+			personaje->recibirGolpe( personajeFlippeado->getAccionDeAtaque() , 0 );
+			printf("hubo colision  ppcf\n");
+		}
+	}
+
+	if (objetoSinFlip != NULL ){
+
+		Rect_Logico* rectPoder = objetoSinFlip->rectanguloAtaque();
+		if(rectPoder->x>rectDefensa2->x)
+			return;
+		bool colisionaAtaquePersonajeSinFlipX = floatIsBetween(rectDefensa2->x,rectPoder->x + objetoSinFlip->getVelocidadX() ,rectPoder->w) and
+				!floatIsBetween(rectDefensa2->x ,rectPoder->x,rectPoder->w);
+
+		printf("RectAtaqueXEnd :%f      RectdefensaPos :%f \n",rectPoder->x+rectPoder->w,rectDefensa2->x);
+		bool colisionaY = (floatIsBetween(rectDefensa2->y, rectPoder->y-rectPoder->h , rectPoder->h) and floatIsBetween(rectDefensa2->y, rectPoder->y-rectPoder->h, rectPoder->h)) or
+				(floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
+
+		if( colisionaAtaquePersonajeSinFlipX and colisionaY){
+			printf("hubo colision ppsf\n");
 		}
 	}
 
@@ -168,6 +186,8 @@ void CapaPrincipal::Renderizar()
 int CapaPrincipal::Scrollear(){
 	if(getX() == 0 and (m_Personaje->getSentidoDeMovimiento() < 0))return this->CheckSegundoJugador(0);
 	if(getX() == rect->w and (m_Personaje->getSentidoDeMovimiento() > 0)) return this->CheckSegundoJugador(0);
+	if ((m_Personaje->getX() <= (getX() + m_ancho_ventana*0.02f)) and !(m_Personaje->getSentidoDeMovimiento() < 0)) return this->CheckSegundoJugador(0);
+	if ((m_Personaje->getX() >= (getX() + m_ancho_ventana*0.80f)) and !(m_Personaje->getSentidoDeMovimiento() > 0) ) return this->CheckSegundoJugador(0);
 	if ((m_Personaje->getX() <= (getX() + m_ancho_ventana*0.02f)) and (m_Personaje->getSentidoDeMovimiento() < 0)) return this->CheckSegundoJugador(-1);
 	if ((m_Personaje->getX() >= (getX() + m_ancho_ventana*0.80f)) and (m_Personaje->getSentidoDeMovimiento() > 0) ) return this->CheckSegundoJugador(1);
 	return this->CheckSegundoJugador(0);
@@ -179,6 +199,7 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 			m_PersonajeQueScrollea = 1;
 		return estadoJugador1;
 	}
+
 
 
 	switch (estadoJugador1) {
@@ -204,14 +225,22 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 			if(getX() == 0 and (m_PersonajeDos->getSentidoDeMovimiento() < 0))return this->_NadieScrollea();
 			if(getX() == rect->w and (m_PersonajeDos->getSentidoDeMovimiento() > 0)) return this->_NadieScrollea();
 			if ((m_PersonajeDos->getX() <= (getX() + m_ancho_ventana*0.02f)) and (m_PersonajeDos->getSentidoDeMovimiento() < 0)){
-				m_Personaje->setScroll(false);
-				m_PersonajeDos->setScroll(false);
-				return 0;
+				if ((m_Personaje->getX() >= (getX() + m_ancho_ventana*0.80f))){
+					m_Personaje->setScroll(false);
+					m_PersonajeDos->setScroll(false);
+					return 0;
+				}
+				m_PersonajeQueScrollea = 2;
+				return -1;
 			}
 			if ((m_PersonajeDos->getX() >= (getX() + m_ancho_ventana*0.80f)) and (m_PersonajeDos->getSentidoDeMovimiento() > 0) ){
-				m_Personaje->setScroll(false);
-				m_PersonajeDos->setScroll(false);
-				return 0;
+				if ((m_Personaje->getX() <= (getX() + m_ancho_ventana*0.02f))){
+					m_Personaje->setScroll(false);
+					m_PersonajeDos->setScroll(false);
+					return 0;
+				}
+				m_PersonajeQueScrollea = 2;
+				return 1;
 			}
 			return this->_NadieScrollea();
 			break;
