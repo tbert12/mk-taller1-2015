@@ -4,7 +4,8 @@ using namespace std;
 
 ParserJSON::ParserJSON(string ruta_archivo) {
 	m_ruta_archivo = ruta_archivo;
-	comandos = NULL;
+	comandos_luchador1 = NULL;
+	comandos_luchador2 = NULL;
 }
 
 ParserJSON::~ParserJSON() {
@@ -115,8 +116,12 @@ float ParserJSON::getRatioYArrojable( Json::Value root_arrojables, float arrojab
 }
 
 // Devuelve el puntero al mapa de comandos.
-map<string, int>* ParserJSON::getComandos() {
-	return comandos;
+map<string, int>* ParserJSON::getComandos1() {
+	return comandos_luchador1;
+}
+
+map<string, int>* ParserJSON::getComandos2() {
+	return comandos_luchador2;
 }
 
 
@@ -545,43 +550,64 @@ int ParserJSON::cargarComando( Json::Value botones, const char* accion, int coma
 
 void ParserJSON::cargarMapaComandos(Json::Value root) {
 
-	if ( ! root.isMember("botones") ) {
+	if ( ! root.isMember("comandos") ) {
 		log("No se especificaron parametros para el mapeo de comandos y botones. Se setean por defecto.", LOG_WARNING);
-		mapaComandosDefault(comandos);
+		mapaComandosDefault(comandos_luchador1, comandos_luchador2);
 		return;
 	}
 
+	if ( ! root["comandos"].isMember("luchador1") || ! root["comandos"].isMember("luchador2") ) {
+		log("No se especificaron correctamente los parametros para el mapeo de comandos y botones de los jugadores o de algun jugador. Se setean por defecto.", LOG_WARNING);
+		mapaComandosDefault(comandos_luchador1, comandos_luchador2);
+		return;
+	}
 
 	log("Se cargara la configuracion del comando de pina baja.", LOG_DEBUG);
-	int comando_pina_baja = cargarComando(root["botones"], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
+	int comando_pina_baja1 = cargarComando(root["comandos"]["luchador1"], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
+	int comando_pina_baja2 = cargarComando(root["comandos"]["luchador2"], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de patada baja.", LOG_DEBUG);
-	int comando_patada_baja = cargarComando(root["botones"], "patada baja", COMANDO_PATADA_BAJA_DEFAULT);
+	int comando_patada_baja1 = cargarComando(root["comandos"]["luchador1"], "patada baja", COMANDO_PATADA_BAJA_DEFAULT);
+	int comando_patada_baja2 = cargarComando(root["comandos"]["luchador2"], "patada baja", COMANDO_PATADA_BAJA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de pina alta.", LOG_DEBUG);
-	int comando_pina_alta = cargarComando(root["botones"], "pina alta", COMANDO_PINA_ALTA_DEFAULT);
+	int comando_pina_alta1 = cargarComando(root["comandos"]["luchador1"], "pina alta", COMANDO_PINA_ALTA_DEFAULT);
+	int comando_pina_alta2 = cargarComando(root["comandos"]["luchador2"], "pina alta", COMANDO_PINA_ALTA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de patada alta.", LOG_DEBUG);
-	int comando_patada_alta = cargarComando(root["botones"], "patada alta", COMANDO_PATADA_ALTA_DEFAULT);
+	int comando_patada_alta1 = cargarComando(root["comandos"]["luchador1"], "patada alta", COMANDO_PATADA_ALTA_DEFAULT);
+	int comando_patada_alta2 = cargarComando(root["comandos"]["luchador2"], "patada alta", COMANDO_PATADA_ALTA_DEFAULT);
 
 	log("Se cargara la configuracion del comando de cubrirse.", LOG_DEBUG);
-	int comando_cubrirse = cargarComando(root["botones"], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
+	int comando_cubrirse1 = cargarComando(root["comandos"]["luchador1"], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
+	int comando_cubrirse2 = cargarComando(root["comandos"]["luchador2"], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
 
 	log("Se cargara la configuracion del comando de lanzar arma arrojable.", LOG_DEBUG);
-	int comando_lanzar_arma = cargarComando(root["botones"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
+	int comando_lanzar_arma1 = cargarComando(root["comandos"]["luchador1"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
+	int comando_lanzar_arma2 = cargarComando(root["comandos"]["luchador2"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
 
 
-	std::map<std::string, int>* mapita = new std::map<std::string,int>;
-	mapita->operator[](string("pina baja")) = comando_pina_baja;
-	mapita->operator[](string("patada baja")) = comando_patada_baja;
-	mapita->operator[](string("pina alta")) = comando_pina_alta;
-	mapita->operator[](string("patada alta")) = comando_patada_alta;
-	mapita->operator[](string("cubrirse"))= comando_cubrirse;
-	mapita->operator[](string("lanzar arma")) = comando_lanzar_arma;
+	std::map<std::string, int>* mapita1 = new std::map<std::string,int>;
+	mapita1->operator[](string("pina baja")) = comando_pina_baja1;
+	mapita1->operator[](string("patada baja")) = comando_patada_baja1;
+	mapita1->operator[](string("pina alta")) = comando_pina_alta1;
+	mapita1->operator[](string("patada alta")) = comando_patada_alta1;
+	mapita1->operator[](string("cubrirse"))= comando_cubrirse1;
+	mapita1->operator[](string("lanzar arma")) = comando_lanzar_arma1;
 
+	comandos_luchador1 = mapita1;
+	log( "Se cargo correctamente el mapa de comandos y botones del primer controlador.", LOG_DEBUG );
 
-	comandos = mapita;
-	log( "Se cargo correctamente el mapa de comandos y botones del controlador.", LOG_DEBUG );
+	std::map<std::string, int>* mapita2 = new std::map<std::string,int>;
+	mapita2->operator[](string("pina baja")) = comando_pina_baja2;
+	mapita2->operator[](string("patada baja")) = comando_patada_baja2;
+	mapita2->operator[](string("pina alta")) = comando_pina_alta2;
+	mapita2->operator[](string("patada alta")) = comando_patada_alta2;
+	mapita2->operator[](string("cubrirse"))= comando_cubrirse2;
+	mapita2->operator[](string("lanzar arma")) = comando_lanzar_arma2;
+
+	comandos_luchador2 = mapita2;
+	log( "Se cargo correctamente el mapa de comandos y botones del segundo controlador.", LOG_DEBUG );
 
 }
 

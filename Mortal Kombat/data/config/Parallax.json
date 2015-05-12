@@ -62,7 +62,7 @@
 		"sprites": "data/players/liukang/sprites/",
 		"poderes": "data/players/liukang/poderes/",
 		"color-alternativo": {
-			"h-inicial": -30,
+			"h-inicial": -20,
 			"h-final": 20,
 			"desplazamiento": 240
 		},
@@ -72,16 +72,26 @@
 	],
 	
 	"pelea": {
-		"luchador1": "Sub-Zero",
-		"luchador2": "Liu Kang"
+		"luchador1": "Liu Kang",
+		"luchador2": "Sub-Zero"
 	},
 	
-	"botones": {
-		"pina baja": 2,
-		"patada baja": 1,
-		"pina alta": 3,
-		"patada alta": 0,
-		"cubrirse": 6,
-		"lanzar arma": 4
+	"comandos": {
+		"luchador1": {
+			"pina baja": 2,
+			"patada baja": 1,
+			"pina alta": 3,
+			"patada alta": 0,
+			"cubrirse": 6,
+			"lanzar arma": 4
+		},
+		"luchador2": {
+			"pina baja": 2,
+			"patada baja": 1,
+			"pina alta": 3,
+			"patada alta": 0,
+			"cubrirse": 6,
+			"lanzar arma": 4
+		}
 	}
 }

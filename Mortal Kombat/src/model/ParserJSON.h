@@ -9,7 +9,8 @@ class ParserJSON {
 
 private:
 	 string m_ruta_archivo;
-	 map<string, int>* comandos;
+	 map<string, int>* comandos_luchador1;
+	 map<string, int>* comandos_luchador2;
 
 public:
 	 ParserJSON(string ruta_archivo);
@@ -18,7 +19,8 @@ public:
 	 float getRatioYPersonaje( Json::Value root_sprites, float personaje_alto );
 	 float getRatioXArrojable( Json::Value root_arrojables, float arrojable_ancho );
 	 float getRatioYArrojable( Json::Value root_arrojables, float arrojable_alto );
-	 map<string, int>* getComandos();
+	 map<string, int>* getComandos1();
+	 map<string, int>* getComandos2();
 	 Mundo* cargarMundo();
 	 int cargarComando(Json::Value root, const char* accion, int comando_default);
 	 void cargarMapaComandos(Json::Value root);
