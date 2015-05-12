@@ -120,8 +120,6 @@ void Personaje::QuitarVida(int valor){
 	vida = vida - valor;
 	if(vida <= 0){
 		_cambiarSprite(SPRITE_MUERE);
-		_estaAgachado = false;
-		_estaCubriendose = false;
 		_estaMuerto = true;
 		spriteActual->doLoop(true);
 		vida = 0;
