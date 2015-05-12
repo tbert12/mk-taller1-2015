@@ -2,8 +2,6 @@
 
 using namespace std;
 
-map<string, int>* mapa_comandos_default = new map<string, int>;
-
 Sprite* crearSpritePorDefecto(const char* archivo_json, const char* accion_sprite, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color, float h_inicial, float h_final, float h_desplazamiento ) {
 	Sprite* sprite;
 
@@ -479,14 +477,6 @@ Mundo* generarMundoDefault() {
 
 	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJES_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,VENTANA_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,personajes);
 	mundo->addCapaPrincipal(capa_principal,PERSONAJES_Z_INDEX_DEFAULT);
-
-	// Uso mapa de comandos como variable externa para usar desde el main.
-	mapa_comandos_default->operator[](string("pina baja")) = COMANDO_PINA_BAJA_DEFAULT;
-	mapa_comandos_default->operator[](string("patada baja")) = COMANDO_PATADA_BAJA_DEFAULT;
-	mapa_comandos_default->operator[](string("pina alta")) = COMANDO_PINA_ALTA_DEFAULT;
-	mapa_comandos_default->operator[](string("patada alta")) = COMANDO_PATADA_ALTA_DEFAULT;
-	mapa_comandos_default->operator[](string("cubrirse"))= COMANDO_CUBRIRSE_DEFAULT;
-	mapa_comandos_default->operator[](string("lanzar arma")) = COMANDO_LANZAR_ARMA_DEFAULT;
 
 
 	return mundo;
