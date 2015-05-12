@@ -129,12 +129,6 @@ void Mundo::render(){
 	//aca una vez actualizado to do chequeo las colisiones y demas.
 	_verificarColisiones();
 
-	if(personajes[0]->getX() == 200){
-		ventana->vibrar();
-	}
-	//capaPrincipal->chequeo_colisiones
-
-
 	//renderizo las capas
 	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
 		capas[i]->Renderizar();
@@ -148,18 +142,46 @@ void Mundo::render(){
 }
 
 void Mundo::_verificarColisiones(){
-	Personaje* personaje;
-	Personaje* personaje_flipeado;
+	int resultado = capaPrincipal->CheckearColisiones();
+
+	if (resultado == COLISION_NO_COLISION ) return;
+
+	Personaje* personaje = capaPrincipal->getPersonajSinFlip();
+	Personaje* personaje_flipeado = capaPrincipal->getPersonajConFlip();
+
 	/*COLISION CAPA PRINCIPAL*/
-	/*
-	switch (){
+	switch (resultado){
+		case COLISION_PERSONAJE_PERSONAJE_DEFENSA:
+			//chocan los dos personajes pero no atacando
+			break;
+		case COLISION_PERSONAJE_PERSONAJE_SIN_FLIP:
+			//personaje ataca a personaje_flipeado
+			personaje_flipeado->recibirGolpe(personaje->getAccionDeAtaque(),10);
+			if(personaje->getAccionDeAtaque() == SPRITE_GANCHO)
+				ventana->vibrar();
+			break;
+		case COLISION_PERSONAJE_PERSONAJE_CON_FLIP:
+			//personaje_flipeado ataca a personaje
+			personaje->recibirGolpe(personaje_flipeado->getAccionDeAtaque(),10);
+			if(personaje_flipeado->getAccionDeAtaque() == SPRITE_GANCHO)
+				ventana->vibrar();
+			break;
+		case COLISION_PERSONAJE_OBJETO_SIN_FLIP:
+			//objeto de personaje choco a personaje_flipeado
+			personaje_flipeado->recibirGolpe(1,personaje->getPoderActivo()->getDanio());
+			personaje->getPoderActivo()->destruir();
+			break;
+		case COLISION_PERSONAJE_OBJETO_CON_FLIP:
+			//objeto de personaje_flipeado choco a personaje
+			personaje->recibirGolpe(1,personaje_flipeado->getPoderActivo()->getDanio());
+			personaje_flipeado->getPoderActivo()->destruir();
+			break;
 		case COLISION_OBJETO_OBJETO:
-			//asdasd
+			//chocan los dos objetos
+			personaje_flipeado->getPoderActivo()->destruir();
+			personaje->getPoderActivo()->destruir();
 			break;
-		case COLISION_PERSONAJE_OBJETO:
-			//asd
-			break;
-	}*/
+	}
 }
 
 Mundo::~Mundo() {

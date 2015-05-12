@@ -15,6 +15,7 @@
 #include "CapaPrincipal.h"
 #include "CapaFondo.h"
 #include "Personaje.h"
+#include "ObjetoArrojable.h"
 #include "../view/Sprite.h"
 #include "../view/Frame.h"
 #include "../view/Ventana.h"
