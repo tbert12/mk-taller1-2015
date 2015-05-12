@@ -22,6 +22,9 @@ CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeF
 	m_PersonajeQueScrollea = 0;
 	rectAtaqueAnterior2 = NULL;
 	rectAtaqueAnterior1 = NULL;
+	m_personajeConFlip = NULL;
+	m_personajeSinFlip = NULL;
+	_scroll = 0;
 }
 
 CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, vector<Personaje*> personajes)
@@ -186,13 +189,11 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 		Rect_Logico* rectPoderSinFlip = objetoSinFlip->rectanguloAtaque();
 		Rect_Logico* rectPoderConFlip = objetoConFlip->rectanguloAtaque();
 		if(rectPoderSinFlip->x>=rectPoderConFlip->x){
-			objetoSinFlip->destruir();
-			objetoConFlip->destruir();
 			return COLISION_OBJETO_OBJETO;
 		}
 	}
 
-	if (objetoSinFlip != NULL ){
+	if (objetoSinFlip != NULL){
 
 		Rect_Logico* rectPoder = objetoSinFlip->rectanguloAtaque();
 		if(rectPoder->x>rectDefensa2->x)
@@ -205,7 +206,6 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 				(floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
 
 		if( colisionaAtaquePersonajeSinFlipX and colisionaY){
-			objetoSinFlip->destruir();
 			return COLISION_PERSONAJE_OBJETO_SIN_FLIP;
 			printf("hubo colision ppsf\n");
 		}
@@ -223,7 +223,6 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 		printf("RectAtaqueXEnd :%f      RectdefensaPos :%f \n",rectPoder->x+rectPoder->w,rectDefensa2->x);
 		bool colisionaY = (floatIsBetween(rectDefensa2->y, rectPoder->y-rectPoder->h , rectPoder->h) and floatIsBetween(rectDefensa2->y, rectPoder->y-rectPoder->h, rectPoder->h)) or
 				(floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
-
 		if( colisionaAtaquePersonajeSinFlipX and colisionaY){
 			return COLISION_PERSONAJE_OBJETO_CON_FLIP;
 			printf("hubo colision ppcf\n");

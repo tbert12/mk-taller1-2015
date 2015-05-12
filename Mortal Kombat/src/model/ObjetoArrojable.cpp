@@ -124,7 +124,12 @@ void ObjetoArrojable::renderizar(float x_dist_ventana){
 
 
 bool ObjetoArrojable::getVida(){
-	return vida;
+	if (vida){
+		if(m_destruir)
+			return false;
+		return true;
+	}
+	return false;
 }
 
 ObjetoArrojable::~ObjetoArrojable() {
