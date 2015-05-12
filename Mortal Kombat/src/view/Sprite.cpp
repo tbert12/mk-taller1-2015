@@ -54,7 +54,7 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 		printf("No se creo Rectangulo\n");
 	}
 	RectanguloTest1->setAlpha(100);
-	RectanguloTest1->setColor(100,0,255);
+	RectanguloTest1->setColor(100,255,255);
 
 	RectanguloTest2 = ventana->crearTextura();
 	if (!RectanguloTest2->loadFromFile("data/img/forColisionTest/cuadrado_rojo.png")){
@@ -129,7 +129,6 @@ void Sprite::Reset(){
 }
 
 void Sprite::render(float x, float y, bool fliped){
-	printf("Frame: %i\n",frameActual);
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
 	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h_log, fliped);
 }

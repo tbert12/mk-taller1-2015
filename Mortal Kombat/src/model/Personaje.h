@@ -47,7 +47,16 @@ const int SPRITE_RECIBE_FUERTE = 		25;
 
 const int GOLPE_DE_PODER = 				-1;
 
+const int QUITAR_VIDA_GOLPE_BAJO = 3;
+const int QUITAR_VIDA_GOLPE_ALTO = 4;
+const int QUITAR_VIDA_PATADA_CIRCULAR = 5;
+const int QUITAR_VIDA_GANCHO = 8;
+
+const int MIN_GOLPE_FUERTE = 4;
+
 const int TIEMPOTOTALDESALTO = 15;
+const float ALTURA_SALTO_GANCHO = 1.8; //Proporcion a la altura logica del personaje
+const float ALTURA_SALTO_DIAG=    1.2;
 
 class Personaje {
 private:
