@@ -120,8 +120,6 @@ void Personaje::QuitarVida(int valor){
 	vida = vida - valor;
 	if(vida <= 0){
 		_cambiarSprite(SPRITE_MUERE);
-		_estaAgachado = false;
-		_estaCubriendose = false;
 		_estaMuerto = true;
 		spriteActual->doLoop(true);
 		vida = 0;
@@ -641,7 +639,7 @@ void Personaje::_patadaAltaAgachado() {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++RECIBE-GOLPES+++++++++++++++++++++++++++++++++++++++++++
 
-bool Personaje::recibirGolpe(int CodigoGolpe, int Danio = 0){
+bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	if (_recibioGolpe) return false;
 	if (_estaCubriendose){
 		QuitarVida(1);

@@ -49,8 +49,6 @@ const int GOLPE_DE_PODER = 				-1;
 
 const int TIEMPOTOTALDESALTO = 15;
 
-
-
 class Personaje {
 private:
 	std::string nombre;
@@ -151,7 +149,7 @@ public:
 	void Inicial();
 	bool estaAgachado();
 
-	bool recibirGolpe(int CodigoGolpe, int Danio);
+	bool recibirGolpe(int CodigoGolpe, int Danio = 0);
 	void QuitarVida(int valor);
 
 	//acciones
