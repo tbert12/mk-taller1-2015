@@ -832,27 +832,6 @@
 		"nombre":"patadaEnSalto.png",
 		"frames":[
 			{
-				"x":173,
-				"y":88,
-				"Alto":117
-,
-				"Ancho":70
-			},
-			{
-				"x":0,
-				"y":92,
-				"Alto":128
-,
-				"Ancho":89
-			},
-			{
-				"x":90,
-				"y":92,
-				"Alto":135
-,
-				"Ancho":82
-			},
-			{
 				"x":198,
 				"y":0,
 				"Alto":84
