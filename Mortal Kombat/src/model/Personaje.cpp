@@ -269,10 +269,19 @@ void Personaje::renderizar(float x_dist_ventana,float posOtherPlayer){
 
 Rect_Logico* Personaje::rectanguloAtaque(){
 	if (!_estaAtacando) return NULL;
+	/* Casos a Resolver
+	 * 		-Pina Alta, Patada Alta
+	 * 		-Patada Saltando, Pina Saltando
+	 * 	OK  -Pina Baja, Patada Baja
+	 * 		-Patada Agachado, Pina Agachado
+	 * 		-Gancho
+	 */
+
 	Rect_Logico* rectangulo = new Rect_Logico;
 	if(m_fliped)
 		rectangulo->x = m_xActual - spriteActual->getAncho();
-	else rectangulo->x = m_xActual + sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
+	else
+		rectangulo->x = m_xActual + sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
 	rectangulo->h = getAlto()/2;
 	rectangulo->y = m_yActual - rectangulo->h;
 	rectangulo->w = spriteActual->getAncho() - sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
@@ -302,7 +311,7 @@ Rect_Logico* Personaje::rectanguloDefensa(){
 void Personaje::AvanzarSprite(){
 	//Los If son muy parecidos, pero hay que tenerlos separados para entender el codigo
 	if (spriteActual->ultimoFrame() or (!_estaSaltando and !_recibioGolpe) ){
-
+		//Termina de atacar o agacharse o saltando = 0 (justo en el momento que cae)
 		if ( (_estaAtacando and !_estaAgachado) or (_estaAgachado and !_estaCubriendose and !_estaAtacando and !_recibioGolpe) or !_estaSaltando ){
 			if (m_velocidadActual == 0){
 				_cambiarSprite(SPRITE_INICIAL);
@@ -640,13 +649,6 @@ void Personaje::_patadaAltaAgachado() {
 //+++++++++++RECIBE-GOLPES+++++++++++++++++++++++++++++++++++++++++++
 
 bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
-	if (_recibioGolpe) return false;
-	if (_estaCubriendose){
-		QuitarVida(1);
-		spriteActual->vibrar();
-		return false;
-	}
-	bool golpeFuerte = false;
 	//El Codigo de golpe esta seteados en todos el mismo
 	/*
 		--->SPRITE_RECIBE_GANCHO<--- (-10 de Vida)
@@ -672,53 +674,55 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 		PATADA_CIRCULAR=       16;
 
 	*/
+	if (_recibioGolpe) return false;
+	if (_estaCubriendose){
+		QuitarVida(1);
+		spriteActual->vibrar();
+		return false;
+	}
+	bool golpeFuerte = false;
+
 	std::map<int, int> reaccionesAGolpes;
-	reaccionesAGolpes[SPRITE_GANCHO] = SPRITE_RECIBE_GANCHO;
-	reaccionesAGolpes[SPRITE_PINA_ALTA] = SPRITE_RECIBE_ALTO;
-	reaccionesAGolpes[SPRITE_PATADA_ALTA] = SPRITE_RECIBE_ALTO;
-
-	reaccionesAGolpes[SPRITE_PATADA_SALTANDO] = SPRITE_RECIBE_FUERTE;
-	reaccionesAGolpes[SPRITE_PINA_SALTANDO] = SPRITE_RECIBE_FUERTE;
-	reaccionesAGolpes[GOLPE_DE_PODER] = SPRITE_RECIBE_FUERTE;
-
-	reaccionesAGolpes[SPRITE_PATADA_ALTA_AGACHADO] = _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
-	reaccionesAGolpes[SPRITE_PATADA_BAJA_AGACHADO] = _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
-	reaccionesAGolpes[SPRITE_PINA_AGACHADO] = _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
-	reaccionesAGolpes[SPRITE_PATADA_BAJA] = _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
-	reaccionesAGolpes[SPRITE_PINA_BAJA] = _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
-
-	reaccionesAGolpes[SPRITE_PATADA_CIRCULAR] = SPRITE_RECIBE_PATADA_GIRA;
+	reaccionesAGolpes[SPRITE_GANCHO] = 				SPRITE_RECIBE_GANCHO;
+	reaccionesAGolpes[SPRITE_PINA_ALTA] = 			_estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_ALTO;
+	reaccionesAGolpes[SPRITE_PATADA_ALTA] = 		_estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_ALTO;
+	reaccionesAGolpes[SPRITE_PATADA_SALTANDO] = 	SPRITE_RECIBE_FUERTE;
+	reaccionesAGolpes[SPRITE_PINA_SALTANDO] = 		SPRITE_RECIBE_FUERTE;
+	reaccionesAGolpes[GOLPE_DE_PODER] = 			SPRITE_RECIBE_FUERTE;
+	reaccionesAGolpes[SPRITE_PATADA_ALTA_AGACHADO]= _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
+	reaccionesAGolpes[SPRITE_PATADA_BAJA_AGACHADO]= _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
+	reaccionesAGolpes[SPRITE_PINA_AGACHADO]= 		_estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
+	reaccionesAGolpes[SPRITE_PATADA_BAJA]=  		_estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
+	reaccionesAGolpes[SPRITE_PINA_BAJA]= 			_estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
+	reaccionesAGolpes[SPRITE_PATADA_CIRCULAR] = 	SPRITE_RECIBE_PATADA_GIRA;
 
 	std::map<int, int> DanioPorGolpe;
-	DanioPorGolpe[SPRITE_GANCHO] = 8;
-	DanioPorGolpe[SPRITE_PINA_ALTA] = 4;
-	DanioPorGolpe[SPRITE_PATADA_ALTA] = 4;
-	DanioPorGolpe[SPRITE_PATADA_SALTANDO] = 4;
-	DanioPorGolpe[SPRITE_PINA_SALTANDO] = 4;
-	DanioPorGolpe[SPRITE_PATADA_ALTA_AGACHADO] = 3;
-	DanioPorGolpe[SPRITE_PATADA_BAJA_AGACHADO] = 3;
-	DanioPorGolpe[SPRITE_PINA_AGACHADO] = 3;
-	DanioPorGolpe[SPRITE_PATADA_BAJA] = 3;
-	DanioPorGolpe[SPRITE_PINA_BAJA] = 3;
-	DanioPorGolpe[SPRITE_PATADA_CIRCULAR] = 5;
+	DanioPorGolpe[SPRITE_GANCHO]= 				QUITAR_VIDA_GANCHO;
+	DanioPorGolpe[SPRITE_PINA_ALTA]= 			QUITAR_VIDA_GOLPE_ALTO;
+	DanioPorGolpe[SPRITE_PATADA_ALTA]=  		QUITAR_VIDA_GOLPE_ALTO;
+	DanioPorGolpe[SPRITE_PATADA_SALTANDO]=  	QUITAR_VIDA_GOLPE_ALTO;
+	DanioPorGolpe[SPRITE_PINA_SALTANDO]= 		QUITAR_VIDA_GOLPE_ALTO;
+	DanioPorGolpe[SPRITE_PATADA_ALTA_AGACHADO]= QUITAR_VIDA_GOLPE_BAJO;
+	DanioPorGolpe[SPRITE_PATADA_BAJA_AGACHADO]= QUITAR_VIDA_GOLPE_BAJO;
+	DanioPorGolpe[SPRITE_PINA_AGACHADO]= 		QUITAR_VIDA_GOLPE_BAJO;
+	DanioPorGolpe[SPRITE_PATADA_BAJA]=  		QUITAR_VIDA_GOLPE_BAJO;
+	DanioPorGolpe[SPRITE_PINA_BAJA]= 			QUITAR_VIDA_GOLPE_BAJO;
+	DanioPorGolpe[SPRITE_PATADA_CIRCULAR]=  	QUITAR_VIDA_PATADA_CIRCULAR;
+	DanioPorGolpe[GOLPE_DE_PODER]=  			Danio;
 
 	printf("Recibe Agachado:%s\n",reaccionesAGolpes[SPRITE_PINA_AGACHADO] == SPRITE_RECIBE_AGACHADO ? "SPRITE_RECIBE_AGACHADO" : "SPRITE_RECIBE_BAJO");
 
 	_cambiarSprite(reaccionesAGolpes[CodigoGolpe]);
-	if (!Danio)	{
-		QuitarVida(DanioPorGolpe[CodigoGolpe]);
-	} else {
-		QuitarVida(Danio);
-	}
+	QuitarVida(DanioPorGolpe[CodigoGolpe]);
 
 	if (CodigoGolpe == SPRITE_GANCHO){
-		maxAlturaDeSalto = 1.8 * getAlto();
+		maxAlturaDeSalto = ALTURA_SALTO_GANCHO * getAlto();
 		tiempoDeSalto = 1;
 		_estaSaltando = 1;
 		spriteActual->doLoop(true);
 	}
 
-	if (CodigoGolpe == -1 or (DanioPorGolpe[CodigoGolpe] > 3 and CodigoGolpe != SPRITE_PATADA_CIRCULAR) ){
+	if (CodigoGolpe == -1 or (DanioPorGolpe[CodigoGolpe] >= MIN_GOLPE_FUERTE and CodigoGolpe != SPRITE_PATADA_CIRCULAR) ){
 		golpeFuerte = true;
 		if (m_fliped){
 			m_velocidadActual = m_velocidad;

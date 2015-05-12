@@ -54,7 +54,7 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 		printf("No se creo Rectangulo\n");
 	}
 	RectanguloTest1->setAlpha(100);
-	RectanguloTest1->setColor(100,0,255);
+	RectanguloTest1->setColor(100,255,255);
 
 	RectanguloTest2 = ventana->crearTextura();
 	if (!RectanguloTest2->loadFromFile("data/img/forColisionTest/cuadrado_rojo.png")){
