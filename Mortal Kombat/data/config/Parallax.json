@@ -72,8 +72,8 @@
 	],
 	
 	"pelea": {
-		"luchador1": "Sub-Zero",
-		"luchador2": "Liu Kang"
+		"luchador1": "Liu Kang",
+		"luchador2": "Sub-Zero"
 	},
 	
 	"comandos": {
