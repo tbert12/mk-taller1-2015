@@ -29,6 +29,7 @@ class Sprite {
 		bool doloop;
 		int frameLoop;
 		int m_pong;
+		int m_fullpong;
 
 		bool frezee;
 		int frezeeTime;
@@ -53,6 +54,7 @@ class Sprite {
 		void doPongIn(int pong);
 		void doFullPong();
 		void doLoop(bool loop);
+		bool inLoop();
 		bool loop();
 		void doReverse(bool Reverse);
 

@@ -16,6 +16,9 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 	//m_pong hace efecto espejo, llega al valor de m_pong vuelve hasta el inicial y comienza de nuevo;
 	m_pong = 0;
 
+	//Guarda el pong comun y hace m_pong hasta el ultimo frame
+	m_fullpong = 0;
+
 	//Si el frameLoop es 3, y estas en frameActual 0, hace 0,1,2,3 y se queda (hasta que sea false)
 	doloop = false;
 	frameLoop = 0;
@@ -108,9 +111,10 @@ bool Sprite::Advance(){
 				frameActual++;
 		}
 	}
-	if (m_pong == frameActual){
-			reverse = !reverse;
+	if (m_pong and (m_pong == frameActual) ){
+		reverse = !reverse;
 	}
+
 	if (frameActual >= cantidadFrames or frameActual < 0){
 		Reset();
 	}
@@ -140,12 +144,16 @@ void Sprite::doLoop(bool loop){
 	doloop = loop;
 }
 
+bool Sprite::inLoop(){
+	return (doloop and frameActual==frameLoop) ;
+}
+
 void Sprite::doReverse(bool Reverse){
 	reverse = Reverse;
 }
 
 bool Sprite::ultimoFrame(){
-	if (doloop) return false;
+	if (doloop or frezeeCount) return false;
 	if (reverse){
 		return (frameActual == 0);
 	}
@@ -174,10 +182,7 @@ void Sprite::doPongIn(int pong){
 }
 
 void Sprite::doFullPong(){
-	if (reverse){
-		m_pong = 0;
-		return;
-	}
+	m_fullpong = m_pong;
 	m_pong = cantidadFrames - 1;
 }
 
@@ -194,8 +199,8 @@ void Sprite::freezeSprite(){
 void Sprite::hardReset(){
 	reverse = false;
 	doloop = false;
-	frezee = false;
 	frezeeCount = 0;
+	frezee = true;
 
 	Reset();
 }

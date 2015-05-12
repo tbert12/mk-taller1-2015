@@ -8,6 +8,14 @@
 #ifndef SRC_MODEL_PERSONAJE_H_
 #define SRC_MODEL_PERSONAJE_H_
 
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <map>
+#include "../view/Sprite.h"
+#include "ObjetoArrojable.h"
+
+
 //Constants
 const int SPRITE_INICIAL=         		0;
 const int SPRITE_CAMINAR=         		1;
@@ -39,14 +47,6 @@ const int SPRITE_RECIBE_FUERTE = 		25;
 
 const int TIEMPOTOTALDESALTO = 15;
 
-#include <stdio.h>
-#include <iostream>
-#include <vector>
-#include <map>
-#include "../view/Sprite.h"
-#include "ObjetoArrojable.h"
-
-
 
 
 class Personaje {
@@ -76,6 +76,8 @@ private:
 	bool _estaCubriendose;
 	bool _estaAgachado;
 	bool _estaAtacando;
+	bool _recibioGolpe;
+	bool _estaMuerto;
 
 	Sprite* spriteActual;
 	std::vector<Sprite*> sprites;
@@ -126,7 +128,7 @@ public:
 	bool enMovimiento();
 
 	void Update(int velocidadScroll);
-	void renderizar(float x_dist_ventana, float posOtherPlayer);
+	void renderizar(float x_dist_ventana,float posOtherPlayer);
 
 	void setPosition(float x, float y);
 	void setDimensionesMundo(float h, float w);
@@ -147,7 +149,7 @@ public:
 	void Inicial();
 	bool estaAgachado();
 
-	void recibirGolpe(int CodigoGolpe, int Danio);
+	bool recibirGolpe(int CodigoGolpe, int Danio);
 	void QuitarVida(int valor);
 
 	//acciones

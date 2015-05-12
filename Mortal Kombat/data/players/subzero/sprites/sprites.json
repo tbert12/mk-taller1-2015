@@ -365,7 +365,8 @@
 				"y":85,
 				"Alto":35
 ,
-				"Ancho":65
+				"Ancho":65,
+				"freeze": 5
 			},
 			{
 				"x":158,
@@ -944,7 +945,8 @@
 				"y":0,
 				"Alto":76
 ,
-				"Ancho":64
+				"Ancho":64,
+				"pong": true
 			}
 		]
 	},
@@ -970,7 +972,8 @@
 				"y":0,
 				"Alto":121
 ,
-				"Ancho":62
+				"Ancho":62,
+				"pong": true
 			}
 		]
 	},
@@ -989,7 +992,8 @@
 				"y":0,
 				"Alto":127
 ,
-				"Ancho":54
+				"Ancho":54,
+				"pong": true
 			},
 			{
 				"x":58,
