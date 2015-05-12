@@ -45,6 +45,8 @@ const int SPRITE_RECIBE_ALTO = 			23;
 const int SPRITE_RECIBE_BAJO =			24;
 const int SPRITE_RECIBE_FUERTE = 		25;
 
+const int GOLPE_DE_PODER = 				-1;
+
 const int TIEMPOTOTALDESALTO = 15;
 
 

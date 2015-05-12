@@ -129,7 +129,7 @@ void Sprite::Reset(){
 }
 
 void Sprite::render(float x, float y, bool fliped){
-	//printf("Frame: %i [%f,%f]\n",frameActual,x,y);
+	printf("Frame: %i\n",frameActual);
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
 	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h_log, fliped);
 }
@@ -194,6 +194,10 @@ void Sprite::setFrezeeFrame(int frame,int time){
 
 void Sprite::freezeSprite(){
 	frezee = true;
+}
+
+void Sprite::vibrar(){
+	SpriteSheetTexture->setVibrar();
 }
 
 void Sprite::hardReset(){
