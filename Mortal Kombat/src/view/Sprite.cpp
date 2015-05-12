@@ -203,7 +203,7 @@ void Sprite::hardReset(){
 	reverse = false;
 	doloop = false;
 	frezeeCount = 0;
-	frezee = true;
+	frezee = false;
 
 	Reset();
 }
