@@ -290,7 +290,8 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 		if ( spriteActual->primerFrame() ) propH = 4;
 		else propH = 0;
 	} else if (Accion == SPRITE_PATADA_BAJA or Accion == SPRITE_PINA_BAJA or Accion == SPRITE_PINA_AGACHADO){
-		propH = 4;
+		propH = 6;
+		propY = 2;
 	} else if (Accion == SPRITE_PATADA_CIRCULAR or Accion == SPRITE_PATADA_SALTANDO){
 		propH = 2;
 		propY = propH;
