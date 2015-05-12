@@ -136,6 +136,7 @@ void Sprite::setLoop(int num_frame) {
 }
 
 void Sprite::doLoop(bool loop){
+	if (doloop == loop) return;
 	doloop = loop;
 }
 
