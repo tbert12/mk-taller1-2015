@@ -552,8 +552,7 @@ void ParserJSON::cargarMapaComandos(Json::Value root) {
 
 	if ( ! root.isMember("comandos") ) {
 		log("No se especificaron parametros para el mapeo de comandos y botones. Se setean por defecto.", LOG_WARNING);
-		mapaComandosDefault(comandos_luchador1);
-		mapaComandosDefault(comandos_luchador2);
+		mapaComandosDefault(comandos_luchador1, comandos_luchador2);
 		return;
 	}
 

@@ -432,12 +432,22 @@ vector<Personaje*> generarPersonajesDefault( Ventana* ventana) {
 	return personajes;
 }
 
-void mapaComandosDefault(map<string, int>* comandos) {
+void mapaComandosDefault(map<string, int>* comandos1, map<string, int>* comandos2) {
 
-	*comandos = { {string("pina baja"), COMANDO_PINA_BAJA_DEFAULT},
-			{string("patada baja"), COMANDO_PATADA_BAJA_DEFAULT}, {string("pina alta"), COMANDO_PINA_ALTA_DEFAULT},
-				{string("patada alta"), COMANDO_PATADA_ALTA_DEFAULT}, {string("cubrirse"), COMANDO_CUBRIRSE_DEFAULT},
-					{string("lanzar arma"), COMANDO_LANZAR_ARMA_DEFAULT} };
+	comandos1->operator[](string("pina baja")) = COMANDO_PINA_BAJA_DEFAULT;
+	comandos1->operator[](string("patada baja")) = COMANDO_PATADA_BAJA_DEFAULT;
+	comandos1->operator[](string("pina alta")) = COMANDO_PINA_ALTA_DEFAULT;
+	comandos1->operator[](string("patada alta")) = COMANDO_PATADA_ALTA_DEFAULT;
+	comandos1->operator[](string("cubrirse"))= COMANDO_CUBRIRSE_DEFAULT;
+	comandos1->operator[](string("lanzar arma")) = COMANDO_LANZAR_ARMA_DEFAULT;
+
+	comandos2->operator[](string("pina baja")) = COMANDO_PINA_BAJA_DEFAULT;
+	comandos2->operator[](string("patada baja")) = COMANDO_PATADA_BAJA_DEFAULT;
+	comandos2->operator[](string("pina alta")) = COMANDO_PINA_ALTA_DEFAULT;
+	comandos2->operator[](string("patada alta")) = COMANDO_PATADA_ALTA_DEFAULT;
+	comandos2->operator[](string("cubrirse"))= COMANDO_CUBRIRSE_DEFAULT;
+	comandos2->operator[](string("lanzar arma")) = COMANDO_LANZAR_ARMA_DEFAULT;
+
 }
 
 
