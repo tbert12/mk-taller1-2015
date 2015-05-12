@@ -101,22 +101,18 @@ bool LTexture::loadFromFile( std::string ruta, bool cambiar_color, float h_inici
 				h_inicial = - h_inicial;
 				h_inicial = fmod(h_inicial, 360);
 				h_inicial = 360 - h_inicial;
-				log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
 			}
 			if ( h_inicial > 360 ) {
 				h_inicial = fmod(h_inicial, 360);
-				log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
 			}
 
 			if ( h_final < 0 ) {
 				h_final = - h_final;
 				h_final = fmod(h_final, 360);
 				h_final = 360 - h_final;
-				log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
 			}
 			if ( h_final > 360 ) {
 				h_final = fmod(h_final, 360);
-				log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
 			}
 
 			Uint32* pixels = (Uint32*) loadedSurface->pixels;

@@ -356,8 +356,8 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 		}
 
 		// Calculo los ratios del arrojable.
-		float ratio_x_arrojable = getRatioXArrojable(root, arrojable_ancho);
-		float ratio_y_arrojable = getRatioYArrojable(root, arrojable_alto);
+		float ratio_x_arrojable = getRatioXArrojable(arrojables[i], arrojable_ancho);
+		float ratio_y_arrojable = getRatioYArrojable(arrojables[i], arrojable_alto);
 
 		log( "Se cargara el sprite para el objeto arrojable del personaje", LOG_DEBUG );
 		Sprite* sprite_objeto_arrojable =  cargarSprite( arrojables[i], ruta_carpeta, "objetoArrojable", SPRITESHEET_OBJETO_ARROJABLE_DEFAULT, ventana, ratio_x_arrojable, ratio_y_arrojable );
@@ -598,7 +598,9 @@ vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
 		} else {
 			try {
 				h_inicial = personaje["color-alternativo"].get( "h-inicial", COLOR_H_INICIAL_DEFAULT ).asFloat();
-				log( "Se cargo el hue inicial para el desplazamiento al color alternativo.", LOG_DEBUG );
+				if (h_inicial < 0) log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				else if (h_inicial > 360) log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				else log( "Se cargo el hue inicial para el desplazamiento al color alternativo.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				h_inicial = COLOR_H_INICIAL_DEFAULT;
 				log( "El hue inicial especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );
@@ -610,7 +612,9 @@ vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
 		} else {
 			try {
 				h_final = personaje["color-alternativo"].get( "h-final", COLOR_H_FINAL_DEFAULT ).asFloat();
-				log( "Se cargo el hue final para el desplazamiento al color alternativo.", LOG_DEBUG );
+				if (h_final < 0) log( "El hue se expresa en grados sexagesimales. El valor es menor a 0, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				else if (h_final > 360) log( "El hue se expresa en grados sexagesimales. El valor es mayor a 360, pero se adapta al rango [0,360] de la circunferencia.", LOG_WARNING );
+				else log( "Se cargo el hue final para el desplazamiento al color alternativo.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				h_final = COLOR_H_FINAL_DEFAULT;
 				log( "El hue final especificado para el desplazamiento al color alternativo no es un numero valido. Se setea por defecto.", LOG_ERROR );

@@ -1,12 +1,12 @@
 {
 
-	"loglvl": 1,
+	"loglvl": 2,
 	
 	"tiempo": 99,
 
 	"ventana": {
 		"ancho-px": 640,
-		"alto-px": 480,
+		"alto-px": 480
 		"ancho": 400
 	},
 	
@@ -73,7 +73,7 @@
 	
 	"pelea": {
 		"luchador1": "Liu Kang",
-		"luchador2": "Sub-Zero"
+		"luchador2": "Liu Kang"
 	},
 	
 	"botones": {
