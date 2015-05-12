@@ -122,13 +122,13 @@ void Mundo::render(){
 	if(capaPrincipal->getPersonajConFlip()->getVida() <= 0){
 		log("Partida finalizada, GANADOR: " + capaPrincipal->getPersonajSinFlip()->getNombre(),LOG_DEBUG);
 		partida_finalizada = true;
-		_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
+		//_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
 		return;
 	}
 	else if (capaPrincipal->getPersonajSinFlip()->getVida() <= 0){
 		log("Partida finalizada, GANADOR: " + capaPrincipal->getPersonajConFlip()->getNombre(),LOG_DEBUG);
 		partida_finalizada = true;
-		_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
+		//_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
 		return;
 	}
 
@@ -161,6 +161,7 @@ void Mundo::_verificarColisiones(){
 	if (resultado == COLISION_NO_COLISION ) return;
 
 	int accion;
+	bool vibrar = false;
 	Personaje* personaje = capaPrincipal->getPersonajSinFlip();
 	Personaje* personaje_flipeado = capaPrincipal->getPersonajConFlip();
 
@@ -174,24 +175,32 @@ void Mundo::_verificarColisiones(){
 		case COLISION_PERSONAJE_PERSONAJE_SIN_FLIP:
 			//personaje ataca a personaje_flipeado
 			accion = personaje->getAccionDeAtaque();
-			if(personaje_flipeado->recibirGolpe(accion))
+			vibrar = personaje_flipeado->recibirGolpe(accion);
+			if(vibrar){
+				printf("HAY QUE VIBRAR\n");
 				ventana->vibrar();
+			}
 			break;
 		case COLISION_PERSONAJE_PERSONAJE_CON_FLIP:
 			//personaje_flipeado ataca a personaje
 			accion = personaje_flipeado->getAccionDeAtaque();
-			if(personaje->recibirGolpe(accion))
+			vibrar = personaje->recibirGolpe(accion);
+			if(vibrar){
+				printf("HAY QUE VIBRAR\n");
 				ventana->vibrar();
+			}
 			break;
 		case COLISION_PERSONAJE_OBJETO_SIN_FLIP:
 			//objeto de personaje choco a personaje_flipeado
-			if(personaje_flipeado->recibirGolpe(GOLPE_DE_PODER,personaje->getPoderActivo()->getDanio()))
+			vibrar = personaje_flipeado->recibirGolpe(GOLPE_DE_PODER,personaje->getPoderActivo()->getDanio());
+			if(vibrar)
 				ventana->vibrar();
 			personaje->getPoderActivo()->destruir();
 			break;
 		case COLISION_PERSONAJE_OBJETO_CON_FLIP:
 			//objeto de personaje_flipeado choco a personaje
-			if(personaje->recibirGolpe(GOLPE_DE_PODER,personaje_flipeado->getPoderActivo()->getDanio()))
+			vibrar = personaje->recibirGolpe(GOLPE_DE_PODER,personaje_flipeado->getPoderActivo()->getDanio());
+			if(vibrar)
 				ventana->vibrar();
 			personaje_flipeado->getPoderActivo()->destruir();
 			break;
