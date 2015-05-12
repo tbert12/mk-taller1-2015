@@ -711,6 +711,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	DanioPorGolpe[GOLPE_DE_PODER]=  			Danio;
 
 	printf("Recibe Agachado:%s\n",reaccionesAGolpes[SPRITE_PINA_AGACHADO] == SPRITE_RECIBE_AGACHADO ? "SPRITE_RECIBE_AGACHADO" : "SPRITE_RECIBE_BAJO");
+	printf("codigo Golpe:%i\n",CodigoGolpe);
 	printf("Danio: %i\n",DanioPorGolpe[CodigoGolpe]);
 	printf("Accion %i\n",reaccionesAGolpes[CodigoGolpe]);
 	_cambiarSprite(reaccionesAGolpes[CodigoGolpe]);

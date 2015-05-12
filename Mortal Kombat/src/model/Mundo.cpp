@@ -166,6 +166,8 @@ void Mundo::_verificarColisiones(){
 
 	/*COLISION CAPA PRINCIPAL*/
 	switch (resultado){
+		case NO_COLISION:
+			break;
 		case COLISION_PERSONAJE_PERSONAJE_DEFENSA:
 			//chocan los dos personajes pero no atacando
 			break;
@@ -197,6 +199,8 @@ void Mundo::_verificarColisiones(){
 			//chocan los dos objetos
 			personaje_flipeado->getPoderActivo()->destruir();
 			personaje->getPoderActivo()->destruir();
+			break;
+		default:
 			break;
 	}
 }
