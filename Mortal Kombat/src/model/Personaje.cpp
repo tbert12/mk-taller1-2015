@@ -302,7 +302,8 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 			propH = 4;
 		}
 	}
-	rectangulo->h = getAlto()/propH;
+	if (propH) rectangulo->h = getAlto()/propH;
+	else rectangulo->h = 0;
 	rectangulo->y = m_yActual - getAlto() + rectangulo->h*propY;
 	rectangulo->w = spriteActual->getAncho() - sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
 	return rectangulo;
@@ -707,8 +708,8 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 
 	std::map<int, int> reaccionesAGolpes;
 	reaccionesAGolpes[SPRITE_GANCHO] = 				SPRITE_RECIBE_GANCHO;
-	reaccionesAGolpes[SPRITE_PINA_ALTA] = 			_estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_ALTO;
-	reaccionesAGolpes[SPRITE_PATADA_ALTA] = 		_estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_ALTO;
+	reaccionesAGolpes[SPRITE_PINA_ALTA] = 			SPRITE_RECIBE_ALTO;
+	reaccionesAGolpes[SPRITE_PATADA_ALTA] = 		SPRITE_RECIBE_ALTO;
 	reaccionesAGolpes[SPRITE_PATADA_SALTANDO] = 	SPRITE_RECIBE_FUERTE;
 	reaccionesAGolpes[SPRITE_PINA_SALTANDO] = 		SPRITE_RECIBE_FUERTE;
 	reaccionesAGolpes[GOLPE_DE_PODER] = 			SPRITE_RECIBE_FUERTE; //PODER
@@ -754,7 +755,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	}
 
 	_recibioGolpe = true;
-	printf("Va a vibrar %s\n",golpeFuerte ? "Si" : "No");
+
 	return golpeFuerte;
 }
 
