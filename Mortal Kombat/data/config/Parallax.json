@@ -76,12 +76,22 @@
 		"luchador2": "Liu Kang"
 	},
 	
-	"botones": {
-		"pina baja": 2,
-		"patada baja": 1,
-		"pina alta": 3,
-		"patada alta": 0,
-		"cubrirse": 6,
-		"lanzar arma": 4
+	"comandos": {
+		"luchador1": {
+			"pina baja": 2,
+			"patada baja": 1,
+			"pina alta": 3,
+			"patada alta": 0,
+			"cubrirse": 6,
+			"lanzar arma": 4
+		},
+		"luchador2": {
+			"pina baja": 2,
+			"patada baja": 1,
+			"pina alta": 3,
+			"patada alta": 0,
+			"cubrirse": 6,
+			"lanzar arma": 4
+		}
 	}
 }
