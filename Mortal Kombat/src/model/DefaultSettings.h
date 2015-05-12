@@ -94,6 +94,8 @@ const char* const IMAGEN_CARGANDO_JUEGO = "data/img/background/inicio.png";
 
 const float PERSONAJE_VELOCIDAD = 5.0;
 
+extern map<string, int>* mapa_comandos_default;
+
 
 using namespace std;
 
