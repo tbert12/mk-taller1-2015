@@ -18,6 +18,7 @@ Mundo::Mundo(float ancho,float alto) {
 	capaPrincipal = NULL;
 	tiempo_pantalla = NULL;
 	empezar = false;
+	partida_finalizada = false;
 }
 
 void Mundo::start(){
@@ -116,6 +117,17 @@ void Mundo::render(){
 	tiempo->actualizar();
 	if (tiempo->tiempoTerminado()){
 		//se termino el tiempo
+	}
+
+	if(capaPrincipal->getPersonajConFlip()->getVida() <= 0){
+		log("Partida finalizada, GANADOR: " + capaPrincipal->getPersonajSinFlip()->getNombre(),LOG_DEBUG);
+		partida_finalizada = true;
+		return;
+	}
+	else if (capaPrincipal->getPersonajSinFlip()->getVida() <= 0){
+		log("Partida finalizada, GANADOR: " + capaPrincipal->getPersonajConFlip()->getNombre(),LOG_DEBUG);
+		partida_finalizada = true;
+		return;
 	}
 
 	//verifico scroll

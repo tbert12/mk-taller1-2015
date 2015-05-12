@@ -21,6 +21,9 @@
 #include "../view/Ventana.h"
 #include "Personaje.h"
 
+Mundo* mundo;
+Controller* control;
+
 string ruta_archivo_configuracion = "data/config/Parallax.json";
 map<string, int>* mapa_comandos;
 
@@ -43,9 +46,28 @@ Mundo* cargarMundo(){
 	return unMundo;
 }
 
-void free(Mundo* mundo,Controller* c1){
-	delete mundo;
+void free(Mundo* un_mundo,Controller* c1){
+	delete un_mundo;
 	delete c1;
+}
+
+bool _recargarMundo(){
+	log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_WARNING );
+	free(mundo,control);
+	log ( "Refresh: se libero la memoria de lo cargado anteriormente", LOG_WARNING );
+
+
+	mundo = cargarMundo();
+	if (mundo == NULL){
+		log ( "No se pudo cargar el mundo luego del refresh, se cierra el programa", LOG_ERROR );
+		return false;
+	}
+
+	log( "Se creo correctamente el Mundo de la partida, luego del refresh", LOG_DEBUG );
+
+	//Creo el Controlador
+	control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos);
+	return true;
 }
 
 int main( int argc, char* args[] )
@@ -59,13 +81,13 @@ int main( int argc, char* args[] )
 		ruta_archivo_configuracion = args[1];
 	}
 
-	Mundo* mundo = cargarMundo();
+	mundo = cargarMundo();
 	if (mundo == NULL) {
 		return 1;
 	}
 
 	//Creo el Controlador
-	Controller* control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos);
+	control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos);
 
 	//While Principal
 	while( !control->Quit()){
@@ -76,26 +98,15 @@ int main( int argc, char* args[] )
 				control->Pressed();
 
 			} catch ( std::runtime_error &e ) {
-				log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_WARNING );
-				free(mundo,control);
-				log ( "Refresh: se libero la memoria de lo cargado anteriormente", LOG_WARNING );
-
-
-				mundo = cargarMundo();
-				if (mundo == NULL){
-					log ( "No se pudo cargar el mundo luego del refresh, se cierra el programa", LOG_ERROR );
-					return 1;
-				}
-
-				log( "Se creo correctamente el Mundo de la partida, luego del refresh", LOG_DEBUG );
-
-				//Creo el Controlador
-				control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos);
+				if(!_recargarMundo()) return 1;
 			}
 		}
 
 		//si no esta en pausa
 		if (!control->pausa()){
+			if(mundo->partida_finalizada){
+				if(!_recargarMundo()) return 1;
+			}
 			mundo->render();
 		}
 
@@ -108,5 +119,4 @@ int main( int argc, char* args[] )
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 
 	return 0;
-	//
 }

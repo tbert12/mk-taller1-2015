@@ -59,6 +59,7 @@ public:
 	void render();
 	virtual ~Mundo();
 	bool mostrarImagen(string ruta);
+	bool partida_finalizada;
 };
 
 #endif /* SRC_MODEL_MUNDO_H_ */
