@@ -688,7 +688,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	reaccionesAGolpes[SPRITE_PATADA_ALTA] = 		_estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_ALTO;
 	reaccionesAGolpes[SPRITE_PATADA_SALTANDO] = 	SPRITE_RECIBE_FUERTE;
 	reaccionesAGolpes[SPRITE_PINA_SALTANDO] = 		SPRITE_RECIBE_FUERTE;
-	reaccionesAGolpes[GOLPE_DE_PODER] = 			SPRITE_RECIBE_FUERTE;
+	reaccionesAGolpes[GOLPE_DE_PODER] = 			SPRITE_RECIBE_FUERTE; //PODER
 	reaccionesAGolpes[SPRITE_PATADA_ALTA_AGACHADO]= _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
 	reaccionesAGolpes[SPRITE_PATADA_BAJA_AGACHADO]= _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
 	reaccionesAGolpes[SPRITE_PINA_AGACHADO]= 		_estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
@@ -711,7 +711,8 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	DanioPorGolpe[GOLPE_DE_PODER]=  			Danio;
 
 	printf("Recibe Agachado:%s\n",reaccionesAGolpes[SPRITE_PINA_AGACHADO] == SPRITE_RECIBE_AGACHADO ? "SPRITE_RECIBE_AGACHADO" : "SPRITE_RECIBE_BAJO");
-
+	printf("Danio: %i\n",DanioPorGolpe[CodigoGolpe]);
+	printf("Accion %i\n",reaccionesAGolpes[CodigoGolpe]);
 	_cambiarSprite(reaccionesAGolpes[CodigoGolpe]);
 	QuitarVida(DanioPorGolpe[CodigoGolpe]);
 
@@ -732,6 +733,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	}
 
 	_recibioGolpe = true;
+
 	return golpeFuerte;
 }
 
