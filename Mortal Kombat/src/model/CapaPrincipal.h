@@ -12,6 +12,13 @@
 #include "Personaje.h"
 #include <SDL2/SDL.h>
 
+//Constants
+const int COLISION_PERSONAJE_PERSONAJE_DEFENSA = 0;
+const int COLISION_PERSONAJE_PERSONAJE_SIN_FLIP= 1;
+const int COLISION_PERSONAJE_PERSONAJE_CON_FLIP= 2;
+const int COLISION_PERSONAJE_OBJETO = 			 3;
+const int COLISION_OBJETO_OBJETO = 				 4;
+
 class CapaPrincipal: public Capa {
 
 public:
