@@ -289,10 +289,10 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	if (Accion == SPRITE_PATADA_ALTA or Accion == SPRITE_PINA_ALTA){
 		if ( spriteActual->primerFrame() ) propH = 4;
 		else propH = 0;
-	} else if (Accion == SPRITE_PATADA_BAJA or Accion == SPRITE_PINA_BAJA or Accion == SPRITE_PINA_AGACHADO){
+	} else if (Accion == SPRITE_PATADA_BAJA or Accion == SPRITE_PINA_BAJA or Accion == SPRITE_PINA_AGACHADO or Accion == SPRITE_PATADA_ALTA_AGACHADO){
 		propH = 6;
 		propY = 2;
-	} else if (Accion == SPRITE_PATADA_CIRCULAR or Accion == SPRITE_PATADA_SALTANDO){
+	} else if (Accion == SPRITE_PATADA_CIRCULAR or Accion == SPRITE_PATADA_SALTANDO or Accion == SPRITE_PATADA_BAJA_AGACHADO){
 		propH = 2;
 		propY = propH;
 	} else if (Accion == SPRITE_GANCHO){
