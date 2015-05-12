@@ -20,6 +20,8 @@ private:
 	SDL_Window* Window;
 	SDL_Renderer* Renderer;
 	std::vector<LTexture*> texturas;
+	SDL_Texture* textura_texto;
+	TTF_Font* font;
 
 public:
 
@@ -48,6 +50,7 @@ public:
 	LTexture* crearTextura();
 
 	bool mostrarImagen(string ruta);
+	bool mostrarTexto(string texto);
 
 	//limpia la pantalla
 	void clear();

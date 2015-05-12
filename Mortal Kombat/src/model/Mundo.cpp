@@ -122,11 +122,13 @@ void Mundo::render(){
 	if(capaPrincipal->getPersonajConFlip()->getVida() <= 0){
 		log("Partida finalizada, GANADOR: " + capaPrincipal->getPersonajSinFlip()->getNombre(),LOG_DEBUG);
 		partida_finalizada = true;
+		_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
 		return;
 	}
 	else if (capaPrincipal->getPersonajSinFlip()->getVida() <= 0){
 		log("Partida finalizada, GANADOR: " + capaPrincipal->getPersonajConFlip()->getNombre(),LOG_DEBUG);
 		partida_finalizada = true;
+		_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
 		return;
 	}
 
@@ -158,6 +160,7 @@ void Mundo::_verificarColisiones(){
 
 	if (resultado == COLISION_NO_COLISION ) return;
 
+	int accion;
 	Personaje* personaje = capaPrincipal->getPersonajSinFlip();
 	Personaje* personaje_flipeado = capaPrincipal->getPersonajConFlip();
 
@@ -168,29 +171,25 @@ void Mundo::_verificarColisiones(){
 			break;
 		case COLISION_PERSONAJE_PERSONAJE_SIN_FLIP:
 			//personaje ataca a personaje_flipeado
-			int accion = personaje->getAccionDeAtaque();
-			personaje_flipeado->recibirGolpe(accion);
-			if(accion == SPRITE_GANCHO || accion == SPRITE_PATADA_SALTANDO || accion == SPRITE_PINA_SALTANDO)
+			accion = personaje->getAccionDeAtaque();
+			if(personaje_flipeado->recibirGolpe(accion))
 				ventana->vibrar();
 			break;
 		case COLISION_PERSONAJE_PERSONAJE_CON_FLIP:
 			//personaje_flipeado ataca a personaje
-			int accion = personaje_flipeado->getAccionDeAtaque();
-			personaje->recibirGolpe(accion);
-			if(accion == SPRITE_GANCHO || accion == SPRITE_PATADA_SALTANDO || accion == SPRITE_PINA_SALTANDO)
+			accion = personaje_flipeado->getAccionDeAtaque();
+			if(personaje->recibirGolpe(accion))
 				ventana->vibrar();
 			break;
 		case COLISION_PERSONAJE_OBJETO_SIN_FLIP:
 			//objeto de personaje choco a personaje_flipeado
-			personaje_flipeado->recibirGolpe(GOLPE_DE_PODER,personaje->getPoderActivo()->getDanio());
-			if(personaje->getPoderActivo()->getDanio() > MIN_VIBRAR)
+			if(personaje_flipeado->recibirGolpe(GOLPE_DE_PODER,personaje->getPoderActivo()->getDanio()))
 				ventana->vibrar();
 			personaje->getPoderActivo()->destruir();
 			break;
 		case COLISION_PERSONAJE_OBJETO_CON_FLIP:
 			//objeto de personaje_flipeado choco a personaje
-			personaje->recibirGolpe(GOLPE_DE_PODER,personaje_flipeado->getPoderActivo()->getDanio());
-			if(personaje_flipeado->getPoderActivo()->getDanio() > MIN_VIBRAR)
+			if(personaje->recibirGolpe(GOLPE_DE_PODER,personaje_flipeado->getPoderActivo()->getDanio()))
 				ventana->vibrar();
 			personaje_flipeado->getPoderActivo()->destruir();
 			break;
@@ -200,6 +199,12 @@ void Mundo::_verificarColisiones(){
 			personaje->getPoderActivo()->destruir();
 			break;
 	}
+}
+
+void Mundo::_mostrar_ganador(string nombre){
+	string texto = "Ganador \n" + nombre;
+	ventana->mostrarTexto(texto);
+	usleep(3000);
 }
 
 Mundo::~Mundo() {

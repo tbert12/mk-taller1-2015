@@ -10,7 +10,7 @@
 TiempoPartida::TiempoPartida(Ventana* una_ventana, Tiempo* un_tiempo) {
 	m_tiempo = un_tiempo;
 	m_ventana = una_ventana;
-	font = TTF_OpenFont("data/font/tiempo.ttf", (int)(m_ventana->obtenerAlto()*(0.1)*m_ventana->obtenerRatioY() +0.5) );
+	font = TTF_OpenFont("data/font/fuente.ttf", (int)(m_ventana->obtenerAlto()*(0.1)*m_ventana->obtenerRatioY() +0.5) );
 	if( font == NULL ){
 		log("No se pudo cargar la fuente del tiempo",LOG_ERROR);
 	}

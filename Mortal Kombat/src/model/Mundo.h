@@ -23,10 +23,8 @@
 #include "../view/TiempoPartida.h"
 #include <vector>
 #include <algorithm>
+#include <unistd.h>
 #include "logging.h"
-
-#define MIN_VIBRAR 3
-
 
 class Mundo {
 private:
@@ -46,6 +44,7 @@ private:
 	void _crearBarras();
 	void _crearTiempo();
 	void _renderEstado();
+	void _mostrar_ganador(string nombre);
 	BarraEnergia* BarraJugador1;
 	BarraEnergia* BarraJugador2;
 public:

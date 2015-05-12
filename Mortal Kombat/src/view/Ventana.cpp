@@ -11,6 +11,8 @@ Ventana::Ventana(int screenWidth, int screenHeight, float ratiox,float ratioy)
 	Window = NULL;
 	Renderer = NULL;
 	m_vibrar = false;
+	font = NULL;
+	textura_texto = NULL;
 }
 
 void Ventana::vibrar(){
@@ -62,7 +64,6 @@ float Ventana::obtenerAlto()
 {
 	return m_alto_px/ratio_y;
 }
-
 
 bool Ventana::create_window()
 {
@@ -143,6 +144,10 @@ void Ventana::close_window()
 	//gSpriteSheetTexture.free();
 
 	//Destruir Ventanas
+	if (textura_texto != NULL)
+		SDL_DestroyTexture(textura_texto);
+	if (font != NULL)
+		TTF_CloseFont(font);
 	SDL_DestroyRenderer( Renderer );
 	SDL_DestroyWindow( Window );
 	Window = NULL;
@@ -175,5 +180,55 @@ bool Ventana::mostrarImagen(string ruta){
 void Ventana::Refresh(){
 	//Actualizar pantalla
 	SDL_RenderPresent( Renderer );
+}
+
+bool Ventana::mostrarTexto(string texto){
+	font = TTF_OpenFont("data/font/fuente.ttf", (int)(m_alto_px*(0.3) +0.5) );
+	int ancho,alto;
+	if( font == NULL ){
+		log("No se pudo cargar la fuente del tiempo",LOG_ERROR);
+		return false;
+	}
+	if( textura_texto != NULL ){
+			SDL_DestroyTexture( textura_texto);
+			textura_texto = NULL;
+			ancho = 0;
+			alto = 0;
+	}
+
+	SDL_Color textColor = { 255, 247, 0 };
+
+	//Render text surface
+	SDL_Surface* textSurface = TTF_RenderText_Solid( font, texto.c_str(), textColor );
+	if( textSurface == NULL ){
+		log("No se puede crear la textura del tiempo",LOG_ERROR);
+		return false;
+	}
+	else{
+		//Create texture from surface pixels
+		textura_texto = SDL_CreateTextureFromSurface( Renderer, textSurface );
+		if( textura_texto == NULL ){
+			log("No se puede crear la textura del tiempo",LOG_ERROR);
+			return false;
+		}
+		else{
+			//Get image dimensions
+			ancho = textSurface->w;
+			alto = textSurface->h;
+		}
+		//Get rid of old surface
+		SDL_FreeSurface( textSurface );
+	}
+	//Return success
+	return textura_texto != NULL;
+
+	int pos_x = (int)((m_ancho_px/2 - ancho)/ 2 +0.5);
+	int pos_y =	(int)((m_alto_px/2 - alto)/ 2 +0.5);
+
+	SDL_Rect renderQuad = { pos_x, pos_y, ancho, alto};
+	//Render to screen
+	SDL_RenderCopyEx( Renderer, textura_texto, NULL, &renderQuad, 0.0, NULL,SDL_FLIP_NONE);
+	Refresh();
+	return true;
 }
 
