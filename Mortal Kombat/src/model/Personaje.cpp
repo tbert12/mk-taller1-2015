@@ -269,21 +269,41 @@ void Personaje::renderizar(float x_dist_ventana,float posOtherPlayer){
 
 Rect_Logico* Personaje::rectanguloAtaque(){
 	if (!_estaAtacando) return NULL;
+	int Accion = getAccionDeAtaque();
+	int propH = 1; //Proporsiones Harcodeadas para formar rectangulos acordes
+	int propY = 1;
 	/* Casos a Resolver
-	 * 		-Pina Alta, Patada Alta
-	 * 		-Patada Saltando, Pina Saltando
+	 * 	OK	-Pina Alta, Patada Alta
+	 * 	OK	-Patada Saltando, Pina Saltando
 	 * 	OK  -Pina Baja, Patada Baja
-	 * 		-Patada Agachado, Pina Agachado
-	 * 		-Gancho
+	 * 	OK	-Patada Agachado, Pina Agachado
+	 * 	OK	-Gancho
 	 */
 
 	Rect_Logico* rectangulo = new Rect_Logico;
 	if(m_fliped)
-		rectangulo->x = m_xActual - spriteActual->getAncho();
+		rectangulo->x = m_xActual - sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
 	else
 		rectangulo->x = m_xActual + sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
-	rectangulo->h = getAlto()/2;
-	rectangulo->y = m_yActual - rectangulo->h;
+
+	if (Accion == SPRITE_PATADA_ALTA or Accion == SPRITE_PINA_ALTA){
+		if ( spriteActual->primerFrame() ) propH = 4;
+		else propH = 0;
+	} else if (Accion == SPRITE_PATADA_BAJA or Accion == SPRITE_PINA_BAJA or Accion == SPRITE_PINA_AGACHADO or Accion == SPRITE_PATADA_ALTA_AGACHADO){
+		propH = 6;
+		propY = 2;
+	} else if (Accion == SPRITE_PATADA_CIRCULAR or Accion == SPRITE_PATADA_SALTANDO or Accion == SPRITE_PATADA_BAJA_AGACHADO){
+		propH = 2;
+		propY = propH;
+	} else if (Accion == SPRITE_GANCHO){
+		if (!spriteActual->proxFrameUltimo()){
+			propH = 0; //Por lo que veo C++ sabe dividir por 0
+		} else {
+			propH = 4;
+		}
+	}
+	rectangulo->h = getAlto()/propH;
+	rectangulo->y = m_yActual - getAlto() + rectangulo->h*propY;
 	rectangulo->w = spriteActual->getAncho() - sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
 	return rectangulo;
 }
@@ -297,10 +317,13 @@ Rect_Logico* Personaje::nextRectAtaque(){
 
 Rect_Logico* Personaje::rectanguloDefensa(){
 	Rect_Logico* rectangulo = new Rect_Logico;
+	float MinAncho = sprites[SPRITE_CUBRIRSE]->getAncho();
 	rectangulo->y=  m_yActual;
-	rectangulo->w = sprites[SPRITE_CUBRIRSE]->getAncho() - getAncho()*0.25; //El mas Angosto
-	if(m_fliped) rectangulo->x = m_xActual - getAncho()*0.75;
-	else rectangulo->x = m_xActual + getAncho()*0.25;
+	if(m_fliped)
+		rectangulo->x = m_xActual - MinAncho*0.75;
+	else
+		rectangulo->x = m_xActual + MinAncho*0.35;
+	rectangulo->w = MinAncho - getAncho()*0.25; //El mas Angosto
 	rectangulo->h = spriteActual->getAlto();
 	return rectangulo;
 }
@@ -414,7 +437,7 @@ void Personaje::Inicial(){
 }
 
 void Personaje::Frenar(){
-	if (_estaSaltando > 0 or _estaAgachado) return;
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
 	m_velocidadActual = 0;
 	Inicial();
 }
@@ -710,11 +733,9 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	DanioPorGolpe[SPRITE_PATADA_CIRCULAR]=  	QUITAR_VIDA_PATADA_CIRCULAR;
 	DanioPorGolpe[GOLPE_DE_PODER]=  			Danio;
 
-	printf("Recibe Agachado:%s\n",reaccionesAGolpes[SPRITE_PINA_AGACHADO] == SPRITE_RECIBE_AGACHADO ? "SPRITE_RECIBE_AGACHADO" : "SPRITE_RECIBE_BAJO");
-	printf("Danio: %i\n",DanioPorGolpe[CodigoGolpe]);
-	printf("Accion %i\n",reaccionesAGolpes[CodigoGolpe]);
 	_cambiarSprite(reaccionesAGolpes[CodigoGolpe]);
 	QuitarVida(DanioPorGolpe[CodigoGolpe]);
+	spriteActual->freezeSprite();
 
 	if (CodigoGolpe == SPRITE_GANCHO){
 		maxAlturaDeSalto = ALTURA_SALTO_GANCHO * getAlto();
@@ -723,7 +744,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 		spriteActual->doLoop(true);
 	}
 
-	if (CodigoGolpe == -1 or (DanioPorGolpe[CodigoGolpe] >= MIN_GOLPE_FUERTE and CodigoGolpe != SPRITE_PATADA_CIRCULAR) ){
+	if (DanioPorGolpe[CodigoGolpe] >= MIN_GOLPE_FUERTE and CodigoGolpe != SPRITE_PATADA_CIRCULAR){
 		golpeFuerte = true;
 		if (m_fliped){
 			m_velocidadActual = m_velocidad;
@@ -733,7 +754,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	}
 
 	_recibioGolpe = true;
-
+	printf("Va a vibrar %s\n",golpeFuerte ? "Si" : "No");
 	return golpeFuerte;
 }
 
