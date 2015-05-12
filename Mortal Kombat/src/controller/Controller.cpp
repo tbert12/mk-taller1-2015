@@ -7,7 +7,7 @@
 
 #include "Controller.h"
 
-Controller::Controller(Personaje* un_personaje,Personaje* otro_personaje,map<string, int>* mapa_comandos) {
+Controller::Controller(Personaje* un_personaje,Personaje* otro_personaje,map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2) {
 	personaje_1 = un_personaje;
 	personaje_2 = otro_personaje;
 	quit = false;
@@ -16,7 +16,7 @@ Controller::Controller(Personaje* un_personaje,Personaje* otro_personaje,map<str
 	Joystick_2 = NULL;
 	Teclado = NULL;
 	SDL_JoystickEventState(SDL_ENABLE);
-	_Init(mapa_comandos);
+	_Init(mapa_comandos1,mapa_comandos2);
 }
 bool Controller::pausa(){
 	if (Teclado != NULL){
@@ -43,23 +43,23 @@ bool Controller::PollEvent(){
 	return (SDL_PollEvent( &evento ) != 0);
 }
 
-void Controller::_Init(map<string, int>* mapa_comandos){
+void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2){
 	int cant_joy = SDL_NumJoysticks();
 
 	//Si hay dos joystick los uso;
 	if (cant_joy >= 2){
 		log("Hay mas de dos joystick conectados, se setean al jugador 1 y 2 .Ademas se crea el teclado para el personaje 1",LOG_DEBUG);
 		if (personaje_1 != NULL)
-			Joystick_1 = new JoystickControl(&evento,0,personaje_1,mapa_comandos);
+			Joystick_1 = new JoystickControl(&evento,0,personaje_1,mapa_comandos1);
 			Teclado = new KeyboardControl(&evento,personaje_1,false);
 		if(personaje_2 != NULL)
-			Joystick_2 = new JoystickControl(&evento,1,personaje_2,mapa_comandos);
+			Joystick_2 = new JoystickControl(&evento,1,personaje_2,mapa_comandos2);
 	}
 	//hay solo un joy entonces es para el jugador uno, el 2 con teclado
 	else if (cant_joy == 1){
 		log("Hay solo un joystick, se le setea al jugador 1, y el teclado al jugador 2",LOG_WARNING);
 		if (personaje_1 != NULL)
-			Joystick_1 = new JoystickControl(&evento,0,personaje_1,mapa_comandos);
+			Joystick_1 = new JoystickControl(&evento,0,personaje_1,mapa_comandos1);
 		if(personaje_2 != NULL)
 			Teclado = new KeyboardControl(&evento,personaje_2,true);
 	}
