@@ -65,6 +65,7 @@ class Sprite {
 		float getAncho();
 		float getAlto();
 
+		void vibrar();
 		void setRender(SDL_Renderer* Renderer);
 		void render(float x,float y, bool fliped);
 
