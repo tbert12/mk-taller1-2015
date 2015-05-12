@@ -556,6 +556,11 @@ void ParserJSON::cargarMapaComandos(Json::Value root) {
 		return;
 	}
 
+	if ( ! root["comandos"].isMember("luchador1") || ! root["comandos"].isMember("luchador2") ) {
+		log("No se especificaron correctamente los parametros para el mapeo de comandos y botones de los jugadores o de algun jugador. Se setean por defecto.", LOG_WARNING);
+		mapaComandosDefault(comandos_luchador1, comandos_luchador2);
+		return;
+	}
 
 	log("Se cargara la configuracion del comando de pina baja.", LOG_DEBUG);
 	int comando_pina_baja1 = cargarComando(root["comandos"]["luchador1"], "pina baja", COMANDO_PINA_BAJA_DEFAULT);
