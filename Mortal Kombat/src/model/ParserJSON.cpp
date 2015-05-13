@@ -856,11 +856,23 @@ Mundo* ParserJSON::cargarMundo() {
 
 	if ( error_abrir_archivo ) {
 		log( "No se pudo abrir el archivo de configuracion JSON, se genera una partida por defecto.", LOG_ERROR );
-		return generarMundoDefault();
+		//return generarMundoDefault();
+
+		/*HARDCODEO ZARPADISIMO*/
+		archivoConfig.open("data/config/default.json");
+		reader.parse( archivoConfig, root, false );
+		/*----------------------*/
+
 	}
 	if ( json_invalido ) {
 	    log( "No se pudo interpretar el JSON, se genera una partida por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
-	    return generarMundoDefault();
+	    //return generarMundoDefault();
+
+		/*HARDCODEO ZARPADISIMO*/
+		archivoConfig.open("data/config/default.json");
+		reader.parse( archivoConfig, root, false );
+		/*----------------------*/
+
 	}
 	if ( loglvl_no_seteado ) {
 		log( "No se especifico el nivel de logging. Se setea en modo DEBUG por defecto.", LOG_WARNING );

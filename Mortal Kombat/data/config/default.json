@@ -13,46 +13,61 @@
 	"escenario": {
 		"ancho": 600,
 		"alto": 150,
-		"y-piso": 135
+		"y-piso": 135,
+		"z-index_personajes": 3
 	},
 	
 	"capas": [
 		{
 			"imagen_fondo": "data/img/background/default/background_0.png",
-			"ancho": 200,
-			"z-index": 0
+			"ancho": 200
 		},
 		{
 			"imagen_fondo": "data/img/background/default/background_1.png",
-			"ancho": 226.6,
-			"z-index": 1
+			"ancho": 226.6
 		},
 		{
 			"imagen_fondo": "data/img/background/default/background_2.png",
-			"ancho": 600,
-			"z-index": 2
+			"ancho": 600
 		}
 	],
 	
-	"personaje": {
-		"ancho": 40,
-		"alto": 70,
-		"z-index": 3,
+	"personajes": [
+		{
+		"nombre": "Jugador",
 		"sprites": "data/players/subzero/sprites/",
-		"nombre": "Sub-Zero"	
-	}
+		"poderes": "data/players/subzero/poderes/",
+		"color-alternativo": {
+			"h-inicial": 180,
+			"h-final": 200,
+			"desplazamiento": 50
+		},
+		"ancho": 40,
+		"alto": 70
+		}
+	],
 	
-	"botones": {
-		"arriba": "SDLK_UP",
-		"abajo": "SDLK_DOWN",
-		"derecha": "SDLK_RIGHT",
-		"izquierda": "SDLK_LEFT",
-		"pina baja": "SDLK_a",
-		"patada baja": "SDLK_s",
-		"pina alta": "SDLK_q",
-		"patada alta": "SDLK_w",
-		"cubrirse": "SDLK_d",
-		"lanzar arma": "SDLK_e"
+	"pelea": {
+		"luchador1": "Jugador",
+		"luchador2": "Jugador"
+	},
+	
+	"comandos": {
+		"luchador1": {
+			"pina baja": 2,
+			"patada baja": 1,
+			"pina alta": 3,
+			"patada alta": 0,
+			"cubrirse": 4,
+			"lanzar arma": 5
+		},
+		"luchador2": {
+			"pina baja": 2,
+			"patada baja": 1,
+			"pina alta": 3,
+			"patada alta": 0,
+			"cubrirse": 4,
+			"lanzar arma": 5
+		}
 	}
-
 }
