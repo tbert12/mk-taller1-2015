@@ -63,11 +63,17 @@ int CapaPrincipal::CheckearColisiones(){
 	Personaje* personaje;
 	Personaje* personajeFlippeado;
 
+	printf("%i \n",m_PersonajeUno->getFlipState());
+	printf("%i \n",m_PersonajeDos->getFlipState());
+
 	if(m_PersonajeUno->getFlipState() == m_PersonajeDos->getFlipState()){
-		if(m_PersonajeUno->getX() < m_PersonajeDos->getX())
+		if(m_PersonajeUno->getX() < m_PersonajeDos->getX()){
 			m_PersonajeUno->setFlip(false);
-		else
+			m_PersonajeDos->setFlip(true);
+		}else{
 			m_PersonajeUno->setFlip(true);
+			m_PersonajeDos->setFlip(false);
+		}
 	}
 
 	if(m_PersonajeUno->getFlipState()){
@@ -161,11 +167,11 @@ void CapaPrincipal::_ChequearSiSePisan(){
 		if(sePisanX){
 			printf("aca \n");
 			if(!(rectDefensa1->x+ rectDefensa1->w*.5f >= rectDefensa2->x - rectDefensa2->w*.5f)){
-				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()+m_personajeSinFlip->getAncho()*.5f);
-				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()-m_personajeConFlip->getAncho()*.5f);
+				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()+m_personajeSinFlip->getAncho()*.05f);
+				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()-m_personajeConFlip->getAncho()*.05f);
 			}else{
-				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()-m_personajeSinFlip->getAncho()*.5f);
-				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()+m_personajeConFlip->getAncho()*.5f);
+				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()-m_personajeSinFlip->getAncho()*.05f);
+				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()+m_personajeConFlip->getAncho()*.05f);
 			}
 			if(m_personajeSinFlip->getX() + m_personajeSinFlip->getAncho()*.5f > m_personajeConFlip->getX() - m_personajeConFlip->getAncho()*.5f){
 				m_personajeSinFlip->setFlip(true);
