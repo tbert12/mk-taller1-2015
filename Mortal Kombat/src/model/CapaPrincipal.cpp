@@ -71,6 +71,14 @@ int CapaPrincipal::CheckearColisiones(){
 		personaje = m_PersonajeUno;
 	}
 
+	if(m_PersonajeUno->getFlipState() == m_PersonajeDos->getFlipState()){
+		if(m_PersonajeUno->getX() < m_PersonajeDos->getX())
+			m_PersonajeUno->setFlip(false);
+		else
+			m_PersonajeUno->setFlip(true);
+	}
+
+
 	if(personaje->getX() + personaje->getAncho()*.5f > personajeFlippeado->getX() - personajeFlippeado->getAncho()*.5f){
 		personaje->setFlip(true);
 		personajeFlippeado->setFlip(false);
@@ -138,10 +146,11 @@ void CapaPrincipal::_ChequearSiSePisan(){
 	Rect_Logico* rectDefensa1 = m_personajeSinFlip->rectanguloDefensa();
 	Rect_Logico* rectDefensa2 = m_personajeConFlip->rectanguloDefensa();
 
-	bool colisionaDefensaPersonajesX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w*1.5f));
-	bool sePisanX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w));
+	bool colisionaDefensaPersonajesX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w*1.5f)) or (floatIsBetween(rectDefensa1->x ,rectDefensa2->x - rectDefensa2->w * 1.5f,rectDefensa2->w ));
+	bool sePisanX = (floatIsBetween(m_personajeConFlip->getX() ,m_personajeSinFlip->getX(),m_personajeSinFlip->getAncho())) or (floatIsBetween(m_personajeSinFlip->getX() ,m_personajeConFlip->getX() - m_personajeConFlip->getAncho(),m_personajeConFlip->getAncho()));
 	//bool colisionaDefensaPersonajesX = false;
 	if(colisionaDefensaPersonajesX){
+
 		if(hayAlguienSaltando){
 			personajeSaltando->Update(personajeEnElSuelo->getX(),true);//lo hago dos veces para que se mueva el doble
 			personajeSaltando->Update(personajeEnElSuelo->getX(),true);//porque el update a algo quito no lo mueve
@@ -153,11 +162,11 @@ void CapaPrincipal::_ChequearSiSePisan(){
 			m_personajeConFlip->Frenar();
 		if(sePisanX){
 			if(!(rectDefensa1->x+ rectDefensa1->w*.5f >= rectDefensa2->x - rectDefensa2->w*.5f)){
-				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()+m_personajeSinFlip->getAncho()*.05f);
-				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()-m_personajeConFlip->getAncho()*.05f);
+				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()+m_personajeSinFlip->getAncho()*.5f);
+				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()-m_personajeConFlip->getAncho()*.5f);
 			}else{
-				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()-m_personajeSinFlip->getAncho()*.05f);
-				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()+m_personajeConFlip->getAncho()*.05f);
+				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()-m_personajeSinFlip->getAncho()*.5f);
+				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()+m_personajeConFlip->getAncho()*.5f);
 			}
 			if(m_personajeSinFlip->getX() + m_personajeSinFlip->getAncho()*.5f > m_personajeConFlip->getX() - m_personajeConFlip->getAncho()*.5f){
 				m_personajeSinFlip->setFlip(true);
