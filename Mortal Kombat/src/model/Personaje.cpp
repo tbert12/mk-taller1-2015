@@ -155,10 +155,7 @@ void Personaje::Update(float posDeOtroJugador){
 		}
 		return;
 	}
-	float renderX = m_xActual;
-	if(m_mover)
-		renderX += m_velocidadActual;
-
+	float renderX = m_xActual + m_velocidadActual;
 	float maximo,minimo;
 	if(m_fliped){
 		maximo = m_AnchoMundo;
@@ -176,7 +173,7 @@ void Personaje::Update(float posDeOtroJugador){
 					if(m_mover) m_xActual = renderX;
 				}
 			} else {
-				if(m_mover and !estaElotroJugador) m_xActual = renderX;
+				if(m_mover /*and !estaElotroJugador*/) m_xActual = renderX;
 			}
 		}
 	}
