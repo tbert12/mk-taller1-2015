@@ -1,6 +1,6 @@
 {
 
-	"loglvl": 2,
+	"loglvl": 1,
 	
 	"tiempo": 99,
 
@@ -82,16 +82,16 @@
 			"patada baja": 1,
 			"pina alta": 3,
 			"patada alta": 0,
-			"cubrirse": 6,
-			"lanzar arma": 4
+			"cubrirse": 4,
+			"lanzar arma": 5
 		},
 		"luchador2": {
 			"pina baja": 2,
 			"patada baja": 1,
 			"pina alta": 3,
 			"patada alta": 0,
-			"cubrirse": 6,
-			"lanzar arma": 4
+			"cubrirse": 4,
+			"lanzar arma": 5
 		}
 	}
 }
