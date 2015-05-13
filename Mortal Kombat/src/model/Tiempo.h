@@ -18,7 +18,7 @@ public:
 private:
 	int m_tiempoLimite;
 	int m_tiempoRestante;
-	std::time_t tiempo;
+	time_t tiempo;
 };
 
 #endif /* SRC_MODEL_TIEMPO_H_ */
