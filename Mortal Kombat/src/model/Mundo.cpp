@@ -166,11 +166,6 @@ void Mundo::_verificarColisiones(){
 
 	/*COLISION CAPA PRINCIPAL*/
 	switch (resultado){
-		case COLISION_NO_COLISION:
-			break;
-		case COLISION_PERSONAJE_PERSONAJE_DEFENSA:
-			//chocan los dos personajes pero no atacando
-			break;
 		case COLISION_PERSONAJE_PERSONAJE_SIN_FLIP:
 			//personaje ataca a personaje_flipeado
 			accion = personaje->getAccionDeAtaque();
