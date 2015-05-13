@@ -63,9 +63,6 @@ int CapaPrincipal::CheckearColisiones(){
 	Personaje* personaje;
 	Personaje* personajeFlippeado;
 
-	printf("%i \n",m_PersonajeUno->getFlipState());
-	printf("%i \n",m_PersonajeDos->getFlipState());
-
 	if(m_PersonajeUno->getFlipState() == m_PersonajeDos->getFlipState()){
 		if(m_PersonajeUno->getX() < m_PersonajeDos->getX()){
 			m_PersonajeUno->setFlip(false);
@@ -165,7 +162,6 @@ void CapaPrincipal::_ChequearSiSePisan(){
 		if(m_personajeConFlip->getSentidoDeMovimiento()<0)
 			m_personajeConFlip->Frenar();
 		if(sePisanX){
-			printf("aca \n");
 			if(!(rectDefensa1->x+ rectDefensa1->w*.5f >= rectDefensa2->x - rectDefensa2->w*.5f)){
 				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()+m_personajeSinFlip->getAncho()*.05f);
 				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()-m_personajeConFlip->getAncho()*.05f);

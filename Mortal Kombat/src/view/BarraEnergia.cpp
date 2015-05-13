@@ -8,6 +8,7 @@
 #include "BarraEnergia.h"
 #define RUTA_BASE "data/img/estado/barras/energia_vacia.png"
 #define RUTA_RELLENO "data/img/estado/barras/energia_llena.png"
+#define RUTA_TTF "data/font/fuente.ttf"
 
 BarraEnergia::BarraEnergia(Ventana* una_ventana,int max_barra) {
 	ventana = una_ventana;
@@ -23,6 +24,21 @@ BarraEnergia::BarraEnergia(Ventana* una_ventana,int max_barra) {
 	textura_relleno = NULL;
 	_loadBase();
 	_loadRelleno();
+
+	//Para el nombre
+	font = TTF_OpenFont(RUTA_TTF, (int)(ventana->obtenerAlto()*(0.04)*ventana->obtenerRatioY() +0.5) );
+	if( font == NULL ){
+		log("No se pudo cargar la fuente del tiempo",LOG_ERROR);
+	}
+	texturaNombreTexto = NULL;
+	textoConstante = "Player";
+	anchoTexto = 0;
+	altoTexto = 0;
+	textColor = { 255, 247, 0 };
+}
+
+void BarraEnergia::setNombreBarra(string nom){
+	textoConstante = nom;
 }
 
 void BarraEnergia::setFlip(){
@@ -140,6 +156,28 @@ void BarraEnergia::_renderBase(){
 	if(flip) flipType = SDL_FLIP_HORIZONTAL;
 
 	SDL_RenderCopyEx( ventana->getRenderer(), textura_base, rect_base, &Object,  0 , 0, flipType);
+}
+
+void BarraEnergia::_renderText(){
+	if (texturaNombreTexto == NULL)
+		_loadFromRenderedText(textoConstante);
+	
+	int pos_x;
+	int pos_y = (int)(ventana->obtenerAlto()*(0.11)*ventana->obtenerRatioY() + 0.5);
+
+	if (!flip){ //esta en la izquierda
+		pos_x = (int)(ventana->obtenerAncho()*(0.03)*ventana->obtenerRatioX() + 0.5);
+	}
+	else{ //esta en la derecha
+		float dist_borde= (ventana->obtenerAncho()*(0.02)*ventana->obtenerRatioX());
+
+		pos_x = (int)((ventana->obtenerAncho() - dist_borde)*ventana->obtenerRatioX() +0.5) - anchoTexto -5;
+	}
+
+	SDL_Rect renderQuad = { pos_x, pos_y, anchoTexto, altoTexto };
+
+	//Render to screen
+	SDL_RenderCopyEx( ventana->getRenderer(), texturaNombreTexto, NULL, &renderQuad, 0.0, NULL,SDL_FLIP_NONE);
 
 }
 
@@ -179,6 +217,39 @@ void BarraEnergia::_renderRelleno(int estado){
 	SDL_RenderCopyEx( ventana->getRenderer(), textura_relleno, &clip, &Object,  0 , 0, flipType);
 }
 
+bool BarraEnergia::_loadFromRenderedText( std::string textureText){
+	//Get rid of preexisting texture
+	if( texturaNombreTexto != NULL ){
+		SDL_DestroyTexture( texturaNombreTexto );
+		texturaNombreTexto = NULL;
+	}
+
+	//Render text surface
+	SDL_Surface* textSurface = TTF_RenderText_Solid( font, textureText.c_str(), textColor );
+	if( textSurface == NULL ){
+		log("No se puede crear la textura del tiempo",LOG_ERROR);
+	}
+	else{
+
+		//Create texture from surface pixels
+		texturaNombreTexto = SDL_CreateTextureFromSurface( ventana->getRenderer(), textSurface );
+		if( texturaNombreTexto == NULL ){
+			log("No se puede crear la textura del tiempo",LOG_ERROR);
+		}
+		else{
+			//Get image dimensions
+			anchoTexto = textSurface->w;
+			altoTexto = textSurface->h;
+		}
+
+		//Get rid of old surface
+		SDL_FreeSurface( textSurface );
+	}
+
+	//Return success
+	return texturaNombreTexto != NULL;
+}
+
 void BarraEnergia::render(int estado){
 	if (textura_base == NULL or textura_relleno == NULL){
 		if (textura_base == NULL )printf("BASE es null\n");
@@ -188,6 +259,7 @@ void BarraEnergia::render(int estado){
 	}
 	_renderBase();
 	_renderRelleno(estado);
+	_renderText();
 }
 
 BarraEnergia::~BarraEnergia() {
@@ -201,6 +273,12 @@ BarraEnergia::~BarraEnergia() {
 		textura_relleno = NULL;
 	}
 	delete rect_relleno;
+	if( texturaNombreTexto != NULL ){
+		SDL_DestroyTexture( texturaNombreTexto);
+		texturaNombreTexto = NULL;
+	}
+	if (font)
+		TTF_CloseFont( font );
 	ventana = NULL;
 }
 

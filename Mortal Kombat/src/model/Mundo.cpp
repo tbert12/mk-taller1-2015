@@ -51,6 +51,15 @@ void Mundo::addCapaPrincipal( CapaPrincipal* capa_principal, int index ) {
 		personajes_z_index = index;
 	}
 	capaPrincipal = capa_principal;
+	
+	if (BarraJugador1){
+		BarraJugador1->setNombreBarra(capa_principal->getPersonajSinFlip()->getNombre());
+	}
+	
+	if (BarraJugador2){
+		BarraJugador2->setNombreBarra(capa_principal->getPersonajConFlip()->getNombre());
+	}
+	
 }
 
 Capa* Mundo::getCapa(int indice){
@@ -110,8 +119,6 @@ void Mundo::render(){
 		start();
 		empezar = true;
 	}
-	//limpio pantalla
-	ventana->clear();
 
 	//verifico el tiempo
 	tiempo->actualizar();
@@ -122,16 +129,19 @@ void Mundo::render(){
 	if(capaPrincipal->getPersonajConFlip()->getVida() <= 0){
 		log("Partida finalizada, GANADOR: " + capaPrincipal->getPersonajSinFlip()->getNombre(),LOG_DEBUG);
 		partida_finalizada = true;
-		//_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
+		_mostrar_ganador(capaPrincipal->getPersonajSinFlip()->getNombre());
 		return;
 	}
 	else if (capaPrincipal->getPersonajSinFlip()->getVida() <= 0){
 		log("Partida finalizada, GANADOR: " + capaPrincipal->getPersonajConFlip()->getNombre(),LOG_DEBUG);
 		partida_finalizada = true;
-		//_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
+		_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
 		return;
 	}
-
+	
+	//limpio pantalla
+	ventana->clear();
+	
 	//verifico scroll
 	int scroll = _verificarScroll();
 
@@ -203,7 +213,7 @@ void Mundo::_verificarColisiones(){
 void Mundo::_mostrar_ganador(string nombre){
 	string texto = "Ganador \n" + nombre;
 	ventana->mostrarTexto(texto);
-	usleep(3000);
+	usleep(3000000);
 }
 
 Mundo::~Mundo() {

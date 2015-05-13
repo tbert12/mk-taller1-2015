@@ -30,10 +30,20 @@ private:
 	void _renderBase();
 	void _renderRelleno(int estado);
 	void _actualizarActual(int estado);
+
+	//Nombre Texto
+	int anchoTexto,altoTexto;
+	bool _loadFromRenderedText( std::string textureText);
+	void _renderText();
+	string textoConstante;
+	SDL_Texture* texturaNombreTexto;
+	TTF_Font* font;
+	SDL_Color textColor;
 public:
 	void render(int estado);
 	BarraEnergia(Ventana* una_ventana,int maximo_barra);
 	void setFlip();
+	void setNombreBarra(string nombre);
 	virtual ~BarraEnergia();
 };
 

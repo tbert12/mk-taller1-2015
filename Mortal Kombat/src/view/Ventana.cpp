@@ -185,6 +185,7 @@ void Ventana::Refresh(){
 bool Ventana::mostrarTexto(string texto){
 	font = TTF_OpenFont("data/font/fuente.ttf", 28);
 	int ancho,alto;
+	bool success = false;
 	if( font == NULL ){
 		log("No se pudo cargar la fuente del tiempo",LOG_ERROR);
 		return false;
@@ -220,15 +221,15 @@ bool Ventana::mostrarTexto(string texto){
 		SDL_FreeSurface( textSurface );
 	}
 	//Return success
-	return textura_texto != NULL;
+	success = (textura_texto != NULL);
 
-	int pos_x = (int)((m_ancho_px/2 - ancho)/ 2 +0.5);
-	int pos_y =	(int)((m_alto_px/2 - alto)/ 2 +0.5);
+	int pos_x = (int)(m_ancho_px/2 - ancho/2 +0.5);
+	int pos_y = (int)(m_alto_px/2 - alto/2 +0.5);
 
 	SDL_Rect renderQuad = { pos_x, pos_y, ancho, alto};
 	//Render to screen
 	SDL_RenderCopyEx( Renderer, textura_texto, NULL, &renderQuad, 0.0, NULL,SDL_FLIP_NONE);
 	Refresh();
-	return true;
+	return success;
 }
 

@@ -169,7 +169,7 @@ void Personaje::Update(float posDeOtroJugador,bool forzado){
 		minimo = 0;
 	}
 
-	bool estaElotroJugador = (m_velocidadActual > 0 and renderX >= posDeOtroJugador) or (m_velocidadActual < 0 and renderX >= posDeOtroJugador);
+	//bool estaElotroJugador = (m_velocidadActual > 0 and renderX >= posDeOtroJugador) or (m_velocidadActual < 0 and renderX >= posDeOtroJugador);
 	if (renderX <= maximo and renderX >= minimo){
 		if ( !_estaAgachado and !_estaCubriendose){
 			if (_estaAtacando){
@@ -260,7 +260,7 @@ void Personaje::renderizar(float x_dist_ventana,float posOtherPlayer){
 	}
 
 	//* Para test de colisiones *//
-	spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
+	//spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
 	//* Fin de test para mostrar colisiones *//
 
 	AvanzarSprite();
