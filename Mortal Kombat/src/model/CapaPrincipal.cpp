@@ -120,24 +120,34 @@ bool floatIsBetween(float x, float border1, float deltaX){
 	return x>=border1 and x<= border1+deltaX;
 }
 
-int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personajeFlippeado){
-	Rect_Logico* rectAtaque1 = personaje->rectanguloAtaque();
-	Rect_Logico* rectDefensa1 = personaje->rectanguloDefensa();
+int CapaPrincipal::ChequearSiSePisan(){
+	Rect_Logico* rectAtaque1 = m_personajeSinFlip->rectanguloAtaque();
+	Rect_Logico* rectDefensa1 = m_personajeSinFlip->rectanguloDefensa();
 
-	Rect_Logico* rectAtaque2 = personajeFlippeado->rectanguloAtaque();
-	Rect_Logico* rectDefensa2 = personajeFlippeado->rectanguloDefensa();
+	Rect_Logico* rectAtaque2 = m_personajeConFlip->rectanguloAtaque();
+	Rect_Logico* rectDefensa2 = m_personajeConFlip->rectanguloDefensa();
 
 
 	bool colisionaDefensaPersonajesX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w*1.5f));
 	//bool colisionaDefensaPersonajesX = false;
 	//bool colisionY = personaje->getY()>personajeFlippeado->getY() or personajeFlippeado->getY()> personaje->getY();
 	if(colisionaDefensaPersonajesX and rectAtaque1 == NULL and rectAtaque2 == NULL){
-		if(personaje->getSentidoDeMovimiento()>0)
-			personaje->Frenar();
-		if(personajeFlippeado->getSentidoDeMovimiento()<0)
-			personajeFlippeado->Frenar();
+
+		if(m_personajeSinFlip->getSentidoDeMovimiento()>0)
+			m_personajeSinFlip->Frenar();
+		if(m_personajeConFlip->getSentidoDeMovimiento()<0)
+			m_personajeConFlip->Frenar();
 		return COLISION_PERSONAJE_PERSONAJE_DEFENSA;
 	}
+}
+
+
+int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personajeFlippeado){
+	Rect_Logico* rectAtaque1 = personaje->rectanguloAtaque();
+	Rect_Logico* rectDefensa1 = personaje->rectanguloDefensa();
+
+	Rect_Logico* rectAtaque2 = personajeFlippeado->rectanguloAtaque();
+	Rect_Logico* rectDefensa2 = personajeFlippeado->rectanguloDefensa();
 
 	if (rectAtaque1 != NULL ){
 
