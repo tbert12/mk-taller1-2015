@@ -269,7 +269,7 @@ int CapaPrincipal::Scrollear(){
 	if ((m_personajeSinFlip->getX() <= (getX() + m_ancho_ventana*0.02f)) and !(m_personajeSinFlip->getSentidoDeMovimiento() < 0)) return this->CheckSegundoJugador(0);
 	if ((m_personajeSinFlip->getX() >= (getX() + m_ancho_ventana*0.96f)) and !(m_personajeSinFlip->getSentidoDeMovimiento() > 0) ) return this->CheckSegundoJugador(0);
 	if ((m_personajeSinFlip->getX() <= (getX() + m_ancho_ventana*0.02f)) and (m_personajeSinFlip->getSentidoDeMovimiento() < 0)) return this->CheckSegundoJugador(-1);
-	if ((m_personajeSinFlip->getX() >= (getX() + m_ancho_ventana*0.96f)) and (m_personajeSinFlip->getSentidoDeMovimiento() > 0) ) return this->CheckSegundoJugador(1);
+	if ((m_personajeSinFlip->getX() + m_personajeSinFlip->getAncho() >= (getX() + m_ancho_ventana*0.96f)) and (m_personajeSinFlip->getSentidoDeMovimiento() > 0) ) return this->CheckSegundoJugador(1);
 	return this->CheckSegundoJugador(0);
 }
 
@@ -304,7 +304,7 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 		default:
 			if(getX() == 0 and (m_personajeConFlip->getSentidoDeMovimiento() < 0))return this->_NadieScrollea();
 			if(getX() == rect->w and (m_personajeConFlip->getSentidoDeMovimiento() > 0)) return this->_NadieScrollea();
-			if ((m_personajeConFlip->getX() <= (getX() + m_ancho_ventana*0.02f)) and (m_personajeConFlip->getSentidoDeMovimiento() < 0)){
+			if ((m_personajeConFlip->getX() - m_personajeConFlip->getAncho()<= (getX() + m_ancho_ventana*0.02f)) and (m_personajeConFlip->getSentidoDeMovimiento() < 0)){
 				if ((m_personajeSinFlip->getX() >= (getX() + m_ancho_ventana*0.96f))){
 					m_personajeSinFlip->setScroll(false);
 					m_personajeConFlip->setScroll(false);
