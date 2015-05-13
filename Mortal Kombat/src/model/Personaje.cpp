@@ -457,19 +457,19 @@ void Personaje::Frenar(){
 }
 
 void Personaje::CaminarDerecha(){
-	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe) return;
 	m_velocidadActual = m_velocidad;
 	_cambiarSprite(SPRITE_CAMINAR);
 }
 
 void Personaje::CaminarIzquierda(){
-	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe) return;
 	m_velocidadActual = - m_velocidad;
 	_cambiarSprite(SPRITE_CAMINAR);
 }
 
 void Personaje::Saltar(){
-	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose) return;
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _recibioGolpe) return;
 
 	maxAlturaDeSalto = 1.20 * getAlto();
 
@@ -534,7 +534,7 @@ float Personaje::_yDeSalto(float currentY, float currentT)
 }
 
 void Personaje::Agachar(){
-	if (_estaSaltando > 0 or  _estaAgachado ) return;
+	if (_estaSaltando > 0 or  _estaAgachado or _recibioGolpe ) return;
 
 	_cambiarSprite(SPRITE_AGACHAR);
 	_estaAgachado = true;
@@ -543,7 +543,7 @@ void Personaje::Agachar(){
 }
 
 void Personaje::Levantarse(){
-	if (_estaSaltando > 0 or !_estaAgachado) return;
+	if (_estaSaltando > 0 or !_estaAgachado or _recibioGolpe) return;
 	if (_estaCubriendose){
 		dejarDeCubrirse();
 	}
@@ -555,7 +555,7 @@ void Personaje::Levantarse(){
 //+++++++++++CUBRIRSE++++++++++++++++++++++++++++++++++++++++++++++++
 
 void Personaje::cubrirse() {
-	if ( _estaCubriendose or _estaSaltando > 0 or _estaAtacando) return;
+	if ( _estaCubriendose or _estaSaltando > 0 or _estaAtacando or _recibioGolpe) return;
 
 	if ( _estaAgachado ) {
 		_cubrirseAgachado();
@@ -587,7 +587,7 @@ void Personaje::dejarDeCubrirse() {
 //+++++++++++ATAQUE - PINA+++++++++++++++++++++++++++++++++++++++++++
 
 void Personaje::pinaBaja() {
-	if (_estaCubriendose) return;
+	if (_estaCubriendose or _recibioGolpe) return;
 	//if (_estaAtacando) return;
 	if ( _estaAgachado ) {
 		_pinaAgachado();
@@ -608,7 +608,7 @@ void Personaje::_pinaAgachado() {
 }
 
 void Personaje::pinaAlta() {
-	if (_estaCubriendose) return;
+	if (_estaCubriendose or _recibioGolpe) return;
 	if ( _estaAgachado ) {
 		_gancho();
 	} else if ( _estaSaltando > 0 ) {
@@ -636,7 +636,7 @@ void Personaje::_pinaSaltando() {
 //+++++++++++ATAQUE - PATADA+++++++++++++++++++++++++++++++++++++++++
 
 void Personaje::patadaBaja() {
-	if (_estaCubriendose) return;
+	if (_estaCubriendose or _recibioGolpe) return;
 	if ( _estaAgachado ) {
 		_patadaBajaAgachado();
 	} else if ( _estaSaltando > 0 ) {
@@ -655,7 +655,7 @@ void Personaje::_patadaBajaAgachado() {
 }
 
 void Personaje::patadaAlta() {
-	if (_estaCubriendose) return;
+	if (_estaCubriendose or _recibioGolpe) return;
 	if ( _estaAgachado ) {
 		_patadaAltaAgachado();
 	} else if ( _estaSaltando > 0 ) {
