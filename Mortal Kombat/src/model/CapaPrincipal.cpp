@@ -123,22 +123,56 @@ bool floatIsBetween(float x, float border1, float deltaX){
 }
 
 void CapaPrincipal::_ChequearSiSePisan(){
-	Rect_Logico* rectAtaque1 = m_personajeSinFlip->rectanguloAtaque();
-	Rect_Logico* rectDefensa1 = m_personajeSinFlip->rectanguloDefensa();
 
-	Rect_Logico* rectAtaque2 = m_personajeConFlip->rectanguloAtaque();
+	bool hayAlguienSaltando = false;
+	Personaje* personajeSaltando;
+	Personaje* personajeEnElSuelo;
+
+
+	if(m_personajeSinFlip->estaSaltando() and m_personajeConFlip->estaSaltando()){
+		hayAlguienSaltando= false;
+	}else if(m_personajeSinFlip->estaSaltando()){
+		hayAlguienSaltando= true;
+		personajeSaltando = m_personajeSinFlip;
+		personajeEnElSuelo= m_personajeConFlip;
+	}else if(m_personajeConFlip->estaSaltando()){
+		hayAlguienSaltando= true;
+		personajeSaltando = m_personajeConFlip;
+		personajeEnElSuelo= m_personajeSinFlip;
+	}
+
+	Rect_Logico* rectDefensa1 = m_personajeSinFlip->rectanguloDefensa();
 	Rect_Logico* rectDefensa2 = m_personajeConFlip->rectanguloDefensa();
 
+	//printf("SaltandoY :%f, SaltandoY+h :%f \n",personajeSaltando->getY(),personajeSaltando->getY() + personajeSaltando->getAlto());
+
+	//fprintf(stderr,"Llegue\n");
 
 	bool colisionaDefensaPersonajesX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w*1.5f));
+	bool sePisanX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w));
 	//bool colisionaDefensaPersonajesX = false;
-	//bool colisionY = personaje->getY()>personajeFlippeado->getY() or personajeFlippeado->getY()> personaje->getY();
-	if(colisionaDefensaPersonajesX and rectAtaque1 == NULL and rectAtaque2 == NULL){
-
+	if(colisionaDefensaPersonajesX){
+		if(hayAlguienSaltando){
+			personajeSaltando->Update(personajeEnElSuelo->getX(),true);//lo hago dos veces para que se mueva el doble
+			personajeSaltando->Update(personajeEnElSuelo->getX(),true);//porque el update a algo quito no lo mueve
+			return;
+		}
 		if(m_personajeSinFlip->getSentidoDeMovimiento()>0)
 			m_personajeSinFlip->Frenar();
 		if(m_personajeConFlip->getSentidoDeMovimiento()<0)
 			m_personajeConFlip->Frenar();
+		if(sePisanX){
+			if(!(rectDefensa1->x+ rectDefensa1->w*.5f > rectDefensa2->x - rectDefensa2->w*.5f)){
+				fprintf(stderr,"Flip\n");
+				m_personajeSinFlip->setPosition(m_personajeSinFlip->getX()+m_personajeSinFlip->getAncho()*.05f,m_personajeSinFlip->getY());
+				m_personajeConFlip->setPosition(m_personajeConFlip->getX()-m_personajeConFlip->getAncho()*.05f,m_personajeConFlip->getY());
+			}else{
+				fprintf(stderr,"No Flip\n");
+				m_personajeSinFlip->setPosition(m_personajeSinFlip->getX()-m_personajeSinFlip->getAncho()*.05f,m_personajeSinFlip->getY());
+				m_personajeConFlip->setPosition(m_personajeConFlip->getX()+m_personajeConFlip->getAncho()*.05f,m_personajeConFlip->getY());
+			}
+		}
+
 	}
 }
 

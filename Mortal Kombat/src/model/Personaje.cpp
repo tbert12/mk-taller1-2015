@@ -142,7 +142,7 @@ void Personaje::setFlip(bool flip){
 		}
 }
 
-void Personaje::Update(float posDeOtroJugador){
+void Personaje::Update(float posDeOtroJugador,bool forzado){
 	//Actualizo La X para cada caso y verificando limites
 	if (_estaMuerto){
 		if (!spriteActual->inLoop()){
@@ -185,7 +185,7 @@ void Personaje::Update(float posDeOtroJugador){
 	}
 
 	//Actualizo la Y
-	if(_estaSaltando > 0){
+	if(_estaSaltando > 0 and not forzado){
 		_actualizarY();
 	} else if (_estaSaltando == 0){
 		m_yActual = m_yPiso;
@@ -211,7 +211,9 @@ void Personaje::_UpdatePoder(){
 bool Personaje::enMovimiento(){
 	return (m_velocidadActual != 0);
 }
-
+bool Personaje::estaSaltando(){
+	return _estaSaltando == -1;
+}
 float Personaje::getAncho(){
 	return spriteActual->getAncho();
 }

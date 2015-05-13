@@ -136,7 +136,7 @@ public:
 
 	bool enMovimiento();
 
-	void Update(float posOtroJugador);
+	void Update(float posOtroJugador,bool forzado = false);
 	void renderizar(float x_dist_ventana,float posOtherPlayer);
 
 	void setPosition(float x, float y);
@@ -157,6 +157,7 @@ public:
 
 	void Inicial();
 	bool estaAgachado();
+	bool estaSaltando();
 
 	bool recibirGolpe(int CodigoGolpe, int Danio = 0);
 	void QuitarVida(int valor);
