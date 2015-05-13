@@ -34,7 +34,7 @@
 		"nombre": "Dragon de fuego",
 		"velocidad": 15,
 		"danio": 15,
-		"ancho": 150,
+		"ancho": 25,
 		"alto": 20
 		}
 	]

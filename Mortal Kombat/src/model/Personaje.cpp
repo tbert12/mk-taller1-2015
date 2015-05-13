@@ -142,7 +142,8 @@ void Personaje::setFlip(bool flip){
 		}
 }
 
-void Personaje::Update(int velocidadScroll){
+void Personaje::Update(float posDeOtroJugador){
+	//Actualizo La X para cada caso y verificando limites
 	if (_estaMuerto){
 		if (!spriteActual->inLoop()){
 			if (m_fliped){
@@ -154,48 +155,44 @@ void Personaje::Update(int velocidadScroll){
 		}
 		return;
 	}
-	float renderX = m_xActual;
-	if(m_mover)
-		renderX += m_velocidadActual;
-
+	float renderX = m_xActual + m_velocidadActual;
 	float maximo,minimo;
 	if(m_fliped){
 		maximo = m_AnchoMundo;
 		minimo = spriteActual->getAncho();
-	}
-	else{
+	}else{
 		maximo = (m_AnchoMundo + spriteActual->getAncho());
 		minimo = 0;
 	}
+
+	bool estaElotroJugador = (m_velocidadActual > 0 and renderX >= posDeOtroJugador) or (m_velocidadActual < 0 and renderX >= posDeOtroJugador);
 	if (renderX <= maximo and renderX >= minimo){
 		if ( !_estaAgachado and !_estaCubriendose){
 			if (_estaAtacando){
-				if (_estaSaltando > 0)
-					if(m_mover) m_xActual += (m_velocidadActual);
-
+				if (_estaSaltando > 0){
+					if(m_mover) m_xActual = renderX;
+				}
 			} else {
-				if(m_mover) m_xActual += (m_velocidadActual);
+				if(m_mover /*and !estaElotroJugador*/) m_xActual = renderX;
 			}
 		}
 	}
 
-	if(m_xActual > maximo)
-			m_xActual = maximo;
-
-	else if(m_xActual < minimo)
-			m_xActual = minimo;
-
-	if(_estaSaltando > 0){
-			_actualizarY();
+	if(m_xActual > maximo){
+		m_xActual = maximo;
+	} else if(m_xActual < minimo){
+		m_xActual = minimo;
 	}
 
-	else if (_estaSaltando == 0){
+	//Actualizo la Y
+	if(_estaSaltando > 0){
+		_actualizarY();
+	} else if (_estaSaltando == 0){
 		m_yActual = m_yPiso;
 		_estaSaltando = -1;
 	}
 
 	m_mover = true;
-
 	_UpdatePoder();
 
 }

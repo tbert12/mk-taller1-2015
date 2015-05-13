@@ -136,7 +136,7 @@ public:
 
 	bool enMovimiento();
 
-	void Update(int velocidadScroll);
+	void Update(float posOtroJugador);
 	void renderizar(float x_dist_ventana,float posOtherPlayer);
 
 	void setPosition(float x, float y);

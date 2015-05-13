@@ -120,25 +120,34 @@ bool floatIsBetween(float x, float border1, float deltaX){
 	return x>=border1 and x<= border1+deltaX;
 }
 
+int CapaPrincipal::ChequearSiSePisan(){
+	Rect_Logico* rectAtaque1 = m_personajeSinFlip->rectanguloAtaque();
+	Rect_Logico* rectDefensa1 = m_personajeSinFlip->rectanguloDefensa();
+
+	Rect_Logico* rectAtaque2 = m_personajeConFlip->rectanguloAtaque();
+	Rect_Logico* rectDefensa2 = m_personajeConFlip->rectanguloDefensa();
+
+
+	bool colisionaDefensaPersonajesX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w*1.5f));
+	//bool colisionaDefensaPersonajesX = false;
+	//bool colisionY = personaje->getY()>personajeFlippeado->getY() or personajeFlippeado->getY()> personaje->getY();
+	if(colisionaDefensaPersonajesX and rectAtaque1 == NULL and rectAtaque2 == NULL){
+
+		if(m_personajeSinFlip->getSentidoDeMovimiento()>0)
+			m_personajeSinFlip->Frenar();
+		if(m_personajeConFlip->getSentidoDeMovimiento()<0)
+			m_personajeConFlip->Frenar();
+		return COLISION_PERSONAJE_PERSONAJE_DEFENSA;
+	}
+}
+
+
 int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personajeFlippeado){
 	Rect_Logico* rectAtaque1 = personaje->rectanguloAtaque();
 	Rect_Logico* rectDefensa1 = personaje->rectanguloDefensa();
 
 	Rect_Logico* rectAtaque2 = personajeFlippeado->rectanguloAtaque();
 	Rect_Logico* rectDefensa2 = personajeFlippeado->rectanguloDefensa();
-
-	//printf("actual: %f, anterior: %f, defensa: %f\n",rectAtaque1->x + rectAtaque1->w ,rectAtaqueAnterior1->x + rectAtaqueAnterior1->w,rectDefensa2->x );
-
-
-	bool colisionaDefensaPersonajesX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w*1.5f));
-	//bool colisionY = personaje->getY()>personajeFlippeado->getY() or personajeFlippeado->getY()> personaje->getY();
-	if(colisionaDefensaPersonajesX and rectAtaque1 == NULL and rectAtaque2 == NULL){
-		if(personaje->getSentidoDeMovimiento()>0)
-			personaje->Frenar();
-		if(personajeFlippeado->getSentidoDeMovimiento()<0)
-			personajeFlippeado->Frenar();
-		return COLISION_PERSONAJE_PERSONAJE_DEFENSA;
-	}
 
 	if (rectAtaque1 != NULL ){
 
@@ -154,7 +163,6 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 				(floatIsBetween(rectAtaque1->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectAtaqueAnterior1->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
 
 		if( colisionaAtaquePersonajeSinFlipX and colisionaY){
-			personajeFlippeado->recibirGolpe( personaje->getAccionDeAtaque() , 0 );
 			return COLISION_PERSONAJE_PERSONAJE_SIN_FLIP;
 			//printf("hubo colision  ppsf\n");
 		}
@@ -171,7 +179,6 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 				(floatIsBetween(rectAtaque2->y, rectDefensa1->y-rectDefensa1->h , rectDefensa1->h) and floatIsBetween(rectAtaqueAnterior2->y, rectDefensa1->y-rectDefensa1->h, rectDefensa1->h));
 		//and colisionaY
 		if( colisionAtaquePersonajeConFlipX  and colisionaY){
-			personaje->recibirGolpe( personajeFlippeado->getAccionDeAtaque() , 0 );
 			return COLISION_PERSONAJE_PERSONAJE_CON_FLIP;
 			//printf("hubo colision  ppcf\n");
 		}
@@ -196,19 +203,20 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 	}
 
 	if (objetoSinFlip != NULL){
-
 		Rect_Logico* rectPoder = objetoSinFlip->rectanguloAtaque();
-		if(rectPoder->x>rectDefensa2->x)
+		if(rectPoder == NULL){
 			return COLISION_NO_COLISION;
-		bool colisionaAtaquePersonajeSinFlipX = floatIsBetween(rectDefensa2->x,rectPoder->x + objetoSinFlip->getVelocidadX() ,rectPoder->w);
+		}
 
-		//printf("RectAtaqueXEnd :%f      RectdefensaPos :%f \n",rectPoder->x+rectPoder->w,rectDefensa2->x);
+		bool colisionaAtaquePersonajeSinFlipX = rectDefensa2->x - rectDefensa2->w < rectPoder->x + objetoSinFlip->getVelocidadX() +rectPoder->w ;
+		//and rectDefensa2->x - rectDefensa2->w > rectPoder->x + rectPoder->w;
+
 		bool colisionaY = (floatIsBetween(rectDefensa2->y, rectPoder->y-rectPoder->h , rectPoder->h) and floatIsBetween(rectDefensa2->y, rectPoder->y-rectPoder->h, rectPoder->h)) or
 				(floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
 
 		if( colisionaAtaquePersonajeSinFlipX and colisionaY){
+			printf("hubo colision ppsf\n");
 			return COLISION_PERSONAJE_OBJETO_SIN_FLIP;
-			//printf("hubo colision ppsf\n");
 		}
 	}
 
@@ -216,20 +224,21 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 
 		Rect_Logico* rectPoder = objetoConFlip->rectanguloAtaque();
 
-		if(rectPoder->x>rectDefensa1->x)
+		if(rectPoder == NULL or rectPoder->x + rectPoder->w < rectDefensa1->x )
 			return COLISION_NO_COLISION;
 
-		bool colisionaAtaquePersonajeSinFlipX = floatIsBetween(rectDefensa1->x + 1.5f*rectDefensa1->w,rectPoder->x  ,rectPoder->w);
+		bool colisionaAtaquePersonajeConFlipX = rectDefensa1->x + rectDefensa1->w > rectPoder->x - objetoConFlip->getVelocidadX() ;
+		//and	rectDefensa1->x + rectDefensa1->w < rectPoder->x;
 
-		//printf("RectAtaqueXEnd :%f      RectdefensaPos :%f \n",rectPoder->x+rectPoder->w,rectDefensa2->x);
 		bool colisionaY = (floatIsBetween(rectDefensa1->y, rectPoder->y-rectPoder->h , rectPoder->h) and floatIsBetween(rectDefensa2->y, rectPoder->y-rectPoder->h, rectPoder->h)) or
 				(floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
-		if( colisionaAtaquePersonajeSinFlipX and colisionaY){
+
+		if( colisionaAtaquePersonajeConFlipX and colisionaY){
+			printf("hubo colision ppcf\n");
 			return COLISION_PERSONAJE_OBJETO_CON_FLIP;
-			//printf("hubo colision ppcf\n");
 		}
 	}
-	return NO_COLISION;
+	return COLISION_NO_COLISION;
 }
 
 Personaje* CapaPrincipal::getPersonajSinFlip(){

@@ -122,13 +122,13 @@ void Mundo::render(){
 	if(capaPrincipal->getPersonajConFlip()->getVida() <= 0){
 		log("Partida finalizada, GANADOR: " + capaPrincipal->getPersonajSinFlip()->getNombre(),LOG_DEBUG);
 		partida_finalizada = true;
-		_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
+		//_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
 		return;
 	}
 	else if (capaPrincipal->getPersonajSinFlip()->getVida() <= 0){
 		log("Partida finalizada, GANADOR: " + capaPrincipal->getPersonajConFlip()->getNombre(),LOG_DEBUG);
 		partida_finalizada = true;
-		_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
+		//_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
 		return;
 	}
 
@@ -166,7 +166,7 @@ void Mundo::_verificarColisiones(){
 
 	/*COLISION CAPA PRINCIPAL*/
 	switch (resultado){
-		case NO_COLISION:
+		case COLISION_NO_COLISION:
 			break;
 		case COLISION_PERSONAJE_PERSONAJE_DEFENSA:
 			//chocan los dos personajes pero no atacando

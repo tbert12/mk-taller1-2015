@@ -183,7 +183,7 @@ void Ventana::Refresh(){
 }
 
 bool Ventana::mostrarTexto(string texto){
-	font = TTF_OpenFont("data/font/fuente.ttf", (int)(m_alto_px*(0.3) +0.5) );
+	font = TTF_OpenFont("data/font/fuente.ttf", 28);
 	int ancho,alto;
 	if( font == NULL ){
 		log("No se pudo cargar la fuente del tiempo",LOG_ERROR);
