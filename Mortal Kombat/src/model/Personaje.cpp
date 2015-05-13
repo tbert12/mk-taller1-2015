@@ -288,6 +288,8 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	if (Accion == SPRITE_PATADA_ALTA){
 		if ( spriteActual->primerFrame() ) propH = 4;
 		else propH = 0;
+	} else if (Accion == SPRITE_PINA_ALTA){
+		propH = 4;
 	} else if (Accion == SPRITE_PATADA_BAJA or Accion == SPRITE_PINA_BAJA or Accion == SPRITE_PINA_AGACHADO or Accion == SPRITE_PATADA_ALTA_AGACHADO){
 		propH = 6;
 		propY = 2;
@@ -445,7 +447,7 @@ void Personaje::Inicial(){
 }
 
 void Personaje::Frenar(){
-	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe) return;
 	m_velocidadActual = 0;
 	Inicial();
 }
