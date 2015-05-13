@@ -30,6 +30,7 @@ public:
 	Personaje* getPersonajSinFlip();
 	Personaje* getPersonajConFlip();
 	int CheckearColisiones();
+	int ChequearSiSePisan();
 	virtual ~CapaPrincipal();
 	virtual void Renderizar();
 	virtual void Update(int scroll);
