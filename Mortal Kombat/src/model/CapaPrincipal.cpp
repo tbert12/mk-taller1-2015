@@ -321,7 +321,6 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 			if(getX() == 0 and (m_personajeConFlip->getSentidoDeMovimiento() < 0))return this->_NadieScrollea();
 			if(getX() == (rect->w-m_ancho_ventana) and (m_personajeConFlip->getSentidoDeMovimiento() > 0) and (m_personajeConFlip->getX() >= (getX() + m_ancho_ventana*0.97f)) ) return this->_NadieScrollea();
 			if ((m_personajeConFlip->getX() - m_personajeConFlip->getAncho()<= (getX() + m_ancho_ventana*0.02f)) and (m_personajeConFlip->getSentidoDeMovimiento() < 0)){
-				printf("asi\n");
 				if ((m_personajeSinFlip->getX() >= (getX() + m_ancho_ventana*0.97f))){
 					m_personajeSinFlip->setScroll(false);
 					m_personajeConFlip->setScroll(false);
