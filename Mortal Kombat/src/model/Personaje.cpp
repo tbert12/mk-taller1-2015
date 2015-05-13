@@ -257,7 +257,7 @@ void Personaje::renderizar(float x_dist_ventana,float posOtherPlayer){
 	}
 
 	//* Para test de colisiones *//
-	spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
+	//spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
 	//* Fin de test para mostrar colisiones *//
 
 	AvanzarSprite();

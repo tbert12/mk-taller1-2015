@@ -147,6 +147,7 @@ void CapaPrincipal::_ChequearSiSePisan(){
 	//printf("SaltandoY :%f, SaltandoY+h :%f \n",personajeSaltando->getY(),personajeSaltando->getY() + personajeSaltando->getAlto());
 
 	//fprintf(stderr,"Llegue\n");
+	//commit
 
 	bool colisionaDefensaPersonajesX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w*1.5f));
 	bool sePisanX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w));
