@@ -63,14 +63,6 @@ int CapaPrincipal::CheckearColisiones(){
 	Personaje* personaje;
 	Personaje* personajeFlippeado;
 
-	if(m_PersonajeUno->getFlipState()){
-		personaje = m_PersonajeDos;
-		personajeFlippeado = m_PersonajeUno;
-	}else{
-		personajeFlippeado = m_PersonajeDos;
-		personaje = m_PersonajeUno;
-	}
-
 	if(m_PersonajeUno->getFlipState() == m_PersonajeDos->getFlipState()){
 		if(m_PersonajeUno->getX() < m_PersonajeDos->getX())
 			m_PersonajeUno->setFlip(false);
@@ -78,6 +70,13 @@ int CapaPrincipal::CheckearColisiones(){
 			m_PersonajeUno->setFlip(true);
 	}
 
+	if(m_PersonajeUno->getFlipState()){
+		personaje = m_PersonajeDos;
+		personajeFlippeado = m_PersonajeUno;
+	}else{
+		personajeFlippeado = m_PersonajeDos;
+		personaje = m_PersonajeUno;
+	}
 
 	if(personaje->getX() + personaje->getAncho()*.5f > personajeFlippeado->getX() - personajeFlippeado->getAncho()*.5f){
 		personaje->setFlip(true);
@@ -147,7 +146,7 @@ void CapaPrincipal::_ChequearSiSePisan(){
 	Rect_Logico* rectDefensa2 = m_personajeConFlip->rectanguloDefensa();
 
 	bool colisionaDefensaPersonajesX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w*1.5f)) or (floatIsBetween(rectDefensa1->x ,rectDefensa2->x - rectDefensa2->w * 1.5f,rectDefensa2->w ));
-	bool sePisanX = (floatIsBetween(m_personajeConFlip->getX() ,m_personajeSinFlip->getX(),m_personajeSinFlip->getAncho())) or (floatIsBetween(m_personajeSinFlip->getX() ,m_personajeConFlip->getX() - m_personajeConFlip->getAncho(),m_personajeConFlip->getAncho()));
+	bool sePisanX = (floatIsBetween(rectDefensa2->x, rectDefensa1->x, rectDefensa1->w)) or (floatIsBetween(rectDefensa1->x ,rectDefensa2->x - rectDefensa2->w, rectDefensa2->w));
 	//bool colisionaDefensaPersonajesX = false;
 	if(colisionaDefensaPersonajesX){
 		if(hayAlguienSaltando){
