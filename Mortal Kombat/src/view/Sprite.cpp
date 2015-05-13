@@ -130,7 +130,7 @@ void Sprite::Reset(){
 
 void Sprite::render(float x, float y, bool fliped){
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
-	printf("Frame: %i | Total: %i\n",frameActual,cantidadFrames);
+	//printf("Frame: %i | Total: %i\n",frameActual,cantidadFrames);
 	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h_log, fliped);
 }
 
