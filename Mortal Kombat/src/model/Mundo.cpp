@@ -166,7 +166,7 @@ void Mundo::_verificarColisiones(){
 
 	/*COLISION CAPA PRINCIPAL*/
 	switch (resultado){
-		case NO_COLISION:
+		case COLISION_NO_COLISION:
 			break;
 		case COLISION_PERSONAJE_PERSONAJE_DEFENSA:
 			//chocan los dos personajes pero no atacando
