@@ -215,7 +215,7 @@ bool Personaje::enMovimiento(){
 	return (m_velocidadActual != 0);
 }
 bool Personaje::estaSaltando(){
-	return _estaSaltando == -1;
+	return _estaSaltando <= 0;
 }
 float Personaje::getAncho(){
 	return spriteActual->getAncho();
