@@ -28,8 +28,9 @@ void JoystickControl::_verificarMapaComandos(){
 			//si supera la cantidad de botones del joystick
 			if(it->second >= SDL_JoystickNumButtons(joystick))
 				mapa_correcto = false;
-			if (it->first != PINA_BAJA || it->first != PATADA_BAJA || it->first != PINA_ALTA || it->first != PATADA_ALTA || it->first != CUBRIRSE ||it->first != LANZAR_ARMA)
-				mapa_correcto = false;
+
+			//if (it->first != PINA_BAJA || it->first != PATADA_BAJA || it->first != PINA_ALTA || it->first != PATADA_ALTA || it->first != CUBRIRSE ||it->first != LANZAR_ARMA)
+			//	mapa_correcto = false;
 		}
 	}
 
@@ -69,6 +70,10 @@ void JoystickControl::_Init(int id){
 }
 
 void JoystickControl::JoyPressed(){
+	//probamos los botonesss
+	//printf("Boton n°: %i \n",evento->jbutton.button);
+	//return;
+
 	//X axis motion
 	if(evento->type == SDL_JOYAXISMOTION){
 		if( evento->jaxis.axis == 0 ){

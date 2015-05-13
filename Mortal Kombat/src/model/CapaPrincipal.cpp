@@ -75,7 +75,6 @@ int CapaPrincipal::CheckearColisiones(){
 	this->_ChequearSiSePisan();
 
 	int toReturn = this->_CheckearColisiones(personaje,personajeFlippeado);
-	//printf("personajex");
 	if(personaje->getX() + personaje->getAncho()*.5f > personajeFlippeado->getX() - personajeFlippeado->getAncho()*.5f){
 		personaje->setFlip(true);
 		personajeFlippeado->setFlip(false);
@@ -90,55 +89,80 @@ int CapaPrincipal::CheckearColisiones(){
 }
 
 void CapaPrincipal::_LateUpdate(){
-
 	if(m_PersonajeQueScrollea==2){
 		if (m_Personaje->getX() >= (getX() + m_ancho_ventana*0.80f)) {
-			m_Personaje->Update(m_PersonajeDos->getVelocidadIzquierda());
+			m_Personaje->Update(m_PersonajeDos->getX() + m_PersonajeDos->getVelocidadIzquierda());
 		}else if (m_Personaje->getX() <= (getX() + m_ancho_ventana*0.02f) ){
-			m_Personaje->Update(m_PersonajeDos->getVelocidadDerecha());
+			m_Personaje->Update( m_PersonajeDos->getX() + m_PersonajeDos->getVelocidadDerecha());
 		}
-		m_Personaje->Update(_scroll>0? m_PersonajeDos->getVelocidadDerecha() : m_PersonajeDos->getVelocidadIzquierda());
+		m_Personaje->Update(m_PersonajeDos->getX() + _scroll>0? m_PersonajeDos->getVelocidadDerecha() : m_PersonajeDos->getVelocidadIzquierda());
 	}else
-		m_Personaje->Update(0);
+		m_Personaje->Update(m_PersonajeDos->getX());
 
 	if(m_PersonajeDos){
 		if(m_PersonajeQueScrollea==1){
 			if (m_PersonajeDos->getX() >= (getX() + m_ancho_ventana*0.80f)) {
-				m_PersonajeDos->Update(m_Personaje->getVelocidadIzquierda());
+				m_PersonajeDos->Update(m_Personaje->getX() + m_Personaje->getVelocidadIzquierda());
 			}else if (m_PersonajeDos->getX() <= (getX() + m_ancho_ventana*0.02f) ){
-				m_PersonajeDos->Update(m_Personaje->getVelocidadDerecha());
+				m_PersonajeDos->Update(m_Personaje->getX() + m_Personaje->getVelocidadDerecha());
 			}
 			else
-				m_PersonajeDos->Update(0);
+				m_PersonajeDos->Update(m_Personaje->getX());
 		}else{
-			m_PersonajeDos->Update(0);
+			m_PersonajeDos->Update(m_Personaje->getX());
 		}
 	}
-
 }
 
 bool floatIsBetween(float x, float border1, float deltaX){
-	//printf("x:%f, border1: %f, border2: %f\n",x,border1,border1+deltaX);
 	return x>=border1 and x<= border1+deltaX;
 }
 
 void CapaPrincipal::_ChequearSiSePisan(){
-	Rect_Logico* rectAtaque1 = m_personajeSinFlip->rectanguloAtaque();
-	Rect_Logico* rectDefensa1 = m_personajeSinFlip->rectanguloDefensa();
 
-	Rect_Logico* rectAtaque2 = m_personajeConFlip->rectanguloAtaque();
+	bool hayAlguienSaltando = false;
+	Personaje* personajeSaltando;
+	Personaje* personajeEnElSuelo;
+
+
+	if(m_personajeSinFlip->estaSaltando() and m_personajeConFlip->estaSaltando()){
+		hayAlguienSaltando= false;
+	}else if(m_personajeSinFlip->estaSaltando()){
+		hayAlguienSaltando= true;
+		personajeSaltando = m_personajeSinFlip;
+		personajeEnElSuelo= m_personajeConFlip;
+	}else if(m_personajeConFlip->estaSaltando()){
+		hayAlguienSaltando= true;
+		personajeSaltando = m_personajeConFlip;
+		personajeEnElSuelo= m_personajeSinFlip;
+	}
+
+	Rect_Logico* rectDefensa1 = m_personajeSinFlip->rectanguloDefensa();
 	Rect_Logico* rectDefensa2 = m_personajeConFlip->rectanguloDefensa();
 
-
 	bool colisionaDefensaPersonajesX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w*1.5f));
+	bool sePisanX = (floatIsBetween(rectDefensa2->x ,rectDefensa1->x,rectDefensa1->w));
 	//bool colisionaDefensaPersonajesX = false;
-	//bool colisionY = personaje->getY()>personajeFlippeado->getY() or personajeFlippeado->getY()> personaje->getY();
-	if(colisionaDefensaPersonajesX and rectAtaque1 == NULL and rectAtaque2 == NULL){
-
+	if(colisionaDefensaPersonajesX){
+		if(hayAlguienSaltando){
+			personajeSaltando->Update(personajeEnElSuelo->getX(),true);//lo hago dos veces para que se mueva el doble
+			personajeSaltando->Update(personajeEnElSuelo->getX(),true);//porque el update a algo quito no lo mueve
+			return;
+		}
 		if(m_personajeSinFlip->getSentidoDeMovimiento()>0)
 			m_personajeSinFlip->Frenar();
 		if(m_personajeConFlip->getSentidoDeMovimiento()<0)
 			m_personajeConFlip->Frenar();
+		if(sePisanX){
+			if(!(rectDefensa1->x+ rectDefensa1->w*.5f > rectDefensa2->x - rectDefensa2->w*.5f)){
+				m_personajeSinFlip->setPosition(m_personajeSinFlip->getX()+m_personajeSinFlip->getAncho()*.05f,m_personajeSinFlip->getY());
+				m_personajeConFlip->setPosition(m_personajeConFlip->getX()-m_personajeConFlip->getAncho()*.05f,m_personajeConFlip->getY());
+			}else{
+				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()-m_personajeSinFlip->getAncho()*.05f);
+				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()+m_personajeConFlip->getAncho()*.05f);
+			}
+		}
+
 	}
 }
 
@@ -153,39 +177,38 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 	if (rectAtaque1 != NULL ){
 
 		if(!rectAtaqueAnterior1){
-			//printf("uso rect defensa \n");
 			rectAtaqueAnterior1 = rectDefensa1;
 		}
 
-		/*printf("rect x end:   %f \n", rectAtaque1->x+rectAtaque1->w);
-		printf("rect x start: %f \n", rectAtaque1->x);
-		printf("rect x defensa: %f \n", rectAtaque1->x);*/
+		bool antesColisionaX = floatIsBetween(rectDefensa2->x ,rectAtaqueAnterior1->x,rectAtaqueAnterior1->w);
+		bool ahoraColisionaX = floatIsBetween(rectDefensa2->x ,rectAtaque1->x,rectAtaque1->w);
+		bool antesColisionaY = floatIsBetween(rectDefensa2->y, rectAtaqueAnterior1->y-rectAtaqueAnterior1->h, rectAtaqueAnterior1->h) or floatIsBetween(rectAtaqueAnterior1->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h);
+		bool ahoraColisionaY = floatIsBetween(rectDefensa2->y, rectAtaque1->y-rectAtaque1->h , rectAtaque1->h) or floatIsBetween(rectAtaque1->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h);
 
-		bool colisionaAtaquePersonajeSinFlipX = (floatIsBetween(rectDefensa2->x ,rectAtaque1->x,rectAtaque1->w) and
-				!floatIsBetween(rectDefensa2->x ,rectAtaqueAnterior1->x,rectAtaqueAnterior1->w));
+		bool posibilidad1 = (ahoraColisionaX and not antesColisionaX)and ( antesColisionaY and ahoraColisionaY );
+		bool posibilidad2 = (ahoraColisionaX and antesColisionaX)and ( not antesColisionaY and ahoraColisionaY );
+		bool colision = posibilidad1 or posibilidad2;
 
-		bool colisionaY = (floatIsBetween(rectDefensa2->y, rectAtaque1->y-rectAtaque1->h , rectAtaque1->h) and floatIsBetween(rectDefensa2->y, rectAtaqueAnterior1->y-rectAtaqueAnterior1->h, rectAtaqueAnterior1->h)) or
-				(floatIsBetween(rectAtaque1->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectAtaqueAnterior1->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
-
-		if( colisionaAtaquePersonajeSinFlipX and colisionaY){
-			printf("hubo colision  ppsf\n");
+		if( colision){
 			return COLISION_PERSONAJE_PERSONAJE_SIN_FLIP;
 		}
+
 	}else if (rectAtaque2 != NULL ){
 		if(!rectAtaqueAnterior2){
-			//printf("uso rect defensa \n");
 			rectAtaqueAnterior2 = rectDefensa2;
 		}
-		bool colisionAtaquePersonajeConFlipX = (floatIsBetween(rectDefensa1->x  + rectDefensa1->w, rectAtaque2->x , rectAtaque2->w) and
-						!floatIsBetween(rectDefensa1->x + rectDefensa1->w, rectAtaqueAnterior2->x, rectAtaqueAnterior2->w));
 
-		//printf("colisionAtaquePersonajeConFlip: %i \n",colisionAtaquePersonajeConFlipX);
-		bool colisionaY = (floatIsBetween(rectDefensa1->y, rectAtaque2->y-rectAtaque2->h , rectAtaque2->h) and floatIsBetween(rectDefensa1->y, rectAtaqueAnterior2->y-rectAtaqueAnterior2->h, rectAtaqueAnterior2->h)) or
-				(floatIsBetween(rectAtaque2->y, rectDefensa1->y-rectDefensa1->h , rectDefensa1->h) and floatIsBetween(rectAtaqueAnterior2->y, rectDefensa1->y-rectDefensa1->h, rectDefensa1->h));
-		//and colisionaY
-		if( colisionAtaquePersonajeConFlipX  and colisionaY){
+		bool antesColisionaX = floatIsBetween(rectDefensa1->x + rectDefensa1->w, rectAtaqueAnterior2->x, rectAtaqueAnterior2->w);
+		bool ahoraColisionaX = floatIsBetween(rectDefensa1->x  + rectDefensa1->w, rectAtaque2->x , rectAtaque2->w);
+		bool antesColisionaY = floatIsBetween(rectDefensa1->y, rectAtaqueAnterior2->y-rectAtaqueAnterior2->h, rectAtaqueAnterior2->h) or floatIsBetween(rectAtaqueAnterior2->y, rectDefensa1->y-rectDefensa1->h, rectDefensa1->h);
+		bool ahoraColisionaY = floatIsBetween(rectDefensa1->y, rectAtaque2->y-rectAtaque2->h , rectAtaque2->h) or floatIsBetween(rectAtaque2->y, rectDefensa1->y-rectDefensa1->h , rectDefensa1->h);
+
+		bool posibilidad1 = (ahoraColisionaX and not antesColisionaX)and ( antesColisionaY and ahoraColisionaY );
+		bool posibilidad2 = (ahoraColisionaX and antesColisionaX)and ( not antesColisionaY and ahoraColisionaY );
+		bool colision = posibilidad1 or posibilidad2;
+
+		if(colision){
 			return COLISION_PERSONAJE_PERSONAJE_CON_FLIP;
-			//printf("hubo colision  ppcf\n");
 		}
 	}
 
@@ -220,7 +243,6 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 				(floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
 
 		if( colisionaAtaquePersonajeSinFlipX and colisionaY){
-			printf("hubo colision ppsf\n");
 			return COLISION_PERSONAJE_OBJETO_SIN_FLIP;
 		}
 	}
@@ -239,7 +261,6 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 				(floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
 
 		if( colisionaAtaquePersonajeConFlipX and colisionaY){
-			printf("hubo colision ppcf\n");
 			return COLISION_PERSONAJE_OBJETO_CON_FLIP;
 		}
 	}
@@ -265,9 +286,9 @@ void CapaPrincipal::Renderizar()
 
 int CapaPrincipal::Scrollear(){
 	if(getX() == 0 and (m_personajeSinFlip->getSentidoDeMovimiento() < 0))return this->CheckSegundoJugador(0);
-	if(getX() == rect->w and (m_personajeSinFlip->getSentidoDeMovimiento() > 0)) return this->CheckSegundoJugador(0);
+	if(getX() == (rect->w - m_ancho_ventana) and (m_personajeSinFlip->getSentidoDeMovimiento() > 0)) return this->CheckSegundoJugador(0);
 	if ((m_personajeSinFlip->getX() <= (getX() + m_ancho_ventana*0.02f)) and !(m_personajeSinFlip->getSentidoDeMovimiento() < 0)) return this->CheckSegundoJugador(0);
-	if ((m_personajeSinFlip->getX() >= (getX() + m_ancho_ventana*0.96f)) and !(m_personajeSinFlip->getSentidoDeMovimiento() > 0) ) return this->CheckSegundoJugador(0);
+	if ((m_personajeSinFlip->getX() >= (getX() + m_ancho_ventana*0.90f)) and !(m_personajeSinFlip->getSentidoDeMovimiento() > 0) ) return this->CheckSegundoJugador(0);
 	if ((m_personajeSinFlip->getX() <= (getX() + m_ancho_ventana*0.02f)) and (m_personajeSinFlip->getSentidoDeMovimiento() < 0)) return this->CheckSegundoJugador(-1);
 	if ((m_personajeSinFlip->getX() + m_personajeSinFlip->getAncho() >= (getX() + m_ancho_ventana*0.96f)) and (m_personajeSinFlip->getSentidoDeMovimiento() > 0) ) return this->CheckSegundoJugador(1);
 	return this->CheckSegundoJugador(0);
@@ -280,11 +301,9 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 		return estadoJugador1;
 	}
 
-
-
 	switch (estadoJugador1) {
 		case 1:
-			if ((m_personajeConFlip->getX() <= (getX() + m_ancho_ventana*0.02f))){
+			if ((m_personajeConFlip->getX() <= (getX() + m_ancho_ventana*0.01f))){
 				m_personajeSinFlip->setScroll(false);
 				m_personajeConFlip->setScroll(false);
 				return 0;
@@ -293,7 +312,7 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 			return 1;
 			break;
 		case -1:
-			if ((m_personajeConFlip->getX() >= (getX() + m_ancho_ventana*0.96f))){
+			if ((m_personajeConFlip->getX() >= (getX() + m_ancho_ventana*0.98f)) and !(m_personajeConFlip->getSentidoDeMovimiento() < 0) ){
 				m_personajeSinFlip->setScroll(false);
 				m_personajeConFlip->setScroll(false);
 				return 0;
@@ -303,9 +322,9 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 			break;
 		default:
 			if(getX() == 0 and (m_personajeConFlip->getSentidoDeMovimiento() < 0))return this->_NadieScrollea();
-			if(getX() == rect->w and (m_personajeConFlip->getSentidoDeMovimiento() > 0)) return this->_NadieScrollea();
+			if(getX() == (rect->w-m_ancho_ventana) and (m_personajeConFlip->getSentidoDeMovimiento() > 0) and (m_personajeConFlip->getX() >= (getX() + m_ancho_ventana*0.97f)) ) return this->_NadieScrollea();
 			if ((m_personajeConFlip->getX() - m_personajeConFlip->getAncho()<= (getX() + m_ancho_ventana*0.02f)) and (m_personajeConFlip->getSentidoDeMovimiento() < 0)){
-				if ((m_personajeSinFlip->getX() >= (getX() + m_ancho_ventana*0.96f))){
+				if ((m_personajeSinFlip->getX() >= (getX() + m_ancho_ventana*0.97f))){
 					m_personajeSinFlip->setScroll(false);
 					m_personajeConFlip->setScroll(false);
 					return 0;
@@ -313,7 +332,7 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 				m_PersonajeQueScrollea = _getIdDePersonaje(m_personajeConFlip);
 				return -1;
 			}
-			if ((m_personajeConFlip->getX() >= (getX() + m_ancho_ventana*0.96f)) and (m_personajeConFlip->getSentidoDeMovimiento() > 0) ){
+			if ((m_personajeConFlip->getX() >= (getX() + m_ancho_ventana*0.97f)) and (m_personajeConFlip->getSentidoDeMovimiento() > 0) ){
 				if ((m_personajeSinFlip->getX() <= (getX() + m_ancho_ventana*0.02f))){
 					m_personajeSinFlip->setScroll(false);
 					m_personajeConFlip->setScroll(false);

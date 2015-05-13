@@ -96,6 +96,10 @@ void Personaje::setPosition(float x, float y){
 	m_yPiso = m_yActual;
 }
 
+void Personaje::setPositionX(float x){
+	m_xActual = x;
+}
+
 std::string Personaje::getNombre() {
 	return nombre;
 }
@@ -142,7 +146,7 @@ void Personaje::setFlip(bool flip){
 		}
 }
 
-void Personaje::Update(float posDeOtroJugador){
+void Personaje::Update(float posDeOtroJugador,bool forzado){
 	//Actualizo La X para cada caso y verificando limites
 	if (_estaMuerto){
 		if (!spriteActual->inLoop()){
@@ -185,7 +189,7 @@ void Personaje::Update(float posDeOtroJugador){
 	}
 
 	//Actualizo la Y
-	if(_estaSaltando > 0){
+	if(_estaSaltando > 0 and not forzado){
 		_actualizarY();
 	} else if (_estaSaltando == 0){
 		m_yActual = m_yPiso;
@@ -211,7 +215,9 @@ void Personaje::_UpdatePoder(){
 bool Personaje::enMovimiento(){
 	return (m_velocidadActual != 0);
 }
-
+bool Personaje::estaSaltando(){
+	return _estaSaltando == -1;
+}
 float Personaje::getAncho(){
 	return spriteActual->getAncho();
 }
@@ -255,7 +261,7 @@ void Personaje::renderizar(float x_dist_ventana,float posOtherPlayer){
 	}
 
 	//* Para test de colisiones *//
-	spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
+	//spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
 	//* Fin de test para mostrar colisiones *//
 
 	AvanzarSprite();
@@ -283,9 +289,11 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	else
 		rectangulo->x = m_xActual + sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
 
-	if (Accion == SPRITE_PATADA_ALTA or Accion == SPRITE_PINA_ALTA){
+	if (Accion == SPRITE_PATADA_ALTA){
 		if ( spriteActual->primerFrame() ) propH = 4;
 		else propH = 0;
+	} else if (Accion == SPRITE_PINA_ALTA){
+		propH = 4;
 	} else if (Accion == SPRITE_PATADA_BAJA or Accion == SPRITE_PINA_BAJA or Accion == SPRITE_PINA_AGACHADO or Accion == SPRITE_PATADA_ALTA_AGACHADO){
 		propH = 6;
 		propY = 2;
@@ -443,7 +451,7 @@ void Personaje::Inicial(){
 }
 
 void Personaje::Frenar(){
-	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe) return;
 	m_velocidadActual = 0;
 	Inicial();
 }
