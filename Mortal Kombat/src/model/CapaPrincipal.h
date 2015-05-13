@@ -30,7 +30,7 @@ public:
 	Personaje* getPersonajSinFlip();
 	Personaje* getPersonajConFlip();
 	int CheckearColisiones();
-	int ChequearSiSePisan();
+
 	virtual ~CapaPrincipal();
 	virtual void Renderizar();
 	virtual void Update(int scroll);
@@ -50,6 +50,9 @@ private:
 	float m_velocidad_derecha;
 	float m_velocidad_izquierda;
 	int m_PersonajeQueScrollea; //0 no scrollea ninguno, 1 scrollea el 1, 2 el 2
+
+	void _ChequearSiSePisan();
+	int _getIdDePersonaje(Personaje* personaje_a_ver);
 	int CheckSegundoJugador(int estadoSegundoJugador);
 	int _CheckearColisiones(Personaje*,Personaje*);
 	void _LateUpdate();
