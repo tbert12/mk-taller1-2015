@@ -1171,13 +1171,27 @@ Mundo* ParserJSON::cargarMundo() {
 	bool fallo_personaje_1 = false;
 	bool cambiar_color = false;
 	if ( ! root.isMember("pelea") ) {
-		personaje_1 = generarPersonajeDefault(1, ventana, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
+		personaje_1 = generarPersonajeDefault(1, ventana, ventana_ancho, ventana_alto, escenario_ancho, escenario_alto, y_piso, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
 		cambiar_color = true;
-		personaje_2 = generarPersonajeDefault(2, ventana, cambiar_color, !PERSONAJE_FLIPPED_DEFAULT);
+		personaje_2 = generarPersonajeDefault(2, ventana, ventana_ancho, ventana_alto, escenario_ancho, escenario_alto, y_piso, cambiar_color, !PERSONAJE_FLIPPED_DEFAULT);
 		log( "No se especificaron correctamente los parametros para los dos luchadores de la pelea. Se setean ambos como el personaje por defecto.", LOG_ERROR );
 	} else {
 		if ( ! root["pelea"].isMember("luchador1") ) {
-			personaje_1 = generarPersonajeDefault(1, ventana, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
+			//personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
+
+			/*HARDCODEO ZARPARDO*/
+			Json::Value root_default;
+			Json::Reader reader_default;
+
+			// Abrir archivo.
+			ifstream archivoConfigDefault;
+			archivoConfigDefault.open("data/config/default.json");
+			reader_default.parse( archivoConfigDefault, root_default, false );
+
+			personaje_1 = cargarPersonaje(personaje_nombre_1, 1, root_default, PERSONAJE_FLIPPED_DEFAULT, ventana, cambiar_color, escenario_ancho, escenario_alto, ventana_ancho, y_piso);
+
+
+			//personaje_1 = generarPersonajeDefault(1, ventana, ventana_ancho, ventana_alto, escenario_ancho, escenario_alto, y_piso, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
 			fallo_personaje_1 = true;
 			log("No se especifico el luchador 1, se setea por defecto.", LOG_ERROR);
 		} else {
@@ -1186,8 +1200,21 @@ Mundo* ParserJSON::cargarMundo() {
 				log( "El nombre del personaje 1 fue cargado correctamente.", LOG_DEBUG );
 				personaje_1 = cargarPersonaje(personaje_nombre_1, 1, root, PERSONAJE_FLIPPED_DEFAULT, ventana, cambiar_color, escenario_ancho, escenario_alto, ventana_ancho, y_piso);
 			} catch ( exception &e ) {
-				personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
-				personaje_1 = generarPersonajeDefault(1, ventana, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
+				//personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
+
+				/*HARDCODEO ZARPARDO*/
+				Json::Value root_default;
+				Json::Reader reader_default;
+
+				// Abrir archivo.
+				ifstream archivoConfigDefault;
+				archivoConfigDefault.open("data/config/default.json");
+				reader_default.parse( archivoConfigDefault, root_default, false );
+
+				personaje_1 = cargarPersonaje(personaje_nombre_1, 1, root_default, PERSONAJE_FLIPPED_DEFAULT, ventana, cambiar_color, escenario_ancho, escenario_alto, ventana_ancho, y_piso);
+
+
+				//personaje_1 = generarPersonajeDefault(1, ventana, ventana_ancho, ventana_alto, escenario_ancho, escenario_alto, y_piso, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
 				fallo_personaje_1 = true;
 				log( "El nombre del personaje 1 no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 			}
@@ -1195,7 +1222,7 @@ Mundo* ParserJSON::cargarMundo() {
 		if ( ! root["pelea"].isMember("luchador2") ) {
 			if ( fallo_personaje_1 )
 				cambiar_color = true;
-			personaje_2 = generarPersonajeDefault(2, ventana, cambiar_color, !PERSONAJE_FLIPPED_DEFAULT);
+			personaje_2 = generarPersonajeDefault(2, ventana, ventana_ancho, ventana_alto, escenario_ancho, escenario_alto, y_piso, cambiar_color, !PERSONAJE_FLIPPED_DEFAULT);
 			log("No se especifico el luchador 2, se setea por defecto.", LOG_ERROR);
 		} else {
 			try {
@@ -1209,7 +1236,7 @@ Mundo* ParserJSON::cargarMundo() {
 				personaje_nombre_2 = PERSONAJE_NOMBRE_DEFAULT;
 				if ( fallo_personaje_1 )
 					cambiar_color = true;
-				personaje_2 = generarPersonajeDefault(2, ventana, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
+				personaje_2 = generarPersonajeDefault(2, ventana, ventana_ancho, ventana_alto, escenario_ancho, escenario_alto, y_piso, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
 				log( "El nombre del personaje 2 no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 			}
 		}
