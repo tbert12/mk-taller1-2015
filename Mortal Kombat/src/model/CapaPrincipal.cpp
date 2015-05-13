@@ -66,15 +66,11 @@ int CapaPrincipal::CheckearColisiones(){
 	if(m_Personaje->getFlipState()){
 		personaje = m_PersonajeDos;
 		personajeFlippeado = m_Personaje;
-	}
-	else{
+	}else{
 		personajeFlippeado = m_PersonajeDos;
 		personaje = m_Personaje;
 	}
 
-	this->_ChequearSiSePisan();
-
-	int toReturn = this->_CheckearColisiones(personaje,personajeFlippeado);
 	if(personaje->getX() + personaje->getAncho()*.5f > personajeFlippeado->getX() - personajeFlippeado->getAncho()*.5f){
 		personaje->setFlip(true);
 		personajeFlippeado->setFlip(false);
@@ -82,6 +78,10 @@ int CapaPrincipal::CheckearColisiones(){
 
 	m_personajeSinFlip = personaje;
 	m_personajeConFlip = personajeFlippeado;
+
+	this->_ChequearSiSePisan();
+
+	int toReturn = this->_CheckearColisiones(personaje,personajeFlippeado);
 
 	_LateUpdate();
 

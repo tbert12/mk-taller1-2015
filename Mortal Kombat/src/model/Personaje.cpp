@@ -189,7 +189,7 @@ void Personaje::Update(float posDeOtroJugador,bool forzado){
 	}
 
 	//Actualizo la Y
-	if(_estaSaltando > 0 and not forzado){
+	if(_estaSaltando > 0 and !forzado){
 		_actualizarY();
 	} else if (_estaSaltando == 0){
 		m_yActual = m_yPiso;
