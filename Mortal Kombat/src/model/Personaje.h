@@ -140,6 +140,7 @@ public:
 	void renderizar(float x_dist_ventana,float posOtherPlayer);
 
 	void setPosition(float x, float y);
+	void setPositionX(float x);
 	void setDimensionesMundo(float h, float w);
 
 	int getSentidoDeMovimiento();

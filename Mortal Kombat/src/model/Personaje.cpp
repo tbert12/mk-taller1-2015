@@ -96,6 +96,10 @@ void Personaje::setPosition(float x, float y){
 	m_yPiso = m_yActual;
 }
 
+void Personaje::setPositionX(float x){
+	m_xActual = x;
+}
+
 std::string Personaje::getNombre() {
 	return nombre;
 }
