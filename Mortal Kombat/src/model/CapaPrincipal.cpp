@@ -159,6 +159,10 @@ void CapaPrincipal::_ChequearSiSePisan(){
 				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()-m_personajeSinFlip->getAncho()*.05f);
 				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()+m_personajeConFlip->getAncho()*.05f);
 			}
+			if(m_personajeSinFlip->getX() + m_personajeSinFlip->getAncho()*.5f > m_personajeConFlip->getX() - m_personajeConFlip->getAncho()*.5f){
+				m_personajeSinFlip->setFlip(true);
+				m_personajeConFlip->setFlip(false);
+			}
 		}
 	}
 }
