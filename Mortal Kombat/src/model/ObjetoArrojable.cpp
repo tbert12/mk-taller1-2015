@@ -75,8 +75,6 @@ void ObjetoArrojable::_Update(){
 
 void ObjetoArrojable::_render(float pos_ventana){
 	sprite->render(m_xActual - pos_ventana,m_yActual,flip);
-	//render colision test
-	sprite->RENDERCOLISIONTEST(pos_ventana,m_yActual,flip,rectanguloAtaque(),NULL);
 	_avanzarSprite();
 }
 
