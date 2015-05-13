@@ -42,7 +42,7 @@ private:
 	int _NadieScrollea();
 	Rect_Logico* rectAtaqueAnterior1;
 	Rect_Logico* rectAtaqueAnterior2;
-	Personaje* m_Personaje;
+	Personaje* m_PersonajeUno;
 	Personaje* m_PersonajeDos;
 	Personaje* m_personajeSinFlip;
 	Personaje* m_personajeConFlip;
