@@ -102,7 +102,7 @@ void JoystickControl::JoyPressed(){
 	//Boton
 	else if (evento->type == SDL_JOYBUTTONUP){
 		int boton = evento->jbutton.button;
-		if (boton == comandos->operator[](PATADA_BAJA) )
+		if (boton == comandos->operator[](PINA_BAJA) )
 			personaje->pinaBaja();
 		else if( boton == comandos->operator [](PINA_ALTA)){
 			personaje->pinaAlta();
