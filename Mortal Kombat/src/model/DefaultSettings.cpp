@@ -406,12 +406,12 @@ vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
 	return objetosArrojables;
 }
 
-Personaje* generarPersonajeDefault( int nro_personaje, Ventana* ventana, bool cambiar_color, bool flipped ) {
+Personaje* generarPersonajeDefault( int nro_personaje, Ventana* ventana, float ventana_ancho, float ventana_alto, float escenario_ancho, float escenario_alto, float y_piso, bool cambiar_color, bool flipped ) {
 	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, cambiar_color, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD, flipped);
 	if ( nro_personaje == 1 )
-		personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
+		personaje_default->setPosition((escenario_ancho/2) - (ventana_ancho/2) * PERSONAJE_POS_RESPECTO_CAM,y_piso);
 	else if ( nro_personaje == 2 )
-		personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) + (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
+		personaje_default->setPosition((escenario_ancho/2) + (ventana_ancho/2) * PERSONAJE_POS_RESPECTO_CAM,y_piso);
 	return personaje_default;
 }
 
