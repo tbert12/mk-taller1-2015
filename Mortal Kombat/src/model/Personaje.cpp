@@ -193,7 +193,6 @@ void Personaje::Update(float posDeOtroJugador,bool forzado){
 		_actualizarY();
 	} else if (_estaSaltando == 0){
 		m_yActual = m_yPiso;
-		_estaSaltando = -1;
 	}
 
 	m_mover = true;
@@ -356,6 +355,7 @@ void Personaje::AvanzarSprite(){
 				_cambiarSprite(SPRITE_CAMINAR);
 			}
 			if (_estaAtacando) _estaAtacando = false;
+			if (!_estaSaltando) _estaSaltando = -1;
 			if (_estaAgachado and !_estaCubriendose) _estaAgachado = false;
 		}
 	}
@@ -519,7 +519,9 @@ void Personaje::_actualizarY(){
 				spriteActual->Reset();
 			}
 			spriteActual->doLoop(false);
-			if (!m_velocidadActual) spriteActual->Advance();
+			if (!m_velocidadActual){
+				spriteActual->Advance();
+			}
 		}
 	}
 }
