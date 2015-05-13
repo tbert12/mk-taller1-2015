@@ -155,8 +155,8 @@ void CapaPrincipal::_ChequearSiSePisan(){
 			m_personajeConFlip->Frenar();
 		if(sePisanX){
 			if(!(rectDefensa1->x+ rectDefensa1->w*.5f > rectDefensa2->x - rectDefensa2->w*.5f)){
-				m_personajeSinFlip->setPosition(m_personajeSinFlip->getX()+m_personajeSinFlip->getAncho()*.05f,m_personajeSinFlip->getY());
-				m_personajeConFlip->setPosition(m_personajeConFlip->getX()-m_personajeConFlip->getAncho()*.05f,m_personajeConFlip->getY());
+				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()+m_personajeSinFlip->getAncho()*.05f);
+				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()-m_personajeConFlip->getAncho()*.05f);
 			}else{
 				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()-m_personajeSinFlip->getAncho()*.05f);
 				m_personajeConFlip->setPositionX(m_personajeConFlip->getX()+m_personajeConFlip->getAncho()*.05f);
@@ -324,6 +324,7 @@ int CapaPrincipal::CheckSegundoJugador(int estadoJugador1){
 			if(getX() == 0 and (m_personajeConFlip->getSentidoDeMovimiento() < 0))return this->_NadieScrollea();
 			if(getX() == (rect->w-m_ancho_ventana) and (m_personajeConFlip->getSentidoDeMovimiento() > 0) and (m_personajeConFlip->getX() >= (getX() + m_ancho_ventana*0.97f)) ) return this->_NadieScrollea();
 			if ((m_personajeConFlip->getX() - m_personajeConFlip->getAncho()<= (getX() + m_ancho_ventana*0.02f)) and (m_personajeConFlip->getSentidoDeMovimiento() < 0)){
+				printf("asi\n");
 				if ((m_personajeSinFlip->getX() >= (getX() + m_ancho_ventana*0.97f))){
 					m_personajeSinFlip->setScroll(false);
 					m_personajeConFlip->setScroll(false);
