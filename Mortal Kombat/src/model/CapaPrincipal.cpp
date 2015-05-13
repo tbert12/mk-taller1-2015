@@ -236,8 +236,8 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 			return COLISION_NO_COLISION;
 		}
 
-		bool colisionaAtaquePersonajeSinFlipX = rectDefensa2->x - rectDefensa2->w < rectPoder->x + objetoSinFlip->getVelocidadX() +rectPoder->w ;
-		//and rectDefensa2->x - rectDefensa2->w > rectPoder->x + rectPoder->w;
+		bool colisionaAtaquePersonajeSinFlipX = rectDefensa2->x - rectDefensa2->w < rectPoder->x + objetoSinFlip->getVelocidadX() +rectPoder->w
+				and not(rectDefensa2->x < rectPoder->x);
 
 		bool colisionaY = (floatIsBetween(rectDefensa2->y, rectPoder->y-rectPoder->h , rectPoder->h) and floatIsBetween(rectDefensa2->y, rectPoder->y-rectPoder->h, rectPoder->h)) or
 				(floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h) and floatIsBetween(rectPoder->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h));
@@ -254,8 +254,8 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 		if(rectPoder == NULL or rectPoder->x + rectPoder->w < rectDefensa1->x )
 			return COLISION_NO_COLISION;
 
-		bool colisionaAtaquePersonajeConFlipX = rectDefensa1->x + rectDefensa1->w > rectPoder->x - objetoConFlip->getVelocidadX() ;
-		//and	rectDefensa1->x + rectDefensa1->w < rectPoder->x;
+		bool colisionaAtaquePersonajeConFlipX = rectDefensa1->x + rectDefensa1->w > rectPoder->x - objetoConFlip->getVelocidadX()
+				and	not(rectDefensa1->x > rectPoder->x + rectPoder->w );
 
 		bool colisionaY = (floatIsBetween(rectDefensa1->y, rectPoder->y-rectPoder->h , rectPoder->h) and floatIsBetween(rectDefensa1->y, rectPoder->y-rectPoder->h, rectPoder->h)) or
 				(floatIsBetween(rectPoder->y, rectDefensa1->y-rectDefensa1->h , rectDefensa2->h) and floatIsBetween(rectPoder->y, rectDefensa1->y-rectDefensa1->h, rectDefensa1->h));
