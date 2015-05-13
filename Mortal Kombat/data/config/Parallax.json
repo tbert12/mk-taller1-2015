@@ -62,7 +62,7 @@
 		"sprites": "data/players/liukang/sprites/",
 		"poderes": "data/players/liukang/poderes/",
 		"color-alternativo": {
-			"h-inicial": -30,
+			"h-inicial": -20,
 			"h-final": 20,
 			"desplazamiento": 240
 		},
