@@ -285,7 +285,7 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	else
 		rectangulo->x = m_xActual + sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
 
-	if (Accion == SPRITE_PATADA_ALTA or Accion == SPRITE_PINA_ALTA){
+	if (Accion == SPRITE_PATADA_ALTA){
 		if ( spriteActual->primerFrame() ) propH = 4;
 		else propH = 0;
 	} else if (Accion == SPRITE_PATADA_BAJA or Accion == SPRITE_PINA_BAJA or Accion == SPRITE_PINA_AGACHADO or Accion == SPRITE_PATADA_ALTA_AGACHADO){
