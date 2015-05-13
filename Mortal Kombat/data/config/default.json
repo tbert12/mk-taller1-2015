@@ -35,8 +35,8 @@
 	"personajes": [
 		{
 		"nombre": "Jugador",
-		"sprites": "data/players/subzero/sprites/",
-		"poderes": "data/players/subzero/poderes/",
+		"sprites": "data/players/default/sprites/",
+		"poderes": "data/players/default/poderes/",
 		"color-alternativo": {
 			"h-inicial": 180,
 			"h-final": 200,
