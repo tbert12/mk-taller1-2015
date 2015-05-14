@@ -407,8 +407,8 @@ vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
 	return objetosArrojables;
 }
 
-Personaje* generarPersonajeDefault( int nro_personaje, Ventana* ventana, float ventana_ancho, float ventana_alto, float escenario_ancho, float escenario_alto, float y_piso, bool cambiar_color, bool flipped ) {
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, cambiar_color, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD, flipped);
+Personaje* generarPersonajeDefault( int nro_personaje, Ventana* ventana, float ventana_ancho, float escenario_ancho, float escenario_alto, float y_piso, float personaje_ancho, float personaje_alto, bool cambiar_color, bool flipped ) {
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,personaje_ancho,personaje_alto, cambiar_color, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD, flipped);
 	if ( nro_personaje == 1 )
 		personaje_default->setPosition((escenario_ancho/2) - (ventana_ancho/2) * PERSONAJE_POS_RESPECTO_CAM,y_piso);
 	else if ( nro_personaje == 2 )
@@ -449,6 +449,8 @@ void mapaComandosDefault(map<string, int>* comandos1, map<string, int>* comandos
 }
 
 
+
+/*
 Mundo* generarMundoDefault() {
 
 	float ratio_x = VENTANA_ANCHO_PX_DEFAULT/VENTANA_ANCHO_DEFAULT;
@@ -482,3 +484,4 @@ Mundo* generarMundoDefault() {
 
 	return mundo;
 }
+*/

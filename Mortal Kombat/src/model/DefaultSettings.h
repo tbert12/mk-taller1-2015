@@ -10,6 +10,8 @@
 #include "../controller/KeyboardControl.h"
 #include <sys/stat.h>
 
+const char* const JSON_CONFIG_DEFAULT = "data/config/default.json";
+
 const int LOGLVL_DEFAULT = 2;
 const int TIEMPO_DEFAULT = 180;
 const int VENTANA_ANCHO_PX_DEFAULT = 640;
@@ -103,9 +105,10 @@ Sprite* crearSpriteArrojablePorDefecto(Json::Value root_poderes, const char* acc
 vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float h_desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT );
 void mapaComandosDefault(map<string, int>* comandos1, map<string, int>* comandos2);
 vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana);
-Personaje* generarPersonajeDefault(int nro_personaje, Ventana* ventana,float ventana_ancho, float ventana_alto,float escenario_ancho, float escenario_alto, float y_piso, bool cambiar_color, bool flipped);
+Personaje* generarPersonajeDefault(int nro_personaje, Ventana* ventana,float ventana_ancho, float escenario_ancho, float escenario_alto, float y_piso,float personaje_ancho, float personaje_alto, bool cambiar_color, bool flipped);
 vector<Personaje*> generarPersonajesDefault(Ventana* ventana);
-Mundo* generarMundoDefault();
+
+//Mundo* generarMundoDefault();
 
 
 #endif /* SRC_MODEL_DEFAULTSETTINGS_H_ */
