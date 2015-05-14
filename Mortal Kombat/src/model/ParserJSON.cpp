@@ -845,12 +845,12 @@ Mundo* ParserJSON::cargarMundo() {
 
 	if ( error_abrir_archivo ) {
 		log( "No se pudo abrir el archivo de configuracion JSON, se genera una partida por defecto.", LOG_ERROR );
-		archivoConfig.open("data/config/default.json");
+		archivoConfig.open(JSON_CONFIG_DEFAULT);
 		reader.parse( archivoConfig, root, false );
 	}
 	if ( json_invalido ) {
 	    log( "No se pudo interpretar el JSON, se genera una partida por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
-		archivoConfig.open("data/config/default.json");
+		archivoConfig.open(JSON_CONFIG_DEFAULT);
 		reader.parse( archivoConfig, root, false );
 	}
 	if ( loglvl_no_seteado ) {
