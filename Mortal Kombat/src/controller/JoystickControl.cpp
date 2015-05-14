@@ -70,10 +70,6 @@ void JoystickControl::_Init(int id){
 }
 
 void JoystickControl::JoyPressed(){
-	//probamos los botonesss
-	//printf("Boton n°: %i \n",evento->jbutton.button);
-	//return;
-
 	//X axis motion
 	if(evento->type == SDL_JOYAXISMOTION){
 		if( evento->jaxis.axis == 0 ){
@@ -105,7 +101,7 @@ void JoystickControl::JoyPressed(){
 		}
 	}
 	//Boton
-	else if (evento->type == SDL_JOYBUTTONUP){
+	else if (evento->type == SDL_JOYBUTTONDOWN){
 		int boton = evento->jbutton.button;
 		if (boton == comandos->operator[](PINA_BAJA) )
 			personaje->pinaBaja();
