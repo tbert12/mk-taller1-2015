@@ -8,23 +8,26 @@
 #include "Pelea.h"
 
 Pelea::Pelea(Ventana* la_ventana,Personaje* personaje1,Personaje* personaje2,int un_tiempo,std::vector<Capa*> las_capas,CapaPrincipal* capa_principal) {
-	personaje_uno = personaje1;
-	personaje_dos = personaje2;
+	m_personajeUno = personaje1;
+	m_personajeDos = personaje2;
+	ganador = NULL;
 	capas = las_capas;
 	capaPrincipal = capa_principal;
 	ventana = la_ventana;
 	tiempoRound = un_tiempo;
 	NumeroRound = 1;
+	GanadorRound = {0,0,0};
 	comenzo_pelea = false;
 	round_finalizado = false;
+	partida_finalizada = false;
 	tiempo = new Tiempo(tiempoRound);
 	_crearEstado();
 }
 
 void Pelea::_crearEstado(){
 	if (ventana == NULL) return;
-	BarraPersonajeUno = new BarraEnergia(ventana,personaje_uno->getVida());
-	BarraPersonajeDos = new BarraEnergia(ventana,personaje_dos->getVida());
+	BarraPersonajeUno = new BarraEnergia(ventana,m_personajeUno->getVida());
+	BarraPersonajeDos = new BarraEnergia(ventana,m_personajeDos->getVida());
 	BarraPersonajeDos->setFlip();
 	if (tiempo)
 		tiempo_pantalla = new TiempoPartida(ventana,tiempo);
@@ -37,14 +40,21 @@ void Pelea::start(){
 
 void Pelea::_renderEstado(){
 	if (BarraPersonajeUno != NULL)
-		BarraPersonajeUno->render(personaje_uno->getVida());
+		BarraPersonajeUno->render(m_personajeUno->getVida());
 	if (BarraPersonajeDos != NULL)
-		BarraPersonajeDos->render(personaje_dos->getVida());
+		BarraPersonajeDos->render(m_personajeDos->getVida());
 	if (tiempo_pantalla != NULL)
 		tiempo_pantalla->render();
 }
 
+bool Pelea::peleaFinalizada(){
+	return partida_finalizada;
+}
+
 void Pelea::render(){
+	if (partida_finalizada)
+		return;
+
 	if(!comenzo_pelea){
 		start();
 		comenzo_pelea = true;
@@ -52,41 +62,34 @@ void Pelea::render(){
 
 	//verifico el tiempo
 	tiempo->actualizar();
-	if (tiempo->tiempoTerminado()){
-		//se termino el tiempo
+
+	//verifico si finalizo el round
+	_roundFinalizado();
+
+	if (!round_finalizado){
+		//verifico scroll
+		int scroll = capaPrincipal->Scrollear(); //capaPrincipal->Scrollear();
+
+		//actualizo los estados
+		for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
+			capas[i]->Update(scroll);
+		}
+
+		//aca una vez actualizado to do chequeo las colisiones y demas.
+		_verificarColisiones();
+
+		//renderizo las capas
+		for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
+			capas[i]->Renderizar();
+		}
 	}
-
-	//verifico Ganador
-	if(personaje_uno->getVida() <= 0){
-		log("Partida finalizada, GANADOR: " + personaje_dos->getNombre(),LOG_DEBUG);
-		round_finalizado = true;
-		//_mostrar_ganador(capaPrincipal->getPersonajSinFlip()->getNombre());
-		return;
+	else{
+		_partidaFinalizada();
+		if(!partida_finalizada){
+			//imprimo ganador?
+			_resetRound();
+		}
 	}
-	else if (personaje_dos->getVida() <= 0){
-		log("Partida finalizada, GANADOR: " + personaje_uno->getNombre(),LOG_DEBUG);
-		round_finalizado = true;
-		//_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
-		return;
-	}
-
-	//verifico scroll
-	int scroll = capaPrincipal->Scrollear(); //capaPrincipal->Scrollear();
-
-	//actualizo los estados
-	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
-		capas[i]->Update(scroll);
-	}
-
-
-	//aca una vez actualizado to do chequeo las colisiones y demas.
-	_verificarColisiones();
-
-	//renderizo las capas
-	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
-		capas[i]->Renderizar();
-	}
-
 }
 
 void Pelea::_verificarColisiones(){
@@ -132,6 +135,86 @@ void Pelea::_verificarColisiones(){
 		default:
 			break;
 	}
+}
+
+void Pelea::_roundFinalizado(){
+
+	//se termino el tiempo, gana el de mayor vida
+	if(tiempo->tiempoTerminado()){
+		round_finalizado = true;
+		if(m_personajeUno->getVida() > m_personajeDos->getVida()){
+			//gana personaje uno
+			log("Round finalizado, GANADOR: " + m_personajeUno->getNombre(),LOG_DEBUG);
+			GanadorRound[NumeroRound -1]  = 1;
+		}
+		else if (m_personajeUno->getVida() < m_personajeDos->getVida()){
+			//gana personaje dos
+			log("Round finalizado, GANADOR: " + m_personajeDos->getNombre(),LOG_DEBUG);
+			GanadorRound[NumeroRound -1]  = 2;
+		}
+		else{
+			//empatan ?
+			GanadorRound[NumeroRound -1]  = 0;
+		}
+	}
+
+	//el tiempo no termino
+	else{
+		//verifico si hay ganador por agotarse vida
+		if(m_personajeUno->getVida() <= 0){
+			round_finalizado = true;
+			log("Round finalizado, GANADOR: " + m_personajeDos->getNombre(),LOG_DEBUG);
+			GanadorRound[NumeroRound -1]  = 2;
+			//_mostrar_ganador(capaPrincipal->getPersonajSinFlip()->getNombre());
+		}
+		else if (m_personajeDos->getVida() <= 0){
+			round_finalizado = true;
+			log("Round finalizado, GANADOR: " + m_personajeUno->getNombre(),LOG_DEBUG);
+			GanadorRound[NumeroRound -1]  = 1;
+			//_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
+		}
+	}
+}
+void Pelea::_partidaFinalizada(){
+	if (NumeroRound == 2){
+		//si ya un personaje gano los dos rounds
+		if ((GanadorRound[0]  == 1 and GanadorRound[1]  == 1 ) || (GanadorRound[0]  == 2 and GanadorRound[1]  == 2 )){
+			partida_finalizada = true;
+			if (GanadorRound[0]  == 1){
+				ganador = m_personajeUno;
+			}else{
+				ganador = m_personajeDos;
+			}
+		}
+		else{
+			NumeroRound++;
+		}
+	}else if (NumeroRound >= 3){
+		partida_finalizada = true;
+		//si hay 3 round el que gano el ultimo es el ganador
+		if (GanadorRound[NumeroRound - 1] == 1){
+			ganador = m_personajeUno;
+		}
+		else if (GanadorRound[NumeroRound - 1] == 2){
+			ganador = m_personajeDos;
+		}
+		else{ //empate gana el que gano el primer round?
+			if (GanadorRound[0] == 1){
+			ganador = m_personajeUno;
+			}
+			else if (GanadorRound[0] == 2){
+				ganador = m_personajeDos;
+			}
+		}
+	}
+}
+
+void Pelea::_resetRound(){
+	//reseteo todos las capas y personajes
+	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
+		capas[i]->reset();
+	}
+	round_finalizado = false;
 }
 
 Pelea::~Pelea() {

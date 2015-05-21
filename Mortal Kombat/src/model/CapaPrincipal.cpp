@@ -48,6 +48,7 @@ CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeF
 void CapaPrincipal::_actualizarX(){
 	if (rect->x < 0) rect->x = 0;
 	if (rect->x > rect->w) rect->x = rect->w;
+
 }
 
 void CapaPrincipal::Update(int scroll){
@@ -58,6 +59,21 @@ void CapaPrincipal::Update(int scroll){
 	_scroll = scroll;
 }
 
+void CapaPrincipal::reset(){
+	rect->x = rect->w*0.5f;
+	rect->y = 0;
+	rect->x = rect->x - m_ancho_ventana/2;//Inicia al medio
+	m_PersonajeUno->setPosition((m_anchoDeFondo/2) - (m_ancho_ventana/2)*0.8,-1);
+	m_PersonajeDos->setPosition((m_anchoDeFondo/2) + (m_ancho_ventana/2)*0.8,-1);
+	m_velocidad_derecha = m_PersonajeUno->getVelocidadDerecha();
+	m_velocidad_izquierda = m_PersonajeUno->getVelocidadIzquierda();
+	m_PersonajeQueScrollea = 0;
+	rectAtaqueAnterior2 = NULL;
+	rectAtaqueAnterior1 = NULL;
+	m_personajeConFlip = NULL;
+	m_personajeSinFlip = NULL;
+	_scroll = 0;
+}
 
 int CapaPrincipal::CheckearColisiones(){
 	Personaje* personaje;

@@ -92,8 +92,10 @@ int Personaje::getVida(){
 
 void Personaje::setPosition(float x, float y){
 	m_xActual = x;
-	m_yActual = y;
-	m_yPiso = m_yActual;
+	if(y < 0)
+		m_yActual = m_yPiso;
+	else
+		m_yActual = m_yPiso = y;
 }
 
 void Personaje::setPositionX(float x){

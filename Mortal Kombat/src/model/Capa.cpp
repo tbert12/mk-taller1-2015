@@ -46,6 +46,10 @@ void Capa::Update(int scroll){
 
 }
 
+void Capa::reset(){
+
+}
+
 void Capa::Renderizar()
 {
 

@@ -32,6 +32,11 @@ void CapaFondo::Renderizar(){
 	m_texture->renderFondo(rect);
 }
 
+void CapaFondo::reset(){
+	rect->x = rect->w*0.5f;
+	rect->y = 0;
+}
+
 CapaFondo::~CapaFondo() {
 	//auto call ~Capa() <- delete rect;
 	delete m_texture;

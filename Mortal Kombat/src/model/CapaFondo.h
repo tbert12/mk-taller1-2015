@@ -30,6 +30,7 @@ public:
 	//virtual void Mover(bool right);
 	virtual void Renderizar();
 	virtual void Update(int scroll);
+	virtual void reset();
 	virtual ~CapaFondo();
 };
 

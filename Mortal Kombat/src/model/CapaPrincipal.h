@@ -34,6 +34,7 @@ public:
 	virtual ~CapaPrincipal();
 	virtual void Renderizar();
 	virtual void Update(int scroll);
+	virtual void reset();
 
 
 private:

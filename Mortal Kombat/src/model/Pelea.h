@@ -24,11 +24,14 @@
 class Pelea {
 
 private:
-	Personaje* personaje_uno;
-	Personaje* personaje_dos;
+	Personaje* m_personajeUno;
+	Personaje* m_personajeDos;
+	Personaje* ganador;
 	int tiempoRound;
 	int NumeroRound;
+	std::vector<int> GanadorRound;
 	bool round_finalizado;
+	bool partida_finalizada;
 	bool comenzo_pelea;
 	Tiempo* tiempo;
 	Ventana* ventana;
@@ -41,11 +44,15 @@ private:
 	void _crearEstado();
 	void _renderEstado();
 	void _verificarColisiones();
+	void _roundFinalizado();
+	void _partidaFinalizada();
+	void _resetRound();
 
 public:
 	Pelea(Ventana* la_ventana,Personaje* personaje1,Personaje* personaje2,int un_tiempo,std::vector<Capa*> las_capas,CapaPrincipal* capa_principal);
 	void start();
 	void render();
+	bool peleaFinalizada();
 	virtual ~Pelea();
 };
 
