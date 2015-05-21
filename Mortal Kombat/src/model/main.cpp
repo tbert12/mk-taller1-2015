@@ -21,19 +21,26 @@
 #include "../view/Ventana.h"
 #include "Personaje.h"
 
+//Variables
 Mundo* mundo;
 Controller* control;
+Personaje* personaje_uno;
+Personaje* personaje_dos;
+int ModoDeJuego = 0; // 0 P1 vs P2
+
 
 string ruta_archivo_configuracion = "data/config/Parallax.json";
 map<string, int>* mapa_comandos1;
 map<string, int>* mapa_comandos2;
 
-Mundo* cargarMundo(){
+Mundo* cargarDatos(){
 	Mundo* unMundo;
 	ParserJSON* parser;
 	try {
 			parser = new ParserJSON( ruta_archivo_configuracion );
 			unMundo = parser->cargarMundo();
+			personaje_uno = unMundo->getPersonaje(0);
+			personaje_dos = unMundo->getPersonaje(1);
 			log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
 			mapa_comandos1 = parser->getComandos1();
 			mapa_comandos2 = parser->getComandos2();
@@ -53,22 +60,34 @@ void free(Mundo* un_mundo,Controller* c1){
 	delete c1;
 }
 
+void crearControlador(){
+	//Creo el Controlador
+	switch(ModoDeJuego){
+		case 0: //P1vsP2
+			control = new Controller(personaje_uno,personaje_dos,mapa_comandos1, mapa_comandos2);
+			break;
+		case 1://P1vsCPU o P1 Practica
+			control = new Controller(personaje_uno,NULL,mapa_comandos1,mapa_comandos2);
+			break;
+	}
+}
+
 bool _recargarMundo(){
 	log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_WARNING );
 	free(mundo,control);
 	log ( "Refresh: se libero la memoria de lo cargado anteriormente", LOG_WARNING );
 
 
-	mundo = cargarMundo();
+	mundo = cargarDatos();
 	if (mundo == NULL){
 		log ( "No se pudo cargar el mundo luego del refresh, se cierra el programa", LOG_ERROR );
 		return false;
 	}
-
+	personaje_uno = mundo->getPersonaje(0);
+	personaje_dos = mundo->getPersonaje(1);
 	log( "Se creo correctamente el Mundo de la partida, luego del refresh", LOG_DEBUG );
 
-	//Creo el Controlador
-	control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos1, mapa_comandos2);
+	crearControlador();
 	return true;
 }
 
@@ -83,10 +102,13 @@ int main( int argc, char* args[] )
 		ruta_archivo_configuracion = args[1];
 	}
 
-	mundo = cargarMundo();
+	//cargo los datos
+	mundo = cargarDatos();
 	if (mundo == NULL) {
 		return 1;
 	}
+
+	//selector de modo
 
 	//Creo el Controlador
 	control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos1, mapa_comandos2);

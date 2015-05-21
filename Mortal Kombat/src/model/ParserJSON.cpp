@@ -1057,14 +1057,14 @@ Mundo* ParserJSON::cargarMundo() {
 		throw runtime_error( "No se pudo abrir la ventana del programa." );
 	}
 
+	// Se va a mostrar en pantalla una imagen durante el tiempo de carga
+	if(ventana->mostrarImagen("data/img/background/inicio.png")){
+		log("Se muestra imagen bienvenida en Ventanta durante tiempo de carga", LOG_DEBUG );
+	}
+
 	// Asigno Ventana al Mundo.
 	nuevo_mundo->setVentana(ventana);
 	log( "Se le asigno la ventana creada al nuevo mundo.", LOG_DEBUG );
-
-	// Se va a mostrar en pantalla una imagen durante el tiempo de carga
-	if(nuevo_mundo->mostrarImagen("data/img/background/inicio.png")){
-		log("Se muestra imagen bienvenida en Ventanta durante tiempo de carga", LOG_DEBUG );
-	}
 
 	// Obtener las capas del escenario. La primera capa es el fondo del escenario.
 	// Se setea por defecto el ancho en caso de error.

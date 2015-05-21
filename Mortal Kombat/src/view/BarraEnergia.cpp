@@ -144,9 +144,9 @@ void BarraEnergia::_renderBase(){
 		pos_x = (int)(ventana->obtenerAncho()*(0.02)*ventana->obtenerRatioX() + 0.5);
 	}
 	else{ //esta en la derecha
-		float dist_borde= (ventana->obtenerAncho()*(0.02)*ventana->obtenerRatioX());
+		int dist_borde= (int)(ventana->obtenerAncho()*(0.02)*ventana->obtenerRatioX() + 0.5);
 
-		pos_x = (int)((ventana->obtenerAncho() - dist_borde - ancho_logico)*ventana->obtenerRatioX() +0.5);
+		pos_x = (int)((ventana->obtenerAncho() - ancho_logico)*ventana->obtenerRatioX() +0.5) - dist_borde;
 	}
 
 	SDL_Rect Object = { pos_x,pos_y, (int)(ancho_logico*ventana->obtenerRatioX() +0.5), (int)(alto_logico*ventana->obtenerRatioY() + 0.5)};
@@ -169,9 +169,9 @@ void BarraEnergia::_renderText(){
 		pos_x = (int)(ventana->obtenerAncho()*(0.03)*ventana->obtenerRatioX() + 0.5);
 	}
 	else{ //esta en la derecha
-		float dist_borde= (ventana->obtenerAncho()*(0.02)*ventana->obtenerRatioX());
+		int dist_borde = (int)(ventana->obtenerAncho()*(0.03)*ventana->obtenerRatioX() + 0.5);
 
-		pos_x = (int)((ventana->obtenerAncho() - dist_borde)*ventana->obtenerRatioX() +0.5) - anchoTexto -5;
+		pos_x = (int)(ventana->obtenerAncho()*ventana->obtenerRatioX() +0.5) - anchoTexto - dist_borde;
 	}
 
 	SDL_Rect renderQuad = { pos_x, pos_y, anchoTexto, altoTexto };
@@ -198,9 +198,9 @@ void BarraEnergia::_renderRelleno(int estado){
 		pos_x = (int)(ventana->obtenerAncho()*(0.02)*ventana->obtenerRatioX() + 0.5);
 	}
 	else{ //esta en la derecha
-		float dist_borde= (ventana->obtenerAncho()*(0.02)*ventana->obtenerRatioX());
+		int dist_borde = (int)(ventana->obtenerAncho()*(0.02)*ventana->obtenerRatioX() + 0.5);
 
-		pos_x = (int)((ventana->obtenerAncho() - dist_borde - ancho_logico)*ventana->obtenerRatioX() +0.5);
+		pos_x = (int)((ventana->obtenerAncho() - ancho_logico)*ventana->obtenerRatioX() +0.5) - dist_borde;
 		pos_x += (int)(ancho_logico*ventana->obtenerRatioX() +0.5) - actual*(int)(ancho_logico*ventana->obtenerRatioX() +0.5)/100;
 	}
 

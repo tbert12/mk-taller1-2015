@@ -96,15 +96,6 @@ int Mundo::_verificarScroll(){
 	return capaPrincipal->Scrollear();
 }
 
-bool Mundo::mostrarImagen(string ruta){
-	if(!ventana->mostrarImagen(ruta)){
-		log("No se pudo mostrar la imagen",LOG_ERROR);
-		return false;
-	}
-	log("Se muestra imagen de inicio",LOG_DEBUG);
-	return true;
-}
-
 void Mundo::_renderEstado(){
 	if (BarraJugador1 != NULL)
 		BarraJugador1->render(personajes[0]->getVida());

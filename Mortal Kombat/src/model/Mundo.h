@@ -59,7 +59,6 @@ public:
 	Ventana* getVentana();
 	void render();
 	virtual ~Mundo();
-	bool mostrarImagen(string ruta);
 	bool partida_finalizada;
 };
 
