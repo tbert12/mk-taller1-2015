@@ -281,7 +281,7 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 		if(rectPoder == NULL or rectPoder->x + rectPoder->w < rectDefensa1->x )
 			return COLISION_NO_COLISION;
 
-		bool colisionaAtaquePersonajeConFlipX = rectDefensa1->x + rectDefensa1->w > rectPoder->x - objetoConFlip->getVelocidadX()+ rectPoder->w *.5f
+		bool colisionaAtaquePersonajeConFlipX = rectDefensa1->x + rectDefensa1->w > rectPoder->x - objetoConFlip->getVelocidadX()+ rectPoder->w *.35f
 				and	not(rectDefensa1->x > rectPoder->x + rectPoder->w );
 
 		bool colisionaY = (floatIsBetween(rectDefensa1->y, rectPoder->y-rectPoder->h , rectPoder->h) and floatIsBetween(rectDefensa1->y, rectPoder->y-rectPoder->h, rectPoder->h)) or
