@@ -599,20 +599,6 @@
 		"nombre":"parado.png",
 		"frames":[
 			{
-				"x":0,
-				"y":0,
-				"Alto":132
-,
-				"Ancho":77
-			},
-			{
-				"x":78,
-				"y":0,
-				"Alto":132
-,
-				"Ancho":77
-			},
-			{
 				"x":156,
 				"y":0,
 				"Alto":132
