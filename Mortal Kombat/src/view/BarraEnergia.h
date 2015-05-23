@@ -41,9 +41,8 @@ private:
 	SDL_Color textColor;
 public:
 	void render(int estado);
-	BarraEnergia(Ventana* una_ventana,int maximo_barra);
+	BarraEnergia(Ventana* una_ventana,int maximo_barra,string nombre);
 	void setFlip();
-	void setNombreBarra(string nombre);
 	virtual ~BarraEnergia();
 };
 

@@ -39,8 +39,9 @@ Mundo* cargarDatos(){
 	try {
 			parser = new ParserJSON( ruta_archivo_configuracion );
 			unMundo = parser->cargarMundo();
-			personaje_uno = unMundo->getPersonaje(0);
-			personaje_dos = unMundo->getPersonaje(1);
+			std::vector<Personaje*> personajes = unMundo->getPersonajes();
+			personaje_uno = personajes[0];
+			personaje_dos = personajes[1];
 			log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
 			mapa_comandos1 = parser->getComandos1();
 			mapa_comandos2 = parser->getComandos2();
@@ -83,8 +84,9 @@ bool _recargarMundo(){
 		log ( "No se pudo cargar el mundo luego del refresh, se cierra el programa", LOG_ERROR );
 		return false;
 	}
-	personaje_uno = mundo->getPersonaje(0);
-	personaje_dos = mundo->getPersonaje(1);
+	std::vector<Personaje*> personajes = mundo->getPersonajes();
+	personaje_uno = personajes[0];
+	personaje_dos = personajes[1];
 	log( "Se creo correctamente el Mundo de la partida, luego del refresh", LOG_DEBUG );
 
 	crearControlador();
@@ -111,7 +113,7 @@ int main( int argc, char* args[] )
 	//selector de modo
 
 	//Creo el Controlador
-	control = new Controller(mundo->getPersonaje(0),mundo->getPersonaje(1),mapa_comandos1, mapa_comandos2);
+	control = new Controller(personaje_uno,personaje_dos,mapa_comandos1, mapa_comandos2);
 
 	//While Principal
 	while( !control->Quit()){

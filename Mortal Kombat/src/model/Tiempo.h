@@ -14,6 +14,7 @@ public:
 	void start();
 	void actualizar();
 	int getTiempo();
+	void reset();
 	virtual ~Tiempo();
 private:
 	int m_tiempoLimite;

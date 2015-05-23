@@ -42,6 +42,24 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 	_estaMuerto = false;
 }
 
+void Personaje::reset(){
+	vida = 100;
+	spriteActual = sprites[SPRITE_INICIAL];
+	m_xActual = 0;
+	m_yActual = 0;
+	m_yPiso = 0;
+	m_velocidadActual = 0;
+	m_fliped = false;
+	m_mover = true;
+	tiempoDeSalto = 0;
+	_estaSaltando = -1;
+	_estaCubriendose = false;
+	_estaAgachado = false;
+	_estaAtacando = false;
+	_recibioGolpe = false;
+	_estaMuerto = false;
+}
+
 //-------------------------------------------------------------------------------------------------------------------------
 //Manejo de attributos logicos
 

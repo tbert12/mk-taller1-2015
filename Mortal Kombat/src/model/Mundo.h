@@ -9,18 +9,10 @@
 #define SRC_MODEL_MUNDO_H_
 
 
-#include "Tiempo.h"
-#include "../view/LTexture.h"
-#include "Capa.h"
-#include "CapaPrincipal.h"
-#include "CapaFondo.h"
 #include "Personaje.h"
-#include "ObjetoArrojable.h"
-#include "../view/Sprite.h"
-#include "../view/Frame.h"
+#include "Pelea.h"
+#include "Escenario.h"
 #include "../view/Ventana.h"
-#include "../view/BarraEnergia.h"
-#include "../view/TiempoPartida.h"
 #include <vector>
 #include <algorithm>
 #include <unistd.h>
@@ -28,38 +20,25 @@
 
 class Mundo {
 private:
-	float ancho_mundo;
-	float alto_mundo;
-	std::vector<Capa*> capas;
-	CapaPrincipal* capaPrincipal;
 	std::vector<Personaje*> personajes;
-	Tiempo* tiempo;
-	TiempoPartida* tiempo_pantalla;
+	std::vector<Escenario*> escenarios;
+	Escenario* escenario_actual;
+	Pelea* pelea;
 	Ventana* ventana;
-	int personajes_z_index;
 	bool empezar;
+	int tiempo_round;
 	void start();
-	int _verificarScroll();
-	void _verificarColisiones();
-	void _crearBarras();
-	void _crearTiempo();
-	void _renderEstado();
 	void _mostrar_ganador(string nombre);
-	BarraEnergia* BarraJugador1;
-	BarraEnergia* BarraJugador2;
 public:
-	Mundo(float AnchoMundo,float AltoMundo);
-	bool addPersonaje(Personaje* un_personaje);
-	Personaje* getPersonaje(int indice = 0);
-	void addCapa(Capa* unaCapa);
-	void addCapaPrincipal(CapaPrincipal* capa_principal,int index);
-	Capa* getCapa(int indice = 0);
-	void setTiempo(Tiempo* unTiempo);
-	void setVentana(Ventana* unaVentana);
+	bool partida_finalizada;
+
+	Mundo(Ventana* una_ventana,int tiempo_round);
+	void addPersonaje(Personaje* un_personaje);
+	std::vector<Personaje*> getPersonajes();
+	void addEscenario(Escenario* un_escenario);
 	Ventana* getVentana();
 	void render();
 	virtual ~Mundo();
-	bool partida_finalizada;
 };
 
 #endif /* SRC_MODEL_MUNDO_H_ */
