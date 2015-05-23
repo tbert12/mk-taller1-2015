@@ -9,16 +9,17 @@
 #include <list>
 
 
-CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personajeUno, Personaje* personajeDos)
+CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal,float pos_piso)
 :Capa(alto,ancho,zIndex, anchoDeFondo,ancho_ventana,velocidadPrincipal) //call superclass constructorPersonaje* personajeUno
 {
-	m_PersonajeUno = personajeUno;
-	m_PersonajeDos = personajeDos;
-	personajeUno->setDimensionesMundo(alto,ancho);
-	personajeDos->setDimensionesMundo(alto,ancho);
+	m_PersonajeUno = NULL;
+	m_PersonajeDos = NULL;
 	rect->x = rect->x - ancho_ventana/2;//Inicia al medio
-	m_velocidad_derecha = m_PersonajeUno->getVelocidadDerecha();
-	m_velocidad_izquierda = m_PersonajeUno->getVelocidadIzquierda();
+	pos_inicial_piso = pos_piso;
+	pos_inicial_personajeUno = (anchoDeFondo/2) - (ancho_ventana/2)*PERSONAJE_POS_RESPECTO_CAM;
+	pos_inicial_personajeDos = (anchoDeFondo/2) + (ancho_ventana/2)*PERSONAJE_POS_RESPECTO_CAM;
+	m_velocidad_derecha = 0;
+	m_velocidad_izquierda = 0;
 	m_PersonajeQueScrollea = 0;
 	rectAtaqueAnterior2 = NULL;
 	rectAtaqueAnterior1 = NULL;
@@ -27,22 +28,24 @@ CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeF
 	_scroll = 0;
 }
 
-CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, vector<Personaje*> personajes)
-:Capa(alto,ancho,zIndex, anchoDeFondo,ancho_ventana,velocidadPrincipal) //call superclass constructorPersonaje* personajeUno
-{
-	m_PersonajeUno = personajes[0];
-	m_PersonajeDos = personajes[1];
-	personajes[0]->setDimensionesMundo(alto,ancho);
-	personajes[1]->setDimensionesMundo(alto,ancho);
-	rect->x = rect->x - ancho_ventana/2;//Inicia al medio
-	m_velocidad_derecha = m_PersonajeUno->getVelocidadDerecha();
-	m_velocidad_izquierda = m_PersonajeUno->getVelocidadIzquierda();
-	m_PersonajeQueScrollea = 0;
-	rectAtaqueAnterior1 = m_PersonajeUno->rectanguloAtaque();
-	rectAtaqueAnterior2 = m_PersonajeDos->rectanguloAtaque();
-	m_personajeSinFlip = m_PersonajeUno;
-	m_personajeConFlip = m_PersonajeDos;
-	_scroll = 0;
+void CapaPrincipal::addPersonajes(Personaje* uno,Personaje* dos){
+	if (uno){
+		m_PersonajeUno = uno;
+		m_PersonajeUno->setDimensionesMundo(rect->h,rect->w);
+		m_PersonajeUno->setPosition(pos_inicial_personajeUno,pos_inicial_piso);
+		m_PersonajeUno->setFlip(false);
+		m_personajeSinFlip = uno;
+		m_velocidad_derecha = m_PersonajeUno->getVelocidadDerecha();
+	}
+	if (dos){
+		m_PersonajeDos = dos;
+		m_PersonajeDos->setDimensionesMundo(rect->h,rect->w);
+		m_PersonajeDos->setPosition(pos_inicial_personajeDos,pos_inicial_piso);
+		m_PersonajeUno->setFlip(true);
+		m_personajeConFlip = dos;
+		m_velocidad_izquierda = m_PersonajeUno->getVelocidadIzquierda();
+	}
+
 }
 
 void CapaPrincipal::_actualizarX(){
@@ -63,19 +66,27 @@ void CapaPrincipal::reset(){
 	rect->x = rect->w*0.5f;
 	rect->y = 0;
 	rect->x = rect->x - m_ancho_ventana/2;//Inicia al medio
-	m_PersonajeUno->setPosition((m_anchoDeFondo/2) - (m_ancho_ventana/2)*0.8,-1);
-	m_PersonajeDos->setPosition((m_anchoDeFondo/2) + (m_ancho_ventana/2)*0.8,-1);
-	m_velocidad_derecha = m_PersonajeUno->getVelocidadDerecha();
-	m_velocidad_izquierda = m_PersonajeUno->getVelocidadIzquierda();
+	if (m_PersonajeUno){
+		m_PersonajeUno->reset();
+		m_PersonajeUno->setPosition(pos_inicial_personajeUno,pos_inicial_piso);
+		m_PersonajeUno->setFlip(false);
+	}
+	if (m_PersonajeDos){
+		m_PersonajeDos->reset();
+		m_PersonajeDos->setPosition(pos_inicial_personajeDos,pos_inicial_piso);
+		m_PersonajeDos->setFlip(true);
+	}
 	m_PersonajeQueScrollea = 0;
 	rectAtaqueAnterior2 = NULL;
 	rectAtaqueAnterior1 = NULL;
-	m_personajeConFlip = NULL;
-	m_personajeSinFlip = NULL;
+	m_personajeConFlip = m_PersonajeDos;
+	m_personajeSinFlip = m_PersonajeUno;
 	_scroll = 0;
 }
 
 int CapaPrincipal::CheckearColisiones(){
+	if(!m_PersonajeUno || !m_PersonajeDos) return COLISION_NO_COLISION;
+
 	Personaje* personaje;
 	Personaje* personajeFlippeado;
 
@@ -115,6 +126,8 @@ int CapaPrincipal::CheckearColisiones(){
 }
 
 void CapaPrincipal::_LateUpdate(){
+	if(!m_PersonajeUno || !m_PersonajeDos) return;
+
 	if(m_PersonajeQueScrollea == this->_getIdDePersonaje(m_personajeConFlip) ){
 		if (m_personajeSinFlip->getX() >= (getX() + m_ancho_ventana*0.80f)) {
 			m_personajeSinFlip->Update(m_personajeConFlip->getX() + m_personajeConFlip->getVelocidadIzquierda());
@@ -303,8 +316,9 @@ Personaje* CapaPrincipal::getPersonajConFlip(){
 }
 
 
-void CapaPrincipal::Renderizar()
-{
+void CapaPrincipal::Renderizar(){
+	if(!m_PersonajeUno || !m_PersonajeDos) return;
+
 	m_PersonajeUno->renderizar(getX(), m_PersonajeDos->getX());
 	if(m_PersonajeDos){
 		m_PersonajeDos->renderizar(getX(), m_PersonajeUno->getX());
@@ -390,6 +404,5 @@ CapaPrincipal::~CapaPrincipal() {
 	m_velocidad_derecha = 0;
 	m_velocidad_izquierda = 0;
 	m_PersonajeUno = NULL;
-	if(m_PersonajeDos)
-		m_PersonajeDos = NULL;
+	m_PersonajeDos = NULL;
 }

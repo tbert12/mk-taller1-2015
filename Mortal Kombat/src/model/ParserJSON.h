@@ -2,6 +2,9 @@
 #define SRC_MODEL_PARSER_H_
 
 #include "DefaultSettings.h"
+#include "CapaFondo.h"
+#include "Escenario.h"
+#include "CapaPrincipal.h"
 
 using namespace std;
 

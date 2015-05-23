@@ -10,7 +10,7 @@
 #define RUTA_RELLENO "data/img/estado/barras/energia_llena.png"
 #define RUTA_TTF "data/font/fuente.ttf"
 
-BarraEnergia::BarraEnergia(Ventana* una_ventana,int max_barra) {
+BarraEnergia::BarraEnergia(Ventana* una_ventana,int max_barra,string nombre) {
 	ventana = una_ventana;
 	maximo_barra = max_barra;
 	actual = maximo_barra;
@@ -31,14 +31,10 @@ BarraEnergia::BarraEnergia(Ventana* una_ventana,int max_barra) {
 		log("No se pudo cargar la fuente del tiempo",LOG_ERROR);
 	}
 	texturaNombreTexto = NULL;
-	textoConstante = "Player";
+	textoConstante = nombre;
 	anchoTexto = 0;
 	altoTexto = 0;
 	textColor = { 255, 247, 0 };
-}
-
-void BarraEnergia::setNombreBarra(string nom){
-	textoConstante = nom;
 }
 
 void BarraEnergia::setFlip(){
@@ -183,7 +179,8 @@ void BarraEnergia::_renderText(){
 
 void BarraEnergia::_actualizarActual(int estado){
 	if(actual == estado) return;
-	actual -= velocidad_descarga;
+	if (estado > actual) actual = estado;
+	else actual -= velocidad_descarga;
 	if(actual < 0) actual = 0;
 }
 

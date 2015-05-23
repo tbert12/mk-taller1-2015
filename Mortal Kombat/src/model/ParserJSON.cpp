@@ -671,7 +671,6 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaj
 
 	Personaje* personaje;
 	float personaje_ancho, personaje_alto;
-	float rpos = PERSONAJE_POS_RESPECTO_CAM;
 	string personaje_carpeta_sprites, personaje_carpeta_arrojables, personaje_nombre;
 	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
 		personaje = generarPersonajeDefault(nro_personaje, ventana, ventana_ancho, escenario_ancho, escenario_alto, y_piso, PERSONAJE_ANCHO_DEFAULT, PERSONAJE_ALTO_DEFAULT,cambiar_color, flipped_default);
@@ -764,10 +763,11 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaj
 						vector<ObjetoArrojable*> arrojables = cargarArrojables(personaje_carpeta_arrojables, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
 
 						// Crear personaje.
-						Personaje* personaje = new Personaje(personaje_nombre, sprites, arrojables, PERSONAJE_VELOCIDAD, flipped_default);
+						Personaje* personaje = new Personaje(personaje_nombre, sprites, arrojables, PERSONAJE_VELOCIDAD, false);
 						log( "Se creo correctamente el personaje.", LOG_DEBUG );
 
 						// Indico posicion inicial del personaje.
+						/*
 						float position;
 						if ( nro_personaje == 1 ) {
 							position = (escenario_ancho/2) - (ventana_ancho/2)*rpos;
@@ -775,9 +775,9 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaj
 						else if ( nro_personaje == 2 ) {
 							position = (escenario_ancho/2) + (ventana_ancho/2)*rpos;
 						}
-						personaje->setPosition( position , y_piso );
+						//personaje->setPosition( position , y_piso );
 						log( "Seteada Posicion en escenario de Personaje", LOG_DEBUG );
-
+						 */
 						return personaje;
 					}
 				} catch ( exception &e ) {
@@ -871,25 +871,24 @@ Mundo* ParserJSON::cargarMundo() {
 
 	// Obtener tiempo limite del combate.
 	float tiempo;
-	Tiempo* tiempo_combate;
+	int tiempo_combate;
 	if ( ! root.isMember("tiempo") ) {
 		log( "No se especifico el tiempo de combate. Se setea en 3 minutos por defecto.", LOG_WARNING );
-		tiempo_combate = new Tiempo(TIEMPO_DEFAULT);
+		tiempo_combate = TIEMPO_DEFAULT;
 	} else {
 		try {
 			tiempo = root.get( "tiempo", TIEMPO_DEFAULT ).asInt();
 			if ( tiempo < 0 ) {
-				tiempo_combate = new Tiempo( TIEMPO_DEFAULT) ;
+				tiempo_combate = TIEMPO_DEFAULT;
 				// Informar al usuario el cambio de tiempo de la ronda.
 				log ( "El tiempo no puede ser negativo. Se setea automaticamente en 3 minutos.", LOG_WARNING );
 			} else {
 				// Crear tiempo.
-				tiempo_combate = new Tiempo( tiempo );
+				tiempo_combate = tiempo;
 				log( "Se cargo correctamente el tiempo del combate.", LOG_DEBUG );
 			}
 		} catch (exception &e) {
-			delete tiempo_combate;
-			tiempo_combate = new Tiempo( TIEMPO_DEFAULT );
+			tiempo_combate = TIEMPO_DEFAULT;
 			log( "El tiempo indicado no pudo ser convertido a un numero. Se setea un tiempo por defecto", LOG_ERROR );
 		}
 	}
@@ -1040,15 +1039,6 @@ Mundo* ParserJSON::cargarMundo() {
 	float ratio_y = ventana_alto_px / ventana_alto;
 	log ( "Se calcularon las relaciones para el ancho y el alto entre los pixeles y las unidades logicas del mundo.", LOG_DEBUG );
 
-	// Crear Mundo.
-	Mundo* nuevo_mundo = new Mundo(escenario_ancho, escenario_alto);
-
-	log ( "Se creo correctamente un mundo vacio.", LOG_DEBUG );
-
-	// Agregar tiempo de combate.
-	nuevo_mundo->setTiempo( tiempo_combate );
-	log ( "Se agrego el tiempo de combate a la pelea.", LOG_DEBUG );
-
 	// Crear Ventana y abrirla.
 	Ventana* ventana = new Ventana( ventana_ancho_px, ventana_alto_px, ratio_x, ratio_y );
 	log ( "Se creo correctamente la ventana (camara).", LOG_DEBUG );
@@ -1062,9 +1052,13 @@ Mundo* ParserJSON::cargarMundo() {
 		log("Se muestra imagen bienvenida en Ventanta durante tiempo de carga", LOG_DEBUG );
 	}
 
-	// Asigno Ventana al Mundo.
-	nuevo_mundo->setVentana(ventana);
+	Mundo* nuevo_mundo = new Mundo(ventana,tiempo_combate);
+	log ( "Se creo correctamente un mundo vacio.", LOG_DEBUG );
 	log( "Se le asigno la ventana creada al nuevo mundo.", LOG_DEBUG );
+
+	//creo el escenario
+	Escenario* escenario = new Escenario();
+	log( "Se creo un escenario vacio", LOG_DEBUG );
 
 	// Obtener las capas del escenario. La primera capa es el fondo del escenario.
 	// Se setea por defecto el ancho en caso de error.
@@ -1077,11 +1071,11 @@ Mundo* ParserJSON::cargarMundo() {
 	if ( ! root.isMember("capas") || ! root["capas"].isArray() ) {
 		log( "No se encontraron parametros en un vector para la creacion de las capas. Se crean capas y se asignan valores por defecto.", LOG_ERROR );
 		CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_0_BACKGROUND_DEFAULT,ventana);
-		nuevo_mundo->addCapa(capa_0);
+		escenario->addCapa(capa_0);
 		CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_1_BACKGROUND_DEFAULT,ventana);
-		nuevo_mundo->addCapa(capa_1);
+		escenario->addCapa(capa_1);
 		CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_2_BACKGROUND_DEFAULT,ventana);
-		nuevo_mundo->addCapa(capa_2);
+		escenario->addCapa(capa_2);
 		capas_ok = false;
 	} else {
 		const Json::Value capas = root["capas"];
@@ -1140,7 +1134,7 @@ Mundo* ParserJSON::cargarMundo() {
 
 			// Agrego capa al mundo.
 			//nuevo_mundo->addCapa(capa_fondo, capa_z_index);
-			nuevo_mundo->addCapa(capa_fondo);
+			escenario->addCapa(capa_fondo);
 			log( "Se agrego la capa al mundo.", LOG_DEBUG );
 		}
 	}
@@ -1205,12 +1199,15 @@ Mundo* ParserJSON::cargarMundo() {
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
 	// Validaciones para el z-index de los personajes.
 	if ( capas_ok && (! z_index_ok) ) personajes_z_index = i+1;
-	CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personajes_z_index, escenario_ancho, ventana_ancho, PERSONAJE_VELOCIDAD, personajes );
+	CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personajes_z_index, escenario_ancho, ventana_ancho, PERSONAJE_VELOCIDAD,y_piso);
+	if (capa_principal)
+		capa_principal->addPersonajes(personajes[0],personajes[1]);
 	log( "Se creo correctamente la capa principal.", LOG_DEBUG );
 
 	// Agrego capa principal al mundo.
-	nuevo_mundo->addCapaPrincipal( capa_principal, personajes_z_index );
+	escenario->addCapaPrincipal( capa_principal, personajes_z_index );
 	log( "Se agrego la capa principal al mundo.", LOG_DEBUG );
+	nuevo_mundo->addEscenario(escenario);
 
 	// Obtener hash de comandos.
 	this->cargarMapaComandos(root);

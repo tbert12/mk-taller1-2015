@@ -9,6 +9,7 @@
 #define SRC_MODEL_PELEA_H_
 
 #include "Tiempo.h"
+#include "Escenario.h"
 #include "Capa.h"
 #include "CapaPrincipal.h"
 #include "Personaje.h"
@@ -32,7 +33,7 @@ private:
 	std::vector<int> GanadorRound;
 	bool round_finalizado;
 	bool partida_finalizada;
-	bool comenzo_pelea;
+	bool comenzo_round;
 	Tiempo* tiempo;
 	Ventana* ventana;
 	BarraEnergia* BarraPersonajeUno;
@@ -49,7 +50,7 @@ private:
 	void _resetRound();
 
 public:
-	Pelea(Ventana* la_ventana,Personaje* personaje1,Personaje* personaje2,int un_tiempo,std::vector<Capa*> las_capas,CapaPrincipal* capa_principal);
+	Pelea(Ventana* la_ventana,Escenario* el_escenario,int un_tiempo);
 	void start();
 	void render();
 	bool peleaFinalizada();

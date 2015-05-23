@@ -7,17 +7,17 @@
 
 #include "Pelea.h"
 
-Pelea::Pelea(Ventana* la_ventana,Personaje* personaje1,Personaje* personaje2,int un_tiempo,std::vector<Capa*> las_capas,CapaPrincipal* capa_principal) {
-	m_personajeUno = personaje1;
-	m_personajeDos = personaje2;
+Pelea::Pelea(Ventana* la_ventana,Escenario* escenario,int un_tiempo) {
+	capaPrincipal = escenario->getCapaPrincipal();
+	m_personajeUno = capaPrincipal->getPersonajSinFlip();
+	m_personajeDos = capaPrincipal->getPersonajConFlip();
 	ganador = NULL;
-	capas = las_capas;
-	capaPrincipal = capa_principal;
+	capas = escenario->getCapas();
 	ventana = la_ventana;
 	tiempoRound = un_tiempo;
 	NumeroRound = 1;
 	GanadorRound = {0,0,0};
-	comenzo_pelea = false;
+	comenzo_round = false;
 	round_finalizado = false;
 	partida_finalizada = false;
 	tiempo = new Tiempo(tiempoRound);
@@ -26,8 +26,8 @@ Pelea::Pelea(Ventana* la_ventana,Personaje* personaje1,Personaje* personaje2,int
 
 void Pelea::_crearEstado(){
 	if (ventana == NULL) return;
-	BarraPersonajeUno = new BarraEnergia(ventana,m_personajeUno->getVida());
-	BarraPersonajeDos = new BarraEnergia(ventana,m_personajeDos->getVida());
+	BarraPersonajeUno = new BarraEnergia(ventana,m_personajeUno->getVida(),m_personajeUno->getNombre());
+	BarraPersonajeDos = new BarraEnergia(ventana,m_personajeDos->getVida(),m_personajeDos->getNombre());
 	BarraPersonajeDos->setFlip();
 	if (tiempo)
 		tiempo_pantalla = new TiempoPartida(ventana,tiempo);
@@ -55,9 +55,9 @@ void Pelea::render(){
 	if (partida_finalizada)
 		return;
 
-	if(!comenzo_pelea){
+	if(!comenzo_round){
 		start();
-		comenzo_pelea = true;
+		comenzo_round = true;
 	}
 
 	//verifico el tiempo
@@ -82,6 +82,8 @@ void Pelea::render(){
 		for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
 			capas[i]->Renderizar();
 		}
+
+		_renderEstado();
 	}
 	else{
 		_partidaFinalizada();
@@ -214,10 +216,14 @@ void Pelea::_resetRound(){
 	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
 		capas[i]->reset();
 	}
+	tiempo->reset();
 	round_finalizado = false;
+	comenzo_round = false;
 }
 
 Pelea::~Pelea() {
+
+	GanadorRound.clear();
 	if(tiempo) delete tiempo;
 	if(BarraPersonajeUno) delete BarraPersonajeUno;
 	if(BarraPersonajeDos) delete BarraPersonajeDos;

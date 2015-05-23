@@ -14,6 +14,10 @@ int Tiempo::getTiempo(){
 	return m_tiempoRestante;
 }
 
+void Tiempo::reset(){
+	m_tiempoRestante = m_tiempoLimite;
+}
+
 void Tiempo::actualizar(){
 	std::time_t tiempo_actual;
 	time(&tiempo_actual);

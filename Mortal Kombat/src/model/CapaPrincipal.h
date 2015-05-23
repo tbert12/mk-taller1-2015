@@ -21,12 +21,14 @@ const int COLISION_PERSONAJE_OBJETO_SIN_FLIP =	 3;
 const int COLISION_PERSONAJE_OBJETO_CON_FLIP =	 4;
 const int COLISION_OBJETO_OBJETO = 				 5;
 
+const float PERSONAJE_POS_RESPECTO_CAM = 0.6;
+
 class CapaPrincipal: public Capa {
 
 public:
-	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, Personaje* personajeUno, Personaje* personajeDos);
-	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, vector<Personaje*> personajes);
+	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, float pos_piso);
 	int Scrollear(); //0 no scrollea , 1 para la derecha -1 para la izquierda!
+	void addPersonajes(Personaje* uno,Personaje* dos);
 	Personaje* getPersonajSinFlip();
 	Personaje* getPersonajConFlip();
 	int CheckearColisiones();
@@ -39,6 +41,9 @@ public:
 
 private:
 	int _scroll;
+	float pos_inicial_personajeUno;
+	float pos_inicial_personajeDos;
+	float pos_inicial_piso;
 
 	int _NadieScrollea();
 	Rect_Logico* rectAtaqueAnterior1;

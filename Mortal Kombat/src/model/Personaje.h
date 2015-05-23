@@ -138,6 +138,7 @@ public:
 
 	void Update(float posOtroJugador,bool forzado = false);
 	void renderizar(float x_dist_ventana,float posOtherPlayer);
+	void reset();
 
 	void setPosition(float x, float y);
 	void setPositionX(float x);
