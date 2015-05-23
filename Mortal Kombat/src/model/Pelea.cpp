@@ -16,6 +16,7 @@ Pelea::Pelea(Ventana* la_ventana,Escenario* escenario,int un_tiempo) {
 	ventana = la_ventana;
 	tiempoRound = un_tiempo;
 	NumeroRound = 1;
+	ciclos_round_terminado = CICLOS_FINAL_ROUND;
 	GanadorRound = {0,0,0};
 	comenzo_round = false;
 	round_finalizado = false;
@@ -66,32 +67,37 @@ void Pelea::render(){
 	//verifico si finalizo el round
 	_roundFinalizado();
 
-	if (!round_finalizado){
-		//verifico scroll
-		int scroll = capaPrincipal->Scrollear(); //capaPrincipal->Scrollear();
-
-		//actualizo los estados
-		for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
-			capas[i]->Update(scroll);
+	if (round_finalizado){
+		if (ciclos_round_terminado > 0){
+			ciclos_round_terminado--;
 		}
-
-		//aca una vez actualizado to do chequeo las colisiones y demas.
-		_verificarColisiones();
-
-		//renderizo las capas
-		for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
-			capas[i]->Renderizar();
-		}
-
-		_renderEstado();
-	}
-	else{
-		_partidaFinalizada();
-		if(!partida_finalizada){
-			//imprimo ganador?
-			_resetRound();
+		else{
+			_partidaFinalizada();
+			ciclos_round_terminado = CICLOS_FINAL_ROUND;
+			if(!partida_finalizada)
+				_resetRound();
 		}
 	}
+	//verifico scroll
+	int scroll = capaPrincipal->Scrollear(); //capaPrincipal->Scrollear();
+
+	//actualizo los estados
+	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
+		capas[i]->Update(scroll);
+	}
+
+	//aca una vez actualizado to do chequeo las colisiones y demas.
+	_verificarColisiones();
+
+	//renderizo las capas
+	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
+		capas[i]->Renderizar();
+	}
+
+	_renderEstado();
+
+	if(round_finalizado && ciclos_round_terminado > 0)
+		_mostarGanadorRound();
 }
 
 void Pelea::_verificarColisiones(){
@@ -167,13 +173,11 @@ void Pelea::_roundFinalizado(){
 			round_finalizado = true;
 			log("Round finalizado, GANADOR: " + m_personajeDos->getNombre(),LOG_DEBUG);
 			GanadorRound[NumeroRound -1]  = 2;
-			//_mostrar_ganador(capaPrincipal->getPersonajSinFlip()->getNombre());
 		}
 		else if (m_personajeDos->getVida() <= 0){
 			round_finalizado = true;
 			log("Round finalizado, GANADOR: " + m_personajeUno->getNombre(),LOG_DEBUG);
 			GanadorRound[NumeroRound -1]  = 1;
-			//_mostrar_ganador(capaPrincipal->getPersonajConFlip()->getNombre());
 		}
 	}
 }
@@ -209,6 +213,21 @@ void Pelea::_partidaFinalizada(){
 			}
 		}
 	}
+	else{
+		NumeroRound++;
+	}
+}
+
+void Pelea::_mostarGanadorRound(){
+	string nombre;
+	if (GanadorRound[NumeroRound - 1] == 1){
+		nombre = m_personajeUno->getNombre();
+	}
+	else if (GanadorRound[NumeroRound - 1] == 2){
+		nombre = m_personajeDos->getNombre();
+	}
+	string texto = "Ganador Round: " + to_string(NumeroRound) + " " + nombre;
+	ventana->mostrarTexto(texto);
 }
 
 void Pelea::_resetRound(){

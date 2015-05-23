@@ -1200,8 +1200,6 @@ Mundo* ParserJSON::cargarMundo() {
 	// Validaciones para el z-index de los personajes.
 	if ( capas_ok && (! z_index_ok) ) personajes_z_index = i+1;
 	CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personajes_z_index, escenario_ancho, ventana_ancho, PERSONAJE_VELOCIDAD,y_piso);
-	if (capa_principal)
-		capa_principal->addPersonajes(personajes[0],personajes[1]);
 	log( "Se creo correctamente la capa principal.", LOG_DEBUG );
 
 	// Agrego capa principal al mundo.

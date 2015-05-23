@@ -50,6 +50,11 @@ void Mundo::render(){
 	//limpio pantalla
 	ventana->clear();
 	
+	if(pelea->peleaFinalizada()){
+		printf("PATIDA FINALIZADA\n");
+		partida_finalizada = true;
+	}
+
 	pelea->render();
 
 	//actualizo pantalla -> SDL_RenderPresent( Renderer );

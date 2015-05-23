@@ -33,7 +33,7 @@ void CapaFondo::Renderizar(){
 }
 
 void CapaFondo::reset(){
-	rect->x = rect->w*0.5f;
+	rect->x = rect->w*0.5f - m_ancho_ventana/2;
 	rect->y = 0;
 }
 

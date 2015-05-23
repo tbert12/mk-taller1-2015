@@ -21,7 +21,8 @@ const int COLISION_PERSONAJE_OBJETO_SIN_FLIP =	 3;
 const int COLISION_PERSONAJE_OBJETO_CON_FLIP =	 4;
 const int COLISION_OBJETO_OBJETO = 				 5;
 
-const float PERSONAJE_POS_RESPECTO_CAM = 0.6;
+const float PERSONAJE_POS_RESPECTO_CAM_UNO = 0.8;
+const float PERSONAJE_POS_RESPECTO_CAM_DOS = 0.5;
 
 class CapaPrincipal: public Capa {
 

@@ -16,8 +16,8 @@ CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeF
 	m_PersonajeDos = NULL;
 	rect->x = rect->x - ancho_ventana/2;//Inicia al medio
 	pos_inicial_piso = pos_piso;
-	pos_inicial_personajeUno = (anchoDeFondo/2) - (ancho_ventana/2)*PERSONAJE_POS_RESPECTO_CAM;
-	pos_inicial_personajeDos = (anchoDeFondo/2) + (ancho_ventana/2)*PERSONAJE_POS_RESPECTO_CAM;
+	pos_inicial_personajeUno = (anchoDeFondo/2) - (ancho_ventana/2)*PERSONAJE_POS_RESPECTO_CAM_UNO;
+	pos_inicial_personajeDos = (anchoDeFondo/2) + (ancho_ventana/2)*PERSONAJE_POS_RESPECTO_CAM_DOS;
 	m_velocidad_derecha = 0;
 	m_velocidad_izquierda = 0;
 	m_PersonajeQueScrollea = 0;
@@ -63,9 +63,8 @@ void CapaPrincipal::Update(int scroll){
 }
 
 void CapaPrincipal::reset(){
-	rect->x = rect->w*0.5f;
+	rect->x = rect->w*0.5f - m_ancho_ventana/2;
 	rect->y = 0;
-	rect->x = rect->x - m_ancho_ventana/2;//Inicia al medio
 	if (m_PersonajeUno){
 		m_PersonajeUno->reset();
 		m_PersonajeUno->setPosition(pos_inicial_personajeUno,pos_inicial_piso);
