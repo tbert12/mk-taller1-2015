@@ -40,6 +40,16 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 	_recibioGolpe = false;
 
 	_estaMuerto = false;
+
+	//Sonidos
+	string named;
+	if(nombre == "Sub-Zero"){
+		named = "subzero";
+	} else {
+		named = "liukang";
+	}
+	pina = new LSound("data/players/" + named + "/sound/pina.wav");
+	recibe = new LSound("data/players/" + named + "/sound/recibeGolpeFuerte.wav");
 }
 
 void Personaje::reset(){
@@ -622,6 +632,7 @@ void Personaje::pinaBaja() {
 			_cambiarSprite(SPRITE_PINA_BAJA);
 		}
 	}
+	pina->play();
 	_estaAtacando = true;
 }
 
@@ -790,7 +801,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	}
 
 	_recibioGolpe = true;
-
+	recibe->play();
 	return golpeFuerte;
 }
 

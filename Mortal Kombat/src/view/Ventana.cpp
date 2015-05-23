@@ -117,6 +117,13 @@ bool Ventana::create_window()
 					log("No se pudo inicializar SDL_TTF",LOG_ERROR);
 					success = false;
 				}
+
+				//Initialize SDL_mixer
+				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+				{
+					log(string( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() ),LOG_ERROR);
+					success = false;
+				}
 			}
 
 			//agrego icono
@@ -154,6 +161,7 @@ void Ventana::close_window()
 	Renderer = NULL;
 
 	//Cerrar SDL
+	Mix_Quit();
 	IMG_Quit();
 	TTF_Quit();
 	SDL_Quit();

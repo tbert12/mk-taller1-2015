@@ -13,6 +13,7 @@
 #include <vector>
 #include <map>
 #include "../view/Sprite.h"
+#include "../view/LSound.h"
 #include "ObjetoArrojable.h"
 
 
@@ -57,6 +58,7 @@ const int MIN_GOLPE_FUERTE = 4;
 const int TIEMPOTOTALDESALTO = 15;
 const float ALTURA_SALTO_GANCHO = 1.8; //Proporcion a la altura logica del personaje
 const float ALTURA_SALTO_DIAG=    1.2;
+
 
 class Personaje {
 private:
@@ -118,6 +120,9 @@ private:
 	/*Defensa*/
 	void _cubrirseAgachado();
 	void _cubrirseParado();
+
+	LSound* pina;
+	LSound* recibe;
 
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, std::vector<ObjetoArrojable*> arrojables,float velocidad, bool fliped = false);

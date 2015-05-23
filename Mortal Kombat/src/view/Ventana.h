@@ -1,9 +1,10 @@
 #ifndef SRC_VIEW_VENTANA_H_
 #define SRC_VIEW_VENTANA_H_
 
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include <string>
 #include "LTexture.h"
 
