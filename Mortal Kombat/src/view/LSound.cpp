@@ -12,6 +12,8 @@ LSound::LSound(std::string rutaSonido) {
 	mSound = Mix_LoadWAV( rutaSonido.c_str() );
 	if (mSound == NULL){
 		log( std::string("Imposible cargar Sonido: %s", Mix_GetError() ),LOG_WARNING);
+	} else {
+		log( std::string("Sonido cargado correctamente: ") + rutaSonido ,LOG_DEBUG);
 	}
 
 }

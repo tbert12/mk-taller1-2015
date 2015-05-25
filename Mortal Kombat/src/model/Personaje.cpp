@@ -813,6 +813,8 @@ Personaje::~Personaje() {
 	for (size_t i=0; i < sprites.size() ; i++){
 		delete sprites[i];
 	}
+	delete pina;
+	delete recibe;
 }
 
 
