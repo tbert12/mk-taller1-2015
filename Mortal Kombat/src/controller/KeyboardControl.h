@@ -10,6 +10,8 @@
 
 #include<SDL2/SDL.h>
 #include "../model/Personaje.h"
+#include "ComboController.h"
+#include "Combo.h"
 #include <exception>
 #include <map>
 
@@ -21,6 +23,7 @@ private:
 	const Uint8* keystate;
 	SDL_Event* evento;
 	bool pausa;
+	ComboController* comboController;
 	bool como_jugador;
 	int sleep;
 

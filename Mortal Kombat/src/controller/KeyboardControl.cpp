@@ -19,11 +19,14 @@ KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJ
 	pausa = false;
 	keystate = SDL_GetKeyboardState(NULL);
 	sleep = 50000;
+	vector<Combo*> vect;
+	comboController = new ComboController(10,10,vect);
 }
 bool KeyboardControl::pause(){
 	return pausa;
 }
 void KeyboardControl::KeyPressed(){
+	comboController->sePresiono(evento->key.keysym.sym);
 	switch( evento->key.keysym.sym ){
 			case  SDLK_UP:
 				if(!como_jugador) return;
