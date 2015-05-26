@@ -18,6 +18,7 @@
 #include <algorithm>    // std::reverse (Tranfuguiada para que camine para atras)
 
 #include "../controller/Controller.h"
+#include "../controller/ComboController.h"
 #include "../view/Ventana.h"
 #include "Personaje.h"
 
@@ -95,8 +96,10 @@ bool _recargarMundo(){
 
 int main( int argc, char* args[] )
 {
-
-
+	vector<Combo*> vect;
+	ComboController* combo = new ComboController(10, 10 ,vect);
+	fprintf(stderr,"%s\n");
+	fprintf(stderr,"algo2\n");
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
 
@@ -114,15 +117,17 @@ int main( int argc, char* args[] )
 
 	//Creo el Controlador
 	control = new Controller(personaje_uno,personaje_dos,mapa_comandos1, mapa_comandos2);
-
+	int i = 0;
 	//While Principal
 	while( !control->Quit()){
 		control->KeyState();
+		combo->sePresiono(i);
+		i++;
+		combo->Update();
+
 		while( control->PollEvent()){
 			try {
-
 				control->Pressed();
-
 			} catch ( std::runtime_error &e ) {
 				if(!_recargarMundo()) return 1;
 			}
@@ -138,6 +143,7 @@ int main( int argc, char* args[] )
 
 		//Sleep(Microsegundos)
 		usleep(control->getSleep());
+		//usleep(500000);
 	}
 
 

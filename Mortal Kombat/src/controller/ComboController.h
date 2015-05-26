@@ -13,6 +13,8 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <cstring>
+#include <stdlib.h>
 #include <SDL2/SDL.h>
 #include "Combo.h"
 
@@ -25,7 +27,7 @@ public:
 
 	ComboController(int tiempoMaximo,int distanciaMaxima, std::vector<Combo*> combosPosibles);
 
-	bool checkCombo(Combo* combo);
+	int checkCombos();
 	bool checkPosibleCombo();
 
 	void sePresiono(int key);
@@ -35,7 +37,7 @@ public:
 private:
 
 	std::vector<Combo*> _combosPosibles;
-	std::vector<int> _keys;
+	string _keys;
 	unsigned int startingTime = 0;
 	unsigned int currentTime;
 	unsigned int lastTime;

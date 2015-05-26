@@ -8,7 +8,7 @@
 #ifndef COMBO_H_
 #define COMBO_H_
 
-#include <vector>
+#include <string>
 
 
 namespace std {
@@ -17,10 +17,10 @@ class Combo {
 
 public:
 
-	Combo(vector<int> botones);
+	Combo(string botones);
 	virtual ~Combo();
 
-	vector<int> m_botones;
+	string m_botones;
 };
 
 } /* namespace std */

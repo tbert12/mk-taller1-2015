@@ -9,7 +9,7 @@
 
 namespace std {
 
-Combo::Combo(vector<int> botones) {
+Combo::Combo(string botones) {
 	// TODO Auto-generated constructor stub
 	m_botones = botones;
 }
