@@ -62,19 +62,23 @@ void free(Mundo* un_mundo,Controller* c1){
 	delete c1;
 }
 
-void crearControlador(){
+void crearControlador(ComboController* combo){
 	//Creo el Controlador
 	switch(ModoDeJuego){
 		case 0: //P1vsP2
-			control = new Controller(personaje_uno,personaje_dos,mapa_comandos1, mapa_comandos2);
+			control = new Controller(personaje_uno,personaje_dos,mapa_comandos1, mapa_comandos2,combo);
 			break;
 		case 1://P1vsCPU o P1 Practica
-			control = new Controller(personaje_uno,NULL,mapa_comandos1,mapa_comandos2);
+			control = new Controller(personaje_uno,NULL,mapa_comandos1,mapa_comandos2,combo);
 			break;
 	}
 }
 
 bool _recargarMundo(){
+
+	vector<Combo*> vect;
+	ComboController* combo = new ComboController(10, 10 ,vect);
+
 	log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_WARNING );
 	free(mundo,control);
 	log ( "Refresh: se libero la memoria de lo cargado anteriormente", LOG_WARNING );
@@ -90,16 +94,16 @@ bool _recargarMundo(){
 	personaje_dos = personajes[1];
 	log( "Se creo correctamente el Mundo de la partida, luego del refresh", LOG_DEBUG );
 
-	crearControlador();
+	crearControlador(combo);
 	return true;
 }
 
 int main( int argc, char* args[] )
 {
+
 	vector<Combo*> vect;
 	ComboController* combo = new ComboController(10, 10 ,vect);
-	fprintf(stderr,"%s\n");
-	fprintf(stderr,"algo2\n");
+
 	// Marco inicio de un nuevo run en el .log
 	prepararLog();
 
@@ -116,18 +120,17 @@ int main( int argc, char* args[] )
 	//selector de modo
 
 	//Creo el Controlador
-	control = new Controller(personaje_uno,personaje_dos,mapa_comandos1, mapa_comandos2);
+	control = new Controller(personaje_uno,personaje_dos,mapa_comandos1, mapa_comandos2, combo);
 	int i = 0;
 	//While Principal
 	while( !control->Quit()){
 		control->KeyState();
-		combo->sePresiono(i);
-		i++;
 		combo->Update();
 
 		while( control->PollEvent()){
 			try {
 				control->Pressed();
+
 			} catch ( std::runtime_error &e ) {
 				if(!_recargarMundo()) return 1;
 			}

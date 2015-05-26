@@ -12,7 +12,7 @@
 
 using namespace std;
 
-KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador) {
+KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador, ComboController* comboController) {
 	personaje = un_personaje;
 	evento = e;
 	como_jugador = comoJugador;
@@ -20,13 +20,13 @@ KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJ
 	keystate = SDL_GetKeyboardState(NULL);
 	sleep = 50000;
 	vector<Combo*> vect;
-	comboController = new ComboController(10,10,vect);
+	_comboController = comboController;
 }
 bool KeyboardControl::pause(){
 	return pausa;
 }
 void KeyboardControl::KeyPressed(){
-	comboController->sePresiono(evento->key.keysym.sym);
+	_comboController->sePresiono(evento->key.keysym.sym);
 	switch( evento->key.keysym.sym ){
 			case  SDLK_UP:
 				if(!como_jugador) return;

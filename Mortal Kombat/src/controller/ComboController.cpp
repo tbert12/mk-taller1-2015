@@ -71,7 +71,6 @@ void ComboController::Update(){
 	if(_keys.length() > 10){
 		_keys = _keys.substr(_keys.length() - 11,10);
 	}
-
 	if(currentTime > (lastTime+ maxTime/maxLength)){
 		if(_keys.length() > 2)
 			_keys = _keys.substr(1 ,_keys.length() -2);
@@ -86,9 +85,9 @@ void ComboController::Update(){
 }
 
 void ComboController::sePresiono(int key){
-	char* caracter;
-	sprintf(caracter,"%i",key);
-	_keys.append(caracter);
+	string caracter = std::to_string(key-'a');
+	_keys = _keys + caracter.c_str();
+	//fprintf(stderr,"keys %s\n",_keys.c_str());
 }
 
 ComboController::~ComboController() {

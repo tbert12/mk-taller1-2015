@@ -7,7 +7,8 @@
 
 #include "Controller.h"
 
-Controller::Controller(Personaje* un_personaje,Personaje* otro_personaje,map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2) {
+Controller::Controller(Personaje* un_personaje,Personaje* otro_personaje,map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2,ComboController* comboController) {
+	_comboController = comboController;
 	personaje_1 = un_personaje;
 	personaje_2 = otro_personaje;
 	quit = false;
@@ -17,6 +18,7 @@ Controller::Controller(Personaje* un_personaje,Personaje* otro_personaje,map<str
 	Teclado = NULL;
 	SDL_JoystickEventState(SDL_ENABLE);
 	_Init(mapa_comandos1,mapa_comandos2);
+
 }
 bool Controller::pausa(){
 	if (Teclado != NULL){
@@ -51,7 +53,7 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 		log("Hay mas de dos joystick conectados, se setean al jugador 1 y 2 .Ademas se crea el teclado para el personaje 1",LOG_DEBUG);
 		if (personaje_1 != NULL)
 			Joystick_1 = new JoystickControl(&evento,0,personaje_1,mapa_comandos1);
-			Teclado = new KeyboardControl(&evento,personaje_1,false);
+			Teclado = new KeyboardControl(&evento,personaje_1,false,this->_comboController);
 		if(personaje_2 != NULL)
 			Joystick_2 = new JoystickControl(&evento,1,personaje_2,mapa_comandos2);
 	}
@@ -61,13 +63,13 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 		if (personaje_1 != NULL)
 			Joystick_1 = new JoystickControl(&evento,0,personaje_1,mapa_comandos1);
 		if(personaje_2 != NULL)
-			Teclado = new KeyboardControl(&evento,personaje_2,true);
+			Teclado = new KeyboardControl(&evento,personaje_2,true, this->_comboController);
 	}
 	//no hay joystick conectados, solo teclado
 	else{
 		log("No hay joystick conectado, se setea el teclado al jugador 1",LOG_DEBUG);
 		if(personaje_1 != NULL)
-			Teclado = new KeyboardControl(&evento,personaje_1,true);
+			Teclado = new KeyboardControl(&evento,personaje_1,true, this->_comboController);
 	}
 }
 
@@ -108,8 +110,10 @@ void Controller::Pressed(){
 	}
 	//evento es del teclado
 	else if(evento.type == SDL_KEYDOWN){
-		if (Teclado != NULL)
+		if (Teclado != NULL){
+
 			Teclado->KeyPressed();
+		}
 	}
 }
 

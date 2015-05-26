@@ -23,13 +23,14 @@ private:
 	bool quit;
 	const Uint8* keystate;
 	SDL_Event evento;
+	ComboController* _comboController;
 
 	void _Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2);
 	void _JoystickRemoved();
 	void _JoystickAdded();
 
 public:
-	Controller(Personaje* un_personaje,Personaje* otro_personaje,map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2);
+	Controller(Personaje* un_personaje,Personaje* otro_personaje,map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2, ComboController* comboController);
 	bool Quit();
 	bool PollEvent();
 	void Pressed();

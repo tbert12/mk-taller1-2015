@@ -23,12 +23,12 @@ private:
 	const Uint8* keystate;
 	SDL_Event* evento;
 	bool pausa;
-	ComboController* comboController;
+	ComboController* _comboController;
 	bool como_jugador;
 	int sleep;
 
 public:
-	KeyboardControl(SDL_Event* e, Personaje* un_personaje,bool como_jugador);
+	KeyboardControl(SDL_Event* e, Personaje* un_personaje,bool como_jugador, ComboController* comboController);
 	virtual ~KeyboardControl();
 	void KeyPressed();
 	void KeyState();
