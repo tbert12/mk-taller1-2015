@@ -42,41 +42,74 @@ int ComboController::distanciaLevenshtein(string s1,int len_s, string s2, int le
 int ComboController::checkCombos(){
 	if(_keys.compare(""))
 		return 1;
-
 	return 0;
 }
 
+bool findRecursive(string s1,char c1,int pos1, char c2, int pos2){
+	string sub = s1.substr(pos1);
+	int newPosC2 = sub.find(c2);
+	return newPosC2 > -1;
+}
+
 bool ComboController::checkPosibleCombo(){
-	if(_keys.compare(""))
+
+	if(_keys.compare("") == 0){
 		return false;
+	}
+
 	string botonesDelCombo;
+
+	bool hayPosibilidadDeCombo = false;
 	for(unsigned int i=0; i < _combosPosibles.size();i++){
 		botonesDelCombo = _combosPosibles[i]->m_botones;
-		int valorFind = 0;
-		/*for(unsigned int j = 0; j < botonesDelCombo.size(); j++){
-			int item = botonesDelCombo[j];
-
-		}*/
+		vector<int> valorFind(botonesDelCombo.length());
+		for(unsigned int j = 0; j < botonesDelCombo.size(); j++){
+			char item = botonesDelCombo[j];
+			valorFind[j]=_keys.find(item);
+		}
+		bool hayPosibilidad = true;
+		if(valorFind[0] < 0){
+			hayPosibilidad=false;
+		}else{
+			for(unsigned int j = 0; j < valorFind.size() -1; j++){
+				if(j > 0){
+					if( (valorFind[j] <0 and valorFind[j+1] >0) or valorFind[j-1] < 0  or (valorFind[j] > valorFind[j+1] and not((valorFind[j] < 0 and valorFind[j+1] < 0) or ((valorFind[j] > valorFind[j+1]) and valorFind[j+1] == -1))) ){
+						if(not(valorFind[j] > valorFind[j+1])){
+							hayPosibilidad=false;
+							break;
+						}
+						if(not(findRecursive(_keys,botonesDelCombo[j+1], valorFind[j], botonesDelCombo[j], valorFind[j+1]))){
+							hayPosibilidad=false;
+							break;
+						}
+					}
+				}
+			}
+		}
+		hayPosibilidadDeCombo = hayPosibilidadDeCombo or hayPosibilidad;
+		fprintf(stderr,"hay posibilidad %i  \n",hayPosibilidadDeCombo);
 	}
-	return false;
+	//fprintf(stderr,"hay posibilidad %i  \n",hayPosibilidadDeCombo);
+	return hayPosibilidadDeCombo;
 }
 
 void ComboController::Update(){
 	currentTime = SDL_GetTicks();
 
-	//fprintf(stderr,"curr/last %i  \n",currentTime/maxLength );
-	/*fprintf(stderr,"curr %i  \n",currentTime);
-	fprintf(stderr,"last %i  \n",lastTime);*/
-
-	if(_keys.length() > 10){
-		_keys = _keys.substr(_keys.length() - 11,10);
+	if(_keys.compare("") > 0){
+		fprintf(stderr,"keys %s  \n",_keys.c_str());
 	}
+
+	if(currentTime < maxTime)
+		return;
+
 	if(currentTime > (lastTime+ maxTime/maxLength)){
-		if(_keys.length() > 2)
-			_keys = _keys.substr(1 ,_keys.length() -2);
+		if(_keys.length() > 1)
+			_keys = _keys.substr(1 ,_keys.length() -1);
+		else
+			_keys = "";
 		lastTime = currentTime ;
 	}
-	fprintf(stderr,"keys %s  \n",_keys.c_str());
 
 	/*
 	 *Insertar codigo de update aqui
@@ -85,9 +118,8 @@ void ComboController::Update(){
 }
 
 void ComboController::sePresiono(int key){
-	string caracter = std::to_string(key-'a');
+	string caracter = std::to_string(key);
 	_keys = _keys + caracter.c_str();
-	//fprintf(stderr,"keys %s\n",_keys.c_str());
 }
 
 ComboController::~ComboController() {

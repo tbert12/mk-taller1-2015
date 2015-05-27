@@ -100,8 +100,14 @@ bool _recargarMundo(){
 
 int main( int argc, char* args[] )
 {
+	Combo* combo1 =new Combo("012");
+	//Combo* combo2 =new Combo("345");
+	//Combo* combo3 =new Combo("678");
 
-	vector<Combo*> vect;
+	vector<Combo*> vect = {combo1};
+	//vector<Combo*> vect = {combo1,combo2,combo3};
+
+
 	ComboController* combo = new ComboController(10, 10 ,vect);
 
 	// Marco inicio de un nuevo run en el .log
@@ -126,6 +132,7 @@ int main( int argc, char* args[] )
 	while( !control->Quit()){
 		control->KeyState();
 		combo->Update();
+		combo->checkPosibleCombo();
 
 		while( control->PollEvent()){
 			try {
@@ -145,8 +152,8 @@ int main( int argc, char* args[] )
 		}
 
 		//Sleep(Microsegundos)
-		usleep(control->getSleep());
-		//usleep(500000);
+		//usleep(control->getSleep());
+		usleep(500000);
 	}
 
 

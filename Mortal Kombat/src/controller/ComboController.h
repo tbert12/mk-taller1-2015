@@ -14,6 +14,7 @@
 #include <string>
 #include <algorithm>
 #include <cstring>
+#include <map>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include "Combo.h"
@@ -21,6 +22,7 @@
 
 using namespace std;
 
+enum Movimientros { ARRIBA, ABAJO, ADELANTE, ATRAS, PINAALTA, PINABAJA, PATADAALTA, PATADABAJA};
 
 class ComboController {
 public:
@@ -37,6 +39,7 @@ public:
 private:
 
 	std::vector<Combo*> _combosPosibles;
+	std::map<int, int> mapaMovimientos;
 	string _keys;
 	unsigned int startingTime = 0;
 	unsigned int currentTime;
