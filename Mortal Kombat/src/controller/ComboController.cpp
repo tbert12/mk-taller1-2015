@@ -39,27 +39,39 @@ int ComboController::distanciaLevenshtein(string s1,int len_s, string s2, int le
 				);
 }
 
-int ComboController::checkCombos(){
-	if(_keys.compare(""))
-		return 1;
-	return 0;
-}
-
 bool findRecursive(string s1,char c1,int pos1, char c2, int pos2){
 	string sub = s1.substr(pos1);
 	int newPosC2 = sub.find(c2);
 	return newPosC2 > -1;
 }
 
-bool ComboController::checkPosibleCombo(){
+bool ComboController::checkCombo(Combo* combo){
+
+	string botonesDelCombo = combo->m_botones;
+	vector<int> valorFind(botonesDelCombo.length());
+	for(unsigned int j = 0; j < botonesDelCombo.size(); j++){
+		char item = botonesDelCombo[j];
+		valorFind[j]=_keys.find(item);
+	}
+
+	return distanciaLevenshtein(botonesDelCombo,botonesDelCombo.length(),_keys,_keys.length());
+}
+
+
+
+vector<bool> ComboController::checkPosibleCombo(){
 
 	if(_keys.compare("") == 0){
-		return false;
+		vector<bool> combosPosibles(_combosPosibles.size());
+		for(unsigned int i=0; i < _combosPosibles.size();i++){
+			combosPosibles[i] = false;
+		}
+		return combosPosibles;
 	}
 
 	string botonesDelCombo;
 
-	bool hayPosibilidadDeCombo = false;
+	vector<bool> combosPosibles(_combosPosibles.size());
 	for(unsigned int i=0; i < _combosPosibles.size();i++){
 		botonesDelCombo = _combosPosibles[i]->m_botones;
 		vector<int> valorFind(botonesDelCombo.length());
@@ -86,11 +98,11 @@ bool ComboController::checkPosibleCombo(){
 				}
 			}
 		}
-		hayPosibilidadDeCombo = hayPosibilidadDeCombo or hayPosibilidad;
-		fprintf(stderr,"hay posibilidad %i  \n",hayPosibilidadDeCombo);
+		combosPosibles[i]= hayPosibilidad;
+		fprintf(stderr,"hay posibilidad %i  \n",hayPosibilidad);
 	}
 	//fprintf(stderr,"hay posibilidad %i  \n",hayPosibilidadDeCombo);
-	return hayPosibilidadDeCombo;
+	return combosPosibles;
 }
 
 void ComboController::Update(){

@@ -29,8 +29,8 @@ public:
 
 	ComboController(int tiempoMaximo,int distanciaMaxima, std::vector<Combo*> combosPosibles);
 
-	int checkCombos();
-	bool checkPosibleCombo();
+	bool checkCombo(Combo* combo);
+	vector<bool> checkPosibleCombo();
 
 	void sePresiono(int key);
 	void Update();
