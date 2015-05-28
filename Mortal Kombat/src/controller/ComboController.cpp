@@ -7,15 +7,14 @@
 
 #include "ComboController.h"
 
-ComboController::ComboController (int tiempoMaximo,int distanciaMaxima, vector<Combo*> combosPosibles) {
+ComboController::ComboController (int tiempoMaximo,int cantidadMaximaErrores, vector<Combo*> combosPosibles) {
 	// TODO Auto-generated constructor stub
 	maxTime = tiempoMaximo * 1000;
 	fprintf(stderr,"%s \n",_keys.c_str());
-	maxLength = distanciaMaxima;
+	maxErrors = cantidadMaximaErrores;
 	startingTime = SDL_GetTicks();
 
 	currentTime = startingTime;
-	lastTime = 0;
 	_combosPosibles = combosPosibles;
 
 	_keys = "";
@@ -43,6 +42,47 @@ bool findRecursive(string s1,char c1,int pos1, char c2, int pos2){
 	string sub = s1.substr(pos1);
 	int newPosC2 = sub.find(c2);
 	return newPosC2 > -1;
+}
+
+int ComboController::checkCombos(){
+	if(_keys.compare("") == 0){
+		printf("bacio\n");
+		return -1;
+	}
+	unsigned int errores = 0;
+	unsigned int encuentros = 0;
+	int encontrado = -1;
+	bool encontre = false;
+
+	string botonesDelCombo;
+	for(unsigned int i=0; i < _combosPosibles.size();i++){
+		errores=0;
+		botonesDelCombo = _combosPosibles[i]->m_botones;
+
+		printf("keys %s\n",_keys.c_str());
+		if(_keys[0] != botonesDelCombo[0])
+			continue;
+		encuentros = 1;
+		for(std::string::size_type i = 0; i < _keys.size(); ++i) {
+		    if(botonesDelCombo[encuentros] == _keys[i]){
+		    	encuentros++;
+		    }else{
+		    	errores++;
+		    }
+		    if(errores>maxErrors){
+		    	break;
+		    }
+		    if(encuentros == botonesDelCombo.size()){
+		    	encontre = true;
+		    	break;
+			}
+		}
+		if(encontre){
+			encontrado = i;
+			break;
+		}
+	}
+	return encontrado;
 }
 
 bool ComboController::checkCombo(Combo* combo){
@@ -108,19 +148,19 @@ vector<bool> ComboController::checkPosibleCombo(){
 void ComboController::Update(){
 	currentTime = SDL_GetTicks();
 
-	if(_keys.compare("") > 0){
-		fprintf(stderr,"keys %s  \n",_keys.c_str());
+	if(_keys.length() == 0){
+		return;
 	}
 
 	if(currentTime < maxTime)
 		return;
 
-	if(currentTime > (lastTime+ maxTime/maxLength)){
+	if(currentTime > (keyTime[0]+ maxTime)){
 		if(_keys.length() > 1)
 			_keys = _keys.substr(1 ,_keys.length() -1);
 		else
 			_keys = "";
-		lastTime = currentTime ;
+		keyTime.erase(keyTime.begin());
 	}
 
 	/*
@@ -130,8 +170,9 @@ void ComboController::Update(){
 }
 
 void ComboController::sePresiono(int key){
-	string caracter = std::to_string(key);
+	string caracter = std::to_string(key-'a');
 	_keys = _keys + caracter.c_str();
+	keyTime.push_back(SDL_GetTicks());
 }
 
 ComboController::~ComboController() {

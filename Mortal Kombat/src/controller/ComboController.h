@@ -27,8 +27,9 @@ enum Movimientros { ARRIBA, ABAJO, ADELANTE, ATRAS, PINAALTA, PINABAJA, PATADAAL
 class ComboController {
 public:
 
-	ComboController(int tiempoMaximo,int distanciaMaxima, std::vector<Combo*> combosPosibles);
+	ComboController(int tiempoMaximo,int cantidadMaximaErrores, std::vector<Combo*> combosPosibles);
 
+	int checkCombos();
 	bool checkCombo(Combo* combo);
 	vector<bool> checkPosibleCombo();
 
@@ -39,14 +40,15 @@ public:
 private:
 
 	std::vector<Combo*> _combosPosibles;
-	std::map<int, int> mapaMovimientos;
+
 	string _keys;
+
 	unsigned int startingTime = 0;
 	unsigned int currentTime;
-	unsigned int lastTime;
+	std::vector<int> keyTime;
 
 	unsigned int maxTime;
-	unsigned int maxLength;
+	unsigned int maxErrors;
 
 	int distanciaLevenshtein(string s1,int len_s, string s2, int len_t);
 

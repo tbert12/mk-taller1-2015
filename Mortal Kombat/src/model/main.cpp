@@ -132,7 +132,8 @@ int main( int argc, char* args[] )
 	while( !control->Quit()){
 		control->KeyState();
 		combo->Update();
-		combo->checkPosibleCombo();
+		//combo->checkPosibleCombo();
+		printf("combo encontrado %i \n",combo->checkCombos());
 
 		while( control->PollEvent()){
 			try {
