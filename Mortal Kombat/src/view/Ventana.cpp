@@ -71,9 +71,9 @@ bool Ventana::create_window()
 	bool success = true;
 
 	//Inicializar SDL
-	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC) < 0 )
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_AUDIO) < 0 )
 	{
-		log(string("SDL no puede inicializar! SDL Error: %s\n", SDL_GetError()),LOG_ERROR );
+		log(string("SDL no puede inicializar! SDL Error:") + SDL_GetError(),LOG_ERROR );
 		success = false;
 	}
 	else
@@ -88,7 +88,7 @@ bool Ventana::create_window()
 		Window = SDL_CreateWindow( "MK - FIUBA", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_ancho_px, m_alto_px, SDL_WINDOW_SHOWN );
 		if( Window == NULL )
 		{
-			log(string( "La ventana no se puede crear! SDL Error: %s\n", SDL_GetError() ),LOG_ERROR);
+			log(string( "La ventana no se puede crear! SDL Error:") + SDL_GetError(),LOG_ERROR);
 			success = false;
 		}
 		else
@@ -98,7 +98,7 @@ bool Ventana::create_window()
 			Renderer = SDL_CreateRenderer( Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 			if( Renderer == NULL )
 			{
-				log(string( "No se pudo crear la renderizacion! SDL Error: %s\n", SDL_GetError() ),LOG_ERROR);
+				log(string( "No se pudo crear la renderizacion! SDL Error:" ) + SDL_GetError(),LOG_ERROR);
 				success = false;
 			}
 			else
@@ -110,7 +110,7 @@ bool Ventana::create_window()
 				int imgFlags = IMG_INIT_PNG;
 				if( !( IMG_Init( imgFlags ) & imgFlags ) )
 				{
-					log(string( "SDL_image no pudo inicializarse! SDL_image Errors: %s\n", IMG_GetError() ),LOG_ERROR);
+					log(string( "SDL_image no pudo inicializarse! SDL_image Errors: ") + IMG_GetError(),LOG_ERROR);
 					success = false;
 				}
 				if( TTF_Init() < 0 ){
@@ -121,7 +121,7 @@ bool Ventana::create_window()
 				//Initialize SDL_mixer
 				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
 				{
-					log(string( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() ),LOG_ERROR);
+					log(string( "SDL_mixer could not initialize! SDL_mixer Error: ") + Mix_GetError() ,LOG_ERROR);
 					success = false;
 				}
 			}
