@@ -667,13 +667,13 @@ vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
 }
 
 
-Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, int nro_personaje, Json::Value root, bool flipped_default, Ventana* ventana, bool cambiar_color, float escenario_ancho, float escenario_alto, float ventana_ancho, float y_piso) {
+Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root, Ventana* ventana, bool cambiar_color) {
 
 	Personaje* personaje;
 	float personaje_ancho, personaje_alto;
 	string personaje_carpeta_sprites, personaje_carpeta_arrojables, personaje_nombre;
 	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
-		personaje = generarPersonajeDefault(nro_personaje, ventana, ventana_ancho, escenario_ancho, escenario_alto, y_piso, PERSONAJE_ANCHO_DEFAULT, PERSONAJE_ALTO_DEFAULT,cambiar_color, flipped_default);
+		personaje = generarPersonajeDefault(ventana, PERSONAJE_ANCHO_DEFAULT, PERSONAJE_ALTO_DEFAULT);
 		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan el personaje por defecto.", LOG_ERROR );
 	} else {
 		for ( int k=0; k < (int)root["personajes"].size(); k++ ) {
@@ -881,7 +881,7 @@ Mundo* ParserJSON::cargarMundo() {
 			if ( tiempo < 0 ) {
 				tiempo_combate = TIEMPO_DEFAULT;
 				// Informar al usuario el cambio de tiempo de la ronda.
-				log ( "El tiempo no puede ser negativo. Se setea automaticamente en 3 minutos.", LOG_WARNING );
+				log ( "El tiempo no puede ser negativo. Se setea automaticamente.", LOG_WARNING );
 			} else {
 				// Crear tiempo.
 				tiempo_combate = tiempo;
@@ -896,23 +896,24 @@ Mundo* ParserJSON::cargarMundo() {
 	// Obtener dimensiones de la ventana. Se setean por defecto en caso de error.
 	// El alto se seteara luego dependiendo del escenario.
 	int ventana_ancho_px, ventana_alto_px;
-	float ventana_ancho;
+	float ventana_ancho, ventana_alto;
 	if ( ! root.isMember("ventana") ) {
 		log( "No se encontraron parametros para la creacion de la ventana. Se asignan valores por defecto.", LOG_ERROR );
 		ventana_ancho_px = VENTANA_ANCHO_PX_DEFAULT;
 		ventana_alto_px = VENTANA_ALTO_PX_DEFAULT;
 		ventana_ancho = VENTANA_ANCHO_DEFAULT;
+		ventana_alto = VENTANA_ALTO_DEFAULT;
 	} else {
 		if ( ! root["ventana"].isMember("ancho-px") ) {
 			ventana_ancho_px = VENTANA_ANCHO_PX_DEFAULT;
-			log( "No se especifico el ancho en pixeles de la ventana. Se seta en 512px por defecto.", LOG_WARNING );
+			log( "No se especifico el ancho en pixeles de la ventana. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
 				ventana_ancho_px = root["ventana"].get( "ancho-px", VENTANA_ANCHO_PX_DEFAULT ).asInt();
 				if ( ventana_ancho_px < 0 ) {
 					ventana_ancho_px = VENTANA_ANCHO_PX_DEFAULT;
 					// Informar al usuario el cambio de ancho.
-					log( "El ancho en pixeles de la ventana no puede ser negativo. Se setea automaticamente a 512px.", LOG_WARNING );
+					log( "El ancho en pixeles de la ventana no puede ser negativo. Se setea automaticamente.", LOG_WARNING );
 				} else log( "Se cargo correctamente el ancho en pixeles de la ventana.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				ventana_ancho_px = VENTANA_ANCHO_PX_DEFAULT;
@@ -921,14 +922,14 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 		if ( ! root["ventana"].isMember("alto-px") ) {
 			ventana_alto_px = VENTANA_ALTO_PX_DEFAULT;
-			log( "No se especifico el alto en pixeles de la ventana. Se seta en 384px por defecto.", LOG_WARNING );
+			log( "No se especifico el alto en pixeles de la ventana. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
 				ventana_alto_px = root["ventana"].get( "alto-px", VENTANA_ALTO_PX_DEFAULT ).asInt();
 				if ( ventana_alto_px < 0 ) {
 					ventana_alto_px = VENTANA_ALTO_PX_DEFAULT;
 					// Informar al usuario el cambio de alto.
-					log( "El alto en pixeles de la ventana no puede ser negativo. Se setea automaticamente a 384px.", LOG_WARNING );
+					log( "El alto en pixeles de la ventana no puede ser negativo. Se setea automaticamente.", LOG_WARNING );
 				} else log( "Se cargo correctamente el alto en pixeles de la ventana.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				ventana_alto_px = VENTANA_ALTO_PX_DEFAULT;
@@ -937,21 +938,60 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 		if ( ! root["ventana"].isMember("ancho") ) {
 			ventana_ancho = VENTANA_ANCHO_DEFAULT;
-			log( "No se especifico el ancho logico de la ventana. Se seta en 200 por defecto.", LOG_WARNING );
+			log( "No se especifico el ancho logico de la ventana. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
 				ventana_ancho = root["ventana"].get( "ancho", VENTANA_ANCHO_DEFAULT ).asFloat();
 				if ( ventana_ancho < 0 ) {
 					ventana_ancho = VENTANA_ANCHO_DEFAULT;
 					// Informar al usuario el cambio de ancho logico.
-					log( "El ancho logico de la ventana no puede ser negativo. Se setea automaticamente a 200.", LOG_WARNING );
+					log( "El ancho logico de la ventana no puede ser negativo. Se setea automaticamente.", LOG_WARNING );
 				} else log( "Se cargo correctamente el ancho logico de la ventana.", LOG_DEBUG );
 			} catch ( exception &e ) {
 				ventana_ancho = VENTANA_ANCHO_DEFAULT;
 				log( "El ancho logico de la ventana indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 			}
 		}
+		if ( ! root["ventana"].isMember("alto") ) {
+			ventana_alto = VENTANA_ALTO_DEFAULT;
+			log( "No se especifico el alto logico de la ventana. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				ventana_alto = root["ventana"].get( "alto", VENTANA_ALTO_DEFAULT ).asFloat();
+				if ( ventana_alto < 0 ) {
+					ventana_ancho = VENTANA_ALTO_DEFAULT;
+					// Informar al usuario el cambio de alto logico.
+					log( "El alto logico de la ventana no puede ser negativo. Se setea automaticamente.", LOG_WARNING );
+				} else log( "Se cargo correctamente el alto logico de la ventana.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				ventana_alto = VENTANA_ALTO_DEFAULT;
+				log( "El alto logico de la ventana indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+			}
+		}
 	}
+
+	// Obtener relaciones entre pixeles y unidades logicas del mundo.
+	float ratio_x = ventana_ancho_px / ventana_ancho;
+	float ratio_y = ventana_alto_px / ventana_alto;
+	log ( "Se calcularon las relaciones para el ancho y el alto entre los pixeles y las unidades logicas del mundo.", LOG_DEBUG );
+
+	// Crear Ventana y abrirla.
+	Ventana* ventana = new Ventana( ventana_ancho_px, ventana_alto_px, ratio_x, ratio_y );
+	log ( "Se creo correctamente la ventana (camara).", LOG_DEBUG );
+	if( ! ventana->create_window() ) {
+		log( "No se puede inicializar la ventana. El programa no puede continuar.", LOG_ERROR );
+		throw runtime_error( "No se pudo abrir la ventana del programa." );
+	}
+
+	// Se va a mostrar en pantalla una imagen durante el tiempo de carga
+	if(ventana->mostrarImagen("data/img/background/inicio.png")){
+		log("Se muestra imagen bienvenida en Ventanta durante tiempo de carga", LOG_DEBUG );
+	}
+
+	// Creo mundo vacio.
+	Mundo* nuevo_mundo = new Mundo(ventana,tiempo_combate);
+	log ( "Se creo correctamente un mundo vacio.", LOG_DEBUG );
+	log( "Se le asigno la ventana creada al nuevo mundo.", LOG_DEBUG );
 
 	// Obtener las dimensiones logicas del escenario.
 	// En caso de error se setean por defecto.
@@ -1029,32 +1069,6 @@ Mundo* ParserJSON::cargarMundo() {
 			}
 		}
 	}
-
-	// Setear alto logico de la ventana de acuerdo al alto del escenario.
-	float ventana_alto = escenario_alto;
-	log ( "Se fijo el alto logico de la ventana.", LOG_DEBUG );
-
-	// Obtener relaciones entre pixeles y unidades logicas del mundo.
-	float ratio_x = ventana_ancho_px / ventana_ancho;
-	float ratio_y = ventana_alto_px / ventana_alto;
-	log ( "Se calcularon las relaciones para el ancho y el alto entre los pixeles y las unidades logicas del mundo.", LOG_DEBUG );
-
-	// Crear Ventana y abrirla.
-	Ventana* ventana = new Ventana( ventana_ancho_px, ventana_alto_px, ratio_x, ratio_y );
-	log ( "Se creo correctamente la ventana (camara).", LOG_DEBUG );
-	if( ! ventana->create_window() ) {
-		log( "No se puede inicializar la ventana. El programa no puede continuar.", LOG_ERROR );
-		throw runtime_error( "No se pudo abrir la ventana del programa." );
-	}
-
-	// Se va a mostrar en pantalla una imagen durante el tiempo de carga
-	if(ventana->mostrarImagen("data/img/background/inicio.png")){
-		log("Se muestra imagen bienvenida en Ventanta durante tiempo de carga", LOG_DEBUG );
-	}
-
-	Mundo* nuevo_mundo = new Mundo(ventana,tiempo_combate);
-	log ( "Se creo correctamente un mundo vacio.", LOG_DEBUG );
-	log( "Se le asigno la ventana creada al nuevo mundo.", LOG_DEBUG );
 
 	//creo el escenario
 	Escenario* escenario = new Escenario();
@@ -1139,6 +1153,18 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 	}
 
+
+
+
+	// Obtener hash de comandos.
+	this->cargarMapaComandos(root);
+
+
+	return nuevo_mundo;
+
+
+
+	/*
 	string personaje_nombre_1, personaje_nombre_2;
 	Personaje *personaje_1, *personaje_2;
 	bool fallo_personaje_1 = false;
@@ -1206,13 +1232,7 @@ Mundo* ParserJSON::cargarMundo() {
 	escenario->addCapaPrincipal( capa_principal, personajes_z_index );
 	log( "Se agrego la capa principal al mundo.", LOG_DEBUG );
 	nuevo_mundo->addEscenario(escenario);
-
-	// Obtener hash de comandos.
-	this->cargarMapaComandos(root);
-
-
-	return nuevo_mundo;
-
+	*/
 
 }
 
