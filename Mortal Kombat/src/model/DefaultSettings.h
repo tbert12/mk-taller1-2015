@@ -96,7 +96,7 @@ const int COLOR_DESPLAZAMIENTO_DEFAULT = 0;
 const char* const IMAGEN_CARGANDO_JUEGO = "data/img/background/inicio.png";
 
 
-const float PERSONAJE_VELOCIDAD = 5.0;
+const float PERSONAJE_VELOCIDAD_DEFAULT = 5.0;
 
 
 using namespace std;
@@ -107,7 +107,7 @@ Sprite* crearSpriteArrojablePorDefecto(Json::Value root_poderes, const char* acc
 vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float h_desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT );
 void mapaComandosDefault(map<string, int>* comandos1, map<string, int>* comandos2);
 vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana);
-Personaje* generarPersonajeDefault(int nro_personaje, Ventana* ventana,float ventana_ancho, float escenario_ancho, float escenario_alto, float y_piso,float personaje_ancho, float personaje_alto, bool cambiar_color, bool flipped);
+Personaje* generarPersonajeDefault(Ventana* ventana, float personaje_ancho, float personaje_alto);
 vector<Personaje*> generarPersonajesDefault(Ventana* ventana);
 
 //Mundo* generarMundoDefault();

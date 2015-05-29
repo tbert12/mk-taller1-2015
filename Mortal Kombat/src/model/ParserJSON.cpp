@@ -667,13 +667,13 @@ vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
 }
 
 
-Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root, Ventana* ventana, bool cambiar_color) {
+Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root, Ventana* ventana, float escenario_ancho, float escenario_alto, bool cambiar_color) {
 
 	Personaje* personaje;
-	float personaje_ancho, personaje_alto;
+	float personaje_ancho, personaje_alto, personaje_velocidad;
 	string personaje_carpeta_sprites, personaje_carpeta_arrojables, personaje_nombre;
 	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
-		personaje = generarPersonajeDefault(ventana, PERSONAJE_ANCHO_DEFAULT, PERSONAJE_ALTO_DEFAULT);
+		personaje = generarPersonajeDefault(ventana, personaje_ancho, personaje_alto);
 		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan el personaje por defecto.", LOG_ERROR );
 	} else {
 		for ( int k=0; k < (int)root["personajes"].size(); k++ ) {
@@ -721,6 +721,24 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 								log( "El alto logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
 							}
 						}
+						if ( ! root["personajes"][k].isMember("velocidad") ) {
+							personaje_velocidad = PERSONAJE_VELOCIDAD_DEFAULT;
+							log( "No se especifico la velocidad del personaje. Se setea por defecto.", LOG_WARNING );
+						} else {
+							try {
+								personaje_velocidad = root["personajes"][k].get( "velocidad", PERSONAJE_VELOCIDAD_DEFAULT ).asFloat();
+								if ( personaje_velocidad < 0 ) {
+									personaje_velocidad = PERSONAJE_VELOCIDAD_DEFAULT;
+									log( "La velocidad del personaje no puede ser negativa. Se setea por defecto.", LOG_WARNING );
+								} else if ( personaje_velocidad > escenario_ancho/2 ) {
+									personaje_alto = PERSONAJE_ALTO_DEFAULT;
+									log( "La velocidad del personaje es demasiado grande teniendo en cuenta el ancho del escenario. Se setea por defecto.", LOG_WARNING );
+								} else	log( "Se cargo correctamente la velocidad del personaje.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								personaje_velocidad = PERSONAJE_VELOCIDAD_DEFAULT;
+								log( "La velocidad del personaje indicada es invalida y no puede ser convertida a un numero. Se setea por defecto.", LOG_ERROR );
+							}
+						}
 						if ( ! root["personajes"][k].isMember("sprites") ) {
 							personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 							log( "No se especifico la carpeta contenedora de los sprites del personaje. Se utiliza carpeta por defecto.", LOG_ERROR );
@@ -732,7 +750,18 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 									log( "La ruta a la carpeta de sprites del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
 									personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 								} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sprites del personaje.", LOG_DEBUG );
-							} catch ( exception &e ) {
+							} catch ( exception &e ) {						// Indico posicion inicial del personaje.
+								/*
+								float position;
+								if ( nro_personaje == 1 ) {
+									position = (escenario_ancho/2) - (ventana_ancho/2)*rpos;
+								}
+								else if ( nro_personaje == 2 ) {
+									position = (escenario_ancho/2) + (ventana_ancho/2)*rpos;
+								}
+								//personaje->setPosition( position , y_piso );
+								log( "Seteada Posicion en escenario de Personaje", LOG_DEBUG );
+								 */
 								personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 								log( "La ruta a la carpeta contenedora de los sprites del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 							}
@@ -763,7 +792,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 						vector<ObjetoArrojable*> arrojables = cargarArrojables(personaje_carpeta_arrojables, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
 
 						// Crear personaje.
-						Personaje* personaje = new Personaje(personaje_nombre, sprites, arrojables, PERSONAJE_VELOCIDAD, false);
+						Personaje* personaje = new Personaje(personaje_nombre, sprites, arrojables, personaje_velocidad);
 						log( "Se creo correctamente el personaje.", LOG_DEBUG );
 
 						// Indico posicion inicial del personaje.
@@ -778,6 +807,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 						//personaje->setPosition( position , y_piso );
 						log( "Seteada Posicion en escenario de Personaje", LOG_DEBUG );
 						 */
+
 						return personaje;
 					}
 				} catch ( exception &e ) {
@@ -785,7 +815,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 				}
 			}
 		}
-		personaje = generarPersonajeDefault(nro_personaje, ventana, ventana_ancho, escenario_ancho, escenario_alto, y_piso, PERSONAJE_ANCHO_DEFAULT, PERSONAJE_ALTO_DEFAULT,cambiar_color, flipped_default);
+		personaje = generarPersonajeDefault(ventana, personaje_ancho, personaje_alto);
 		log( "No se encontro el personaje con el nombre indicado en el vector de personajes. Se genera personaje por defecto.", LOG_ERROR );
 	}
 	return personaje;
