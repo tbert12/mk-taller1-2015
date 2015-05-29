@@ -133,7 +133,7 @@ int main( int argc, char* args[] )
 		control->KeyState();
 		combo->Update();
 		//combo->checkPosibleCombo();
-		printf("combo encontrado %i \n",combo->checkCombos());
+		combo->checkCombos();
 
 		while( control->PollEvent()){
 			try {
@@ -153,8 +153,8 @@ int main( int argc, char* args[] )
 		}
 
 		//Sleep(Microsegundos)
-		//usleep(control->getSleep());
-		usleep(500000);
+		usleep(control->getSleep());
+		//usleep(500000);
 	}
 
 

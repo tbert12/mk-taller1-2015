@@ -46,7 +46,6 @@ bool findRecursive(string s1,char c1,int pos1, char c2, int pos2){
 
 int ComboController::checkCombos(){
 	if(_keys.compare("") == 0){
-		printf("bacio\n");
 		return -1;
 	}
 	unsigned int errores = 0;
@@ -59,7 +58,6 @@ int ComboController::checkCombos(){
 		errores=0;
 		botonesDelCombo = _combosPosibles[i]->m_botones;
 
-		printf("keys %s\n",_keys.c_str());
 		if(_keys[0] != botonesDelCombo[0])
 			continue;
 		encuentros = 1;
