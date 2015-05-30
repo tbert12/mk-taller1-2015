@@ -107,7 +107,7 @@ Sprite* crearSpriteArrojablePorDefecto(Json::Value root_poderes, const char* acc
 vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float h_desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT );
 void mapaComandosDefault(map<string, int>* comandos1, map<string, int>* comandos2);
 vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana);
-Personaje* generarPersonajeDefault(Ventana* ventana, float personaje_ancho, float personaje_alto);
+Personaje* generarPersonajeDefault(Ventana* ventana);
 vector<Personaje*> generarPersonajesDefault(Ventana* ventana);
 
 //Mundo* generarMundoDefault();

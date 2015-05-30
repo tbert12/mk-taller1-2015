@@ -407,17 +407,15 @@ vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
 	return objetosArrojables;
 }
 
-Personaje* generarPersonajeDefault( Ventana* ventana, float personaje_ancho, float personaje_alto ) {
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,personaje_ancho,personaje_alto), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD_DEFAULT );
+Personaje* generarPersonajeDefault( Ventana* ventana ) {
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD_DEFAULT );
 	return personaje_default;
 }
 
 vector<Personaje*> generarPersonajesDefault( Ventana* ventana) {
-	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, false, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD, PERSONAJE_FLIPPED_DEFAULT);
-	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) - (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
+	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, false, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD_DEFAULT, PERSONAJE_FLIPPED_DEFAULT);
 
-	Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, true, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD, !PERSONAJE_FLIPPED_DEFAULT);
-	personaje_default->setPosition((ESCENARIO_ANCHO_DEFAULT/2) + (VENTANA_ANCHO_DEFAULT/2) * PERSONAJE_POS_RESPECTO_CAM,Y_PISO_DEFAULT);
+	Personaje* personaje2_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT, true, COLOR_H_INICIAL_DEFAULT, COLOR_H_FINAL_DEFAULT, COLOR_DESPLAZAMIENTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD_DEFAULT, !PERSONAJE_FLIPPED_DEFAULT);
 
 	vector<Personaje*> personajes;
 	personajes.push_back(personaje_default);

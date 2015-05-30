@@ -673,7 +673,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 	float personaje_ancho, personaje_alto, personaje_velocidad;
 	string personaje_carpeta_sprites, personaje_carpeta_arrojables, personaje_nombre;
 	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
-		personaje = generarPersonajeDefault(ventana, personaje_ancho, personaje_alto);
+		personaje = generarPersonajeDefault(ventana);
 		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan el personaje por defecto.", LOG_ERROR );
 	} else {
 		for ( int k=0; k < (int)root["personajes"].size(); k++ ) {
@@ -751,17 +751,6 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 									personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 								} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sprites del personaje.", LOG_DEBUG );
 							} catch ( exception &e ) {						// Indico posicion inicial del personaje.
-								/*
-								float position;
-								if ( nro_personaje == 1 ) {
-									position = (escenario_ancho/2) - (ventana_ancho/2)*rpos;
-								}
-								else if ( nro_personaje == 2 ) {
-									position = (escenario_ancho/2) + (ventana_ancho/2)*rpos;
-								}
-								//personaje->setPosition( position , y_piso );
-								log( "Seteada Posicion en escenario de Personaje", LOG_DEBUG );
-								 */
 								personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 								log( "La ruta a la carpeta contenedora de los sprites del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 							}
@@ -815,10 +804,58 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 				}
 			}
 		}
-		personaje = generarPersonajeDefault(ventana, personaje_ancho, personaje_alto);
+		personaje = generarPersonajeDefault(ventana);
 		log( "No se encontro el personaje con el nombre indicado en el vector de personajes. Se genera personaje por defecto.", LOG_ERROR );
 	}
 	return personaje;
+}
+
+vector<Personaje*> ParserJSON::cargarPersonajes(Json::Value root, Ventana* ventana, float escenario_ancho, float escenario_alto) {
+	vector<Personaje*> personajes;
+	vector<string> nombres_personajes;
+	Personaje* personaje;
+	string nombre;
+
+	log( "Se cargaran todos los personajes del juego.", LOG_DEBUG );
+	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() || ! root["personajes"].size() < 2 ) {
+		personajes = generarPersonajesDefault(ventana);
+		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan dos personajes por defecto.", LOG_ERROR );
+	} else {
+		for ( int i=0; i < (int) root["personajes"].size(); i++ ) {
+			log( "Se cargara un personaje nuevo.", LOG_DEBUG );
+			if ( ! root["personajes"][i].isMember("nombre") ) {
+				log( "El personaje no tiene especificado un nombre. Se ignorara su carga.", LOG_ERROR );
+				continue;
+			}
+			try {
+				nombre = root["personajes"][i].get( "nombre", PERSONAJE_NOMBRE_DEFAULT ).asString();
+				if ( find(nombres_personajes.begin(), nombres_personajes.end(), nombre) != nombres_personajes.end() ) {
+					log( "Ya se cargo un personaje con este nombre. Se ignora la carga de este personaje.", LOG_ERROR );
+				} else {
+					nombres_personajes.push_back(nombre);
+					personaje = cargarPersonaje(nombre, root, ventana, escenario_ancho, escenario_alto, false);
+					personajes.push_back(personaje);
+				}
+			} catch ( exception &e ) {
+				log( "El nombre indicado no es una cadena de texto valida. Se ignora la carga del personaje.", LOG_ERROR );
+				continue;
+			}
+		}
+	}
+
+	// Verifico que se tengan al menos dos personajes.
+	if ( personajes.size() < 2 ) {
+		if ( personajes.size() == 1 ) {
+			personajes.push_back( generarPersonajeDefault(ventana) );
+			log( "Se cargo un unico personaje. Se setea otro personaje por defecto.", LOG_ERROR );
+		} else {
+			personajes = generarPersonajesDefault(ventana);
+			log( "No se cargo ningun personaje. Se setean dos personajes por defecto.", LOG_ERROR );
+		}
+	}
+
+	return personajes;
+
 }
 
 
@@ -1100,7 +1137,7 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 	}
 
-	//creo el escenario
+	// Creo el escenario
 	Escenario* escenario = new Escenario();
 	log( "Se creo un escenario vacio", LOG_DEBUG );
 
@@ -1183,7 +1220,8 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 	}
 
-
+	// Cargo todos los personajes.
+	vector<Personaje*> personajes = cargarPersonajes(root, ventana);
 
 
 	// Obtener hash de comandos.
