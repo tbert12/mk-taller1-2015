@@ -1222,40 +1222,40 @@ Mundo* ParserJSON::cargarMundo() {
 	}
 
 	// Cargo todos los personajes.
-	vector<Personaje*> personajes = cargarPersonajes(root, ventana, escenario_ancho, escenario_alto);
+	//vector<Personaje*> personajes = cargarPersonajes(root, ventana, escenario_ancho, escenario_alto);
 
 	// Obtener hash de comandos.
 	this->cargarMapaComandos(root);
 
 
-	return nuevo_mundo;
 
 
 
-	/*
+
+
 	string personaje_nombre_1, personaje_nombre_2;
 	Personaje *personaje_1, *personaje_2;
 	bool fallo_personaje_1 = false;
 	bool cambiar_color = false;
 	if ( ! root.isMember("pelea") ) {
-		personaje_1 = generarPersonajeDefault(1, ventana, ventana_ancho, escenario_ancho, escenario_alto, y_piso, PERSONAJE_ANCHO_DEFAULT, PERSONAJE_ALTO_DEFAULT, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
+		personaje_1 = generarPersonajeDefault(ventana);
 		cambiar_color = true;
-		personaje_2 = generarPersonajeDefault(2, ventana, ventana_ancho, escenario_ancho, escenario_alto, y_piso,PERSONAJE_ANCHO_DEFAULT, PERSONAJE_ALTO_DEFAULT, cambiar_color, !PERSONAJE_FLIPPED_DEFAULT);
+		personaje_2 = generarPersonajeDefault(ventana);
 		log( "No se especificaron correctamente los parametros para los dos luchadores de la pelea. Se setean ambos como el personaje por defecto.", LOG_ERROR );
 	} else {
 		if ( ! root["pelea"].isMember("luchador1") ) {
 			personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
-			personaje_1 = generarPersonajeDefault(1, ventana, ventana_ancho, escenario_ancho, escenario_alto, y_piso,PERSONAJE_ANCHO_DEFAULT, PERSONAJE_ALTO_DEFAULT, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
+			personaje_1 = generarPersonajeDefault(ventana);
 			fallo_personaje_1 = true;
 			log("No se especifico el luchador 1, se setea por defecto.", LOG_ERROR);
 		} else {
 			try {
 				personaje_nombre_1 = root["pelea"].get("luchador1", PERSONAJE_NOMBRE_DEFAULT).asString();
 				log( "El nombre del personaje 1 fue cargado correctamente.", LOG_DEBUG );
-				personaje_1 = cargarPersonaje(personaje_nombre_1, 1, root, PERSONAJE_FLIPPED_DEFAULT, ventana, cambiar_color, escenario_ancho, escenario_alto, ventana_ancho, y_piso);
+				personaje_1 = cargarPersonaje(personaje_nombre_1, root, ventana, escenario_ancho, escenario_alto, cambiar_color);
 			} catch ( exception &e ) {
 				personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
-				personaje_1 = generarPersonajeDefault(1, ventana, ventana_ancho, escenario_ancho, escenario_alto, y_piso,PERSONAJE_ANCHO_DEFAULT, PERSONAJE_ALTO_DEFAULT, cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
+				personaje_1 = generarPersonajeDefault(ventana);
 				fallo_personaje_1 = true;
 				log( "El nombre del personaje 1 no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 			}
@@ -1263,7 +1263,7 @@ Mundo* ParserJSON::cargarMundo() {
 		if ( ! root["pelea"].isMember("luchador2") ) {
 			if ( fallo_personaje_1 )
 				cambiar_color = true;
-			personaje_2 = generarPersonajeDefault(2, ventana, ventana_ancho, escenario_ancho, escenario_alto, y_piso,PERSONAJE_ANCHO_DEFAULT, PERSONAJE_ALTO_DEFAULT, cambiar_color, !PERSONAJE_FLIPPED_DEFAULT);
+			personaje_2 = generarPersonajeDefault(ventana);
 			log("No se especifico el luchador 2, se setea por defecto.", LOG_ERROR);
 		} else {
 			try {
@@ -1272,12 +1272,12 @@ Mundo* ParserJSON::cargarMundo() {
 				if ( ! personaje_nombre_1.string::compare(personaje_nombre_2) ) {
 					cambiar_color = true;
 				}
-				personaje_2 = cargarPersonaje(personaje_nombre_2, 2, root, !PERSONAJE_FLIPPED_DEFAULT, ventana, cambiar_color, escenario_ancho, escenario_alto, ventana_ancho, y_piso);
+				personaje_2 = cargarPersonaje(personaje_nombre_2, root, ventana, escenario_ancho, escenario_alto, cambiar_color);
 			} catch ( exception &e ) {
 				personaje_nombre_2 = PERSONAJE_NOMBRE_DEFAULT;
 				if ( fallo_personaje_1 )
 					cambiar_color = true;
-				personaje_2 = generarPersonajeDefault(2, ventana, ventana_ancho, escenario_ancho, escenario_alto, y_piso, PERSONAJE_ANCHO_DEFAULT, PERSONAJE_ALTO_DEFAULT,cambiar_color, PERSONAJE_FLIPPED_DEFAULT);
+				personaje_2 = generarPersonajeDefault(ventana);
 				log( "El nombre del personaje 2 no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 			}
 		}
@@ -1293,14 +1293,16 @@ Mundo* ParserJSON::cargarMundo() {
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
 	// Validaciones para el z-index de los personajes.
 	if ( capas_ok && (! z_index_ok) ) personajes_z_index = i+1;
-	CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personajes_z_index, escenario_ancho, ventana_ancho, PERSONAJE_VELOCIDAD,y_piso);
+	CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personajes_z_index, escenario_ancho, ventana_ancho, PERSONAJE_VELOCIDAD_DEFAULT,y_piso);
 	log( "Se creo correctamente la capa principal.", LOG_DEBUG );
 
 	// Agrego capa principal al mundo.
 	escenario->addCapaPrincipal( capa_principal, personajes_z_index );
 	log( "Se agrego la capa principal al mundo.", LOG_DEBUG );
 	nuevo_mundo->addEscenario(escenario);
-	*/
+
+
+	return nuevo_mundo;
 
 }
 
