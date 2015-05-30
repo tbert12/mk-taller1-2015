@@ -1139,6 +1139,7 @@ Mundo* ParserJSON::cargarMundo() {
 
 	// Creo el escenario
 	Escenario* escenario = new Escenario();
+
 	log( "Se creo un escenario vacio", LOG_DEBUG );
 
 	// Obtener las capas del escenario. La primera capa es el fondo del escenario.
@@ -1151,11 +1152,11 @@ Mundo* ParserJSON::cargarMundo() {
 	int i=0;
 	if ( ! root.isMember("capas") || ! root["capas"].isArray() ) {
 		log( "No se encontraron parametros en un vector para la creacion de las capas. Se crean capas y se asignan valores por defecto.", LOG_ERROR );
-		CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_0_BACKGROUND_DEFAULT,ventana);
+		CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_0_BACKGROUND_DEFAULT,ventana);
 		escenario->addCapa(capa_0);
-		CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_1_BACKGROUND_DEFAULT,ventana);
+		CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_1_BACKGROUND_DEFAULT,ventana);
 		escenario->addCapa(capa_1);
-		CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD,CAPA_2_BACKGROUND_DEFAULT,ventana);
+		CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_2_BACKGROUND_DEFAULT,ventana);
 		escenario->addCapa(capa_2);
 		capas_ok = false;
 	} else {
@@ -1205,11 +1206,11 @@ Mundo* ParserJSON::cargarMundo() {
 			// Creo capas de fondo.
 			CapaFondo* capa_fondo;
 			try {
-				capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, background, ventana );
+				capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD_DEFAULT, background, ventana );
 				log( "Se creo correctamente la capa.", LOG_DEBUG );
 			} catch ( CargarImagenException &e ) {
 				delete capa_fondo;
-				capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD, BACKGROUND_DEFAULT, ventana );
+				capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD_DEFAULT, BACKGROUND_DEFAULT, ventana );
 				log( "No se pudo cargar la imagen de la capa. Se carga imagen por defecto. " + string(e.what()), LOG_ERROR );
 			}
 
@@ -1221,8 +1222,7 @@ Mundo* ParserJSON::cargarMundo() {
 	}
 
 	// Cargo todos los personajes.
-	vector<Personaje*> personajes = cargarPersonajes(root, ventana);
-
+	vector<Personaje*> personajes = cargarPersonajes(root, ventana, escenario_ancho, escenario_alto);
 
 	// Obtener hash de comandos.
 	this->cargarMapaComandos(root);
