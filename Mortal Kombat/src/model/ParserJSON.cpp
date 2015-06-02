@@ -1055,8 +1055,11 @@ Mundo* ParserJSON::cargarMundo() {
 		log("Se muestra imagen bienvenida en Ventanta durante tiempo de carga", LOG_DEBUG );
 	}
 
+	// Obtener hash de comandos.
+	this->cargarMapaComandos(root);
+
 	// Creo mundo vacio.
-	Mundo* nuevo_mundo = new Mundo(ventana,tiempo_combate);
+	Mundo* nuevo_mundo = new Mundo(ventana,tiempo_combate,comandos_luchador1,comandos_luchador2);
 	log ( "Se creo correctamente un mundo vacio.", LOG_DEBUG );
 	log( "Se le asigno la ventana creada al nuevo mundo.", LOG_DEBUG );
 
@@ -1223,9 +1226,6 @@ Mundo* ParserJSON::cargarMundo() {
 
 	// Cargo todos los personajes.
 	//vector<Personaje*> personajes = cargarPersonajes(root, ventana, escenario_ancho, escenario_alto);
-
-	// Obtener hash de comandos.
-	this->cargarMapaComandos(root);
 
 
 

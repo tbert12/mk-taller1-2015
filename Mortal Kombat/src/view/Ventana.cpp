@@ -23,6 +23,14 @@ void Ventana::vibrar(){
 	}
 }
 
+int Ventana::getAltoPx(){
+	return m_ancho_px;
+}
+
+int Ventana::getAnchoPx(){
+	return m_alto_px;
+}
+
 float Ventana::obtenerRatioX(){
 	return ratio_x;
 }

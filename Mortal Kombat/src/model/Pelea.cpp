@@ -7,7 +7,8 @@
 
 #include "Pelea.h"
 
-Pelea::Pelea(Ventana* la_ventana,Escenario* escenario,int un_tiempo) {
+Pelea::Pelea(Ventana* la_ventana,Escenario* escenario,int un_tiempo,int modo_de_juego) {
+	ModoDeJuego = modo_de_juego;
 	capaPrincipal = escenario->getCapaPrincipal();
 	m_personajeUno = capaPrincipal->getPersonajSinFlip();
 	m_personajeDos = capaPrincipal->getPersonajConFlip();
@@ -62,7 +63,8 @@ void Pelea::render(){
 	}
 
 	//verifico el tiempo
-	tiempo->actualizar();
+	if (ModoDeJuego != MODO_ENTRENAMIENTO)
+		tiempo->actualizar();
 
 	//verifico si finalizo el round
 	_roundFinalizado();

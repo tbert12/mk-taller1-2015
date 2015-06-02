@@ -23,6 +23,9 @@
 #include "logging.h"
 
 #define CICLOS_FINAL_ROUND 70
+#define MODO_JUGADOR_VS_JUGADOR 0
+#define MODO_JUGADOR_VS_PC 1
+#define MODO_ENTRENAMIENTO 2
 
 class Pelea {
 
@@ -30,6 +33,7 @@ private:
 	Personaje* m_personajeUno;
 	Personaje* m_personajeDos;
 	Personaje* ganador;
+	int ModoDeJuego;
 	int tiempoRound;
 	int NumeroRound;
 	int ciclos_round_terminado;
@@ -54,7 +58,7 @@ private:
 	void _mostarGanadorRound();
 
 public:
-	Pelea(Ventana* la_ventana,Escenario* el_escenario,int un_tiempo);
+	Pelea(Ventana* la_ventana,Escenario* el_escenario,int un_tiempo, int modo_de_juego);
 	void start();
 	void render();
 	bool peleaFinalizada();

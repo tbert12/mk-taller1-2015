@@ -70,8 +70,8 @@ void JoystickControl::_Init(int id){
 }
 
 void JoystickControl::JoyPressed(){
-	//X axis motion
 	if(evento->type == SDL_JOYAXISMOTION){
+		//X axis motion
 		if( evento->jaxis.axis == 0 ){
 			//Left of dead zone
 			if( evento->jaxis.value < -JOYSTICK_DEAD_ZONE ){

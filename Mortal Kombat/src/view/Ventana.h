@@ -32,6 +32,8 @@ public:
 	float obtenerAlto();
 	float obtenerRatioX();
 	float obtenerRatioY();
+	int getAnchoPx();
+	int getAltoPx();
 	//Starts up SDL and creates window
 	bool create_window();
 

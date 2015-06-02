@@ -74,7 +74,6 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 }
 
 void Controller::_JoystickRemoved(){
-	printf("JOYSTICK REMOOOOOOVEEEDDD\n");
 }
 
 void Controller::_JoystickAdded(){

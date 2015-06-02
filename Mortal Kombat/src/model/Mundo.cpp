@@ -7,20 +7,44 @@
 
 #include "Mundo.h"
 
-Mundo::Mundo(Ventana* una_ventana, int tiempo) {
+Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map<string, int>* mapaComan2){
 	ventana = una_ventana;
+	mapa_comandos1 = mapaComan1;
+	mapa_comandos2 = mapaComan2;
 	escenario_actual = NULL;
 	pelea = NULL;
 	tiempo_round = tiempo;
 	empezar = false;
 	partida_finalizada = false;
+	ModoDeJuego = MODO_JUGADOR_VS_PC;
+	botones_pantalla = NULL;
+	control = NULL;
+	combo = NULL;
 }
 
 void Mundo::start(){
+	Personaje* p_uno = personajes[0];
+	Personaje* p_dos = personajes[1];
+
 	if (escenarios[0]){
 		escenario_actual = escenarios[0];
-		escenario_actual->addPersonajes(personajes[0],personajes[1]);
-		pelea = new Pelea(ventana,escenario_actual,tiempo_round);
+		escenario_actual->addPersonajes(p_uno,p_dos);
+		vector<Combo*> vect;
+		combo = new ComboController(10, 10 ,vect);
+		//Creo el Controlador
+		switch(ModoDeJuego){
+			case MODO_JUGADOR_VS_JUGADOR:
+				control = new Controller(p_uno,p_dos,mapa_comandos1, mapa_comandos2,combo);
+				break;
+			case MODO_JUGADOR_VS_PC:
+				control = new Controller(p_uno,NULL,mapa_comandos1,mapa_comandos2,combo);
+				break;
+			case MODO_ENTRENAMIENTO:
+				control = new Controller(p_uno,NULL,mapa_comandos1,mapa_comandos2,combo);
+				botones_pantalla = new BotonesPantalla(ventana);
+				break;
+		}
+		pelea = new Pelea(ventana,escenario_actual,tiempo_round,ModoDeJuego);
 	}
 }
 
@@ -32,6 +56,17 @@ void Mundo::addEscenario(Escenario* un_escenario){
 	escenarios.push_back(un_escenario);
 }
 
+bool Mundo::Quit(){
+	if(control)
+		return control->Quit();
+	return false;
+}
+
+void Mundo::setModoDeJuego(int modo){
+	if (modo == MODO_ENTRENAMIENTO || modo == MODO_JUGADOR_VS_JUGADOR || modo == MODO_JUGADOR_VS_PC )
+		ModoDeJuego = modo;
+}
+
 std::vector<Personaje*> Mundo::getPersonajes(){
 	return personajes;
 }
@@ -41,10 +76,26 @@ Ventana* Mundo::getVentana(){
 	return ventana;
 }
 
+bool Mundo::Pausa(){
+	if (control)
+		return control->pausa();
+	return false;
+}
+
 void Mundo::render(){
 	if(!empezar){
 		start();
 		empezar = true;
+	}
+
+	if( control && combo){
+		control->KeyState();
+		combo->Update();
+		//combo->checkPosibleCombo();
+		combo->checkCombos();
+		while( control->PollEvent()){
+			control->Pressed();
+		}
 	}
 
 	//limpio pantalla
@@ -56,6 +107,9 @@ void Mundo::render(){
 	}
 
 	pelea->render();
+
+	if(ModoDeJuego == MODO_ENTRENAMIENTO && combo)
+		botones_pantalla->render(NULL,false);
 
 	//actualizo pantalla -> SDL_RenderPresent( Renderer );
 	ventana->Refresh();
@@ -80,6 +134,10 @@ Mundo::~Mundo() {
 	personajes.clear();
 
 	if (pelea) delete pelea;
+
+	if (combo) delete combo;
+
+	if (control) delete control;
 
 	if(ventana) delete ventana; //Siempre eliminarlo Ultimo (Hace SDL_Quit)
 }
