@@ -41,6 +41,8 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 
 	_estaMuerto = false;
 
+	m_rectanguloAtaque = new Rect_Logico;
+	m_rectanguloDefensa = new Rect_Logico;
 	//Sonidos
 	string named;
 	if(nombre == "Sub-Zero"){
@@ -349,6 +351,7 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 }
 
 Rect_Logico* Personaje::nextRectAtaque(){
+	printf("Si algun dia ven este printf Avisenle a Tomi!\n");
 	if(!_estaAtacando)
 		return rectanguloAtaque();
 	Rect_Logico* rectangulo = new Rect_Logico;
@@ -813,6 +816,11 @@ Personaje::~Personaje() {
 	for (size_t i=0; i < sprites.size() ; i++){
 		delete sprites[i];
 	}
+	for (size_t i=0; i < poderes.size(); i++){
+		delete poderes[i];
+	}
+	delete m_rectanguloAtaque;
+	delete m_rectanguloDefensa;
 	delete pina;
 	delete recibe;
 }

@@ -24,11 +24,12 @@ ObjetoArrojable::ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_spr
 	m_AnchoMundo = 0;
 	flip = false;
 	m_destruir = false;
+	m_rectangulo = new Rect_Logico;
 }
 
 Rect_Logico* ObjetoArrojable::rectanguloAtaque(){
 	if (m_destruir || !vida) return NULL;
-	Rect_Logico* rectangulo = new Rect_Logico;
+	Rect_Logico* rectangulo = m_rectangulo;
 	rectangulo->x = m_xActual;
 	if (flip) rectangulo->x -= sprite->getAncho();
 	rectangulo->y=  m_yActual;
@@ -133,5 +134,6 @@ bool ObjetoArrojable::getVida(){
 ObjetoArrojable::~ObjetoArrojable() {
 	if(sprite != NULL)
 		delete sprite;
+	delete m_rectangulo;
 }
 

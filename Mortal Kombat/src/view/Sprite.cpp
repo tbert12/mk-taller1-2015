@@ -71,6 +71,8 @@ bool Sprite::loop(){
 Sprite::~Sprite(){
 	delete SpriteSheetTexture;
 	delete []spriteFrames;
+	delete RectanguloTest1;
+	delete RectanguloTest2;
 }
 
 

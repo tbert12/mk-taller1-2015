@@ -90,6 +90,9 @@ private:
 	bool _recibioGolpe;
 	bool _estaMuerto;
 
+	Rect_Logico* m_rectanguloAtaque;
+	Rect_Logico* m_rectanguloDefensa;
+
 	Sprite* spriteActual;
 	std::vector<Sprite*> sprites;
 	std::vector<ObjetoArrojable*> poderes;

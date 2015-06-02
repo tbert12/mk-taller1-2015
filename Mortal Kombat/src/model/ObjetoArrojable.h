@@ -15,6 +15,7 @@
 class ObjetoArrojable {
 private:
 	std::string nombre;
+	Rect_Logico* m_rectangulo;
 	bool vida;
 	float m_xActual;
 	float m_yActual;

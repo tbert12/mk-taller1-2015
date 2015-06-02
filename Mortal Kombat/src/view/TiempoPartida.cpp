@@ -78,7 +78,7 @@ TiempoPartida::~TiempoPartida() {
 		m_textura = NULL;
 	}
 	if (font)
-		//TTF_CloseFont( font );
+		TTF_CloseFont( font );
 	m_tiempo = NULL;
 	m_ventana = NULL;
 }
