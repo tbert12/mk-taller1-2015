@@ -669,7 +669,7 @@ vector<float> ParserJSON::cargarColorAlternativo(Json::Value personaje) {
 }
 
 
-Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root, Ventana* ventana, float escenario_ancho, float escenario_alto, bool cambiar_color) {
+Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root, Ventana* ventana, bool cambiar_color) {
 
 	Personaje* personaje;
 	float personaje_ancho, personaje_alto, personaje_velocidad;
@@ -696,10 +696,8 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 								if ( personaje_ancho < 0 ) {
 									personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
 									log( "El ancho del personaje no puede ser negativo. Se setea por defecto en 30.", LOG_WARNING );
-								} else if ( personaje_ancho > escenario_ancho ) {
-									personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
-									log( "El ancho del personaje no puede superar el del escenario. Se setea por defecto en 30.", LOG_WARNING );
-								} else	log( "Se cargo correctamente el ancho logico del personaje.", LOG_DEBUG );
+								} else
+									log( "Se cargo correctamente el ancho logico del personaje.", LOG_DEBUG );
 							} catch ( exception &e ) {
 								personaje_ancho = PERSONAJE_ANCHO_DEFAULT;
 								log( "El ancho logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
@@ -714,10 +712,8 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 								if ( personaje_alto < 0 ) {
 									personaje_alto = PERSONAJE_ALTO_DEFAULT;
 									log( "El alto del personaje no puede negativo. Se setea por defecto en 60.", LOG_WARNING );
-								} else if ( personaje_alto > escenario_alto ) {
-									personaje_alto = PERSONAJE_ALTO_DEFAULT;
-									log( "El alto del personaje no puede superar el del escenario. Se setea por defecto en 60.", LOG_WARNING );
-								} else	log( "Se cargo correctamente el alto logico del personaje.", LOG_DEBUG );
+								} else
+									log( "Se cargo correctamente el alto logico del personaje.", LOG_DEBUG );
 							} catch ( exception &e ) {
 								personaje_alto = PERSONAJE_ALTO_DEFAULT;
 								log( "El alto logico del personaje inidicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
@@ -732,10 +728,8 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 								if ( personaje_velocidad < 0 ) {
 									personaje_velocidad = PERSONAJE_VELOCIDAD_DEFAULT;
 									log( "La velocidad del personaje no puede ser negativa. Se setea por defecto.", LOG_WARNING );
-								} else if ( personaje_velocidad > escenario_ancho/2 ) {
-									personaje_alto = PERSONAJE_ALTO_DEFAULT;
-									log( "La velocidad del personaje es demasiado grande teniendo en cuenta el ancho del escenario. Se setea por defecto.", LOG_WARNING );
-								} else	log( "Se cargo correctamente la velocidad del personaje.", LOG_DEBUG );
+								} else
+									log( "Se cargo correctamente la velocidad del personaje.", LOG_DEBUG );
 							} catch ( exception &e ) {
 								personaje_velocidad = PERSONAJE_VELOCIDAD_DEFAULT;
 								log( "La velocidad del personaje indicada es invalida y no puede ser convertida a un numero. Se setea por defecto.", LOG_ERROR );
@@ -799,7 +793,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 	return personaje;
 }
 
-vector<Personaje*> ParserJSON::cargarPersonajes(Json::Value root, Ventana* ventana, float escenario_ancho, float escenario_alto) {
+vector<Personaje*> ParserJSON::cargarPersonajes(Json::Value root, Ventana* ventana) {
 	vector<Personaje*> personajes;
 	vector<string> nombres_personajes;
 	Personaje* personaje;
@@ -822,7 +816,7 @@ vector<Personaje*> ParserJSON::cargarPersonajes(Json::Value root, Ventana* venta
 					log( "Ya se cargo un personaje con este nombre. Se ignora la carga de este personaje.", LOG_ERROR );
 				} else {
 					nombres_personajes.push_back(nombre);
-					personaje = cargarPersonaje(nombre, root, ventana, escenario_ancho, escenario_alto, false);
+					personaje = cargarPersonaje(nombre, root, ventana, false);
 					personajes.push_back(personaje);
 				}
 			} catch ( exception &e ) {
@@ -844,6 +838,236 @@ vector<Personaje*> ParserJSON::cargarPersonajes(Json::Value root, Ventana* venta
 	}
 
 	return personajes;
+
+}
+
+Escenario* ParserJSON::cargarEscenario(string nombre_escenario, Json::Value root, Ventana* ventana, float ventana_ancho) {
+
+	Escenario* escenario;
+
+	// Obtener las dimensiones logicas del escenario.
+	// En caso de error se setean por defecto.
+	string escenario_nombre;
+	float escenario_ancho, escenario_alto, y_piso;
+	int personajes_z_index;
+	bool z_index_ok = true;
+	if (! root.isMember("escenarios") || ! root["escenarios"].isArray() || root["escenarios"].size() == 0) {
+		escenario = generarEscenarioDefault();
+		log("No se especificaron parametros para la creacion de escenarios en un vector o el vector esta vacio. Se genera un escenario por defecto.", LOG_ERROR);
+	} else {
+		for (int i = 0; i < (int) root["escenarios"].size(); i++) {
+			if ( ! root["escenarios"].isMember("nombre") ) {
+				log( "No se indico el nombre del escenario. El escenario no se cargara en el mundo.", LOG_ERROR );
+				continue;
+			} else {
+				try {
+					escenario_nombre = root["escenarios"][i].get ( "nombre", ESCENARIO_NOMBRE_DEFAULT ).asString();
+				} catch (exception &e) {
+					log("El nombre del escenario no es una cadena de texto valida. Se ignora la carga del escenario en el mundo.", LOG_ERROR);
+					continue;
+				}
+				if ( ! escenario_nombre.string::compare(nombre_escenario) ) {
+					log("Se encontro el escenario con el nombre indicado.", LOG_DEBUG);
+					if ( ! root["escenarios"][i].isMember("ancho") ) {
+						escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
+						log( "No se especifico el ancho logico del escenario. Se setea por defecto.", LOG_WARNING );
+					} else {
+						try {
+							escenario_ancho = root["escenarios"][i].get( "ancho", ESCENARIO_ANCHO_DEFAULT ).asFloat();
+							if ( escenario_ancho < 0 ) {
+								escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
+								// Informar al usuario el cambio de ancho logico.
+								log( "El ancho del escenario no puede ser negativo. Se setea automaticamente.", LOG_WARNING );
+							} else
+								log( "Se cargo correctamente el ancho logico del escenario.", LOG_DEBUG );
+						} catch ( exception &e ) {
+							escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
+							log( "El ancho logico del escenario indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+						}
+					}
+					if ( ! root["escenarios"][i].isMember("alto") ) {
+						escenario_alto = ESCENARIO_ALTO_DEFAULT;
+						log( "No se especifico el alto logico del escenario. Se setea por defecto.", LOG_WARNING );
+					} else {
+						try {
+							escenario_alto = root["escenarios"][i].get( "alto", ESCENARIO_ALTO_DEFAULT ).asFloat();
+							if ( escenario_alto < 0 ) {
+								escenario_alto = ESCENARIO_ALTO_DEFAULT;
+								// Informar al usuario el cambio de alto logico.
+								log( "El alto del escenario no puede ser negativo. Se setea automaticamente por defecto.", LOG_WARNING );
+							} else
+								log( "Se cargo correctamente el alto logico del escenario.", LOG_DEBUG );
+						} catch ( exception &e ) {
+							escenario_alto = ESCENARIO_ALTO_DEFAULT;
+							log( "El alto logico del escenario indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+						}
+					}
+					if ( ! root["escenarios"][i].isMember("y-piso") ) {
+						y_piso = Y_PISO_DEFAULT;
+						log( "No se especifico la altura del piso del escenario. Se setea por defecto.", LOG_WARNING );
+					} else {
+						try {
+							y_piso = root["escenarios"][i].get( "y-piso", Y_PISO_DEFAULT ).asFloat();
+							log ( "Se cargo correctamente la altura del piso.", LOG_DEBUG );
+						} catch ( exception &e ) {
+							y_piso = Y_PISO_DEFAULT;
+							log( "La altura del piso del escenario (y-piso) indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+						}
+					}
+					if ( ! root["escenarios"][i].isMember("z-index_personajes") ) {
+						personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
+						z_index_ok = false;
+						log( "No se especifico el z-index de los personajes. Se posicionan delante de todas las capas por defecto.", LOG_WARNING );
+					} else {
+						try {
+							personajes_z_index = root["escenarios"][i].get( "z-index_personajes", PERSONAJES_Z_INDEX_DEFAULT ).asInt();
+							log( "Se cargo correctamente el z-index de los personajes.", LOG_DEBUG );
+						} catch ( exception &e ) {
+							personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
+							z_index_ok = false;
+							log( "El z-index de los personajes indicado no es valido y no pudo ser convertido a un numero entero. Se colocan por defecto delante de todas las capas.", LOG_ERROR );
+						}
+					}
+				} else
+					log("No se encontro el escenario con el nombre indicado.", LOG_WARNING);
+			}
+
+			// Creo el escenario
+			escenario = new Escenario();
+			log( "Se creo un escenario vacio", LOG_DEBUG );
+
+			// Obtener las capas del escenario. La primera capa es el fondo del escenario.
+			// Se setea por defecto el ancho en caso de error.
+			// Si la imagen no existe, se usa una por defecto.
+			string background;
+			float capa_ancho, capa_alto;
+			int capa_z_index;
+			bool capas_ok = true;
+			int j=0;
+			if ( ! root["escenarios"][i].isMember("capas") || ! root["escenarios"][i]["capas"].isArray() ) {
+				log( "No se encontraron parametros en un vector para la creacion de las capas. Se crean capas y se asignan valores por defecto.", LOG_ERROR );
+				CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_0_BACKGROUND_DEFAULT,ventana);
+				escenario->addCapa(capa_0);
+				CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_1_BACKGROUND_DEFAULT,ventana);
+				escenario->addCapa(capa_1);
+				CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_2_BACKGROUND_DEFAULT,ventana);
+				escenario->addCapa(capa_2);
+				capas_ok = false;
+			} else {
+				const Json::Value capas = root["escenarios"][i]["capas"];
+				for ( ; j < (int)capas.size(); j++ ) {
+					if ( ! capas[j].isMember("imagen_fondo") ) {
+						background = BACKGROUND_DEFAULT;
+						log( "No se especifico la imagen de fondo de la capa. Se asigna una imagen por defecto.", LOG_ERROR );
+					} else {
+						try {
+							background = capas[j].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
+
+							struct stat sb;
+							if ( stat(background.c_str(), &sb) != 0 ) {
+								log( "La ruta a la imagen de la capa no existe. Se carga la ruta por defecto.", LOG_ERROR );
+								background = BACKGROUND_DEFAULT;
+							} else log( "Se cargo el nombre de la imagen de la capa.", LOG_DEBUG );
+						} catch ( exception &e ) {
+							background = BACKGROUND_DEFAULT;
+							log( "La ruta del archivo de la imagen de la capa no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+						}
+					}
+					if ( ! capas[j].isMember("ancho") ) {
+						capa_ancho = VENTANA_ANCHO_DEFAULT;
+						log( "No se especifico el ancho logico de la capa. Se setea en 600 por defecto.", LOG_WARNING );
+					} else {
+						try {
+							capa_ancho = capas[j].get( "ancho", VENTANA_ANCHO_DEFAULT ).asFloat();
+							if ( capa_ancho < 0 ) {
+								capa_ancho = VENTANA_ANCHO_DEFAULT;
+								// Informar al usuario el cambio de ancho.
+								log( "El ancho de la capa no puede ser negativo. Se setea automaticamente en 600.", LOG_WARNING );
+							}
+							else log( "Se cargo correctamente el ancho logico de la capa.", LOG_DEBUG );
+						} catch ( exception &e ) {
+							capa_ancho = VENTANA_ANCHO_DEFAULT;
+							log( "El ancho de la capa es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+						}
+					}
+
+					capa_z_index = j;
+
+					// Setear alto logico de la capa de acuerdo al alto del escenario.
+					capa_alto = escenario_alto;
+					log ( "Se fijo el alto logico de la capa.", LOG_DEBUG );
+
+					// Creo capas de fondo.
+					CapaFondo* capa_fondo;
+					try {
+						capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD_DEFAULT, background, ventana );
+						log( "Se creo correctamente la capa.", LOG_DEBUG );
+					} catch ( CargarImagenException &e ) {
+						delete capa_fondo;
+						capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD_DEFAULT, BACKGROUND_DEFAULT, ventana );
+						log( "No se pudo cargar la imagen de la capa. Se carga imagen por defecto. " + string(e.what()), LOG_ERROR );
+					}
+
+					// Agrego capa al escenario.
+					escenario->addCapa(capa_fondo);
+					log( "Se agrego la capa al mundo.", LOG_DEBUG );
+				}
+			}
+
+			// Crear capa principal, donde estan los personajes y se desarrolla la accion.
+			// Validaciones para el z-index de los personajes.
+			if ( capas_ok && (! z_index_ok) ) personajes_z_index = i+1;
+			CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personajes_z_index, escenario_ancho, ventana_ancho, PERSONAJE_VELOCIDAD_DEFAULT,y_piso);
+			log( "Se creo correctamente la capa principal.", LOG_DEBUG );
+
+			// Agrego capa principal al escenario.
+			escenario->addCapaPrincipal( capa_principal, personajes_z_index );
+			log( "Se agrego la capa principal al escenario.", LOG_DEBUG );
+		}
+	}
+}
+
+vector<Escenario*> ParserJSON::cargarEscenarios(Json::Value root, Ventana* ventana, float ventana_ancho) {
+
+	vector<Escenario*> escenarios;
+	vector<string> nombres_escenarios;
+	Escenario* escenario;
+	string nombre;
+
+	log( "Se cargaran todos los escenarios del juego.", LOG_DEBUG );
+	if ( ! root.isMember("escenarios") || ! root["escenarios"].isArray() || root["escenarios"].size() == 0 ) {
+		escenarios.push_back( generarEscenarioDefault(ventana) );
+		log( "No se especificaron parametros para la creacion de los escenarios en un vector. Se genera un escenario por defecto.", LOG_ERROR );
+	} else {
+		for ( int i=0; i < (int) root["escenarios"].size(); i++ ) {
+			log( "Se cargara un escenario nuevo.", LOG_DEBUG );
+			if ( ! root["escenarios"][i].isMember("nombre") ) {
+				log( "El escenario no tiene especificado un nombre. Se ignorara la carga del escenario.", LOG_ERROR );
+				continue;
+			}
+			try {
+				nombre = root["escenarios"][i].get( "nombre", ESCENARIO_NOMBRE_DEFAULT ).asString();
+				if ( find(nombres_escenarios.begin(), nombres_escenarios.end(), nombre) != nombres_escenarios.end() ) {
+					log( "Ya se cargo un escenario con este nombre. Se ignora la carga de este escenario.", LOG_ERROR );
+				} else {
+					nombres_escenarios.push_back(nombre);
+					escenario = cargarEscenario(nombre, root, ventana, ventana_ancho);
+					escenarios.push_back(escenario);
+				}
+			} catch ( exception &e ) {
+				log( "El nombre indicado no es una cadena de texto valida. Se ignora la carga del escenario.", LOG_ERROR );
+				continue;
+			}
+		}
+	}
+
+	// Verifico que se tenga al menos un escenario.
+	if ( escenarios.size() < 1 ) {
+		escenarios.push_back( generarEscenarioDefault(ventana) );
+		log( "No se cargo ningun escenario exitosamente. Se genera un escenario por defecto.", LOG_ERROR );
+	}
+
+	return escenarios;
 
 }
 
@@ -1052,171 +1276,17 @@ Mundo* ParserJSON::cargarMundo() {
 	log ( "Se creo correctamente un mundo vacio.", LOG_DEBUG );
 	log( "Se le asigno la ventana creada al nuevo mundo.", LOG_DEBUG );
 
-	// Obtener las dimensiones logicas del escenario.
-	// En caso de error se setean por defecto.
-	float escenario_ancho, escenario_alto, y_piso;
-	int personajes_z_index;
-	bool z_index_ok = true;
-	if ( ! root.isMember("escenario") ) {
-		log( "No se encontraron parametros para la creacion del escenario. Se asignan valores por defecto.", LOG_ERROR );
-		escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
-		escenario_alto = ESCENARIO_ALTO_DEFAULT;
-		y_piso = Y_PISO_DEFAULT;
-		personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
-		z_index_ok = false;
-	} else {
-		if ( ! root["escenario"].isMember("ancho") ) {
-			escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
-			log( "No se especifico el ancho logico del escenario. Se setea en 600 por defecto.", LOG_WARNING );
-		} else {
-			try {
-				escenario_ancho = root["escenario"].get( "ancho", ESCENARIO_ANCHO_DEFAULT ).asFloat();
-				if ( escenario_ancho < 0 ) {
-					escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
-					// Informar al usuario el cambio de ancho logico.
-					log( "El ancho del escenario no puede ser negativo. Se setea automaticamente a 600.", LOG_WARNING );
-				} else log( "Se cargo correctamente el ancho logico del escenario.", LOG_DEBUG );
-			} catch ( exception &e ) {
-				escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
-				log( "El ancho logico del escenario indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
-			}
-		}
-		if ( ! root["escenario"].isMember("alto") ) {
-			escenario_alto = ESCENARIO_ALTO_DEFAULT;
-			log( "No se especifico el alto logico del escenario. Se setea en 150 por defecto.", LOG_WARNING );
-		} else {
-			try {
-				escenario_alto = root["escenario"].get( "alto", ESCENARIO_ALTO_DEFAULT ).asFloat();
-				if ( escenario_alto < 0 ) {
-					escenario_alto = ESCENARIO_ALTO_DEFAULT;
-					// Informar al usuario el cambio de alto logico.
-					log( "El alto del escenario no puede ser negativo. Se setea automaticamente a 150.", LOG_WARNING );
-				} else log( "Se cargo correctamente el alto logico del escenario.", LOG_DEBUG );
-			} catch ( exception &e ) {
-				escenario_alto = ESCENARIO_ALTO_DEFAULT;
-				log( "El alto logico del escenario indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
-			}
-		}
-		if ( ! root["escenario"].isMember("y-piso") ) {
-			y_piso = Y_PISO_DEFAULT;
-			log( "No se especifico la altura del piso del escenario. Se setea en 135 por defecto.", LOG_WARNING );
-		} else {
-			try {
-				y_piso = root["escenario"].get( "y-piso", Y_PISO_DEFAULT ).asFloat();
-				log ( "Se cargo correctamente la altura del piso.", LOG_DEBUG );
-			} catch ( exception &e ) {
-				y_piso = Y_PISO_DEFAULT;
-				log( "La altura del piso del escenario (y-piso) indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
-			}
-		}
-		if ( ! root["escenario"].isMember("z-index_personajes") ) {
-			personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
-			z_index_ok = false;
-			log( "No se especifico el z-index de los personajes. Se setean delante de todas las capas por defecto.", LOG_WARNING );
-		} else {
-			try {
-				personajes_z_index = root["escenario"].get( "z-index_personajes", PERSONAJES_Z_INDEX_DEFAULT ).asInt();
-				if ( personajes_z_index < 0 ) {
-					personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
-					z_index_ok = false;
-					log( "El z-index de los personajes no puede ser negativo. Se colocan por defecto los personajes delante de todas las capas.", LOG_WARNING );
-				} else	log( "Se cargo correctamente el z-index de los personajes.", LOG_DEBUG );
-			} catch ( exception &e ) {
-				personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
-				z_index_ok = false;
-				log( "El z-index de los personajes indicado no es valido y no pudo ser convertido a un numero entero. Se setea por defecto.", LOG_ERROR );
-			}
-		}
-	}
-
-	// Creo el escenario
-	Escenario* escenario = new Escenario();
-
-	log( "Se creo un escenario vacio", LOG_DEBUG );
-
-	// Obtener las capas del escenario. La primera capa es el fondo del escenario.
-	// Se setea por defecto el ancho en caso de error.
-	// Si la imagen no existe, se usa una por defecto.
-	string background;
-	float capa_ancho, capa_alto;
-	int capa_z_index;
-	bool capas_ok = true;
-	int i=0;
-	if ( ! root.isMember("capas") || ! root["capas"].isArray() ) {
-		log( "No se encontraron parametros en un vector para la creacion de las capas. Se crean capas y se asignan valores por defecto.", LOG_ERROR );
-		CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_0_BACKGROUND_DEFAULT,ventana);
-		escenario->addCapa(capa_0);
-		CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_1_BACKGROUND_DEFAULT,ventana);
-		escenario->addCapa(capa_1);
-		CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_2_BACKGROUND_DEFAULT,ventana);
-		escenario->addCapa(capa_2);
-		capas_ok = false;
-	} else {
-		const Json::Value capas = root["capas"];
-		for ( ; i < (int)capas.size(); i++ ) {
-			if ( ! capas[i].isMember("imagen_fondo") ) {
-				background = BACKGROUND_DEFAULT;
-				log( "No se especifico la imagen de fondo de la capa. Se asigna una imagen por defecto.", LOG_ERROR );
-			} else {
-				try {
-					background = capas[i].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
-
-					struct stat sb;
-					if ( stat(background.c_str(), &sb) != 0 ) {
-						log( "La ruta a la imagen de la capa no existe. Se carga la ruta por defecto.", LOG_ERROR );
-						background = BACKGROUND_DEFAULT;
-					} else log( "Se cargo el nombre de la imagen de la capa.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					background = BACKGROUND_DEFAULT;
-					log( "La ruta del archivo de la imagen de la capa no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-			if ( ! capas[i].isMember("ancho") ) {
-				capa_ancho = VENTANA_ANCHO_DEFAULT;
-				log( "No se especifico el ancho logico de la capa. Se setea en 600 por defecto.", LOG_WARNING );
-			} else {
-				try {
-					capa_ancho = capas[i].get( "ancho", VENTANA_ANCHO_DEFAULT ).asFloat();
-					if ( capa_ancho < 0 ) {
-						capa_ancho = VENTANA_ANCHO_DEFAULT;
-						// Informar al usuario el cambio de ancho.
-						log( "El ancho de la capa no puede ser negativo. Se setea automaticamente en 600.", LOG_WARNING );
-					}
-					else log( "Se cargo correctamente el ancho logico de la capa.", LOG_DEBUG );
-				} catch ( exception &e ) {
-					capa_ancho = VENTANA_ANCHO_DEFAULT;
-					log( "El ancho de la capa es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
-				}
-			}
-
-			capa_z_index = i;
-
-			// Setear alto logico de la capa de acuerdo al alto del escenario.
-			capa_alto = escenario_alto;
-			log ( "Se fijo el alto logico de la capa.", LOG_DEBUG );
-
-			// Creo capas de fondo.
-			CapaFondo* capa_fondo;
-			try {
-				capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD_DEFAULT, background, ventana );
-				log( "Se creo correctamente la capa.", LOG_DEBUG );
-			} catch ( CargarImagenException &e ) {
-				delete capa_fondo;
-				capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, PERSONAJE_VELOCIDAD_DEFAULT, BACKGROUND_DEFAULT, ventana );
-				log( "No se pudo cargar la imagen de la capa. Se carga imagen por defecto. " + string(e.what()), LOG_ERROR );
-			}
-
-			// Agrego capa al mundo.
-			//nuevo_mundo->addCapa(capa_fondo, capa_z_index);
-			escenario->addCapa(capa_fondo);
-			log( "Se agrego la capa al mundo.", LOG_DEBUG );
-		}
-	}
+	// Cargo todos los escenarios.
+	vector<Escenario*> escenarios = cargarEscenarios(root, ventana, ventana_ancho);
+	nuevo_mundo->addEscenarios(escenarios);
+	log("Se agregaron los escenarios al nuevo mundo de la partida.", LOG_DEBUG);
 
 	// Cargo todos los personajes.
-	vector<Personaje*> personajes = cargarPersonajes(root, ventana, escenario_ancho, escenario_alto);
+	vector<Personaje*> personajes = cargarPersonajes(root, ventana);
 	nuevo_mundo->addPersonajes(personajes);
 	log( "Se agregaron los personajes al nuevo mundo de la partida.", LOG_DEBUG );
+
+	return nuevo_mundo;
 
 
 	/*
@@ -1276,20 +1346,6 @@ Mundo* ParserJSON::cargarMundo() {
 	personajes.push_back(personaje_2);
 	log( "Se agregaron los dos personajes al nuevo mundo de la partida.", LOG_DEBUG );
 	*/
-
-	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
-	// Validaciones para el z-index de los personajes.
-	if ( capas_ok && (! z_index_ok) ) personajes_z_index = i+1;
-	CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personajes_z_index, escenario_ancho, ventana_ancho, PERSONAJE_VELOCIDAD_DEFAULT,y_piso);
-	log( "Se creo correctamente la capa principal.", LOG_DEBUG );
-
-	// Agrego capa principal al mundo.
-	escenario->addCapaPrincipal( capa_principal, personajes_z_index );
-	log( "Se agrego la capa principal al mundo.", LOG_DEBUG );
-	nuevo_mundo->addEscenario(escenario);
-
-
-	return nuevo_mundo;
 
 }
 

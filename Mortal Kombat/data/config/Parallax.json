@@ -11,39 +11,43 @@
 		"alto": 334.3
 	},
 	
-	"escenario": {
-		"ancho": 1000,
-		"alto": 334.3,
-		"y-piso": 325,
-		"z-index_personajes": 5
-	},
 	
-	"capas": [
+	"escenarios": [ 
 		{
-			"imagen_fondo": "data/img/background/Parallax/5.png",
-			"ancho": 400
-		},
-		{
-			"imagen_fondo": "data/img/background/Parallax/4.png",
-			"ancho": 500
-		},
-		{
-			"imagen_fondo": "data/img/background/Parallax/3.png",
-			"ancho": 700
-		},
-		{
-			"imagen_fondo": "data/img/background/Parallax/2.png",
-			"ancho": 900
-		},
-		{
-			"imagen_fondo": "data/img/background/Parallax/1.png",
-			"ancho": 1000
-		},
-		{
-			"imagen_fondo": "data/img/background/Parallax/0.png",
-			"ancho": 1000
+			"nombre": "Parallax",
+			"ancho": 1000,
+			"alto": 334.3,
+			"y-piso": 325,
+			"z-index_personajes": 5,
+			"capas": [
+				{
+					"imagen_fondo": "data/img/background/Parallax/5.png",
+					"ancho": 400
+				},
+				{
+					"imagen_fondo": "data/img/background/Parallax/4.png",
+					"ancho": 500
+				},
+				{
+					"imagen_fondo": "data/img/background/Parallax/3.png",
+					"ancho": 700
+				},
+				{
+					"imagen_fondo": "data/img/background/Parallax/2.png",
+					"ancho": 900
+				},
+				{
+					"imagen_fondo": "data/img/background/Parallax/1.png",
+					"ancho": 1000
+				},
+				{
+					"imagen_fondo": "data/img/background/Parallax/0.png",
+					"ancho": 1000
+				}
+			]
 		}
 	],
+	
 	
 	"personajes": [
 		{
@@ -72,7 +76,7 @@
 		}
 	],
 
-	
+
 	"comandos": {
 		"luchador1": {
 			"pina baja": 2,

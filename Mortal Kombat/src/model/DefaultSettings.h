@@ -18,6 +18,7 @@ const int VENTANA_ANCHO_PX_DEFAULT = 640;
 const int VENTANA_ALTO_PX_DEFAULT = 480;
 const float VENTANA_ANCHO_DEFAULT = 400.0;
 const float VENTANA_ALTO_DEFAULT = 334.3;
+const char* const ESCENARIO_NOMBRE_DEFAULT = "Default";
 const float ESCENARIO_ANCHO_DEFAULT = 1000.0;
 const float ESCENARIO_ALTO_DEFAULT = 334.3;
 const float Y_PISO_DEFAULT = 325.0;

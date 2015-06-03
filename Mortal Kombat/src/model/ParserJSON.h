@@ -30,8 +30,10 @@ public:
 	 vector<ObjetoArrojable*> cargarArrojables(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento);
 	 Sprite* cargarSprite( Json::Value root, string ruta_carpeta, const char accion_sprite[], string spritesheet_accion, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color = false, float h_inicial = 0, float h_final = 0, float desplazamiento = 0 );
 	 vector<Sprite*> cargarSprites(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT);
-	 Personaje* cargarPersonaje(string nombre_personaje, Json::Value root, Ventana* ventana, float escenario_ancho, float escenario_alto, bool cambiar_color);
-	 vector<Personaje*> cargarPersonajes(Json::Value root, Ventana* ventana, float escenario_ancho, float escenario_alto);
+	 Personaje* cargarPersonaje(string nombre_personaje, Json::Value root, Ventana* ventana, bool cambiar_color);
+	 vector<Personaje*> cargarPersonajes(Json::Value root, Ventana* ventana);
+	 Escenario* cargarEscenario(string nombre_escenario, Json::Value root, Ventana* ventana, float ventana_ancho);
+	 vector<Escenario*> cargarEscenarios(Json::Value root, Ventana* ventana, float ventana_ancho);
 	 vector<float> cargarColorAlternativo(Json::Value personaje);
 };
 
