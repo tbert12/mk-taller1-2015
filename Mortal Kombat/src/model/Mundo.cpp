@@ -121,7 +121,7 @@ void Mundo::render(){
 	pelea->render();
 
 	if(ModoDeJuego == MODO_ENTRENAMIENTO && combo)
-		botones_pantalla->render(NULL,false);
+		//botones_pantalla->render(NULL,false);
 
 	//actualizo pantalla -> SDL_RenderPresent( Renderer );
 	ventana->Refresh();
