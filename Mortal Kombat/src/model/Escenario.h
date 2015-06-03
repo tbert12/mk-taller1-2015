@@ -14,12 +14,14 @@
 
 class Escenario {
 private:
+	string nombre;
 	std::vector<Capa*> capas;
 	CapaPrincipal* capaPrincipal;
 	Personaje* PersonajeUno;
 	Personaje* PersonajeDos;
 public:
-	Escenario();
+	Escenario(string nombre);
+	string getNombre();
 	void addCapa(Capa* unaCapa);
 	void addCapaPrincipal(CapaPrincipal* capa_principal,int index);
 	void addPersonajes(Personaje* un_Personaje,Personaje* otro_Personaje);

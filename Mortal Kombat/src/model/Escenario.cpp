@@ -7,11 +7,15 @@
 
 #include "Escenario.h"
 
-Escenario::Escenario() {
+Escenario::Escenario(string nombre_escenario) {
+	nombre = nombre_escenario;
 	capaPrincipal = NULL;
 	PersonajeUno = NULL;
 	PersonajeDos = NULL;
+}
 
+string Escenario::getNombre() {
+	return nombre;
 }
 
 void Escenario::addCapa(Capa* una_capa) {

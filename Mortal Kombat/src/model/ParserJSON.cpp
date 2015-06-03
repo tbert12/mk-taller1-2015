@@ -852,12 +852,11 @@ Escenario* ParserJSON::cargarEscenario(string nombre_escenario, Json::Value root
 	int personajes_z_index;
 	bool z_index_ok = true;
 	if (! root.isMember("escenarios") || ! root["escenarios"].isArray() || root["escenarios"].size() == 0) {
-		escenario = generarEscenarioDefault();
+		escenario = generarEscenarioDefault(ventana);
 		log("No se especificaron parametros para la creacion de escenarios en un vector o el vector esta vacio. Se genera un escenario por defecto.", LOG_ERROR);
 	} else {
 		for (int i = 0; i < (int) root["escenarios"].size(); i++) {
 			if ( ! root["escenarios"].isMember("nombre") ) {
-				log( "No se indico el nombre del escenario. El escenario no se cargara en el mundo.", LOG_ERROR );
 				continue;
 			} else {
 				try {
@@ -933,7 +932,7 @@ Escenario* ParserJSON::cargarEscenario(string nombre_escenario, Json::Value root
 			}
 
 			// Creo el escenario
-			escenario = new Escenario();
+			escenario = new Escenario(escenario_nombre);
 			log( "Se creo un escenario vacio", LOG_DEBUG );
 
 			// Obtener las capas del escenario. La primera capa es el fondo del escenario.
@@ -1025,6 +1024,7 @@ Escenario* ParserJSON::cargarEscenario(string nombre_escenario, Json::Value root
 			log( "Se agrego la capa principal al escenario.", LOG_DEBUG );
 		}
 	}
+	return escenario;
 }
 
 vector<Escenario*> ParserJSON::cargarEscenarios(Json::Value root, Ventana* ventana, float ventana_ancho) {

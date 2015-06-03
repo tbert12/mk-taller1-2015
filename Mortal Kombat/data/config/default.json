@@ -11,27 +11,30 @@
 		"alto": 150
 	},
 	
-	"escenario": {
-		"ancho": 600,
-		"alto": 150,
-		"y-piso": 135,
-		"z-index_personajes": 3
-	},
-	
-	"capas": [
+	"escenarios": [ 
 		{
-			"imagen_fondo": "data/img/background/default/background_0.png",
-			"ancho": 200
-		},
-		{
-			"imagen_fondo": "data/img/background/default/background_1.png",
-			"ancho": 226.6
-		},
-		{
-			"imagen_fondo": "data/img/background/default/background_2.png",
-			"ancho": 600
+			"nombre": "Default",
+			"ancho": 600,
+			"alto": 150,
+			"y-piso": 135,
+			"z-index_personajes": 3,
+			"capas": [
+				{
+					"imagen_fondo": "data/img/background/default/background_0.png",
+					"ancho": 200
+				},
+				{
+					"imagen_fondo": "data/img/background/default/background_1.png",
+					"ancho": 226.6
+				},
+				{
+					"imagen_fondo": "data/img/background/default/background_2.png",
+					"ancho": 600
+				}
+			]
 		}
 	],
+	
 	
 	"personajes": [
 		{
@@ -48,10 +51,6 @@
 		}
 	],
 	
-	"pelea": {
-		"luchador1": "Jugador",
-		"luchador2": "Jugador"
-	},
 	
 	"comandos": {
 		"luchador1": {

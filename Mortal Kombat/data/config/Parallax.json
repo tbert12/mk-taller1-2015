@@ -1,6 +1,6 @@
 {
 
-	"loglvl": 2,
+	"loglvl": 1,
 	
 	"tiempo": 99,
 
@@ -51,28 +51,28 @@
 	
 	"personajes": [
 		{
-		"nombre": "Sub-Zero",
-		"sprites": "data/players/subzero/sprites/",
-		"poderes": "data/players/subzero/poderes/",
-		"color-alternativo": {
-			"h-inicial": 180,
-			"h-final": 200,
-			"desplazamiento": 50
-		},
-		"ancho": 65,
-		"alto": 150
+			"nombre": "Sub-Zero",
+			"sprites": "data/players/subzero/sprites/",
+			"poderes": "data/players/subzero/poderes/",
+			"color-alternativo": {
+				"h-inicial": 180,
+				"h-final": 200,
+				"desplazamiento": 50
+			},
+			"ancho": 65,
+			"alto": 150
 		},
 		{
-		"nombre": "Liu Kang",
-		"sprites": "data/players/liukang/sprites/",
-		"poderes": "data/players/liukang/poderes/",
-		"color-alternativo": {
-			"h-inicial": -30,
-			"h-final": 20,
-			"desplazamiento": 240
-		},
-		"ancho": 65,
-		"alto": 150
+			"nombre": "Liu Kang",
+			"sprites": "data/players/liukang/sprites/",
+			"poderes": "data/players/liukang/poderes/",
+			"color-alternativo": {
+				"h-inicial": -30,
+				"h-final": 20,
+				"desplazamiento": 240
+			},
+			"ancho": 65,
+			"alto": 150
 		}
 	],
 

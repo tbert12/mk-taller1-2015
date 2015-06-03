@@ -407,6 +407,24 @@ vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana) {
 	return objetosArrojables;
 }
 
+Escenario* generarEscenarioDefault(Ventana* ventana) {
+	string nombre = ESCENARIO_NOMBRE_DEFAULT;
+
+	CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_0_BACKGROUND_DEFAULT,ventana);
+	CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_1_BACKGROUND_DEFAULT,ventana);
+	CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,PERSONAJE_VELOCIDAD_DEFAULT,CAPA_2_BACKGROUND_DEFAULT,ventana);
+
+	CapaPrincipal* capa_principal = new CapaPrincipal(ESCENARIO_ALTO_DEFAULT, ESCENARIO_ANCHO_DEFAULT, PERSONAJES_Z_INDEX_DEFAULT, ESCENARIO_ANCHO_DEFAULT, VENTANA_ANCHO_DEFAULT, PERSONAJE_VELOCIDAD_DEFAULT,Y_PISO_DEFAULT);
+
+	Escenario* escenario = new Escenario(nombre);
+	escenario->addCapa(capa_0);
+	escenario->addCapa(capa_1);
+	escenario->addCapa(capa_2);
+	escenario->addCapaPrincipal( capa_principal, PERSONAJES_Z_INDEX_DEFAULT );
+
+	return escenario;
+}
+
 Personaje* generarPersonajeDefault( Ventana* ventana ) {
 	Personaje* personaje_default = new Personaje(PERSONAJE_NOMBRE_DEFAULT, generarSpritesDefault( ventana,PERSONAJE_ANCHO_DEFAULT,PERSONAJE_ALTO_DEFAULT), generarArrojableDefault(ventana), PERSONAJE_VELOCIDAD_DEFAULT );
 	return personaje_default;

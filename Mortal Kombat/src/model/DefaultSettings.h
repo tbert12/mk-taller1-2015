@@ -7,21 +7,22 @@
 #include "../../libs/json/json.h"
 #include "logging.h"
 #include "Mundo.h"
+#include "CapaFondo.h"
 #include "../controller/KeyboardControl.h"
 #include <sys/stat.h>
 
 const char* const JSON_CONFIG_DEFAULT = "data/config/default.json";
 
 const int LOGLVL_DEFAULT = 2;
-const int TIEMPO_DEFAULT = 180;
-const int VENTANA_ANCHO_PX_DEFAULT = 640;
-const int VENTANA_ALTO_PX_DEFAULT = 480;
-const float VENTANA_ANCHO_DEFAULT = 400.0;
-const float VENTANA_ALTO_DEFAULT = 334.3;
+const int TIEMPO_DEFAULT = 99;
+const int VENTANA_ANCHO_PX_DEFAULT = 512;
+const int VENTANA_ALTO_PX_DEFAULT = 384;
+const float VENTANA_ANCHO_DEFAULT = 200;
+const float VENTANA_ALTO_DEFAULT = 150;
 const char* const ESCENARIO_NOMBRE_DEFAULT = "Default";
-const float ESCENARIO_ANCHO_DEFAULT = 1000.0;
-const float ESCENARIO_ALTO_DEFAULT = 334.3;
-const float Y_PISO_DEFAULT = 325.0;
+const float ESCENARIO_ANCHO_DEFAULT = 600.0;
+const float ESCENARIO_ALTO_DEFAULT = 150.0;
+const float Y_PISO_DEFAULT = 135.0;
 const char* const BACKGROUND_DEFAULT = "data/img/background/default/unknown.png";
 const char* const CAPA_0_BACKGROUND_DEFAULT = "data/img/background/default/background_0.png";
 const char* const CAPA_1_BACKGROUND_DEFAULT = "data/img/background/default/background_1.png";
@@ -30,15 +31,15 @@ const float CAPA_0_ANCHO_DEFAULT = 200.0;
 const float CAPA_1_ANCHO_DEFAULT = 226.6;
 const float CAPA_2_ANCHO_DEFAULT = 600.0;
 const int CAPA_Z_INDEX_DEFAULT = 0;
-const int PERSONAJES_Z_INDEX_DEFAULT = 5;
+const int PERSONAJES_Z_INDEX_DEFAULT = 3;
 const char* const PERSONAJE_CARPETA_SPRITES_DEFAULT = "data/players/default/sprites/";
 const char* const PERSONAJE_CARPETA_ARROJABLES_DEFAULT = "data/players/default/poderes/";
 const char* const PERSONAJE_NOMBRE_DEFAULT = "Jugador";
 const bool PERSONAJE_FLIPPED_DEFAULT = false;
 const int PERSONAJE_ANCHO_PX_DEFAULT = 72;
 const int PERSONAJE_ALTO_PX_DEFAULT = 133;
-const float PERSONAJE_ANCHO_DEFAULT = 65.0;
-const float PERSONAJE_ALTO_DEFAULT = 150.0;
+const float PERSONAJE_ANCHO_DEFAULT = 40.0;
+const float PERSONAJE_ALTO_DEFAULT = 70.0;
 const float ARROJABLE_ANCHO_DEFAULT = 50.0;
 const float ARROJABLE_ALTO_DEFAULT = 20.0;
 const float ARROJABLE_ANCHO_PX_DEFAULT = 191.0;
@@ -108,6 +109,7 @@ Sprite* crearSpriteArrojablePorDefecto(Json::Value root_poderes, const char* acc
 vector<Sprite*> generarSpritesDefault( Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color = false, float h_inicial = COLOR_H_INICIAL_DEFAULT, float h_final = COLOR_H_FINAL_DEFAULT, float h_desplazamiento = COLOR_DESPLAZAMIENTO_DEFAULT );
 void mapaComandosDefault(map<string, int>* comandos1, map<string, int>* comandos2);
 vector<ObjetoArrojable*> generarArrojableDefault(Ventana* ventana);
+Escenario* generarEscenarioDefault(Ventana* ventana);
 Personaje* generarPersonajeDefault(Ventana* ventana);
 vector<Personaje*> generarPersonajesDefault(Ventana* ventana);
 
