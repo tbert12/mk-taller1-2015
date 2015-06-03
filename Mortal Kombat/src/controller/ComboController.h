@@ -36,6 +36,7 @@ public:
 	void sePresiono(int key);
 	void Update();
 
+	string get_stream_teclas();
 	virtual ~ComboController();
 private:
 

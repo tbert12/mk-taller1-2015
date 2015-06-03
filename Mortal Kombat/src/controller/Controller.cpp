@@ -36,6 +36,7 @@ bool Controller::pausa(){
 	return false;
 }
 
+
 bool Controller::Quit(){
 	return quit;
 }

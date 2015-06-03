@@ -103,8 +103,7 @@ void Mundo::render(){
 	if( control && combo){
 		control->KeyState();
 		combo->Update();
-		//combo->checkPosibleCombo();
-		combo->checkCombos();
+		//combo->checkCombos();
 		while( control->PollEvent()){
 			control->Pressed();
 		}
@@ -121,7 +120,7 @@ void Mundo::render(){
 	pelea->render();
 
 	if(ModoDeJuego == MODO_ENTRENAMIENTO && combo)
-		//botones_pantalla->render(NULL,false);
+		botones_pantalla->render(combo->get_stream_teclas(),false);
 
 	//actualizo pantalla -> SDL_RenderPresent( Renderer );
 	ventana->Refresh();

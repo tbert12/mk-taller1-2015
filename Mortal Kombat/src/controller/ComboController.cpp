@@ -20,6 +20,9 @@ ComboController::ComboController (int tiempoMaximo,int cantidadMaximaErrores, ve
 	_keys = "";
 }
 
+string ComboController::get_stream_teclas(){
+	return _keys;
+}
 
 int ComboController::distanciaLevenshtein(string s1,int len_s, string s2, int len_t){
 	  /* base case: empty strings */

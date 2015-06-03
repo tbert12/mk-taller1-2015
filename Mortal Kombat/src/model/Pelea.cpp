@@ -81,9 +81,7 @@ void Pelea::render(){
 				_resetRound();
 		}
 	}
-	//verifico scroll
-	int scroll = capaPrincipal->Scrollear(); //capaPrincipal->Scrollear();
-	float velocidadScroll = capaPrincipal->getVelocidadScroll();
+
 	//actualizo los estados
 	escenario->Update();
 

@@ -37,6 +37,7 @@ public:
 	void KeyState();
 	bool pausa();
 	int getSleep();
+	bool checkCombos();
 	virtual ~Controller();
 };
 
