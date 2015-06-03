@@ -25,10 +25,13 @@ void LSound::play(){
 	 *  -loop: loopear el sonido n veces (-1 eq infinito)
 	 *  -sound: =?
 	 */
+	if (mSound == NULL) return;
 	Mix_PlayChannel( -1, mSound, 0 );
 }
 
 LSound::~LSound() {
-	Mix_FreeChunk(mSound);
+	if (mSound != NULL) {
+		Mix_FreeChunk(mSound);
+	}
 }
 
