@@ -76,7 +76,7 @@ int main( int argc, char* args[] )
 		return 1;
 	}
 
-	/*
+
 	MenuSeleccion* menu = new MenuSeleccion(mundo->getVentana(),mundo->getPersonajes());
 	if (menu == NULL)
 		return 1;
@@ -101,7 +101,7 @@ int main( int argc, char* args[] )
 
 	//seteo modo de juego
 	mundo->setModoDeJuego(menu->modoDeJuego());
-	*/
+
 
 	//While Juego
 	while( !mundo->Quit()){

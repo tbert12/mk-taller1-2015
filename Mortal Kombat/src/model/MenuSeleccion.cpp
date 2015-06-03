@@ -21,7 +21,7 @@ MenuSeleccion::MenuSeleccion(Ventana* la_ventana,std::vector<Personaje*> los_per
 }
 
 void MenuSeleccion::render(){
-	//menu->render();
+	menu->render(ModoDeJuego);
 }
 
 void MenuSeleccion::select(){
@@ -58,11 +58,15 @@ void MenuSeleccion::abajo(){
 }
 
 void MenuSeleccion::izquierda(){
-
+	if (ModoDeJuego == 0)
+		ModoDeJuego = 2;
+	else ModoDeJuego--;
 }
 
 void MenuSeleccion::derecha(){
-
+	if (ModoDeJuego == 2)
+		ModoDeJuego = 0;
+	else ModoDeJuego++;
 }
 
 MenuSeleccion::~MenuSeleccion() {

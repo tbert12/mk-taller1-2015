@@ -12,11 +12,9 @@ Menu::Menu(Ventana* una_ventana) {
 	ventana = una_ventana;
 	imagen = new SDL_Rect;
 	textura = NULL;
-	_loadImage();
-	_crearOpciones();
 
 	//Texto
-	font = TTF_OpenFont(RUTA_TTF, (int)(ventana->obtenerAlto()*(0.10)*ventana->obtenerRatioY() +0.5) );
+	font = TTF_OpenFont(RUTA_TTF, (int)(ventana->obtenerAlto()*(0.05)*ventana->obtenerRatioY() +0.5) );
 	if( font == NULL ){
 		log("No se pudo cargar la fuente del tiempo",LOG_ERROR);
 	}
@@ -26,15 +24,45 @@ Menu::Menu(Ventana* una_ventana) {
 		Color = { 255, 247, 0 };
 		ColorRed = { 255, 0, 0 };
 	}
+
+	_loadImage();
+	_crearOpciones();
 }
 
 void Menu::_crearOpciones(){
-	Opcion opcion1 = {SDL_Rect {0,0,0,0},SDL_Color { 255, 247, 0 },string("Player vs Player"),string("Player vs Player")};
-	opciones.push_back(opcion1);
-	Opcion opcion2 = {SDL_Rect {0,0,0,0},SDL_Color { 255, 247, 0 },string("Player vs CPU"),string("Player vs CPU")};
-	opciones.push_back(opcion2);
-	Opcion opcion3 = {SDL_Rect {0,0,0,0},SDL_Color { 255, 247, 0 },string("Practica"),string("Practica")};
-	opciones.push_back(opcion3);
+	/*
+	pos del cuadro grande
+	alto 78
+	ancho 358
+	x 22
+	y 156
+	 */
+	int ancho = int(99*ventana->obtenerRatioX() + 0.5);
+	int alto = int(120*ventana->obtenerRatioY() + 0.5);
+	int y = int(51*ventana->obtenerRatioY() + 0.5);
+
+	Descripcion = {int(22*ventana->obtenerRatioX() + 0.5),int(206*ventana->obtenerRatioY() + 0.5),int(356*ventana->obtenerRatioX() + 0.5),int(102*ventana->obtenerRatioY() + 0.5)};
+
+	Opcion* opcion1 = new Opcion;
+	opcion1->posicion = SDL_Rect {int(20*ventana->obtenerRatioX() + 0.5),y,ancho,alto};
+	opcion1->texto = string("Player\n  vs \nPlayer");
+	opcion1->descripcion =  string("Player vs Player");
+	opcion1->textura = NULL;
+	opciones.push_back(*opcion1);
+
+	Opcion* opcion2 = new Opcion;
+	opcion2->posicion = SDL_Rect {int(150*ventana->obtenerRatioX() + 0.5),y,ancho,alto};
+	opcion2->texto = string("Player\n   vs \nCPU");
+	opcion2->descripcion =  string("Player vs CPU");
+	opcion2->textura = NULL;
+	opciones.push_back(*opcion2);
+
+	Opcion* opcion3 = new Opcion;
+	opcion3->posicion = SDL_Rect {int(280*ventana->obtenerRatioX() + 0.5),y,ancho,alto};
+	opcion3->texto = string("Entrenamiento");
+	opcion3->descripcion =  string("Entrenamiento");
+	opcion3->textura = NULL;
+	opciones.push_back(*opcion3);
 }
 
 void Menu::_loadImage(){
@@ -81,21 +109,70 @@ std::vector<Opcion> Menu::getOpciones(){
 }
 
 void Menu::_renderImagen(){
-	SDL_Rect camera = { 0,0, ventana->getAnchoPx(), ventana->getAltoPx()};
-	SDL_Rect clip = {0,0,ventana->getAnchoPx(), ventana->getAltoPx()};
-	SDL_RenderCopy( ventana->getRenderer(), textura, &clip, &camera);
+	SDL_RenderCopy( ventana->getRenderer(), textura, NULL, NULL);
 }
 
-void Menu::_renderTexto(){
-	for (unsigned int i = 0 ; i < opciones.size() ; i++){
-		//opciones[i];
+void Menu::_renderTexto(int opcion_actual){
+
+	for (unsigned int i = 0; i < opciones.size(); i++){
+
+		if ((int)i == opcion_actual){
+			_renderText(opciones[i].texto,ColorRed,opciones[i].posicion);
+			_renderText(opciones[i].descripcion,Color,Descripcion);
+		}
+		else
+			_renderText(opciones[i].texto,Color,opciones[i].posicion);
 	}
 
+	//cuadrado rojo del seleccionado
+	SDL_SetRenderDrawColor(ventana->getRenderer(), 255, 0, 0, 255);
+	SDL_Rect rect = opciones[opcion_actual].posicion;
+	rect.x -= 20;
+	rect.y -= 17;
+	rect.w += 2*20 + 2;
+	rect.h += 2*15 ;
+	SDL_RenderDrawRect(ventana->getRenderer(), &rect);
+
 }
 
-void Menu::render(SDL_Rect* opcion_actual){
+void Menu::render(int opcion_actual){
+	ventana->clear();
+
 	_renderImagen();
-	_renderTexto();
+	_renderTexto(opcion_actual);
+	ventana->Refresh();
+}
+void Menu::_renderText(string text, SDL_Color color, SDL_Rect rect){
+	SDL_Texture* textura;
+	int ancho,alto;
+	//Render text surface
+	SDL_Surface* textSurface = TTF_RenderText_Blended_Wrapped( font, text.c_str(), color, rect.w);
+	if( textSurface == NULL ){
+		log("No se puede crear la textura de la descripion del menu",LOG_ERROR);
+		return;
+	}
+	else{
+		//Create texture from surface pixels
+		textura = SDL_CreateTextureFromSurface( ventana->getRenderer(), textSurface );
+		if( textura == NULL ){
+			log("No se puede crear la textura de la descriptcion del menu",LOG_ERROR);
+			return;
+		}
+		else{
+			//Get image dimensions
+			ancho = textSurface->w;
+			alto = textSurface->h;
+		}
+		//Get rid of old surface
+		SDL_FreeSurface( textSurface );
+	}
+	SDL_Rect renderQuad = {rect.x + rect.w/2 - ancho/2,rect.y + rect.h/2 - alto/2,ancho,alto};
+	if ( rect.w == ancho)
+		renderQuad.x = renderQuad.x + rect.w/2 - ancho/4 ;
+
+	SDL_RenderCopy( ventana->getRenderer(), textura, NULL, &renderQuad);
+	SDL_DestroyTexture( textura );
+
 }
 
 Menu::~Menu() {
@@ -112,7 +189,10 @@ Menu::~Menu() {
 		TTF_CloseFont( font );
 
 	for (unsigned int i = 0 ; i < opciones.size() ; i++){
-		//delete opciones[i];
+		if( opciones[i].textura != NULL ){
+			SDL_DestroyTexture( opciones[i].textura );
+			opciones[i].textura = NULL;
+		}
 	}
 	opciones.clear();
 

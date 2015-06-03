@@ -9,8 +9,9 @@
 #define SRC_VIEW_MENU_H_
 
 #include <string>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include "Ventana.h"
 #include "LTexture.h"
 #include <stdio.h>
@@ -20,7 +21,8 @@
 
 typedef struct Opcion {
 	SDL_Rect posicion;
-	SDL_Color color;
+	SDL_Texture* textura;
+	SDL_Rect rect_textura;
 	string texto;
 	string descripcion;
 } Opcion;
@@ -28,7 +30,7 @@ typedef struct Opcion {
 class Menu {
 public:
 	Menu(Ventana* una_ventana);
-	void render(SDL_Rect* opcion_actual);
+	void render(int opcion_actual);
 	void _loadImage();
 	std::vector<Opcion> getOpciones();
 	virtual ~Menu();
@@ -44,10 +46,13 @@ private:
 	TTF_Font* font;
 	SDL_Color Color;
 	SDL_Color ColorRed;
+	SDL_Rect Descripcion;
+	SDL_Rect Select;
 
 	void _crearOpciones();
 	void _renderImagen();
-	void _renderTexto();
+	void _renderTexto(int opcion_actual);
+	void _renderText(string text, SDL_Color color, SDL_Rect rect);
 };
 
 #endif /* SRC_VIEW_MENU_H_ */

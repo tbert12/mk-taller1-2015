@@ -38,29 +38,20 @@ void ControlModo::Pressed(){
 			case SDLK_RIGHT:
 				menu->derecha();
 				break;
-			case SDLK_r:
-				break;
 			case SDLK_a:
 				menu->select();
 				break;
 			case SDLK_s:
 				menu->select();
 				break;
-			case SDLK_KP_ENTER:
+			case SDLK_RETURN:
 				menu->select();
 				break;
-			case SDLK_w:
+			case SDLK_SPACE:
+				menu->select();
 				break;
 			case SDLK_d:
 				menu->select();
-				break;
-			case SDLK_z:
-				break;
-			case SDLK_p:
-				break;
-			case SDLK_F1:
-				break;
-			case SDLK_F2:
 				break;
 		}
 	}
@@ -75,7 +66,7 @@ void ControlModo::Pressed(){
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				if (menu->mousePosition(x,y))
+				if (menu->mousePosition(x,y) and evento.button.button == SDL_BUTTON_LEFT )
 					menu->select();
 				break;
 		}
@@ -116,6 +107,10 @@ void ControlModo::Pressed(){
 		//con cualquier boton se selecciona
 		menu->select();
 	}
+}
+
+bool ControlModo::Quit(){
+	return quit;
 }
 
 ControlModo::~ControlModo() {
