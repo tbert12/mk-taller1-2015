@@ -52,8 +52,20 @@ void Mundo::addPersonaje(Personaje* un_personaje){
 	personajes.push_back(un_personaje);
 }
 
+void Mundo::addPersonajes(vector<Personaje*> nuevos_personajes) {
+	for (int i = 0; i < (int) nuevos_personajes.size(); i++) {
+		personajes.push_back(nuevos_personajes[i]);
+	}
+}
+
 void Mundo::addEscenario(Escenario* un_escenario){
 	escenarios.push_back(un_escenario);
+}
+
+void Mundo::addEscenarios(vector<Escenario*> nuevos_escenarios) {
+	for (int i = 0; i < (int) nuevos_escenarios.size(); i++) {
+		escenarios.push_back(nuevos_escenarios[i]);
+	}
 }
 
 bool Mundo::Quit(){

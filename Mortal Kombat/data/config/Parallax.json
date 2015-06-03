@@ -1,6 +1,6 @@
 {
 
-	"loglvl": 3,
+	"loglvl": 2,
 	
 	"tiempo": 99,
 
@@ -71,11 +71,7 @@
 		"alto": 150
 		}
 	],
-	
-	"pelea": {
-		"luchador1": "Sub-Zero",
-		"luchador2": "Liu Kang"
-	},
+
 	
 	"comandos": {
 		"luchador1": {

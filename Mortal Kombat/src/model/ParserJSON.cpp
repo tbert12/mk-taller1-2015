@@ -786,19 +786,6 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 						Personaje* personaje = new Personaje(personaje_nombre, sprites, arrojables, personaje_velocidad);
 						log( "Se creo correctamente el personaje.", LOG_DEBUG );
 
-						// Indico posicion inicial del personaje.
-						/*
-						float position;
-						if ( nro_personaje == 1 ) {
-							position = (escenario_ancho/2) - (ventana_ancho/2)*rpos;
-						}
-						else if ( nro_personaje == 2 ) {
-							position = (escenario_ancho/2) + (ventana_ancho/2)*rpos;
-						}
-						//personaje->setPosition( position , y_piso );
-						log( "Seteada Posicion en escenario de Personaje", LOG_DEBUG );
-						 */
-
 						return personaje;
 					}
 				} catch ( exception &e ) {
@@ -819,7 +806,7 @@ vector<Personaje*> ParserJSON::cargarPersonajes(Json::Value root, Ventana* venta
 	string nombre;
 
 	log( "Se cargaran todos los personajes del juego.", LOG_DEBUG );
-	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() || ! root["personajes"].size() < 2 ) {
+	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() || root["personajes"].size() < 2 ) {
 		personajes = generarPersonajesDefault(ventana);
 		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan dos personajes por defecto.", LOG_ERROR );
 	} else {
@@ -1227,14 +1214,12 @@ Mundo* ParserJSON::cargarMundo() {
 	}
 
 	// Cargo todos los personajes.
-	//vector<Personaje*> personajes = cargarPersonajes(root, ventana, escenario_ancho, escenario_alto);
+	vector<Personaje*> personajes = cargarPersonajes(root, ventana, escenario_ancho, escenario_alto);
+	nuevo_mundo->addPersonajes(personajes);
+	log( "Se agregaron los personajes al nuevo mundo de la partida.", LOG_DEBUG );
 
 
-
-
-
-
-
+	/*
 	string personaje_nombre_1, personaje_nombre_2;
 	Personaje *personaje_1, *personaje_2;
 	bool fallo_personaje_1 = false;
@@ -1290,7 +1275,7 @@ Mundo* ParserJSON::cargarMundo() {
 	personajes.push_back(personaje_1);
 	personajes.push_back(personaje_2);
 	log( "Se agregaron los dos personajes al nuevo mundo de la partida.", LOG_DEBUG );
-
+	*/
 
 	// Crear capa principal, donde estan los personajes y se desarrolla la accion.
 	// Validaciones para el z-index de los personajes.

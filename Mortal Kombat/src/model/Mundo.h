@@ -44,8 +44,10 @@ public:
 	bool partida_finalizada;
 	Mundo(Ventana* una_ventana,int tiempo_round,map<string, int>* mapaComan1,map<string, int>* mapaComan2);
 	void addPersonaje(Personaje* un_personaje);
+	void addPersonajes(vector<Personaje*> nuevos_personajes);
 	std::vector<Personaje*> getPersonajes();
 	void addEscenario(Escenario* un_escenario);
+	void addEscenarios(vector<Escenario*> nuevos_escenarios);
 	Ventana* getVentana();
 	void setModoDeJuego(int modo);
 	void render();
