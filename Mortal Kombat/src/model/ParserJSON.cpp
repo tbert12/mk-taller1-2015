@@ -9,6 +9,8 @@ ParserJSON::ParserJSON(string ruta_archivo) {
 }
 
 ParserJSON::~ParserJSON() {
+	delete comandos_luchador1;
+	delete comandos_luchador2;
 }
 
 float ParserJSON::getRatioXPersonaje( Json::Value root_sprites, float personaje_ancho ) {
