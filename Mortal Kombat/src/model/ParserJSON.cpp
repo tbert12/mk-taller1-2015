@@ -855,7 +855,7 @@ Escenario* ParserJSON::cargarEscenario(string nombre_escenario, Json::Value root
 		log("No se especificaron parametros para la creacion de escenarios en un vector o el vector esta vacio. Se genera un escenario por defecto.", LOG_ERROR);
 	} else {
 		for (int i = 0; i < (int) root["escenarios"].size(); i++) {
-			if ( ! root["escenarios"].isMember("nombre") ) {
+			if ( ! root["escenarios"][i].isMember("nombre") ) {
 				continue;
 			} else {
 				try {
