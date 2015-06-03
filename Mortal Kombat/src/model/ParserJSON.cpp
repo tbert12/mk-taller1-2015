@@ -679,7 +679,6 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan el personaje por defecto.", LOG_ERROR );
 	} else {
 		for ( int k=0; k < (int)root["personajes"].size(); k++ ) {
-
 			if ( ! root["personajes"][k].isMember("nombre") ) {
 				continue;
 			} else {
@@ -861,74 +860,74 @@ Escenario* ParserJSON::cargarEscenario(string nombre_escenario, Json::Value root
 			} else {
 				try {
 					escenario_nombre = root["escenarios"][i].get ( "nombre", ESCENARIO_NOMBRE_DEFAULT ).asString();
+					if ( ! escenario_nombre.string::compare(nombre_escenario) ) {
+						log("Se encontro el escenario con el nombre indicado.", LOG_DEBUG);
+						if ( ! root["escenarios"][i].isMember("ancho") ) {
+							escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
+							log( "No se especifico el ancho logico del escenario. Se setea por defecto.", LOG_WARNING );
+						} else {
+							try {
+								escenario_ancho = root["escenarios"][i].get( "ancho", ESCENARIO_ANCHO_DEFAULT ).asFloat();
+								if ( escenario_ancho < 0 ) {
+									escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
+									// Informar al usuario el cambio de ancho logico.
+									log( "El ancho del escenario no puede ser negativo. Se setea automaticamente.", LOG_WARNING );
+								} else
+									log( "Se cargo correctamente el ancho logico del escenario.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
+								log( "El ancho logico del escenario indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+							}
+						}
+						if ( ! root["escenarios"][i].isMember("alto") ) {
+							escenario_alto = ESCENARIO_ALTO_DEFAULT;
+							log( "No se especifico el alto logico del escenario. Se setea por defecto.", LOG_WARNING );
+						} else {
+							try {
+								escenario_alto = root["escenarios"][i].get( "alto", ESCENARIO_ALTO_DEFAULT ).asFloat();
+								if ( escenario_alto < 0 ) {
+									escenario_alto = ESCENARIO_ALTO_DEFAULT;
+									// Informar al usuario el cambio de alto logico.
+									log( "El alto del escenario no puede ser negativo. Se setea automaticamente por defecto.", LOG_WARNING );
+								} else
+									log( "Se cargo correctamente el alto logico del escenario.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								escenario_alto = ESCENARIO_ALTO_DEFAULT;
+								log( "El alto logico del escenario indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+							}
+						}
+						if ( ! root["escenarios"][i].isMember("y-piso") ) {
+							y_piso = Y_PISO_DEFAULT;
+							log( "No se especifico la altura del piso del escenario. Se setea por defecto.", LOG_WARNING );
+						} else {
+							try {
+								y_piso = root["escenarios"][i].get( "y-piso", Y_PISO_DEFAULT ).asFloat();
+								log ( "Se cargo correctamente la altura del piso.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								y_piso = Y_PISO_DEFAULT;
+								log( "La altura del piso del escenario (y-piso) indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+							}
+						}
+						if ( ! root["escenarios"][i].isMember("z-index_personajes") ) {
+							personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
+							z_index_ok = false;
+							log( "No se especifico el z-index de los personajes. Se posicionan delante de todas las capas por defecto.", LOG_WARNING );
+						} else {
+							try {
+								personajes_z_index = root["escenarios"][i].get( "z-index_personajes", PERSONAJES_Z_INDEX_DEFAULT ).asInt();
+								log( "Se cargo correctamente el z-index de los personajes.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
+								z_index_ok = false;
+								log( "El z-index de los personajes indicado no es valido y no pudo ser convertido a un numero entero. Se colocan por defecto delante de todas las capas.", LOG_ERROR );
+							}
+						}
+					} else
+						log("No se encontro el escenario con el nombre indicado.", LOG_WARNING);
 				} catch (exception &e) {
 					log("El nombre del escenario no es una cadena de texto valida. Se ignora la carga del escenario en el mundo.", LOG_ERROR);
 					continue;
 				}
-				if ( ! escenario_nombre.string::compare(nombre_escenario) ) {
-					log("Se encontro el escenario con el nombre indicado.", LOG_DEBUG);
-					if ( ! root["escenarios"][i].isMember("ancho") ) {
-						escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
-						log( "No se especifico el ancho logico del escenario. Se setea por defecto.", LOG_WARNING );
-					} else {
-						try {
-							escenario_ancho = root["escenarios"][i].get( "ancho", ESCENARIO_ANCHO_DEFAULT ).asFloat();
-							if ( escenario_ancho < 0 ) {
-								escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
-								// Informar al usuario el cambio de ancho logico.
-								log( "El ancho del escenario no puede ser negativo. Se setea automaticamente.", LOG_WARNING );
-							} else
-								log( "Se cargo correctamente el ancho logico del escenario.", LOG_DEBUG );
-						} catch ( exception &e ) {
-							escenario_ancho = ESCENARIO_ANCHO_DEFAULT;
-							log( "El ancho logico del escenario indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
-						}
-					}
-					if ( ! root["escenarios"][i].isMember("alto") ) {
-						escenario_alto = ESCENARIO_ALTO_DEFAULT;
-						log( "No se especifico el alto logico del escenario. Se setea por defecto.", LOG_WARNING );
-					} else {
-						try {
-							escenario_alto = root["escenarios"][i].get( "alto", ESCENARIO_ALTO_DEFAULT ).asFloat();
-							if ( escenario_alto < 0 ) {
-								escenario_alto = ESCENARIO_ALTO_DEFAULT;
-								// Informar al usuario el cambio de alto logico.
-								log( "El alto del escenario no puede ser negativo. Se setea automaticamente por defecto.", LOG_WARNING );
-							} else
-								log( "Se cargo correctamente el alto logico del escenario.", LOG_DEBUG );
-						} catch ( exception &e ) {
-							escenario_alto = ESCENARIO_ALTO_DEFAULT;
-							log( "El alto logico del escenario indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
-						}
-					}
-					if ( ! root["escenarios"][i].isMember("y-piso") ) {
-						y_piso = Y_PISO_DEFAULT;
-						log( "No se especifico la altura del piso del escenario. Se setea por defecto.", LOG_WARNING );
-					} else {
-						try {
-							y_piso = root["escenarios"][i].get( "y-piso", Y_PISO_DEFAULT ).asFloat();
-							log ( "Se cargo correctamente la altura del piso.", LOG_DEBUG );
-						} catch ( exception &e ) {
-							y_piso = Y_PISO_DEFAULT;
-							log( "La altura del piso del escenario (y-piso) indicado es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
-						}
-					}
-					if ( ! root["escenarios"][i].isMember("z-index_personajes") ) {
-						personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
-						z_index_ok = false;
-						log( "No se especifico el z-index de los personajes. Se posicionan delante de todas las capas por defecto.", LOG_WARNING );
-					} else {
-						try {
-							personajes_z_index = root["escenarios"][i].get( "z-index_personajes", PERSONAJES_Z_INDEX_DEFAULT ).asInt();
-							log( "Se cargo correctamente el z-index de los personajes.", LOG_DEBUG );
-						} catch ( exception &e ) {
-							personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
-							z_index_ok = false;
-							log( "El z-index de los personajes indicado no es valido y no pudo ser convertido a un numero entero. Se colocan por defecto delante de todas las capas.", LOG_ERROR );
-						}
-					}
-				} else
-					log("No se encontro el escenario con el nombre indicado.", LOG_WARNING);
 			}
 
 			// Creo el escenario
