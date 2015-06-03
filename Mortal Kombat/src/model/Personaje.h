@@ -155,6 +155,7 @@ public:
 	int getSentidoDeMovimiento();
 	float getVelocidadDerecha();
 	float getVelocidadIzquierda();
+	float getVelocidad();
 	int getVida();
 	string getNombre();
 	float getAncho();

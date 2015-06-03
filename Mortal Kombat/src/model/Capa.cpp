@@ -14,7 +14,7 @@ Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_v
 	m_zIndex = zIndex;
 	m_anchoDeFondo = anchoDeFondo;
 	m_ancho_ventana = ancho_ventana;
-	m_velocidad = (ancho-ancho_ventana)/(anchoDeFondo-ancho_ventana) *factorVelocidad;
+	m_velocidad_a_multiplicar = (ancho-ancho_ventana)/(anchoDeFondo-ancho_ventana);
 }
 
 float Capa::getX()
@@ -22,13 +22,14 @@ float Capa::getX()
 	return rect->x;
 }
 
-void Capa::Mover(bool right){
+void Capa::Mover(bool right, float factorVelocidad){
+	float velocidad = m_velocidad_a_multiplicar * factorVelocidad;
 	if(right)
 	{
-		rect->x += m_velocidad;
+		rect->x += velocidad;
 
 	}else{
-		rect->x -=m_velocidad;
+		rect->x -=velocidad;
 	}
 	if( rect->x > rect->w - m_ancho_ventana){
 		rect->x = rect->w - m_ancho_ventana;
@@ -42,7 +43,7 @@ void Capa::Mover(bool right){
 int Capa::getZIndex(){
 	return m_zIndex;
 }
-void Capa::Update(int scroll){
+void Capa::Update(int scroll,float velocidad){
 
 }
 

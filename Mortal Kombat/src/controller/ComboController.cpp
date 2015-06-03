@@ -168,7 +168,7 @@ void ComboController::Update(){
 }
 
 void ComboController::sePresiono(int key){
-	string caracter = std::to_string(key-'a');
+	string caracter = std::to_string(key);
 	_keys = _keys + caracter.c_str();
 	keyTime.push_back(SDL_GetTicks());
 }

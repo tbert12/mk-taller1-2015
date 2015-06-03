@@ -274,9 +274,14 @@ int Personaje::getSentidoDeMovimiento(){
 	return 0;
 }
 
+float Personaje::getVelocidad(){
+	return m_velocidadActual;
+}
+
 float Personaje::getVelocidadDerecha(){
 	return m_velocidad;
 }
+
 float Personaje::getVelocidadIzquierda(){
 	return -m_velocidad;
 }
@@ -491,13 +496,19 @@ void Personaje::Frenar(){
 
 void Personaje::CaminarDerecha(){
 	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe) return;
-	m_velocidadActual = m_velocidad;
+	float factor = 1;
+	if (m_fliped)
+		factor = 0.5;
+	m_velocidadActual = m_velocidad*factor;
 	_cambiarSprite(SPRITE_CAMINAR);
 }
 
 void Personaje::CaminarIzquierda(){
 	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe) return;
-	m_velocidadActual = - m_velocidad;
+	float factor = 0.5;
+	if (m_fliped)
+		factor = 1;
+	m_velocidadActual = - m_velocidad*factor;
 	_cambiarSprite(SPRITE_CAMINAR);
 }
 
@@ -518,13 +529,13 @@ void Personaje::Saltar(){
 void Personaje::_SaltarDerecha(){
 	_cambiarSprite(SPRITE_SALTAR_DIAGONAL);
 	_estaSaltando = 1;
-	m_velocidadActual = m_velocidad;
+	m_velocidadActual = m_velocidad*1.8;
 }
 
 void Personaje::_SaltarIzquierda(){
 	_cambiarSprite(SPRITE_SALTAR_DIAGONAL);
 	_estaSaltando = 1;
-	m_velocidadActual = - m_velocidad;
+	m_velocidadActual = - m_velocidad*1.8;
 }
 
 void Personaje::_SaltarHorizontal(){

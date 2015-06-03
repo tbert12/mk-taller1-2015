@@ -17,7 +17,7 @@
 #include <stdio.h>
 
 #define RUTA_IMG "data/img/etc/mode.png"
-#define RUTA_TTF "data/font/fuente.ttf"
+#define RUTA_TTF "data/font/mortalkombat4.ttf"
 
 typedef struct Opcion {
 	SDL_Rect posicion;

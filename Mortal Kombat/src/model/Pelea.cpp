@@ -7,13 +7,14 @@
 
 #include "Pelea.h"
 
-Pelea::Pelea(Ventana* la_ventana,Escenario* escenario,int un_tiempo,int modo_de_juego) {
+Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_de_juego) {
 	ModoDeJuego = modo_de_juego;
+	escenario = un_escenario;
 	capaPrincipal = escenario->getCapaPrincipal();
 	m_personajeUno = capaPrincipal->getPersonajSinFlip();
 	m_personajeDos = capaPrincipal->getPersonajConFlip();
 	ganador = NULL;
-	capas = escenario->getCapas();
+	//capas = escenario->getCapas();
 	ventana = la_ventana;
 	tiempoRound = un_tiempo;
 	NumeroRound = 1;
@@ -82,19 +83,15 @@ void Pelea::render(){
 	}
 	//verifico scroll
 	int scroll = capaPrincipal->Scrollear(); //capaPrincipal->Scrollear();
-
+	float velocidadScroll = capaPrincipal->getVelocidadScroll();
 	//actualizo los estados
-	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
-		capas[i]->Update(scroll);
-	}
+	escenario->Update();
 
 	//aca una vez actualizado to do chequeo las colisiones y demas.
 	_verificarColisiones();
 
 	//renderizo las capas
-	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
-		capas[i]->Renderizar();
-	}
+	escenario->render();
 
 	_renderEstado();
 
@@ -234,9 +231,7 @@ void Pelea::_mostarGanadorRound(){
 
 void Pelea::_resetRound(){
 	//reseteo todos las capas y personajes
-	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
-		capas[i]->reset();
-	}
+	escenario->reset();
 	tiempo->reset();
 	round_finalizado = false;
 	comenzo_round = false;

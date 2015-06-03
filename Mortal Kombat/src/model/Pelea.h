@@ -45,7 +45,7 @@ private:
 	Ventana* ventana;
 	BarraEnergia* BarraPersonajeUno;
 	BarraEnergia* BarraPersonajeDos;
-	std::vector<Capa*> capas;
+	Escenario* escenario;
 	TiempoPartida* tiempo_pantalla;
 	CapaPrincipal* capaPrincipal;
 

@@ -29,6 +29,7 @@ public:
 	std::vector<Capa*> getCapas();
 	void Update();
 	void render();
+	void reset();
 	virtual ~Escenario();
 };
 

@@ -48,10 +48,16 @@ CapaPrincipal* Escenario::getCapaPrincipal(){
 void Escenario::Update(){
 	//verifico scroll
 	int scroll = capaPrincipal->Scrollear();
-
+	float velocidad = capaPrincipal->getVelocidadScroll();
 	//actualizo los estados
 	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
-		capas[i]->Update(scroll);
+		capas[i]->Update(scroll,velocidad);
+	}
+}
+
+void Escenario::reset(){
+	for (unsigned int i = 0 ; i <= capas.size() -1 ; i++){
+		capas[i]->reset();
 	}
 }
 

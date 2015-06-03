@@ -54,9 +54,22 @@ void CapaPrincipal::_actualizarX(){
 
 }
 
-void CapaPrincipal::Update(int scroll){
-	if (scroll > 0)this->Mover(true);
-	else if (scroll < 0) this->Mover(false);
+float CapaPrincipal::getVelocidadScroll(){
+	float velocidad = 0;
+	if(!m_PersonajeQueScrollea)
+		return 0;
+	else if(m_PersonajeQueScrollea == 1){
+		velocidad = m_PersonajeUno->getVelocidad();
+	}
+	else{
+		velocidad = m_PersonajeDos->getVelocidad();
+	}
+	return velocidad > 0 ? velocidad : velocidad * -1;
+}
+
+void CapaPrincipal::Update(int scroll,float velocidad){
+	if (scroll > 0)this->Mover(true, velocidad);
+	else if (scroll < 0) this->Mover(false, velocidad);
 	this->_actualizarX();
 
 	_scroll = scroll;

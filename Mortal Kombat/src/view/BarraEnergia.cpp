@@ -8,7 +8,7 @@
 #include "BarraEnergia.h"
 #define RUTA_BASE "data/img/estado/barras/energia_vacia.png"
 #define RUTA_RELLENO "data/img/estado/barras/energia_llena.png"
-#define RUTA_TTF "data/font/fuente.ttf"
+#define RUTA_TTF "data/font/mortalkombat4.ttf"
 
 BarraEnergia::BarraEnergia(Ventana* una_ventana,int max_barra,string nombre) {
 	ventana = una_ventana;

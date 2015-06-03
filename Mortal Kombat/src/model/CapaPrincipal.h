@@ -33,10 +33,11 @@ public:
 	Personaje* getPersonajSinFlip();
 	Personaje* getPersonajConFlip();
 	int CheckearColisiones();
+	float getVelocidadScroll();
 
 	virtual ~CapaPrincipal();
 	virtual void Renderizar();
-	virtual void Update(int scroll);
+	virtual void Update(int scroll,float velocidad);
 	virtual void reset();
 
 

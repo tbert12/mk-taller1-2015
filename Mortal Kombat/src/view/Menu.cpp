@@ -14,7 +14,7 @@ Menu::Menu(Ventana* una_ventana) {
 	textura = NULL;
 
 	//Texto
-	font = TTF_OpenFont(RUTA_TTF, (int)(ventana->obtenerAlto()*(0.05)*ventana->obtenerRatioY() +0.5) );
+	font = TTF_OpenFont(RUTA_TTF, (int)(ventana->obtenerAlto()*(0.10)*ventana->obtenerRatioY() +0.5) );
 	if( font == NULL ){
 		log("No se pudo cargar la fuente del tiempo",LOG_ERROR);
 	}

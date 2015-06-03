@@ -1263,7 +1263,7 @@ Mundo* ParserJSON::cargarMundo() {
 	}
 
 	// Se va a mostrar en pantalla una imagen durante el tiempo de carga
-	if(ventana->mostrarImagen("data/img/background/inicio.png")){
+	if(ventana->mostrarImagen("data/img/etc/load.png")){
 		log("Se muestra imagen bienvenida en Ventanta durante tiempo de carga", LOG_DEBUG );
 	}
 

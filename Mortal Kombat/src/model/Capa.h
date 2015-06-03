@@ -17,17 +17,17 @@ class Capa{
 public:
 	int getZIndex();
 	void Actualizar();
-	void Mover(bool right);
+	void Mover(bool right,float velocidad);
 	float getX();
 	virtual void Renderizar();
-	virtual void Update(int scroll);
+	virtual void Update(int scroll, float velocidad);
 	virtual void reset();
 	Capa(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal);
 	virtual ~Capa();
 protected:
 	int m_zIndex;
 	float m_anchoDeFondo;
-	float m_velocidad;
+	float m_velocidad_a_multiplicar;
 	Rect_Logico* rect;
 	float m_ancho_ventana;
 };
