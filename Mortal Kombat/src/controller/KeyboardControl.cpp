@@ -12,48 +12,57 @@
 
 using namespace std;
 
-KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador, ComboController* comboController) {
+KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador,int tiempoMax,int tolerancia) {
 	personaje = un_personaje;
+	comboController = new ComboController(tiempoMax,tolerancia,personaje->getCombos());
 	evento = e;
 	como_jugador = comoJugador;
 	pausa = false;
 	keystate = SDL_GetKeyboardState(NULL);
 	sleep = 50000;
-	vector<Combo*> vect;
-	_comboController = comboController;
+	pelea = NULL;
 }
 bool KeyboardControl::pause(){
 	return pausa;
 }
 void KeyboardControl::KeyPressed(){
-	_comboController->sePresiono(evento->key.keysym.sym);
 	switch( evento->key.keysym.sym ){
 			case  SDLK_UP:
 				if(!como_jugador) return;
 				personaje->Saltar();
+				//comboController->sePresiono(Movimientos[SALTAR]);
 				break;
 			case SDLK_DOWN:
 				if(!como_jugador) return;
 				personaje->Agachar();
+				//comboController->sePresiono(Movimientos[AGACHAR]);
 				break;
 			case SDLK_LEFT:
 				if(!como_jugador) return;
 				personaje->CaminarIzquierda();
+				//comboController->sePresiono(Movimientos[IZQUIERDA]);
 				break;
 			case SDLK_RIGHT:
 				if(!como_jugador) return;
 				personaje->CaminarDerecha();
+				//comboController->sePresiono(Movimientos[DERECHA]);
+				break;
+			case SDLK_m:
+				throw std::runtime_error( "Hay que recargar el archivo JSON." );
 				break;
 			case SDLK_r:
-				throw std::runtime_error( "Hay que recargar el archivo JSON." );
+				if (pelea)
+					pelea->reset();
 				break;
 			case SDLK_a:
 				if(!como_jugador) return;
 				personaje->pinaBaja();
+				//comboController->sePresiono(Movimientos[PINABAJA]);
 				break;
 			case SDLK_s:
 				if(!como_jugador) return;
 				personaje->patadaBaja();
+				//comboController->sePresiono(Movimientos[PATADABAJA]);
 				break;
 			case SDLK_q:
 				if(!como_jugador) return;
@@ -104,7 +113,12 @@ void KeyboardControl::KeyState(){
 		personaje->dejarDeCubrirse();
 }
 
+void KeyboardControl::setPelea(Pelea* una_pelea){
+	pelea = una_pelea;
+}
+
 KeyboardControl::~KeyboardControl() {
+	if (comboController) delete comboController;
 	keystate = NULL;
 	personaje = NULL;
 }

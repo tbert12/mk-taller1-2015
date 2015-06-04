@@ -7,8 +7,10 @@
 
 #include "Mundo.h"
 
-Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map<string, int>* mapaComan2){
+Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map<string, int>* mapaComan2,int un_tiempoMax,int una_tolerancia){
 	ventana = una_ventana;
+	tolerancia = una_tolerancia;
+	tiempoMax = un_tiempoMax;
 	mapa_comandos1 = mapaComan1;
 	mapa_comandos2 = mapaComan2;
 	escenario_actual = NULL;
@@ -19,7 +21,6 @@ Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map
 	ModoDeJuego = MODO_JUGADOR_VS_PC;
 	botones_pantalla = NULL;
 	control = NULL;
-	combo = NULL;
 }
 
 void Mundo::start(){
@@ -29,22 +30,9 @@ void Mundo::start(){
 	if (escenarios[0]){
 		escenario_actual = escenarios[0];
 		escenario_actual->addPersonajes(p_uno,p_dos);
-		vector<Combo*> vect;
-		combo = new ComboController(10, 10 ,vect);
-		//Creo el Controlador
-		switch(ModoDeJuego){
-			case MODO_JUGADOR_VS_JUGADOR:
-				control = new Controller(p_uno,p_dos,mapa_comandos1, mapa_comandos2,combo);
-				break;
-			case MODO_JUGADOR_VS_PC:
-				control = new Controller(p_uno,NULL,mapa_comandos1,mapa_comandos2,combo);
-				break;
-			case MODO_ENTRENAMIENTO:
-				control = new Controller(p_uno,NULL,mapa_comandos1,mapa_comandos2,combo);
-				botones_pantalla = new BotonesPantalla(ventana);
-				break;
-		}
 		pelea = new Pelea(ventana,escenario_actual,tiempo_round,ModoDeJuego);
+		//Creo el Controlador
+		control = new Controller(pelea,mapa_comandos1, mapa_comandos2,tiempoMax,tolerancia);
 	}
 }
 
@@ -100,10 +88,8 @@ void Mundo::render(){
 		empezar = true;
 	}
 
-	if( control && combo){
+	if( control){
 		control->KeyState();
-		combo->Update();
-		//combo->checkCombos();
 		while( control->PollEvent()){
 			control->Pressed();
 		}
@@ -119,10 +105,10 @@ void Mundo::render(){
 
 	pelea->render();
 
-	if(ModoDeJuego == MODO_ENTRENAMIENTO && combo)
-		botones_pantalla->render(combo->get_stream_teclas(),false);
+	if(ModoDeJuego == MODO_ENTRENAMIENTO){
+		//botones_pantalla->render(combo->get_stream_teclas(),false);
+	}
 
-	//actualizo pantalla -> SDL_RenderPresent( Renderer );
 	ventana->Refresh();
 }
 
@@ -130,6 +116,10 @@ void Mundo::_mostrar_ganador(string nombre){
 	string texto = "Ganador \n" + nombre;
 	ventana->mostrarTexto(texto);
 	usleep(3000000);
+}
+
+int Mundo::getSleep(){
+	return control->getSleep();
 }
 
 Mundo::~Mundo() {
@@ -145,8 +135,6 @@ Mundo::~Mundo() {
 	personajes.clear();
 
 	if (pelea) delete pelea;
-
-	if (combo) delete combo;
 
 	if (control) delete control;
 

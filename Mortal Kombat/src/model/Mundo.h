@@ -27,6 +27,7 @@ private:
 	map<string, int>* mapa_comandos1;
 	map<string, int>* mapa_comandos2;
 	int ModoDeJuego;
+	int tiempoMax,tolerancia;
 	std::vector<Personaje*> personajes;
 	std::vector<Escenario*> escenarios;
 	Escenario* escenario_actual;
@@ -36,13 +37,12 @@ private:
 	int tiempo_round;
 	BotonesPantalla* botones_pantalla;
 	Controller* control;
-	ComboController* combo;
 	void start();
 	void _mostrar_ganador(string nombre);
 
 public:
 	bool partida_finalizada;
-	Mundo(Ventana* una_ventana,int tiempo_round,map<string, int>* mapaComan1,map<string, int>* mapaComan2);
+	Mundo(Ventana* una_ventana,int tiempo_round,map<string, int>* mapaComan1,map<string, int>* mapaComan2,int tiempoMax,int tolerancia);
 	void addPersonaje(Personaje* un_personaje);
 	void addPersonajes(vector<Personaje*> nuevos_personajes);
 	std::vector<Personaje*> getPersonajes();
@@ -53,6 +53,7 @@ public:
 	void render();
 	bool Quit();
 	bool Pausa();
+	int getSleep();
 	virtual ~Mundo();
 };
 

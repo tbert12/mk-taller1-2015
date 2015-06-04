@@ -7,8 +7,9 @@
 
 #include "JoystickControl.h"
 
-JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos) {
+JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos,int tiempoMax, int tolerancia) {
 	personaje = un_personaje;
+	comboController = new ComboController(tiempoMax,tolerancia,personaje->getCombos());
 	evento = e;
 	pausa = false;
 	comandos = mapa_comandos;
@@ -151,6 +152,7 @@ void JoystickControl::JoyState(){
 
 JoystickControl::~JoystickControl() {
 	personaje = NULL;
+	if (comboController) delete comboController;
 	if (joystick != NULL && SDL_JoystickGetAttached(joystick)){
 		SDL_JoystickClose( joystick );
 		joystick = NULL;

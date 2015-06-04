@@ -64,21 +64,22 @@ void Pelea::render(){
 	}
 
 	//verifico el tiempo
-	if (ModoDeJuego != MODO_ENTRENAMIENTO)
+	if (ModoDeJuego != MODO_ENTRENAMIENTO){
 		tiempo->actualizar();
+		//verifico si finalizo el round
+		_roundFinalizado();
 
-	//verifico si finalizo el round
-	_roundFinalizado();
 
-	if (round_finalizado){
-		if (ciclos_round_terminado > 0){
-			ciclos_round_terminado--;
-		}
-		else{
-			_partidaFinalizada();
-			ciclos_round_terminado = CICLOS_FINAL_ROUND;
-			if(!partida_finalizada)
-				_resetRound();
+		if (round_finalizado){
+			if (ciclos_round_terminado > 0){
+				ciclos_round_terminado--;
+			}
+			else{
+				_partidaFinalizada();
+				ciclos_round_terminado = CICLOS_FINAL_ROUND;
+				if(!partida_finalizada)
+					_resetRound();
+			}
 		}
 	}
 
@@ -150,11 +151,13 @@ void Pelea::_roundFinalizado(){
 		if(m_personajeUno->getVida() > m_personajeDos->getVida()){
 			//gana personaje uno
 			log("Round finalizado, GANADOR: " + m_personajeUno->getNombre(),LOG_DEBUG);
+			//m_personajeUno->victoria();
 			GanadorRound[NumeroRound -1]  = 1;
 		}
 		else if (m_personajeUno->getVida() < m_personajeDos->getVida()){
 			//gana personaje dos
 			log("Round finalizado, GANADOR: " + m_personajeDos->getNombre(),LOG_DEBUG);
+			//m_personajeDos->victoria();
 			GanadorRound[NumeroRound -1]  = 2;
 		}
 		else{
@@ -169,11 +172,13 @@ void Pelea::_roundFinalizado(){
 		if(m_personajeUno->getVida() <= 0){
 			round_finalizado = true;
 			log("Round finalizado, GANADOR: " + m_personajeDos->getNombre(),LOG_DEBUG);
+			//m_personajeDos->victoria();
 			GanadorRound[NumeroRound -1]  = 2;
 		}
 		else if (m_personajeDos->getVida() <= 0){
 			round_finalizado = true;
 			log("Round finalizado, GANADOR: " + m_personajeUno->getNombre(),LOG_DEBUG);
+			//m_personajeUno->victoria();
 			GanadorRound[NumeroRound -1]  = 1;
 		}
 	}
@@ -233,6 +238,22 @@ void Pelea::_resetRound(){
 	tiempo->reset();
 	round_finalizado = false;
 	comenzo_round = false;
+}
+
+void Pelea::reset(){
+	_resetRound();
+}
+
+Personaje* Pelea::getPersonajeUno(){
+	return m_personajeUno;
+}
+
+Personaje* Pelea::getPersonajeDos(){
+	return m_personajeDos;
+}
+
+int Pelea::getModoDeJuego(){
+	return ModoDeJuego;
 }
 
 Pelea::~Pelea() {

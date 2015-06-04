@@ -62,6 +62,10 @@ public:
 	void start();
 	void render();
 	bool peleaFinalizada();
+	Personaje* getPersonajeUno();
+	Personaje* getPersonajeDos();
+	void reset();
+	int getModoDeJuego();
 	virtual ~Pelea();
 };
 

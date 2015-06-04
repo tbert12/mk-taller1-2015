@@ -7,17 +7,18 @@
 
 #include "Controller.h"
 
-Controller::Controller(Personaje* un_personaje,Personaje* otro_personaje,map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2,ComboController* comboController) {
-	_comboController = comboController;
-	personaje_1 = un_personaje;
-	personaje_2 = otro_personaje;
+Controller::Controller(Pelea* una_pelea,map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2,int tiempoMax, int tolerancia) {
+	pelea = una_pelea;
+	personaje_1 = pelea->getPersonajeUno();
+	personaje_2 = pelea->getPersonajeDos();
 	quit = false;
+	ModoDeJuego = pelea->getModoDeJuego();
 	keystate = SDL_GetKeyboardState(NULL);
 	Joystick_1 = NULL;
 	Joystick_2 = NULL;
 	Teclado = NULL;
 	SDL_JoystickEventState(SDL_ENABLE);
-	_Init(mapa_comandos1,mapa_comandos2);
+	_Init(mapa_comandos1,mapa_comandos2,tiempoMax,tolerancia);
 
 }
 bool Controller::pausa(){
@@ -46,31 +47,48 @@ bool Controller::PollEvent(){
 	return (SDL_PollEvent( &evento ) != 0);
 }
 
-void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2){
+void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2,int tiempoMax, int tolerancia){
 	int cant_joy = SDL_NumJoysticks();
+	Personaje* p_uno;
+	Personaje* p_dos;
+	if (ModoDeJuego == MODO_JUGADOR_VS_JUGADOR){
+			p_uno = personaje_1;
+			p_dos = personaje_2;
+	}else{
+			p_uno = personaje_1;
+			p_dos = NULL;
+	}
+
 
 	//Si hay dos joystick los uso;
 	if (cant_joy >= 2){
 		log("Hay mas de dos joystick conectados, se setean al jugador 1 y 2 .Ademas se crea el teclado para el personaje 1",LOG_DEBUG);
-		if (personaje_1 != NULL)
-			Joystick_1 = new JoystickControl(&evento,0,personaje_1,mapa_comandos1);
-			Teclado = new KeyboardControl(&evento,personaje_1,false,this->_comboController);
-		if(personaje_2 != NULL)
-			Joystick_2 = new JoystickControl(&evento,1,personaje_2,mapa_comandos2);
+		if (p_uno != NULL){
+			Joystick_1 = new JoystickControl(&evento,0,p_uno,mapa_comandos1,tiempoMax,tolerancia);
+			Teclado = new KeyboardControl(&evento,p_uno,false,tiempoMax,tolerancia);
+			if (ModoDeJuego == MODO_ENTRENAMIENTO) Teclado->setPelea(pelea);
+		}
+		if(p_dos != NULL){
+			Joystick_2 = new JoystickControl(&evento,1,p_dos,mapa_comandos2,tiempoMax,tolerancia);
+		}
 	}
 	//hay solo un joy entonces es para el jugador uno, el 2 con teclado
 	else if (cant_joy == 1){
 		log("Hay solo un joystick, se le setea al jugador 1, y el teclado al jugador 2",LOG_WARNING);
-		if (personaje_1 != NULL)
-			Joystick_1 = new JoystickControl(&evento,0,personaje_1,mapa_comandos1);
-		if(personaje_2 != NULL)
-			Teclado = new KeyboardControl(&evento,personaje_2,true, this->_comboController);
+		if (p_uno != NULL)
+			Joystick_1 = new JoystickControl(&evento,0,p_uno,mapa_comandos1,tiempoMax,tolerancia);
+		if(p_dos != NULL){
+			Teclado = new KeyboardControl(&evento,p_dos,true,tiempoMax,tolerancia);
+			if (ModoDeJuego == MODO_ENTRENAMIENTO) Teclado->setPelea(pelea);
+		}
 	}
 	//no hay joystick conectados, solo teclado
 	else{
 		log("No hay joystick conectado, se setea el teclado al jugador 1",LOG_DEBUG);
-		if(personaje_1 != NULL)
-			Teclado = new KeyboardControl(&evento,personaje_1,true, this->_comboController);
+		if(p_uno != NULL){
+			Teclado = new KeyboardControl(&evento,p_uno,true,tiempoMax,tolerancia);
+			if (ModoDeJuego == MODO_ENTRENAMIENTO) Teclado->setPelea(pelea);
+		}
 	}
 }
 

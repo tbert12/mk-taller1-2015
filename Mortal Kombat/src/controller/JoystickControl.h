@@ -40,13 +40,14 @@
 
 #include "../model/logging.h"
 #include "../model/Personaje.h"
+#include "ComboController.h"
 #include <SDL2/SDL.h>
 #include <string>
 #include <map>
 
 class JoystickControl {
 public:
-	JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos);
+	JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos,int tiempoMax, int tolerancia);
 	void JoyPressed();
 	void JoyState();
 	bool pause();
@@ -59,6 +60,7 @@ private:
 	Personaje* personaje;
 	map<string, int>* comandos;
 	bool pausa;
+	ComboController* comboController;
 
 	void _Init(int id);
 	void _verificarMapaComandos();

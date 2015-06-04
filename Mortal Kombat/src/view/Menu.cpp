@@ -30,13 +30,7 @@ Menu::Menu(Ventana* una_ventana) {
 }
 
 void Menu::_crearOpciones(){
-	/*
-	pos del cuadro grande
-	alto 78
-	ancho 358
-	x 22
-	y 156
-	 */
+
 	int ancho = int(99*ventana->obtenerRatioX() + 0.5);
 	int alto = int(120*ventana->obtenerRatioY() + 0.5);
 	int y = int(51*ventana->obtenerRatioY() + 0.5);
@@ -52,14 +46,14 @@ void Menu::_crearOpciones(){
 
 	Opcion* opcion2 = new Opcion;
 	opcion2->posicion = SDL_Rect {int(150*ventana->obtenerRatioX() + 0.5),y,ancho,alto};
-	opcion2->texto = string("Player\n   vs \nCPU");
+	opcion2->texto = string("Player\n  vs\n CPU");
 	opcion2->descripcion =  string("Player vs CPU");
 	opcion2->textura = NULL;
 	opciones.push_back(*opcion2);
 
 	Opcion* opcion3 = new Opcion;
 	opcion3->posicion = SDL_Rect {int(280*ventana->obtenerRatioX() + 0.5),y,ancho,alto};
-	opcion3->texto = string("Entrenamiento");
+	opcion3->texto = string("Training");
 	opcion3->descripcion =  string("Entrenamiento");
 	opcion3->textura = NULL;
 	opciones.push_back(*opcion3);
@@ -127,10 +121,10 @@ void Menu::_renderTexto(int opcion_actual){
 	//cuadrado rojo del seleccionado
 	SDL_SetRenderDrawColor(ventana->getRenderer(), 255, 0, 0, 255);
 	SDL_Rect rect = opciones[opcion_actual].posicion;
-	rect.x -= 20;
-	rect.y -= 17;
-	rect.w += 2*20 + 2;
-	rect.h += 2*15 ;
+	rect.x -= 15;
+	rect.y -= 12;
+	rect.w += 2*15 + 2;
+	rect.h += 2*12 ;
 	SDL_RenderDrawRect(ventana->getRenderer(), &rect);
 
 }
@@ -168,7 +162,7 @@ void Menu::_renderText(string text, SDL_Color color, SDL_Rect rect){
 	}
 	SDL_Rect renderQuad = {rect.x + rect.w/2 - ancho/2,rect.y + rect.h/2 - alto/2,ancho,alto};
 	if ( rect.w == ancho)
-		renderQuad.x = renderQuad.x + rect.w/2 - ancho/4 ;
+		renderQuad.x = renderQuad.x + rect.w/2 - ancho*0.4 ;
 
 	SDL_RenderCopy( ventana->getRenderer(), textura, NULL, &renderQuad);
 	SDL_DestroyTexture( textura );

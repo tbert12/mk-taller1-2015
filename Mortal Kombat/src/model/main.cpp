@@ -118,13 +118,12 @@ int main( int argc, char* args[] )
 			}
 		}
 
-		//Sleep(Microsegundos)
-		//usleep(control->getSleep());
-		usleep(50000);
+		usleep(mundo->getSleep());
+		//usleep(50000);
 	}
 
-	//delete controlModo;
-	//delete menu;
+	delete controlModo;
+	delete menu;
 	delete mundo;
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 

@@ -10,6 +10,7 @@
 
 #include<SDL2/SDL.h>
 #include "../model/Personaje.h"
+#include "../model/Pelea.h"
 #include "ComboController.h"
 #include "Combo.h"
 #include <exception>
@@ -22,15 +23,17 @@ private:
 	Personaje* personaje;
 	const Uint8* keystate;
 	SDL_Event* evento;
+	Pelea* pelea;
 	bool pausa;
-	ComboController* _comboController;
+	ComboController* comboController;
 	bool como_jugador;
 	int sleep;
 
 public:
-	KeyboardControl(SDL_Event* e, Personaje* un_personaje,bool como_jugador, ComboController* comboController);
+	KeyboardControl(SDL_Event* e, Personaje* un_personaje,bool como_jugador,int tiempoMax, int tolerancia);
 	virtual ~KeyboardControl();
 	void KeyPressed();
+	void setPelea(Pelea* una_pelea);
 	void KeyState();
 	int getSleep();
 	bool pause();
