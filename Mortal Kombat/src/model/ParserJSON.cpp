@@ -127,9 +127,11 @@ map<string, int>* ParserJSON::getComandos2() {
 }
 
 
-Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const char accion_sprite[], string spritesheet_accion, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color, float h_inicial, float h_final, float desplazamiento ) {
+Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, string ruta_sonidos, const char accion_sprite[], string spritesheet_accion, Ventana* ventana, float ratio_x_personaje, float ratio_y_personaje, bool cambiar_color, float h_inicial, float h_final, float desplazamiento ) {
 	Sprite* sprite;
+	LSound* sonido;
 	string spritesheet;
+	string nombre_sonido;
 	if ( ! root.isMember(accion_sprite) ) {
 		log( "No se encontro el sprite correspondiente a la accion del personaje. Se generan el sprite de la accion por defecto.", LOG_ERROR );
 		return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color);
@@ -151,6 +153,26 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 				log( "El nombre ingresado del spritesheet no es una cadena de texto valida. Se setea un nombre por defecto.", LOG_ERROR );
 			}
 		}
+
+		if ( ! root[accion_sprite].isMember("sonido") ) {
+			log( "No se especifico el sonido de la imagen para el spritesheet de la accion. No se carga sonido.", LOG_WARNING );
+			nombre_sonido = "";
+		} else {
+			try {
+				nombre_sonido = root[accion_sprite].get( "sonido", "" ).asString();
+				struct stat sb;
+				if ( stat((ruta_sonidos + nombre_sonido).c_str(), &sb) != 0 ) {
+					log( "La ruta al sonido no existe. No se carga el sonido.", LOG_ERROR );
+					nombre_sonido = "";
+				} else
+					log( "Se cargo correctamente el nombre del archivo de sonido del sprite.", LOG_DEBUG );
+			} catch (exception &e) {
+				nombre_sonido = "";
+				log( "El nombre ingresado del sonido no es una cadena de texto valida. No se carga un sonido para la accion.", LOG_ERROR );
+			}
+		}
+		sonido = new LSound(ruta_sonidos + nombre_sonido);
+
 		if ( ! root[accion_sprite].isMember("frames") || ! root[accion_sprite]["frames"].isArray() ) {
 			log( "No se encontraron especificaciones sobre los frames del spritesheet de la accion. Se genera el sprite por defecto.", LOG_ERROR );
 			return crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
@@ -160,6 +182,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 			vector<bool> loop_accion(frames.size(), false);
 			vector<bool> pong_accion(frames.size(), false);
 			vector<int> freeze_accion(frames.size(), 0);
+			vector<bool> sound_accion(frames.size(), false);
 			for ( unsigned int i=0; i < frames_accion.size(); i++ ) {
 				int x, y, alto, ancho;
 				try {
@@ -207,7 +230,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 				try {
 					loop = frames_accion[i].get( "loop", false ).asBool();
 				} catch (exception &e) {
-					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite de la accion. Se setea en false por defecto.", LOG_ERROR );
+					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe loopear o no el sprite de la accion. Se setea en false por defecto.", LOG_WARNING );
 					loop = false;
 				}
 				loop_accion[i] = loop;
@@ -216,7 +239,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 				try {
 					pong = frames_accion[i].get( "pong", false ).asBool();
 				} catch (exception &e) {
-					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe hacer pong o no a un frame del sprite de la accion. Se setea en false por defecto.", LOG_ERROR );
+					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe hacer pong o no a un frame del sprite de la accion. Se setea en false por defecto.", LOG_WARNING );
 					pong = false;
 				}
 				pong_accion[i] = pong;
@@ -225,16 +248,25 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 				try {
 					freezeTime = frames_accion[i].get( "freeze", 0 ).asInt();
 				} catch ( exception &e ) {
-					log( "La cantidad de bucles de freeze no es un numero valido. Se setea por defecto en 0 (no hay freeze).", LOG_ERROR );
+					log( "La cantidad de bucles de freeze no es un numero valido. Se setea por defecto en 0 (no hay freeze).", LOG_WARNING );
 					freezeTime = 0;
 				}
 				freeze_accion[i] = freezeTime;
+
+				bool playSound;
+				try {
+					playSound = frames_accion[i].get( "playSound", false ).asBool();
+				} catch (exception &e) {
+					log ( "No se reconoce como booleano el parametro pasado para determinar si se debe ejecutar o no el sonido de la accion en el frame actual. Se setea en false por defecto.", LOG_WARNING );
+					playSound = false;
+				}
+				sound_accion[i] = playSound;
 
 				frames[i] = new Frame(x, y, alto, ancho);
 				log( "Se creo correctamente un frame del spritesheet de la accion.", LOG_DEBUG );
 			}
 			try {
-				sprite = new Sprite( ruta_carpeta + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+				sprite = new Sprite( ruta_carpeta + spritesheet, frames, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento, sonido );
 				for ( unsigned int j=0; j < frames.size(); j++ ) {
 					if ( loop_accion[j] ) {
 						sprite->setLoop(j);
@@ -248,6 +280,10 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, const c
 					if ( pong_accion[j] ) {
 						sprite->doPongIn(j);
 						log( "Se seteo como frame pong el frame recien creado.", LOG_DEBUG );
+					}
+					if ( sound_accion[j] ) {
+						sprite->setSoundIn(j);
+						log( "Se le asigno la ejecucion del sonido de la accion al frame recien creado.", LOG_DEBUG );
 					}
 				}
 				log( "Se creo correctamente el sprite para la accion del personaje.", LOG_DEBUG );
@@ -376,7 +412,7 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 }
 
 
-vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
+vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, string ruta_sonidos, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
 
 	vector<Sprite*> sprites;
 
@@ -415,115 +451,115 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, Ventana* ventana,
 
 	// Cargo uno por uno los sprites correspondientes a cada accion.
 	log( "Se cargara el sprite inicial para la accion de estar parado.", LOG_DEBUG );
-	Sprite* sprite_parado =  cargarSprite( root, ruta_carpeta, "parado", SPRITESHEET_PARADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_parado =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "parado", SPRITESHEET_PARADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_parado );
 
 	log( "Se cargara el sprite para la accion de caminar del personaje", LOG_DEBUG );
-	Sprite* sprite_caminar =  cargarSprite( root, ruta_carpeta, "caminar", SPRITESHEET_CAMINAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_caminar =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "caminar", SPRITESHEET_CAMINAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_caminar );
 
 	log( "Se cargara el sprite para la accion de saltar del personaje", LOG_DEBUG );
-	Sprite* sprite_saltar =  cargarSprite( root, ruta_carpeta, "saltar", SPRITESHEET_SALTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_saltar =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "saltar", SPRITESHEET_SALTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_saltar );
 
 	log( "Se cargara el sprite para la accion de saltar en diagonal del personaje", LOG_DEBUG );
-	Sprite* sprite_saltar_diagonal =  cargarSprite( root, ruta_carpeta, "saltardiagonal", SPRITESHEET_SALTAR_DIAGONAL_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_saltar_diagonal =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "saltardiagonal", SPRITESHEET_SALTAR_DIAGONAL_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_saltar_diagonal );
 
 	log( "Se cargara el sprite para la accion de agacharse del personaje", LOG_DEBUG );
-	Sprite* sprite_agachar =  cargarSprite( root, ruta_carpeta, "agachar", SPRITESHEET_AGACHAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_agachar =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "agachar", SPRITESHEET_AGACHAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_agachar );
 
 	log( "Se cargara el sprite para la accion de pegar patada alta estando agachado del personaje", LOG_DEBUG );
-	Sprite* sprite_agachado_patada_alta =  cargarSprite( root, ruta_carpeta, "agachadoPatadaAlta", SPRITESHEET_AGACHADO_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_agachado_patada_alta =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "agachadoPatadaAlta", SPRITESHEET_AGACHADO_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_agachado_patada_alta );
 
 	log( "Se cargara el sprite para la accion de pegar patada baja estando agachado del personaje", LOG_DEBUG );
-	Sprite* sprite_agachado_patada_baja =  cargarSprite( root, ruta_carpeta, "agachadoPatadaBaja", SPRITESHEET_AGACHADO_PATADA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_agachado_patada_baja =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "agachadoPatadaBaja", SPRITESHEET_AGACHADO_PATADA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_agachado_patada_baja );
 
 	log( "Se cargara el sprite para la accion de caerse por una barrida del personaje", LOG_DEBUG );
-	Sprite* sprite_caer_en_z =  cargarSprite( root, ruta_carpeta, "caeEnZ", SPRITESHEET_CAER_EN_Z_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_caer_en_z =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "caeEnZ", SPRITESHEET_CAER_EN_Z_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_caer_en_z );
 
 	log( "Se cargara el sprite para la accion de caerse y levantarse inmediatamente del personaje", LOG_DEBUG );
-	Sprite* sprite_caer_y_levantarse =  cargarSprite( root, ruta_carpeta, "caeYSeLevanta", SPRITESHEET_CAER_Y_LEVANTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_caer_y_levantarse =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "caeYSeLevanta", SPRITESHEET_CAER_Y_LEVANTAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_caer_y_levantarse );
 
 	log( "Se cargara el sprite para la accion de cubrirse del personaje", LOG_DEBUG );
-	Sprite* sprite_cubrirse =  cargarSprite( root, ruta_carpeta, "cubrirse", SPRITESHEET_CUBRIRSE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_cubrirse =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "cubrirse", SPRITESHEET_CUBRIRSE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_cubrirse );
 
 	log( "Se cargara el sprite para la accion de cubrirse agachado del personaje", LOG_DEBUG );
-	Sprite* sprite_cubrirse_agachado =  cargarSprite( root, ruta_carpeta, "cubrirseAgachado", SPRITESHEET_CUBRIRSE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_cubrirse_agachado =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "cubrirseAgachado", SPRITESHEET_CUBRIRSE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_cubrirse_agachado );
 
 	log( "Se cargara el sprite para la pose de victoria del personaje", LOG_DEBUG );
-	Sprite* sprite_ganar =  cargarSprite( root, ruta_carpeta, "gana", SPRITESHEET_GANAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_ganar =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "gana", SPRITESHEET_GANAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_ganar );
 
 	log( "Se cargara el sprite para la accion de gancho del personaje", LOG_DEBUG );
-	Sprite* sprite_gancho =  cargarSprite( root, ruta_carpeta, "gancho", SPRITESHEET_GANCHO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_gancho =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "gancho", SPRITESHEET_GANCHO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_gancho );
 
 	log( "Se cargara el sprite para la accion de morirse del personaje", LOG_DEBUG );
-	Sprite* sprite_morir =  cargarSprite( root, ruta_carpeta, "muere", SPRITESHEET_MORIR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_morir =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "muere", SPRITESHEET_MORIR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_morir );
 
 	log( "Se cargara el sprite para la accion de patada alta del personaje", LOG_DEBUG );
-	Sprite* sprite_patada_alta =  cargarSprite( root, ruta_carpeta, "patadaAlta", SPRITESHEET_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_patada_alta =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "patadaAlta", SPRITESHEET_PATADA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_patada_alta );
 
 	log( "Se cargara el sprite para la accion de patada baja del personaje", LOG_DEBUG );
-	Sprite* sprite_patada_baja =  cargarSprite( root, ruta_carpeta, "patadaBaja", SPRITESHEET_PATADA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_patada_baja =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "patadaBaja", SPRITESHEET_PATADA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_patada_baja );
 
 	log( "Se cargara el sprite para la accion de patada circular del personaje", LOG_DEBUG );
-	Sprite* sprite_patada_circular =  cargarSprite( root, ruta_carpeta, "patadaConGiro", SPRITESHEET_PATADA_CIRCULAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_patada_circular =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "patadaConGiro", SPRITESHEET_PATADA_CIRCULAR_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_patada_circular );
 
 	log( "Se cargara el sprite para la accion de patada saltando del personaje", LOG_DEBUG );
-	Sprite* sprite_patada_saltando =  cargarSprite( root, ruta_carpeta, "patadaEnSalto", SPRITESHEET_PATADA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_patada_saltando =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "patadaEnSalto", SPRITESHEET_PATADA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_patada_saltando );
 
 	log( "Se cargara el sprite para la accion de pina agachado del personaje", LOG_DEBUG );
-	Sprite* sprite_pina_agachado =  cargarSprite( root, ruta_carpeta, "pinaAgachado", SPRITESHEET_PINA_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_pina_agachado =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "pinaAgachado", SPRITESHEET_PINA_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_pina_agachado );
 
 	log( "Se cargara el sprite para la accion de pina alta del personaje", LOG_DEBUG );
-	Sprite* sprite_pina_alta =  cargarSprite( root, ruta_carpeta, "pinaAlta", SPRITESHEET_PINA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_pina_alta =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "pinaAlta", SPRITESHEET_PINA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_pina_alta );
 
 	log( "Se cargara el sprite para la accion de pina baja del personaje", LOG_DEBUG );
-	Sprite* sprite_pina_baja =  cargarSprite( root, ruta_carpeta, "pinaBaja", SPRITESHEET_PINA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_pina_baja =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "pinaBaja", SPRITESHEET_PINA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_pina_baja );
 
 	log( "Se cargara el sprite para la accion de pina saltando del personaje", LOG_DEBUG );
-	Sprite* sprite_pina_saltando =  cargarSprite( root, ruta_carpeta, "pinaEnSalto", SPRITESHEET_PINA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_pina_saltando =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "pinaEnSalto", SPRITESHEET_PINA_SALTANDO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_pina_saltando );
 
 	log( "Se cargara el sprite para la accion recibir golpe agachado del personaje", LOG_DEBUG );
-	Sprite* sprite_recibir_golpe_agachado =  cargarSprite( root, ruta_carpeta, "recibeGolpeAgachado", SPRITESHEET_RECIBIR_GOLPE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_recibir_golpe_agachado =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "recibeGolpeAgachado", SPRITESHEET_RECIBIR_GOLPE_AGACHADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_recibir_golpe_agachado );
 
 	log( "Se cargara el sprite para la accion de recibir golpe alto del personaje", LOG_DEBUG );
-	Sprite* sprite_recibir_golpe_alto =  cargarSprite( root, ruta_carpeta, "recibeGolpeAlto", SPRITESHEET_RECIBIR_GOLPE_ALTO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_recibir_golpe_alto =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "recibeGolpeAlto", SPRITESHEET_RECIBIR_GOLPE_ALTO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_recibir_golpe_alto );
 
 	log( "Se cargara el sprite para la accion de recibir golpe bajo del personaje", LOG_DEBUG );
-	Sprite* sprite_recibir_golpe_bajo =  cargarSprite( root, ruta_carpeta, "recibeGolpeBajo", SPRITESHEET_RECIBIR_GOLPE_BAJO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_recibir_golpe_bajo =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "recibeGolpeBajo", SPRITESHEET_RECIBIR_GOLPE_BAJO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_recibir_golpe_bajo );
 
 	log( "Se cargara el sprite para la accion de recibir golpes fuerte del personaje", LOG_DEBUG );
-	Sprite* sprite_recibir_golpe_fuerte =  cargarSprite( root, ruta_carpeta, "recibeGolpeFuerte", SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_recibir_golpe_fuerte =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "recibeGolpeFuerte", SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_recibir_golpe_fuerte );
 
 	log( "Se cargara el sprite para la accion de combo de pina baja del personaje", LOG_DEBUG );
-	Sprite* sprite_combo_pina_baja =  cargarSprite( root, ruta_carpeta, "comboPinaBaja", SPRITESHEET_COMBO_PINA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_combo_pina_baja =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "comboPinaBaja", SPRITESHEET_COMBO_PINA_BAJA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_combo_pina_baja );
 
 	log( "Se cargara el sprite para la accion de combo de pina alta del personaje", LOG_DEBUG );
-	Sprite* sprite_combo_pina_alta =  cargarSprite( root, ruta_carpeta, "comboPinaAlta", SPRITESHEET_COMBO_PINA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	Sprite* sprite_combo_pina_alta =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "comboPinaAlta", SPRITESHEET_COMBO_PINA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_combo_pina_alta );
 
 	log( "Se crearon todos los sprites del personaje.", LOG_DEBUG );
@@ -673,7 +709,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 
 	Personaje* personaje;
 	float personaje_ancho, personaje_alto, personaje_velocidad;
-	string personaje_carpeta_sprites, personaje_carpeta_arrojables, personaje_nombre;
+	string personaje_carpeta_sprites, personaje_carpeta_arrojables, personaje_carpeta_sonidos, personaje_nombre;
 	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
 		personaje = generarPersonajeDefault(ventana);
 		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan el personaje por defecto.", LOG_ERROR );
@@ -745,7 +781,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 									log( "La ruta a la carpeta de sprites del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
 									personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 								} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sprites del personaje.", LOG_DEBUG );
-							} catch ( exception &e ) {						// Indico posicion inicial del personaje.
+							} catch ( exception &e ) {
 								personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 								log( "La ruta a la carpeta contenedora de los sprites del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 							}
@@ -767,10 +803,27 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 							}
 						}
 
+						if ( ! root["personajes"][k].isMember("sonidos") ) {
+							personaje_carpeta_sonidos = PERSONAJE_CARPETA_SONIDOS_DEFAULT;
+							log( "No se especifico la carpeta contenedora de los sonidos del personaje. Se utiliza carpeta por defecto.", LOG_ERROR );
+						} else {
+							try {
+								personaje_carpeta_sonidos = root["personajes"][k].get( "sonidos", PERSONAJE_CARPETA_SONIDOS_DEFAULT ).asString();
+								struct stat sb;
+								if ( stat(personaje_carpeta_sonidos.c_str(), &sb) != 0 ) {
+									log( "La ruta a la carpeta de sonidos del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
+									personaje_carpeta_sonidos = PERSONAJE_CARPETA_SONIDOS_DEFAULT;
+								} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sonidos del personaje.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								personaje_carpeta_sonidos = PERSONAJE_CARPETA_SONIDOS_DEFAULT;
+								log( "La ruta a la carpeta contenedora de los sonidos del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+							}
+						}
+
 						vector<float> colorAlternativo = cargarColorAlternativo(root["personajes"][k]);
 
 						// Creo Sprites del personaje.
-						vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
+						vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, personaje_carpeta_sonidos, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
 
 						// Creo objetos arrojables (poderes).
 						vector<ObjetoArrojable*> arrojables = cargarArrojables(personaje_carpeta_arrojables, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);

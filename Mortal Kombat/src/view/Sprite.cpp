@@ -7,7 +7,7 @@
 
 #include "Sprite.h"
 
-Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y, bool cambiar_color, float h_inicial, float h_final, float desplazamiento){
+Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y, bool cambiar_color, float h_inicial, float h_final, float desplazamiento, LSound* sonido_accion){
 	frameActual = 0;
 	SpriteSheetTexture = ventana->crearTextura();
 
@@ -28,6 +28,9 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 	frezeeCount = 0;//Cronometro para controlarl el tiempo congelado
 	frezeeTime = 0; //Congelarlo por frezeeTime whiles
 	frezeeFrame = 0;//Congelarlo en el Frame frezeeFrame
+
+	sonido = sonido_accion;
+	frameSound = 0;
 
 	if( !SpriteSheetTexture->loadFromFile( ruta, cambiar_color, h_inicial, h_final, desplazamiento ) ){
 		log( "Error al intentar abrir la imagen del sprite.", LOG_ERROR );
@@ -152,6 +155,10 @@ bool Sprite::inLoop(){
 
 void Sprite::doReverse(bool Reverse){
 	reverse = Reverse;
+}
+
+void Sprite::setSoundIn(int index_frame) {
+	frameSound = index_frame;
 }
 
 bool Sprite::ultimoFrame(){

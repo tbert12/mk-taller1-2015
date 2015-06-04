@@ -60,7 +60,8 @@
 				"desplazamiento": 50
 			},
 			"ancho": 65,
-			"alto": 150
+			"alto": 150,
+			"velocidad": 5
 		},
 		{
 			"nombre": "Liu Kang",
@@ -72,7 +73,8 @@
 				"desplazamiento": 240
 			},
 			"ancho": 65,
-			"alto": 150
+			"alto": 150,
+			"velocidad": 5
 		},
 		{
 			"nombre": "Liu Kang 2",

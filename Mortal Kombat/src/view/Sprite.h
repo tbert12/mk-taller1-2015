@@ -18,6 +18,7 @@
 #include "LTexture.h"
 #include "Ventana.h"
 #include "Frame.h"
+#include "LSound.h"
 #include "../model/CargarImagenException.h"
 
 class Sprite {
@@ -36,12 +37,14 @@ class Sprite {
 		int frezeeCount;
 		int frezeeFrame;
 
+		LSound* sonido;
+		int frameSound;
 
 		Rect_Objeto* spriteFrames;
 		LTexture* SpriteSheetTexture;
 
 	public:
-		Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y, bool cambiar_color = false, float h_inicial = 0, float h_final = 0, float desplazamiento = 0);
+		Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,float ratio_x, float ratio_y, bool cambiar_color = false, float h_inicial = 0, float h_final = 0, float desplazamiento = 0, LSound* sonido_accion = NULL);
 		~Sprite();
 
 		bool Advance();
@@ -57,6 +60,7 @@ class Sprite {
 		bool inLoop();
 		bool loop();
 		void doReverse(bool Reverse);
+		void setSoundIn(int index_frame);
 
 		bool ultimoFrame();
 		bool proxFrameUltimo();
