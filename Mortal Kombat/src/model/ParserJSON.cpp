@@ -825,15 +825,10 @@ vector<Personaje*> ParserJSON::cargarPersonajes(Json::Value root, Ventana* venta
 		}
 	}
 
-	// Verifico que se tengan al menos dos personajes.
-	if ( personajes.size() < 2 ) {
-		if ( personajes.size() == 1 ) {
-			personajes.push_back( generarPersonajeDefault(ventana) );
-			log( "Se cargo un unico personaje. Se setea otro personaje por defecto.", LOG_ERROR );
-		} else {
-			personajes = generarPersonajesDefault(ventana);
-			log( "No se cargo ningun personaje. Se setean dos personajes por defecto.", LOG_ERROR );
-		}
+	// Verifico que se tengan al menos un personaje.
+	if ( personajes.size() < 1 ) {
+		personajes.push_back( generarPersonajeDefault(ventana) );
+		log( "No se cargo ningun personaje. Se setea un personaje por defecto.", LOG_ERROR );
 	}
 
 	return personajes;
