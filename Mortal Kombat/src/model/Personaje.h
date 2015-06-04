@@ -13,8 +13,8 @@
 #include <vector>
 #include <map>
 #include "../view/Sprite.h"
-#include "../view/LSound.h"
 #include "ObjetoArrojable.h"
+#include "../controller/Combo.h"
 
 
 //Constants
@@ -96,6 +96,8 @@ private:
 	bool _recibioGolpe;
 	bool _estaMuerto;
 
+	std::vector<Combo*> mCombos;
+
 	Rect_Logico* m_rectanguloAtaque;
 	Rect_Logico* m_rectanguloDefensa;
 
@@ -129,11 +131,6 @@ private:
 	/*Defensa*/
 	void _cubrirseAgachado();
 	void _cubrirseParado();
-
-	/*
-	LSound* pina;
-	LSound* recibe;
-	*/
 
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, std::vector<ObjetoArrojable*> arrojables,float velocidad, bool fliped = false);
@@ -180,6 +177,9 @@ public:
 
 	bool recibirGolpe(int CodigoGolpe, int Danio = 0);
 	void QuitarVida(int valor);
+
+	std::vector<Combo*> getCombos();
+	void setCombos( std::vector<Combo*> );
 
 	//acciones
 	void Frenar();

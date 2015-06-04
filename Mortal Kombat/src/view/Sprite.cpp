@@ -88,7 +88,7 @@ float Sprite::getAlto(){
 }
 
 bool Sprite::Advance(){
-	if (frezee and (frezeeFrame == frameActual) ){
+	if (frezee and (frezeeFrame == frameActual) and frezeeTime ){
 		frezeeCount++;
 		if (frezeeCount >= frezeeTime){
 			frezeeCount = 0;
@@ -137,6 +137,7 @@ void Sprite::render(float x, float y, bool fliped){
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
 	//printf("Frame: %i | Total: %i\n",frameActual,cantidadFrames);
 	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h_log, fliped);
+	playSound();
 }
 
 void Sprite::setLoop(int num_frame) {
@@ -162,10 +163,12 @@ void Sprite::setSoundIn(int index_frame) {
 }
 
 void Sprite::playSound() {
-	if (sonido != NULL) {
-		if (frameActual == frameSound)
+	/* El sonido se reproduce solo cuando se esta reproduciendo el sprite sin reverse
+	 * Esto evita que se reproduzca dos veces cuando hace pong
+	 */
+	if ( sonido and frameActual == frameSound and !reverse) {
 			sonido->play();
-	}
+		}
 }
 
 bool Sprite::ultimoFrame(){

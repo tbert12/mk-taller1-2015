@@ -43,18 +43,6 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 
 	m_rectanguloAtaque = new Rect_Logico;
 	m_rectanguloDefensa = new Rect_Logico;
-
-	/*
-	//Sonidos
-	string named;
-	if(nombre == "Sub-Zero"){
-		named = "subzero";
-	} else {
-		named = "liukang";
-	}
-	pina = new LSound("data/players/" + named + "/sound/pina.wav");
-	recibe = new LSound("data/players/" + named + "/sound/recibeGolpeFuerte.wav");
-	*/
 }
 
 void Personaje::reset(){
@@ -107,10 +95,12 @@ void Personaje::lanzarObjeto(){
 }
 
 std::vector<Sprite*> Personaje::getSprites(){
+	printf("Si alguna vez ven esto diganle a Tomi\n");
 	return sprites;
 }
 
-Sprite* Personaje::getSpriteActual(){;
+Sprite* Personaje::getSpriteActual(){
+	printf("Si alguna vez ven esto diganle a Tomi\n");
 	return spriteActual;
 }
 
@@ -165,6 +155,14 @@ void Personaje::QuitarVida(int valor){
 	}
 }
 
+void Personaje::setCombos( std::vector<Combo*> combos){
+	mCombos = combos;
+}
+
+std::vector<Combo*> Personaje::getCombos(){
+	return mCombos;
+}
+
 void Personaje::setScroll(bool scrollear){
 	m_mover = scrollear;
 }
@@ -182,9 +180,6 @@ void Personaje::setFlip(bool flip){
 }
 
 void Personaje::Update(float posDeOtroJugador,bool forzado){
-
-	spriteActual->playSound();
-
 	//Actualizo La X para cada caso y verificando limites
 	if (_estaMuerto){
 		if (!spriteActual->inLoop()){
@@ -467,7 +462,6 @@ void Personaje::_cambiarSprite(int SpriteAccion){
 	//Dejo el Sprite Limpio antes de cambiarlo
 	if (SpriteAccion != SPRITE_CAMINAR) spriteActual->hardReset();
 	spriteActual = sprites[SpriteAccion];
-
 	if (SpriteAccion == SPRITE_CAMINAR or
 		SpriteAccion == SPRITE_SALTAR_DIAGONAL){
 		bool doReverse;
@@ -652,7 +646,6 @@ void Personaje::pinaBaja() {
 			_cambiarSprite(SPRITE_PINA_BAJA);
 		}
 	}
-	//pina->play();
 	_estaAtacando = true;
 }
 
@@ -821,7 +814,6 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	}
 
 	_recibioGolpe = true;
-	//recibe->play();
 	return golpeFuerte;
 }
 

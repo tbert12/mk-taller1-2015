@@ -199,9 +199,9 @@ void CapaPrincipal::_ChequearSiSePisan(){
 			return;
 		}
 		if(m_personajeSinFlip->getSentidoDeMovimiento()>0)
-			m_personajeSinFlip->Frenar();
+			m_personajeSinFlip->setScroll(true);
 		if(m_personajeConFlip->getSentidoDeMovimiento()<0)
-			m_personajeConFlip->Frenar();
+			m_personajeConFlip->setScroll(true);
 		if(sePisanX){
 			if(!(rectDefensa1->x+ rectDefensa1->w*.5f >= rectDefensa2->x - rectDefensa2->w*.5f)){
 				m_personajeSinFlip->setPositionX(m_personajeSinFlip->getX()+m_personajeSinFlip->getAncho()*.05f);

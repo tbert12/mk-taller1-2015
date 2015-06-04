@@ -1343,7 +1343,9 @@ Mundo* ParserJSON::cargarMundo() {
 	this->cargarMapaComandos(root);
 
 	// Creo mundo vacio.
-	Mundo* nuevo_mundo = new Mundo(ventana,tiempo_combate,comandos_luchador1,comandos_luchador2);
+
+
+	Mundo* nuevo_mundo = new Mundo(ventana,tiempo_combate,comandos_luchador1,comandos_luchador2, 2/*TIEMPO MAXIMOS*/ , 2 /*TOLERANCIA*/);
 	log ( "Se creo correctamente un mundo vacio.", LOG_DEBUG );
 	log( "Se le asigno la ventana creada al nuevo mundo.", LOG_DEBUG );
 
