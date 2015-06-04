@@ -164,6 +164,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, string 
 				if ( stat((ruta_sonidos + nombre_sonido).c_str(), &sb) != 0 ) {
 					log( "La ruta al sonido no existe. No se carga el sonido.", LOG_ERROR );
 					nombre_sonido = "";
+					ruta_sonidos = PERSONAJE_CARPETA_SONIDOS_DEFAULT;
 				} else
 					log( "Se cargo correctamente el nombre del archivo de sonido del sprite.", LOG_DEBUG );
 			} catch (exception &e) {
@@ -171,7 +172,10 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, string 
 				log( "El nombre ingresado del sonido no es una cadena de texto valida. No se carga un sonido para la accion.", LOG_ERROR );
 			}
 		}
-		sonido = new LSound(ruta_sonidos + nombre_sonido);
+		if (nombre_sonido == "")
+			sonido = NULL;
+		else
+			sonido = new LSound(ruta_sonidos + nombre_sonido);
 
 		if ( ! root[accion_sprite].isMember("frames") || ! root[accion_sprite]["frames"].isArray() ) {
 			log( "No se encontraron especificaciones sobre los frames del spritesheet de la accion. Se genera el sprite por defecto.", LOG_ERROR );
@@ -298,7 +302,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, string 
 }
 
 
-vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
+vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, string ruta_sonidos, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
 
 	Json::Value root;
 	Json::Reader reader;
@@ -403,7 +407,7 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, Venta
 		float ratio_y_arrojable = getRatioYArrojable(arrojables[i], arrojable_alto);
 
 		log( "Se cargara el sprite para el objeto arrojable del personaje", LOG_DEBUG );
-		Sprite* sprite_objeto_arrojable =  cargarSprite( arrojables[i], ruta_carpeta, "objetoArrojable", SPRITESHEET_OBJETO_ARROJABLE_DEFAULT, ventana, ratio_x_arrojable, ratio_y_arrojable );
+		Sprite* sprite_objeto_arrojable =  cargarSprite( arrojables[i], ruta_carpeta, ruta_sonidos, "objetoArrojable", SPRITESHEET_OBJETO_ARROJABLE_DEFAULT, ventana, ratio_x_arrojable, ratio_y_arrojable );
 
 		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable, arrojable_danio);
 		objetosArrojables.push_back(arrojable);
@@ -826,7 +830,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 						vector<Sprite*> sprites = cargarSprites(personaje_carpeta_sprites, personaje_carpeta_sonidos, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
 
 						// Creo objetos arrojables (poderes).
-						vector<ObjetoArrojable*> arrojables = cargarArrojables(personaje_carpeta_arrojables, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
+						vector<ObjetoArrojable*> arrojables = cargarArrojables(personaje_carpeta_arrojables, personaje_carpeta_sonidos, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
 
 						// Crear personaje.
 						Personaje* personaje = new Personaje(personaje_nombre, sprites, arrojables, personaje_velocidad);

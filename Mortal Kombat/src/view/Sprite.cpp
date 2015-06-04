@@ -161,6 +161,13 @@ void Sprite::setSoundIn(int index_frame) {
 	frameSound = index_frame;
 }
 
+void Sprite::playSound() {
+	if (sonido != NULL) {
+		if (frameActual == frameSound)
+			sonido->play();
+	}
+}
+
 bool Sprite::ultimoFrame(){
 	if (doloop or frezeeCount) return false;
 	if (reverse){

@@ -37,7 +37,7 @@ class Sprite {
 		int frezeeCount;
 		int frezeeFrame;
 
-		LSound* sonido;
+		LSound* sonido=NULL;
 		int frameSound;
 
 		Rect_Objeto* spriteFrames;
@@ -61,6 +61,7 @@ class Sprite {
 		bool loop();
 		void doReverse(bool Reverse);
 		void setSoundIn(int index_frame);
+		void playSound();
 
 		bool ultimoFrame();
 		bool proxFrameUltimo();

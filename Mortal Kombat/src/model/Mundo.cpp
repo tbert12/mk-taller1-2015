@@ -23,8 +23,8 @@ Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map
 }
 
 void Mundo::start(){
-	Personaje* p_uno = personajes[1];
-	Personaje* p_dos = personajes[2];
+	Personaje* p_uno = personajes[0];
+	Personaje* p_dos = personajes[1];
 
 	if (escenarios[0]){
 		escenario_actual = escenarios[0];

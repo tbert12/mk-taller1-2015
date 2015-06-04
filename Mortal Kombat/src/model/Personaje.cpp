@@ -43,6 +43,8 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 
 	m_rectanguloAtaque = new Rect_Logico;
 	m_rectanguloDefensa = new Rect_Logico;
+
+	/*
 	//Sonidos
 	string named;
 	if(nombre == "Sub-Zero"){
@@ -52,6 +54,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 	}
 	pina = new LSound("data/players/" + named + "/sound/pina.wav");
 	recibe = new LSound("data/players/" + named + "/sound/recibeGolpeFuerte.wav");
+	*/
 }
 
 void Personaje::reset(){
@@ -179,6 +182,9 @@ void Personaje::setFlip(bool flip){
 }
 
 void Personaje::Update(float posDeOtroJugador,bool forzado){
+
+	spriteActual->playSound();
+
 	//Actualizo La X para cada caso y verificando limites
 	if (_estaMuerto){
 		if (!spriteActual->inLoop()){
@@ -646,7 +652,7 @@ void Personaje::pinaBaja() {
 			_cambiarSprite(SPRITE_PINA_BAJA);
 		}
 	}
-	pina->play();
+	//pina->play();
 	_estaAtacando = true;
 }
 
@@ -815,7 +821,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	}
 
 	_recibioGolpe = true;
-	recibe->play();
+	//recibe->play();
 	return golpeFuerte;
 }
 
@@ -832,8 +838,8 @@ Personaje::~Personaje() {
 	}
 	delete m_rectanguloAtaque;
 	delete m_rectanguloDefensa;
-	delete pina;
-	delete recibe;
+	//delete pina;
+	//delete recibe;
 }
 
 

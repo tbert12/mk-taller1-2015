@@ -945,6 +945,7 @@
 	},
 	"pinaBaja":{
 		"nombre":"pinaBaja.png",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":313,
@@ -1081,13 +1082,15 @@
 	},
 	"recibeGolpeFuerte":{
 		"nombre":"recibeGolpeFuerte.png",
+		"sonido": "recibeGolpeFuerte.wav",
 		"frames":[
 			{
 				"x":314,
 				"y":0,
 				"Alto":141
 ,
-				"Ancho":63
+				"Ancho":63,
+				"playSound": true
 			},
 			{
 				"x":0,

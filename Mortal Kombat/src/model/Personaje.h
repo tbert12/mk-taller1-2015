@@ -124,8 +124,10 @@ private:
 	void _cubrirseAgachado();
 	void _cubrirseParado();
 
+	/*
 	LSound* pina;
 	LSound* recibe;
+	*/
 
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, std::vector<ObjetoArrojable*> arrojables,float velocidad, bool fliped = false);
