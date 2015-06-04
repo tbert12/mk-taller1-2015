@@ -73,6 +73,18 @@
 			},
 			"ancho": 65,
 			"alto": 150
+		},
+		{
+			"nombre": "Liu Kang 2",
+			"sprites": "data/players/liukang/sprites/",
+			"poderes": "data/players/liukang/poderes/",
+			"color-alternativo": {
+				"h-inicial": -30,
+				"h-final": 20,
+				"desplazamiento": 240
+			},
+			"ancho": 65,
+			"alto": 150
 		}
 	],
 

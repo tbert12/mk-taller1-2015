@@ -5,7 +5,7 @@
 
 #include "Capa.h"
 
-Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float factorVelocidad) {
+Capa::Capa(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana) {
 	rect = new Rect_Logico;
 	rect->x = ancho*0.5f;
 	rect->y = 0;

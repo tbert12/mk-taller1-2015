@@ -27,7 +27,7 @@ const float PERSONAJE_POS_RESPECTO_CAM_DOS = 0.5;
 class CapaPrincipal: public Capa {
 
 public:
-	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal, float pos_piso);
+	CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float pos_piso);
 	int Scrollear(); //0 no scrollea , 1 para la derecha -1 para la izquierda!
 	void addPersonajes(Personaje* uno,Personaje* dos);
 	Personaje* getPersonajSinFlip();

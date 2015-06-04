@@ -22,7 +22,7 @@ public:
 	virtual void Renderizar();
 	virtual void Update(int scroll, float velocidad);
 	virtual void reset();
-	Capa(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana, float velocidadPrincipal);
+	Capa(float alto, float ancho, int zIndex, float anchoDeFondo,float ancho_ventana);
 	virtual ~Capa();
 protected:
 	int m_zIndex;

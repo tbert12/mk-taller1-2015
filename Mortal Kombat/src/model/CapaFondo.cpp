@@ -8,9 +8,9 @@
 #include "CapaFondo.h"
 
 
-CapaFondo::CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo, float velocidadPrincipal,
+CapaFondo::CapaFondo(float alto, float ancho, int zIndex, float anchoDeFondo,
 		std::string ruta, Ventana* ventana)
-:Capa(alto,ancho,zIndex, anchoDeFondo,ventana->obtenerAncho(),velocidadPrincipal) //call superclass constructor
+:Capa(alto,ancho,zIndex, anchoDeFondo,ventana->obtenerAncho()) //call superclass constructor
 {
 	m_texture = ventana->crearTextura();
 	rect->x = rect->x - ventana->obtenerAncho()/2;//Inicia al medio
