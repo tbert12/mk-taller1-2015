@@ -13,8 +13,10 @@
 
 const char* const JSON_CONFIG_DEFAULT = "data/config/default.json";
 
-const int LOGLVL_DEFAULT = 2;
+const int LOGLVL_DEFAULT = 1;
 const int TIEMPO_DEFAULT = 99;
+const int COMBOS_TOLERANCIA_DEFAULT = 2;
+const int COMBOS_TIEMPO_MAX_DEFAULT = 2;
 const int VENTANA_ANCHO_PX_DEFAULT = 512;
 const int VENTANA_ALTO_PX_DEFAULT = 384;
 const float VENTANA_ANCHO_DEFAULT = 200;

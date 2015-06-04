@@ -4,6 +4,7 @@ using namespace std;
 
 ParserJSON::ParserJSON(string ruta_archivo) {
 	m_ruta_archivo = ruta_archivo;
+	m_ventana = NULL;
 	comandos_luchador1 = NULL;
 	comandos_luchador2 = NULL;
 }
@@ -591,6 +592,39 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, string ruta_sonid
 
 }
 
+vector<Combo*> ParserJSON::cargarCombos(Json::Value root) {
+
+	vector<Combo*> combos;
+	log("Se inicia la carga de los combos del personaje.", LOG_DEBUG);
+
+	if (!root.isMember("combos") || !root["combos"].isArray()) {
+		log("No se especificaron parametros para los combos del personaje en un vector. El personaje no tendra ningun combo.", LOG_WARNING);
+	} else {
+		for (int i = 0; i < (int) root["combos"].size(); i++) {
+			try {
+				string combostream = root["combos"][i].asString();
+				bool combo_valido = true;
+				for(int i = 0; i < (int) combostream.size(); i++) {
+					if ( !isdigit(combostream.at(i)) )
+						combo_valido = false;
+						break;
+				}
+				if (combo_valido) {
+					Combo* combo = new Combo(combostream);
+					combos.push_back(combo);
+					log("El combo fue cargado correctamente. ", LOG_DEBUG);
+				} else {
+					log("El combo no es una cadena de numeros consecutivos. No es un combo valido. Se ignora la carga del combo.", LOG_ERROR);
+				}
+			} catch (exception &e) {
+				log("El combo no es una cadena de texto valida. Se ignora la carga del combo.");
+				continue;
+			}
+		}
+	}
+	return combos;
+}
+
 int ParserJSON::cargarComando( Json::Value botones, const char* accion, int comando_default) {
 	int comando_accion;
 	if ( ! botones.isMember(accion) ) {
@@ -844,6 +878,10 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 							}
 						}
 
+						// Cargo los combos del personaje.
+						vector<Combo*> combos = cargarCombos(root["personajes"][k]);
+
+						// Cargo los parametros para el cambio de color del personaje.
 						vector<float> colorAlternativo = cargarColorAlternativo(root["personajes"][k]);
 
 						// Creo Sprites del personaje.
@@ -854,6 +892,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 
 						// Crear personaje.
 						Personaje* personaje = new Personaje(personaje_nombre, sprites, arrojables, personaje_velocidad);
+						personaje->setCombos(combos);
 						log( "Se creo correctamente el personaje.", LOG_DEBUG );
 
 						return personaje;
@@ -1244,6 +1283,44 @@ Mundo* ParserJSON::cargarMundo() {
 		}
 	}
 
+	// Obtener tiempo maximo de espera en los combos.
+	int combos_tiempo_max;
+	if ( ! root.isMember("tiempo_max_combos") ) {
+		log( "No se especifico el tiempo max de espera de los combos. Se setea por defecto.", LOG_WARNING );
+		combos_tiempo_max = COMBOS_TIEMPO_MAX_DEFAULT;
+	} else {
+		try {
+			combos_tiempo_max = root.get( "tiempo_max_combos", COMBOS_TIEMPO_MAX_DEFAULT ).asInt();
+			if ( combos_tiempo_max < 0 ) {
+				combos_tiempo_max = COMBOS_TIEMPO_MAX_DEFAULT;
+				log ( "El tiempo max de espera de los combos no puede ser negativo. Se setea automaticamente.", LOG_WARNING );
+			} else
+				log( "Se cargo correctamente el tiempo maximo de espera de los combos.", LOG_DEBUG );
+		} catch (exception &e) {
+			combos_tiempo_max = COMBOS_TIEMPO_MAX_DEFAULT;
+			log( "El tiempo indicado no pudo ser convertido a un numero. Se setea un tiempo por defecto", LOG_ERROR );
+		}
+	}
+
+	// Obtener tolerancia de misses en los combos.
+	int combos_tolerancia;
+	if ( ! root.isMember("tolerancia_combos") ) {
+		log( "No se especifico la tolerancia de misses de los combos. Se setea por defecto.", LOG_WARNING );
+		combos_tolerancia = COMBOS_TOLERANCIA_DEFAULT;
+	} else {
+		try {
+			combos_tolerancia = root.get( "tolerancia_combos", COMBOS_TOLERANCIA_DEFAULT ).asInt();
+			if ( combos_tolerancia < 0 ) {
+				combos_tolerancia = COMBOS_TOLERANCIA_DEFAULT;
+				log ( "La tolerancia de misses de los combos no puede ser negativa. Se setea automaticamente.", LOG_WARNING );
+			} else
+				log( "Se cargo correctamente la tolerancia de misses de los combos.", LOG_DEBUG );
+		} catch (exception &e) {
+			combos_tolerancia = COMBOS_TOLERANCIA_DEFAULT;
+			log( "La cantidad de misses posibles en un combo indicada no pudo ser convertida a un numero. Se setea por defecto", LOG_ERROR );
+		}
+	}
+
 	// Obtener dimensiones de la ventana. Se setean por defecto en caso de error.
 	// El alto se seteara luego dependiendo del escenario.
 	int ventana_ancho_px, ventana_alto_px;
@@ -1333,6 +1410,7 @@ Mundo* ParserJSON::cargarMundo() {
 		log( "No se puede inicializar la ventana. El programa no puede continuar.", LOG_ERROR );
 		throw runtime_error( "No se pudo abrir la ventana del programa." );
 	}
+	m_ventana = ventana;
 
 	// Se va a mostrar en pantalla una imagen durante el tiempo de carga
 	if(ventana->mostrarImagen("data/img/etc/load.png")){
@@ -1342,10 +1420,7 @@ Mundo* ParserJSON::cargarMundo() {
 	// Obtener hash de comandos.
 	this->cargarMapaComandos(root);
 
-	// Creo mundo vacio.
-
-
-	Mundo* nuevo_mundo = new Mundo(ventana,tiempo_combate,comandos_luchador1,comandos_luchador2, 2/*TIEMPO MAXIMOS*/ , 2 /*TOLERANCIA*/);
+	Mundo* nuevo_mundo = new Mundo(ventana,tiempo_combate,comandos_luchador1,comandos_luchador2, combos_tiempo_max , combos_tolerancia);
 	log ( "Se creo correctamente un mundo vacio.", LOG_DEBUG );
 	log( "Se le asigno la ventana creada al nuevo mundo.", LOG_DEBUG );
 
@@ -1360,65 +1435,38 @@ Mundo* ParserJSON::cargarMundo() {
 	log( "Se agregaron los personajes al nuevo mundo de la partida.", LOG_DEBUG );
 
 	return nuevo_mundo;
+}
 
+Personaje* ParserJSON::cambiarColorPersonaje(string nombre_personaje) {
 
-	/*
-	string personaje_nombre_1, personaje_nombre_2;
-	Personaje *personaje_1, *personaje_2;
-	bool fallo_personaje_1 = false;
-	bool cambiar_color = false;
-	if ( ! root.isMember("pelea") ) {
-		personaje_1 = generarPersonajeDefault(ventana);
-		cambiar_color = true;
-		personaje_2 = generarPersonajeDefault(ventana);
-		log( "No se especificaron correctamente los parametros para los dos luchadores de la pelea. Se setean ambos como el personaje por defecto.", LOG_ERROR );
-	} else {
-		if ( ! root["pelea"].isMember("luchador1") ) {
-			personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
-			personaje_1 = generarPersonajeDefault(ventana);
-			fallo_personaje_1 = true;
-			log("No se especifico el luchador 1, se setea por defecto.", LOG_ERROR);
-		} else {
-			try {
-				personaje_nombre_1 = root["pelea"].get("luchador1", PERSONAJE_NOMBRE_DEFAULT).asString();
-				log( "El nombre del personaje 1 fue cargado correctamente.", LOG_DEBUG );
-				personaje_1 = cargarPersonaje(personaje_nombre_1, root, ventana, escenario_ancho, escenario_alto, cambiar_color);
-			} catch ( exception &e ) {
-				personaje_nombre_1 = PERSONAJE_NOMBRE_DEFAULT;
-				personaje_1 = generarPersonajeDefault(ventana);
-				fallo_personaje_1 = true;
-				log( "El nombre del personaje 1 no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
-			}
-		}
-		if ( ! root["pelea"].isMember("luchador2") ) {
-			if ( fallo_personaje_1 )
-				cambiar_color = true;
-			personaje_2 = generarPersonajeDefault(ventana);
-			log("No se especifico el luchador 2, se setea por defecto.", LOG_ERROR);
-		} else {
-			try {
-				personaje_nombre_2 = root["pelea"].get("luchador2", PERSONAJE_NOMBRE_DEFAULT).asString();
-				log( "El nombre del personaje 2 fue cargado correctamente.", LOG_DEBUG );
-				if ( ! personaje_nombre_1.string::compare(personaje_nombre_2) ) {
-					cambiar_color = true;
-				}
-				personaje_2 = cargarPersonaje(personaje_nombre_2, root, ventana, escenario_ancho, escenario_alto, cambiar_color);
-			} catch ( exception &e ) {
-				personaje_nombre_2 = PERSONAJE_NOMBRE_DEFAULT;
-				if ( fallo_personaje_1 )
-					cambiar_color = true;
-				personaje_2 = generarPersonajeDefault(ventana);
-				log( "El nombre del personaje 2 no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
-			}
-		}
+	Json::Value root;
+	Json::Reader reader;
+
+	// Abrir archivo.
+	ifstream archivoConfig;
+	archivoConfig.open(m_ruta_archivo.c_str());
+
+	// Si no se pudo abrir archivo, se devuelve NULL.
+	if ( ! archivoConfig.is_open() ) {
+		log( "No se pudo abrir el archivo de configuracion JSON para cargar el personaje con el cambio de color. No se cambia el color del personaje.", LOG_ERROR );
+		return NULL;
 	}
-	vector<Personaje*> personajes;
-	nuevo_mundo->addPersonaje(personaje_1);
-	nuevo_mundo->addPersonaje(personaje_2);
-	personajes.push_back(personaje_1);
-	personajes.push_back(personaje_2);
-	log( "Se agregaron los dos personajes al nuevo mundo de la partida.", LOG_DEBUG );
-	*/
+	log ( "Se abrio el archivo JSON de configuracion para efectuar el cambio de color del personaje.", LOG_DEBUG );
 
+	// Si no se pudo parsear archivo, se devuelve NULL.
+	bool exito = reader.parse( archivoConfig, root, false );
+	if ( ! exito ) {
+	    log( "No se pudo interpretar el JSON. No se cambia el color del personaje." + reader.getFormattedErrorMessages(), LOG_ERROR );
+	    return NULL;
+	} else
+		log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
+
+	// Cerrar archivo.
+	archivoConfig.close();
+	log ( "Se cerro el archivo JSON de configuracion.", LOG_DEBUG );
+
+	// Cargo el personaje con el cambio de color seteado en true.
+	Personaje* personaje = cargarPersonaje(nombre_personaje, root, m_ventana, true);
+	return personaje;
 }
 

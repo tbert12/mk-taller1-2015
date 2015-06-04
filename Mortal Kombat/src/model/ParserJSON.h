@@ -1,11 +1,13 @@
 #ifndef SRC_MODEL_PARSER_H_
 #define SRC_MODEL_PARSER_H_
 
+#include <ctype.h>
 #include "DefaultSettings.h"
 #include "CapaFondo.h"
 #include "Escenario.h"
 #include "CapaPrincipal.h"
 #include "../view/LSound.h"
+
 
 using namespace std;
 
@@ -13,6 +15,7 @@ class ParserJSON {
 
 private:
 	 string m_ruta_archivo;
+	 Ventana* m_ventana;
 	 map<string, int>* comandos_luchador1;
 	 map<string, int>* comandos_luchador2;
 
@@ -36,6 +39,9 @@ public:
 	 Escenario* cargarEscenario(string nombre_escenario, Json::Value root, Ventana* ventana, float ventana_ancho);
 	 vector<Escenario*> cargarEscenarios(Json::Value root, Ventana* ventana, float ventana_ancho);
 	 vector<float> cargarColorAlternativo(Json::Value personaje);
+	 vector<Combo*> cargarCombos(Json::Value root);
+	 Personaje* cambiarColorPersonaje(string nombre_personaje);
+
 };
 
 #endif /* SRC_MODEL_PARSER_H_ */
