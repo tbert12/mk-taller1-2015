@@ -75,8 +75,13 @@ const char* const SPRITESHEET_RECIBIR_GOLPE_AGACHADO_DEFAULT = "recibeGolpeAgach
 const char* const SPRITESHEET_RECIBIR_GOLPE_ALTO_DEFAULT = "recibeGolpeAlto.png";
 const char* const SPRITESHEET_RECIBIR_GOLPE_BAJO_DEFAULT = "recibeGolpeBajo.png";
 const char* const SPRITESHEET_RECIBIR_GOLPE_FUERTE_DEFAULT = "recibeGolpeFuerte.png";
-const char* const SPRITESHEET_COMBO_PINA_BAJA_DEFAULT = "PinaBaja";
-const char* const SPRITESHEET_COMBO_PINA_ALTA_DEFAULT = "PinaAlta";
+const char* const SPRITESHEET_COMBO_PINA_BAJA_DEFAULT = "PinaBaja.png";
+const char* const SPRITESHEET_COMBO_PINA_ALTA_DEFAULT = "PinaAlta.png";
+const char* const SPRITESHEET_TOMA_1_DEFAULT = "toma1.png";
+const char* const SPRITESHEET_PODER_1_DEFAULT = "poder1.png";
+const char* const SPRITESHEET_PODER_2_DEFAULT = "poder2.png";
+const char* const SPRITESHEET_FINISH_DEFAULT = "finish.png";
+const char* const SPRITESHEET_FATALITY_1_DEFAULT = "fatality1.png";
 
 const char* const SPRITESHEET_OBJETO_ARROJABLE_DEFAULT = "objetoArrojable.png";
 const char* const ARROJABLE_NOMBRE_DEFAULT = "Poder";

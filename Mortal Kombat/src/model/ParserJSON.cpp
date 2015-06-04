@@ -566,6 +566,26 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, string ruta_sonid
 	Sprite* sprite_combo_pina_alta =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "comboPinaAlta", SPRITESHEET_COMBO_PINA_ALTA_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_combo_pina_alta );
 
+	log( "Se cargara el sprite para la toma 1 del personaje", LOG_DEBUG );
+	Sprite* sprite_toma_1 =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "toma1", SPRITESHEET_TOMA_1_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_toma_1 );
+
+	log( "Se cargara el sprite para la accion del poder 1 del personaje", LOG_DEBUG );
+	Sprite* sprite_poder_1 =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "poder1", SPRITESHEET_PODER_1_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_poder_1 );
+
+	log( "Se cargara el sprite para la accion del poder 2 del personaje", LOG_DEBUG );
+	Sprite* sprite_poder_2 =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "poder2", SPRITESHEET_PODER_2_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_poder_2 );
+
+	log( "Se cargara el sprite para la accion de finish del personaje", LOG_DEBUG );
+	Sprite* sprite_finish =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "finish", SPRITESHEET_FINISH_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_finish );
+
+	log( "Se cargara el sprite para la accion de la fatality 1 del personaje", LOG_DEBUG );
+	Sprite* sprite_fatality_1 =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "fatality1", SPRITESHEET_FATALITY_1_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_fatality_1 );
+
 	log( "Se crearon todos los sprites del personaje.", LOG_DEBUG );
 	return sprites;
 

@@ -25,6 +25,8 @@ const int SPRITE_SALTAR_DIAGONAL= 		3;
 const int SPRITE_AGACHAR=         		4;
 const int SPRITE_PATADA_ALTA_AGACHADO=  5;
 const int SPRITE_PATADA_BAJA_AGACHADO=  6;
+const int SPRITE_RECIBE_PATADA_GIRA=    7;
+const int SPRITE_RECIBE_GANCHO = 		8; //CaeYSeLevanta
 const int SPRITE_CUBRIRSE=       		9;
 const int SPRITE_CUBRIRSE_AGACHADO=    	10;
 const int SPRITE_GANA =					11;
@@ -38,13 +40,17 @@ const int SPRITE_PINA_AGACHADO=  		18;
 const int SPRITE_PINA_ALTA=		 		19;
 const int SPRITE_PINA_BAJA=		 		20;
 const int SPRITE_PINA_SALTANDO=  		21;
-
-const int SPRITE_RECIBE_PATADA_GIRA=    7;
-const int SPRITE_RECIBE_GANCHO = 		8; //CaeYSeLevanta
 const int SPRITE_RECIBE_AGACHADO =      22;
 const int SPRITE_RECIBE_ALTO = 			23;
 const int SPRITE_RECIBE_BAJO =			24;
 const int SPRITE_RECIBE_FUERTE = 		25;
+const int SPRITE_COMBO_PINA_BAJA =		26;
+const int SPRITE_COMBO_PINA_ALTA =		27;
+const int SPRITE_TOMA_1 =				28;
+const int SPRITE_PODER_1 =				29;
+const int SPRITE_PODER_2 =				30;
+const int SPRITE_FINISH =				31;
+const int SPRITE_FATALITY_1 =			32;
 
 const int GOLPE_DE_PODER = 				-1;
 

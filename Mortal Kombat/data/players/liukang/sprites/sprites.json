@@ -952,7 +952,8 @@
 				"y":0,
 				"Alto":125
 ,
-				"Ancho":54
+				"Ancho":54,
+				"playSound": true
 			},
 			{
 				"x":0,
