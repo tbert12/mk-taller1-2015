@@ -57,15 +57,16 @@ class Sprite {
 		void doPongIn(int pong);
 		void doFullPong();
 		void doLoop(bool loop);
-		bool inLoop();
-		bool loop();
 		void doReverse(bool Reverse);
 		void setSoundIn(int index_frame);
 		void playSound();
 
+		bool inFrezee();
 		bool ultimoFrame();
 		bool proxFrameUltimo();
 		bool primerFrame();
+		bool inLoop();
+		bool loop();
 
 		float getAncho();
 		float getAlto();

@@ -76,6 +76,7 @@ Sprite::~Sprite(){
 	delete []spriteFrames;
 	delete RectanguloTest1;
 	delete RectanguloTest2;
+	delete sonido;
 }
 
 
@@ -179,6 +180,10 @@ bool Sprite::ultimoFrame(){
 	return (frameActual + 1 == cantidadFrames);
 }
 
+bool Sprite::inFrezee(){
+	return (frezee and (frezeeFrame == frameActual) and frezeeTime and frezeeCount);
+}
+
 bool Sprite::proxFrameUltimo(){
 	if (doloop) return false;
 	if (reverse){
@@ -196,7 +201,10 @@ bool Sprite::primerFrame(){
 }
 
 void Sprite::doPongIn(int pong){
-	if (pong <= 0 or pong >= cantidadFrames) return;
+	if (pong <= 0 or pong >= cantidadFrames) {
+		m_pong = 0;
+		return;
+	}
 	m_pong = pong;
 }
 

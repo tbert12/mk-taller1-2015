@@ -21,8 +21,8 @@ CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeF
 	m_velocidad_derecha = 0;
 	m_velocidad_izquierda = 0;
 	m_PersonajeQueScrollea = 0;
-	rectAtaqueAnterior2 = NULL;
-	rectAtaqueAnterior1 = NULL;
+	rectAtaqueAnterior2 = new Rect_Logico;
+	rectAtaqueAnterior1 = new Rect_Logico;
 	m_personajeConFlip = NULL;
 	m_personajeSinFlip = NULL;
 	_scroll = 0;
@@ -89,8 +89,8 @@ void CapaPrincipal::reset(){
 		m_PersonajeDos->setFlip(true);
 	}
 	m_PersonajeQueScrollea = 0;
-	rectAtaqueAnterior2 = NULL;
-	rectAtaqueAnterior1 = NULL;
+	if(rectAtaqueAnterior2)	delete rectAtaqueAnterior2;
+	if(rectAtaqueAnterior1)	delete rectAtaqueAnterior1;
 	m_personajeConFlip = m_PersonajeDos;
 	m_personajeSinFlip = m_PersonajeUno;
 	_scroll = 0;
@@ -229,7 +229,7 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 	if (rectAtaque1 != NULL ){
 
 		if(!rectAtaqueAnterior1){
-			rectAtaqueAnterior1 = rectDefensa1;
+			memcpy((void*)rectAtaqueAnterior1,(void*)rectDefensa1,sizeof(Rect_Logico*));
 		}
 
 		bool antesColisionaX = floatIsBetween(rectDefensa2->x ,rectAtaqueAnterior1->x,rectAtaqueAnterior1->w);
@@ -247,7 +247,7 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 
 	}else if (rectAtaque2 != NULL ){
 		if(!rectAtaqueAnterior2){
-			rectAtaqueAnterior2 = rectDefensa2;
+			memcpy((void*)rectAtaqueAnterior2,(void*)rectDefensa2,sizeof(Rect_Logico*));
 		}
 
 		bool antesColisionaX = floatIsBetween(rectDefensa1->x + rectDefensa1->w, rectAtaqueAnterior2->x, rectAtaqueAnterior2->w);
@@ -264,8 +264,12 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 		}
 	}
 
-	rectAtaqueAnterior1 = rectAtaque1;
-	rectAtaqueAnterior2 = rectAtaque2;
+	if (rectAtaque1){
+		memcpy((void*)rectAtaqueAnterior1,(void*)rectAtaque1,sizeof(Rect_Logico*));
+	}
+	if (rectAtaque2){
+		memcpy((void*)rectAtaqueAnterior2,(void*)rectAtaque2,sizeof(Rect_Logico*));
+	}
 
 	ObjetoArrojable* objetoSinFlip = personaje->getPoderActivo();
 	ObjetoArrojable* objetoConFlip = personajeFlippeado->getPoderActivo();
@@ -330,7 +334,6 @@ Personaje* CapaPrincipal::getPersonajConFlip(){
 
 void CapaPrincipal::Renderizar(){
 	if(!m_PersonajeUno || !m_PersonajeDos) return;
-
 	m_PersonajeUno->renderizar(getX(), m_PersonajeDos->getX());
 	if(m_PersonajeDos){
 		m_PersonajeDos->renderizar(getX(), m_PersonajeUno->getX());
@@ -417,4 +420,6 @@ CapaPrincipal::~CapaPrincipal() {
 	m_velocidad_izquierda = 0;
 	m_PersonajeUno = NULL;
 	m_PersonajeDos = NULL;
+	if(rectAtaqueAnterior2)	delete rectAtaqueAnterior2;
+	if(rectAtaqueAnterior1)	delete rectAtaqueAnterior1;
 }

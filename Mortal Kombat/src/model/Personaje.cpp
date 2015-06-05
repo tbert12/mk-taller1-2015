@@ -25,6 +25,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 	m_AnchoMundo = 0;
 
 	m_fliped = fliped;
+	nextFlip = fliped;
 
 	m_velocidad = velocidad;
 	m_mover = true;
@@ -38,7 +39,6 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 	_estaAgachado = false;
 	_estaAtacando = false;
 	_recibioGolpe = false;
-
 	_estaMuerto = false;
 
 	m_rectanguloAtaque = new Rect_Logico;
@@ -84,13 +84,16 @@ void Personaje::lanzarObjeto(){
 	float x;
 	float y;
 	if (m_fliped){
-		x = m_xActual - spriteActual->getAncho()*0.6;
+		x = m_xActual - getAncho()*0.6;
 	}
 	else{
-		x = m_xActual + spriteActual->getAncho()*0.6;
+		x = m_xActual + getAncho()*0.6;
 	}
-	y = m_yActual - getAlto()/2;
-	poderes[0]->lanzar(x,y,m_fliped);
+	/* Esto tiene que estar en sprite y seteado desde el Json
+	 * El spriteActual = SPRITE_PODER_1
+	 */
+	y = m_yActual - getAlto()*0.8;
+	poderes[0]->lanzar(x, y, m_fliped);
 
 }
 
@@ -148,9 +151,6 @@ bool Personaje::getFlipState()
 void Personaje::QuitarVida(int valor){
 	vida = vida - valor;
 	if(vida <= 0){
-		_cambiarSprite(SPRITE_MUERE);
-		_estaMuerto = true;
-		spriteActual->doLoop(true);
 		vida = 0;
 	}
 }
@@ -168,15 +168,19 @@ void Personaje::setScroll(bool scrollear){
 }
 
 void Personaje::setFlip(bool flip){
-	if (_estaSaltando > 0 || (flip == m_fliped)) return;
-		m_fliped= flip;
-		if (flip){
-			//Le sumamos el ancho para que la x siga quedando en la cabeza
-			m_xActual += spriteActual->getAncho();
-		}
-		else{
-			m_xActual -= spriteActual->getAncho();
-		}
+	if (_estaSaltando > 0 or flip == m_fliped) {
+		nextFlip = flip;
+		return;
+	}
+	m_fliped= flip;
+	nextFlip = flip;
+	if (flip){
+		//Le sumamos el ancho para que la x siga quedando en la cabeza
+		m_xActual += spriteActual->getAncho();
+	}
+	else{
+		m_xActual -= spriteActual->getAncho();
+	}
 }
 
 void Personaje::Update(float posDeOtroJugador,bool forzado){
@@ -320,7 +324,7 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	 * 	OK	-Gancho
 	 */
 
-	Rect_Logico* rectangulo = new Rect_Logico;
+	Rect_Logico* rectangulo = m_rectanguloAtaque;
 	if(m_fliped)
 		rectangulo->x = m_xActual - getAncho();
 	else
@@ -356,16 +360,8 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	return rectangulo;
 }
 
-Rect_Logico* Personaje::nextRectAtaque(){
-	printf("Si algun dia ven este printf Avisenle a Tomi!\n");
-	if(!_estaAtacando)
-		return rectanguloAtaque();
-	Rect_Logico* rectangulo = new Rect_Logico;
-	return rectangulo;
-}
-
 Rect_Logico* Personaje::rectanguloDefensa(){
-	Rect_Logico* rectangulo = new Rect_Logico;
+	Rect_Logico* rectangulo = m_rectanguloDefensa;
 	float MinAncho = sprites[SPRITE_CUBRIRSE]->getAncho();
 	rectangulo->y=  m_yActual;
 	if(m_fliped)
@@ -388,10 +384,11 @@ void Personaje::AvanzarSprite(){
 	if (spriteActual->ultimoFrame() or (!_estaSaltando and !_recibioGolpe) ){
 		//Termina de atacar o agacharse o saltando = 0 (justo en el momento que cae)
 		if ( (_estaAtacando and !_estaAgachado) or (_estaAgachado and !_estaCubriendose and !_estaAtacando and !_recibioGolpe) or !_estaSaltando ){
-			if (m_velocidadActual == 0){
+			if (!m_velocidadActual){
 				_cambiarSprite(SPRITE_INICIAL);
 			} else {
-				_cambiarSprite(SPRITE_CAMINAR);
+				setFlip(nextFlip);
+				_Caminar( (m_velocidadActual > 0) );
 			}
 			if (_estaAtacando) _estaAtacando = false;
 			if (!_estaSaltando) _estaSaltando = -1;
@@ -446,6 +443,11 @@ void Personaje::AvanzarSprite(){
 			}
 		}
 	}
+	if (_estaAtacando and spriteActual == sprites[SPRITE_PODER_1]){
+		if ( spriteActual->inFrezee() ){
+			lanzarObjeto();
+		}
+	}
 	spriteActual->Advance();
 }
 
@@ -496,19 +498,26 @@ void Personaje::Frenar(){
 
 void Personaje::CaminarDerecha(){
 	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe) return;
-	float factor = 1;
-	if (m_fliped)
-		factor = 0.5;
-	m_velocidadActual = m_velocidad*factor;
-	_cambiarSprite(SPRITE_CAMINAR);
+	_Caminar(true);
 }
 
 void Personaje::CaminarIzquierda(){
 	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe) return;
-	float factor = 0.5;
-	if (m_fliped)
-		factor = 1;
-	m_velocidadActual = - m_velocidad*factor;
+	_Caminar(false);
+}
+
+void Personaje::_Caminar(bool derecha){
+	float factor = 1;
+	if (derecha){
+		if (m_fliped)
+			factor = 0.5;
+
+	} else {
+		factor = -0.5;
+		if (m_fliped)
+			factor = -1;
+	}
+	m_velocidadActual = m_velocidad*factor;
 	_cambiarSprite(SPRITE_CAMINAR);
 }
 
@@ -633,36 +642,41 @@ void Personaje::dejarDeCubrirse() {
 //+++++++++++ATAQUE - PINA+++++++++++++++++++++++++++++++++++++++++++
 
 void Personaje::pinaBaja() {
+	_pina(false);
+}
+
+void Personaje::pinaAlta() {
+	_pina(true);
+}
+
+void Personaje::_pina(bool alta){
 	if (_estaCubriendose or _recibioGolpe) return;
-	//if (_estaAtacando) return;
+	int sprite = SPRITE_PINA_BAJA;
+	int spritecombo = SPRITE_COMBO_PINA_BAJA;
+	if (alta){
+		sprite = SPRITE_PINA_ALTA;
+		spritecombo = SPRITE_COMBO_PINA_ALTA;
+	}
+	int accionActual = getAccionDeAtaque();
+	if (_estaAtacando and (accionActual != sprite)) return;
 	if ( _estaAgachado ) {
-		_pinaAgachado();
-	}else if ( _estaSaltando > 0 )  {
+		if (alta) _gancho();
+		else _pinaAgachado();
+	} else if ( _estaSaltando > 0 ) {
 		_pinaSaltando();
 	} else {
-		if (spriteActual == sprites[SPRITE_PINA_BAJA]){
-			spriteActual->doFullPong();
+		if (accionActual == sprite or accionActual == spritecombo){
+			_cambiarSprite(spritecombo);
 		} else {
-			_cambiarSprite(SPRITE_PINA_BAJA);
+			_cambiarSprite(sprite);
 		}
 	}
 	_estaAtacando = true;
+
 }
 
 void Personaje::_pinaAgachado() {
 	_cambiarSprite(SPRITE_PINA_AGACHADO);
-}
-
-void Personaje::pinaAlta() {
-	if (_estaCubriendose or _recibioGolpe) return;
-	if ( _estaAgachado ) {
-		_gancho();
-	} else if ( _estaSaltando > 0 ) {
-		_pinaSaltando();
-	} else {
-		_cambiarSprite(SPRITE_PINA_ALTA);
-	}
-	_estaAtacando = true;
 }
 
 void Personaje::_gancho() {
@@ -816,6 +830,45 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	_recibioGolpe = true;
 	return golpeFuerte;
 }
+//+++++++++++++++++++++++++++++TOMA++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+void Personaje::toma1(){
+	_cambiarSprite(SPRITE_TOMA_1);
+	spriteActual->freezeSprite();
+	_estaAtacando = true;
+}
+//+++++++++++++++++++++PODER Y FATALITY++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void Personaje::poder1(){
+	/*Siempre relacionado a lanzar un objeto*/
+	_cambiarSprite(SPRITE_PODER_1);
+	spriteActual->freezeSprite();
+	_estaAtacando = true;
+}
+
+void Personaje::poder2(){
+	/* Hay que pensar algo de las fatalityes
+	 * Porque son todas distintas, puede haber una clase global que sea Fatality
+	 * en donde Fatality1-Liukang / Fatality2-SubZero Hereda de Fatality y minupulan
+	 * cosas del personaje.
+	 *
+	 * */
+}
+
+
+//+++++++++++++++++++++DEAD o FINISH HIM+++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+void Personaje::finishHim(){
+	_cambiarSprite(SPRITE_FINISH);
+}
+
+void Personaje::morir(){
+	_cambiarSprite(SPRITE_MUERE);
+	_estaMuerto = true;
+	spriteActual->doLoop(true);
+}
+
 
 //+++++++++++++++++++++++++++++VICTORIA++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -837,10 +890,11 @@ Personaje::~Personaje() {
 	for (size_t i=0; i < poderes.size(); i++){
 		delete poderes[i];
 	}
+	for (size_t i=0; i < mCombos.size(); i++){
+		delete mCombos[i];
+	}
 	delete m_rectanguloAtaque;
 	delete m_rectanguloDefensa;
-	//delete pina;
-	//delete recibe;
 }
 
 

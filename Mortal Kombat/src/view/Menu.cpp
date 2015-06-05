@@ -186,6 +186,7 @@ Menu::~Menu() {
 		if( opciones[i].textura != NULL ){
 			SDL_DestroyTexture( opciones[i].textura );
 			opciones[i].textura = NULL;
+			free(&opciones[i]);
 		}
 	}
 	opciones.clear();

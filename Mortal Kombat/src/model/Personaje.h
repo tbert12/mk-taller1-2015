@@ -83,6 +83,7 @@ private:
 	bool m_mover;
 
 	bool m_fliped;
+	bool nextFlip;
 
 	/* Logica de Salto */
 	float maxAlturaDeSalto;
@@ -107,6 +108,8 @@ private:
 	void _cambiarSprite(int accion);
 	void _UpdatePoder();
 
+	 void _Caminar(bool derecha);
+
 	void _SaltarHorizontal();
 
 	/* Salto Diagonal*/
@@ -117,6 +120,7 @@ private:
 	float _yDeSalto(float currentY, float currentT);
 
 	/*Ataque*/
+	void _pina(bool alta);
 	void _pinaSaltando();
 	void _patadaSaltando();
 
@@ -195,6 +199,13 @@ public:
 	void cubrirse();
 	void dejarDeCubrirse();
 	void lanzarObjeto();
+
+	void toma1();
+	void poder1(); /* Relacionado a lanzar un objeto */
+	void poder2();
+
+	void finishHim();
+	void morir();
 
 	void victoria();
 };
