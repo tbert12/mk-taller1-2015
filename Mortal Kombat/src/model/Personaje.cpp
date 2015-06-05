@@ -817,6 +817,15 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	return golpeFuerte;
 }
 
+//+++++++++++++++++++++++++++++VICTORIA++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void Personaje::victoria() {
+	_cambiarSprite(SPRITE_GANA);
+	spriteActual->doLoop(true);
+	spriteActual->freezeSprite();
+}
+
 //-------------------------------------------------------------------------------------------------------------------------
 //FIN MANEJO DE SPRITES :)
 

@@ -195,6 +195,8 @@ public:
 	void cubrirse();
 	void dejarDeCubrirse();
 	void lanzarObjeto();
+
+	void victoria();
 };
 
 #endif /* SRC_MODEL_PERSONAJE_H_ */
