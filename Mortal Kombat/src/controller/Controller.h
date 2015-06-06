@@ -8,6 +8,7 @@
 #ifndef SRC_CONTROLLER_CONTROLLER_H_
 #define SRC_CONTROLLER_CONTROLLER_H_
 
+#include "../model/JugadorCPU.h"
 #include "JoystickControl.h"
 #include "KeyboardControl.h"
 #include "../model/Personaje.h"
@@ -27,6 +28,8 @@ private:
 	int ModoDeJuego;
 	const Uint8* keystate;
 	SDL_Event evento;
+
+	JugadorCPU* cpu = NULL;
 
 	void _Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2,int tiempoMax, int tolerancia);
 	void _JoystickRemoved();

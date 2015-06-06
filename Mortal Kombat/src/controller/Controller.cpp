@@ -53,7 +53,11 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 	if (ModoDeJuego == MODO_JUGADOR_VS_JUGADOR){
 			p_uno = personaje_1;
 			p_dos = personaje_2;
-	}else{
+	}else if (ModoDeJuego == MODO_JUGADOR_VS_PC){
+			cpu = new JugadorCPU(personaje_1, personaje_2);
+			p_uno = personaje_1;
+			p_dos = NULL;
+	} else {
 			p_uno = personaje_1;
 			p_dos = NULL;
 	}
@@ -68,7 +72,7 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 			Teclado = new KeyboardControl(&evento,p_uno,false, NULL);
 			if (ModoDeJuego == MODO_ENTRENAMIENTO) Teclado->setPelea(pelea);
 		}
-		if(p_dos != NULL){
+		if(p_dos != NULL && ModoDeJuego != MODO_JUGADOR_VS_PC){
 			Joystick_2 = new JoystickControl(&evento,1,p_dos,mapa_comandos2,NULL);
 		}
 	}
@@ -101,6 +105,8 @@ void Controller::_JoystickAdded(){
 }
 
 void Controller::Pressed(){
+
+	cpu->realizarMovimiento();
 
 	//evento de salida
 	if(evento.type == SDL_QUIT){
