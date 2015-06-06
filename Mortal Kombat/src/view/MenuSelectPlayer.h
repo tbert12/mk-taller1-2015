@@ -55,6 +55,8 @@ private:
 	SDL_Texture* _loadImage(SDL_Rect* rect, string ruta);
 	void _crearOpciones();
 	void _renderImagen();
+	void _renderFaces();
+	void _renderFace(Opcion_Personaje opcion);
 	void _renderSeleccion(int opcion_actual1,int opcion_actual2);
 	void _renderTexto(int opcion_actual);
 	void _renderText(string text, SDL_Color color, SDL_Rect rect);

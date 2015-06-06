@@ -153,6 +153,7 @@ void MenuSelectPlayer::render(int opcion_actual1,int opcion_actual2){
 	ventana->clear();
 
 	_renderImagen();
+	_renderFaces();
 	_renderSeleccion(opcion_actual1,opcion_actual2);
 	//_renderTexto(opcion_actual);
 
@@ -179,6 +180,42 @@ void MenuSelectPlayer::_renderSeleccion(int opcion_actual1,int opcion_actual2){
 		opciones[opcion_actual2].personaje->setPosition(372*ratio_x,300*ratio_y);
 		opciones[opcion_actual2].personaje->renderizar(0,0);
 	}
+}
+
+void MenuSelectPlayer::_renderFaces(){
+	for(unsigned int i = 0; i < opciones.size(); i++){
+		_renderFace(opciones[i]);
+	}
+}
+
+void MenuSelectPlayer::_renderFace(Opcion_Personaje opcion){
+	//string ruta = opcion.personaje->getPathLogo();
+	string ruta = "data/players/liukang/sprites/face.png";
+	SDL_Rect posicion = opcion.posicion;
+
+	SDL_Texture* textura;
+	//Render text surface
+	SDL_Surface* loadedSurface = IMG_Load( ruta.c_str() );
+	if( loadedSurface == NULL ){
+		log( string("No se puede cargar imagen %s! SDL_image Error:") + ruta,LOG_ERROR);
+		return;
+	}
+	else{
+		//Color de Imagen
+		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
+
+		//Crear textura desde Surface por pixer
+		textura = SDL_CreateTextureFromSurface( ventana->getRenderer(), loadedSurface );
+		if( textura == NULL ){
+			log( string("No se puede crear textura desde: ") + ruta,LOG_ERROR);
+			return;
+		}
+
+		//Liberar la imagen cargada
+		SDL_FreeSurface( loadedSurface );
+	}
+	SDL_RenderCopy( ventana->getRenderer(), textura, NULL, &posicion);
+	SDL_DestroyTexture( textura );
 }
 
 std::vector<Opcion_Personaje> MenuSelectPlayer::getOpciones(){
