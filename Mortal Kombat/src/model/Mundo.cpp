@@ -102,7 +102,7 @@ void Mundo::render(){
 	ventana->clear();
 	
 	if(pelea->peleaFinalizada()){
-		printf("PATIDA FINALIZADA\n");
+		//_mostrar_ganador();
 		partida_finalizada = true;
 	}
 
@@ -117,7 +117,7 @@ void Mundo::render(){
 }
 
 void Mundo::_mostrar_ganador(string nombre){
-	string texto = "Ganador \n" + nombre;
+	string texto = "Ganador de la partida " + nombre;
 	ventana->mostrarTexto(texto);
 	usleep(3000000);
 }

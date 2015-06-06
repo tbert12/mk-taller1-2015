@@ -59,6 +59,7 @@ private:
 	void _partidaFinalizada();
 	void _resetRound();
 	void _mostarGanadorRound();
+	void _mostrarGanadorPelea();
 
 public:
 	Pelea(Ventana* la_ventana,Escenario* el_escenario,int un_tiempo, int modo_de_juego);

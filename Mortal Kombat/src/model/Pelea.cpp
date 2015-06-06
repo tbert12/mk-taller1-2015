@@ -53,7 +53,7 @@ void Pelea::_renderEstado(){
 }
 
 bool Pelea::peleaFinalizada(){
-	return partida_finalizada;
+	return partida_finalizada && ciclos_round_terminado <= 0;
 }
 
 bool Pelea::roundFinalizado(){
@@ -61,8 +61,8 @@ bool Pelea::roundFinalizado(){
 }
 
 void Pelea::render(){
-	if (partida_finalizada)
-		return;
+	//if (partida_finalizada)
+	//	return;
 
 	if(!comenzo_round){
 		start();
@@ -104,8 +104,11 @@ void Pelea::render(){
 
 	_renderEstado();
 
-	if(round_finalizado && ciclos_round_terminado > 0)
-		_mostarGanadorRound();
+	if(round_finalizado && ciclos_round_terminado > 0){
+		if (!partida_finalizada)
+			_mostarGanadorRound();
+		else _mostrarGanadorPelea();
+	}
 }
 
 void Pelea::_verificarColisiones(){
@@ -162,12 +165,14 @@ void Pelea::_roundFinalizado(){
 			//gana personaje uno
 			log("Round finalizado, GANADOR: " + m_personajeUno->getNombre(),LOG_DEBUG);
 			m_personajeUno->victoria();
+			m_personajeDos->morir();
 			GanadorRound[NumeroRound -1]  = 1;
 		}
 		else if (m_personajeUno->getVida() < m_personajeDos->getVida()){
 			//gana personaje dos
 			log("Round finalizado, GANADOR: " + m_personajeDos->getNombre(),LOG_DEBUG);
 			m_personajeDos->victoria();
+			m_personajeUno->morir();
 			GanadorRound[NumeroRound -1]  = 2;
 		}
 		else{
@@ -183,12 +188,14 @@ void Pelea::_roundFinalizado(){
 			round_finalizado = true;
 			log("Round finalizado, GANADOR: " + m_personajeDos->getNombre(),LOG_DEBUG);
 			m_personajeDos->victoria();
+			m_personajeUno->morir();
 			GanadorRound[NumeroRound -1]  = 2;
 		}
 		else if (m_personajeDos->getVida() <= 0){
 			round_finalizado = true;
 			log("Round finalizado, GANADOR: " + m_personajeUno->getNombre(),LOG_DEBUG);
 			m_personajeUno->victoria();
+			m_personajeDos->morir();
 			GanadorRound[NumeroRound -1]  = 1;
 		}
 	}
@@ -240,6 +247,16 @@ void Pelea::_mostarGanadorRound(){
 	}
 	string texto = "Ganador Round: " + to_string(NumeroRound) + " " + nombre;
 	ventana->mostrarTexto(texto);
+}
+
+void Pelea::_mostrarGanadorPelea(){
+	string nombre;
+	if (ganador != NULL){
+		nombre = ganador->getNombre();
+	}
+	string texto = "Ganador Combate: " + nombre;
+	ventana->mostrarTexto(texto);
+
 }
 
 void Pelea::_resetRound(){

@@ -199,7 +199,7 @@ void Ventana::Refresh(){
 }
 
 bool Ventana::mostrarTexto(string texto){
-	font = TTF_OpenFont("data/font/fuente.ttf", 28);
+	font = TTF_OpenFont("data/font/mortalkombat4.ttf", 28);
 	int ancho,alto;
 	bool success = false;
 	if( font == NULL ){
@@ -216,7 +216,7 @@ bool Ventana::mostrarTexto(string texto){
 	SDL_Color textColor = { 255, 247, 0 };
 
 	//Render text surface
-	SDL_Surface* textSurface = TTF_RenderText_Solid( font, texto.c_str(), textColor );
+	SDL_Surface* textSurface = TTF_RenderText_Blended_Wrapped( font, texto.c_str(), textColor, ancho );
 	if( textSurface == NULL ){
 		log("No se puede crear la textura del tiempo",LOG_ERROR);
 		return false;

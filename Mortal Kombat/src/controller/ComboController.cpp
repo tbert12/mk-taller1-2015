@@ -175,7 +175,11 @@ void ComboController::sePresiono(int key){
 }
 
 ComboController::~ComboController() {
-	// TODO Auto-generated destructor stub
+	maxTime = 0;
+	maxErrors = 0;
+	startingTime = 0;
+	currentTime = 0;
+	_keys = "";
 }
 
 

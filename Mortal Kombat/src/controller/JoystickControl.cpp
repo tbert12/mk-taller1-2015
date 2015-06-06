@@ -23,18 +23,16 @@ bool JoystickControl::pause(){
 
 void JoystickControl::_verificarMapaComandos(){
 	bool mapa_correcto = false;
+	/*
 	if (comandos != NULL && joystick != NULL){
 		mapa_correcto = true;
 		for (std::map<string,int>::const_iterator it=comandos->begin(); it!=comandos->end(); ++it){
 			//si supera la cantidad de botones del joystick
 			if(it->second >= SDL_JoystickNumButtons(joystick))
 				mapa_correcto = false;
-
-			//if (it->first != PINA_BAJA || it->first != PATADA_BAJA || it->first != PINA_ALTA || it->first != PATADA_ALTA || it->first != CUBRIRSE ||it->first != LANZAR_ARMA)
-			//	mapa_correcto = false;
 		}
 	}
-
+	*/
 	//si no es correcto hago uno propio
 	if(!mapa_correcto){
 		log("Los botones del joystick especificados en el Json no son correctos, se crean unos por defecto",LOG_WARNING);
