@@ -8,6 +8,7 @@
 #ifndef SRC_MODEL_PELEA_H_
 #define SRC_MODEL_PELEA_H_
 
+#include "JugadorCPU.h"
 #include "Tiempo.h"
 #include "Escenario.h"
 #include "Capa.h"
@@ -48,6 +49,8 @@ private:
 	Escenario* escenario;
 	TiempoPartida* tiempo_pantalla;
 	CapaPrincipal* capaPrincipal;
+
+	JugadorCPU* cpu = NULL;
 
 	void _crearEstado();
 	void _renderEstado();

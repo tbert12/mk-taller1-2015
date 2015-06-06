@@ -53,10 +53,6 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 	if (ModoDeJuego == MODO_JUGADOR_VS_JUGADOR){
 			p_uno = personaje_1;
 			p_dos = personaje_2;
-	}else if (ModoDeJuego == MODO_JUGADOR_VS_PC){
-			cpu = new JugadorCPU(personaje_2, personaje_1);
-			p_uno = personaje_1;
-			p_dos = NULL;
 	} else {
 			p_uno = personaje_1;
 			p_dos = NULL;
@@ -105,8 +101,6 @@ void Controller::_JoystickAdded(){
 }
 
 void Controller::Pressed(){
-
-	cpu->realizarMovimiento();
 
 	//evento de salida
 	if(evento.type == SDL_QUIT){

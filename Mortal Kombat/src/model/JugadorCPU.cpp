@@ -51,42 +51,183 @@ bool JugadorCPU::noHayQueHacerNada() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 10;
+			probabilidad = 2;
 			break;
 		case 1:
 			probabilidad = 5;
 			break;
 		case 2:
-			probabilidad = 2;
+			probabilidad = 10;
 			break;
 		default:
-			probabilidad = 0;
+			probabilidad = 100;
 	}
 	return reaccion(probabilidad);
 }
 
 bool JugadorCPU::hayQuePegarPina() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 50;
+			break;
+		case 1:
+			probabilidad = 70;
+			break;
+		case 2:
+			probabilidad = 90;
+			break;
+		default:
+			probabilidad = 0;
+	}
 
+	if (reaccion(probabilidad)) {
+		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
+		if (dist <= DISTANCIA_PINA) {
+			if (m_personaje_1->estaCubriendose()) {
+				if (reaccion(probabilidad))
+					return true;
+				return false;
+			} else
+				return true;
+		}
+	}
+	return false;
 }
 
 bool JugadorCPU::hayQuePegarPatada() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 40;
+			break;
+		case 1:
+			probabilidad = 60;
+			break;
+		case 2:
+			probabilidad = 80;
+			break;
+		default:
+			probabilidad = 0;
+	}
 
+	if (reaccion(probabilidad)) {
+		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
+		if (dist <= DISTANCIA_PATADA) {
+			if (m_personaje_1->estaCubriendose()) {
+				if (reaccion(probabilidad))
+					return true;
+				return false;
+			} else
+				return true;
+		}
+	}
+	return false;
 }
 
 bool JugadorCPU::hayQuePegarArriba() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 70;
+			break;
+		case 1:
+			probabilidad = 80;
+			break;
+		case 2:
+			probabilidad = 90;
+			break;
+		default:
+			probabilidad = 0;
+	}
 
+	if (reaccion(probabilidad)) {
+		if (m_personaje_1->estaCubriendose() && !m_personaje_1->estaAgachado()) {
+			if (reaccion(probabilidad))
+				return true;
+			return false;
+		} else
+			return true;
+	}
+	return false;
 }
 
 bool JugadorCPU::hayQuePegarAbajo() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 70;
+			break;
+		case 1:
+			probabilidad = 80;
+			break;
+		case 2:
+			probabilidad = 90;
+			break;
+		default:
+			probabilidad = 0;
+	}
 
+	if (reaccion(probabilidad)) {
+		if (m_personaje_1->estaCubriendose() && m_personaje_1->estaAgachado()) {
+			if (reaccion(probabilidad))
+				return true;
+			return false;
+		} else
+			return true;
+	}
+	return false;
 }
 
 bool JugadorCPU::hayQueLanzarPoder() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 2;
+			break;
+		case 1:
+			probabilidad = 5;
+			break;
+		case 2:
+			probabilidad = 10;
+			break;
+		default:
+			probabilidad = 0;
+	}
 
+	if (reaccion(probabilidad)) {
+		if (m_personaje_1->estaCubriendose()) {
+			if (reaccion(probabilidad))
+				return true;
+			return false;
+		} else
+			return true;
+	}
+	return false;
 }
 
 bool JugadorCPU::hayQueHacerToma() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 2;
+			break;
+		case 1:
+			probabilidad = 5;
+			break;
+		case 2:
+			probabilidad = 8;
+			break;
+		default:
+			probabilidad = 0;
+	}
 
+	if (reaccion(probabilidad)) {
+		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
+		if (dist <= DISTANCIA_TOMA)
+			return true;
+	}
+	return false;
 }
 
 bool JugadorCPU::hayQueAtacar() {
@@ -119,16 +260,41 @@ void JugadorCPU::realizarMovimiento() {
 	// Modifico actitud de acuerdo al desarrollo del combate.
 	evaluarAgresividad();
 
+	// Hacer fatality siempre que se pueda.
+
+
 	// Posibilidad de no hacer nada.
 	if (noHayQueHacerNada())
 		return;
 
-	// Posibilidades de desplazamiento.
+	// Posibilidades de defensa.
+	if (hayQueCubrirse())
+		m_personaje_cpu->cubrirse();
 
+	// Posibilidades de desplazamiento.
+	if (hayQueSaltar()) {
+		m_personaje_cpu->Saltar();
+	} else if (hayQueAvanzar()) {
+		if (m_personaje_cpu->getFlipState())
+			m_personaje_cpu->CaminarIzquierda();
+		else
+			m_personaje_cpu->CaminarDerecha();
+	} else if (hayQueRetroceder()) {
+		if (m_personaje_cpu->getFlipState())
+			m_personaje_cpu->CaminarDerecha();
+		else
+			m_personaje_cpu->CaminarIzquierda();
+	} else if (hayQueAgacharse()) {
+		m_personaje_cpu->Agachar();
+	}
 
 	// Posibilidades de ataque.
 	if (hayQueAtacar()) {
-		if (hayQuePegarArriba()) {
+		if (hayQueLanzarPoder()) {
+			m_personaje_cpu->poder1();
+		} else if (hayQueHacerToma()) {
+			m_personaje_cpu->toma1();
+		} else if (hayQuePegarArriba()) {
 			if (hayQuePegarPina())
 				m_personaje_cpu->pinaAlta();
 			else if (hayQuePegarPatada())
@@ -138,10 +304,6 @@ void JugadorCPU::realizarMovimiento() {
 				m_personaje_cpu->pinaBaja();
 			else if (hayQuePegarPatada())
 				m_personaje_cpu->patadaBaja();
-		} else if (hayQueHacerToma()) {
-			m_personaje_cpu->toma1();
-		} else if (hayQueLanzarPoder()) {
-			m_personaje_cpu->poder1();
 		}
 	}
 

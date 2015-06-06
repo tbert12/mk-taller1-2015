@@ -38,6 +38,9 @@ void Pelea::_crearEstado(){
 void Pelea::start(){
 	if (tiempo != NULL)
 		tiempo->start();
+
+	if (ModoDeJuego = MODO_JUGADOR_VS_PC)
+		cpu = new JugadorCPU(m_personajeDos, m_personajeUno);
 }
 
 void Pelea::_renderEstado(){
@@ -85,6 +88,10 @@ void Pelea::render(){
 			}
 		}
 	}
+
+	// Se mueve el jugador CPU.
+	if (cpu != NULL && ModoDeJuego == MODO_JUGADOR_VS_PC)
+		cpu->realizarMovimiento();
 
 	//actualizo los estados
 	escenario->Update();

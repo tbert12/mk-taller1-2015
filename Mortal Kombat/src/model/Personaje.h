@@ -178,6 +178,7 @@ public:
 	void Inicial();
 	bool estaAgachado();
 	bool estaSaltando();
+	bool estaCubriendose();
 
 	bool recibirGolpe(int CodigoGolpe, int Danio = 0);
 	void QuitarVida(int valor);

@@ -254,6 +254,15 @@ bool Personaje::enMovimiento(){
 bool Personaje::estaSaltando(){
 	return _estaSaltando <= 0;
 }
+
+bool Personaje::estaCubriendose() {
+	return _estaCubriendose;
+}
+
+bool Personaje::estaAgachado() {
+	return _estaAgachado;
+}
+
 float Personaje::getAncho(){
 	return spriteActual->getAncho();
 }

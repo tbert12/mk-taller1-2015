@@ -10,6 +10,10 @@
 
 #include "Personaje.h"
 
+const int DISTANCIA_PINA = 75;
+const int DISTANCIA_PATADA = 100;
+const int DISTANCIA_TOMA = 50;
+
 class JugadorCPU {
 public:
 	JugadorCPU(Personaje* personaje_cpu, Personaje* personaje_1);
