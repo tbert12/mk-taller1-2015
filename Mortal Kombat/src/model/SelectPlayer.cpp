@@ -71,13 +71,13 @@ void SelectPlayer::derecha(int jugador){
 void SelectPlayer::arriba(int jugador){
 	if (jugador == PLAYER_ONE){
 		if (player1Select) return;
-		Player1-= 3;
+		Player1-= 4;
 		if (Player1 < 0)
 			Player1 = MAX_PLAYER + Player1;
 	}
 	else if (jugador == PLAYER_TWO){
 		if (player2Select) return;
-		Player2-=3;
+		Player2-=4;
 		if (Player2 < 0)
 			Player2 = MAX_PLAYER + Player2;
 	}
@@ -85,13 +85,13 @@ void SelectPlayer::arriba(int jugador){
 void SelectPlayer::abajo(int jugador){
 	if (jugador == PLAYER_ONE){
 		if (player1Select) return;
-		Player1+= 3;
+		Player1+= 4;
 		if (Player1 > MAX_PLAYER)
 			Player1 = Player1 - MAX_PLAYER;
 	}
 	else if (jugador == PLAYER_TWO){
 		if (player2Select) return;
-		Player2 += 3;
+		Player2 += 4;
 		if (Player2 > MAX_PLAYER)
 			Player2 = Player2 - MAX_PLAYER;
 	}

@@ -127,8 +127,7 @@ int main( int argc, char* args[] )
 		}
 
 		if (selectPlayer->playersSelected()){
-			//player 1
-			//player 2
+			//mundo->setPersonajesDeJuego(selectPlayer->getPersonajeUno(),selectPlayer->getPersonajeDos());
 			delete selectPlayer;
 			delete controlSelect;
 		}

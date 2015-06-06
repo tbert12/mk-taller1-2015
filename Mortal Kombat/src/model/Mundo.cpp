@@ -14,6 +14,8 @@ Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map
 	mapa_comandos1 = mapaComan1;
 	mapa_comandos2 = mapaComan2;
 	escenario_actual = NULL;
+	Personaje_uno = NULL;
+	Personaje_dos = NULL;
 	pelea = NULL;
 	tiempo_round = tiempo;
 	empezar = false;
@@ -24,8 +26,14 @@ Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map
 }
 
 void Mundo::start(){
-	Personaje* p_uno = personajes[0];
-	Personaje* p_dos = personajes[1];
+
+	Personaje* p_uno = Personaje_uno;
+	Personaje* p_dos = Personaje_dos;
+
+	if (p_uno == NULL)
+		p_uno = personajes[0];
+	if (p_dos == NULL)
+		p_dos = personajes[1];
 
 	if (escenarios[0]){
 		escenario_actual = escenarios[0];
@@ -41,6 +49,11 @@ void Mundo::start(){
 
 void Mundo::addPersonaje(Personaje* un_personaje){
 	personajes.push_back(un_personaje);
+}
+
+void Mundo::setPersonajesDeJuego(Personaje* p_uno, Personaje* p_dos){
+	Personaje_uno = p_uno;
+	Personaje_uno = p_dos;
 }
 
 void Mundo::addPersonajes(vector<Personaje*> nuevos_personajes) {
