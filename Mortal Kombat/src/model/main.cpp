@@ -24,14 +24,12 @@
 
 //Variables
 Mundo* mundo;
-//int ModoDeJuego = 0; // 0 P1 vs P2
-
+ParserJSON* parser;
 
 string ruta_archivo_configuracion = "data/config/Parallax.json";
 
 Mundo* cargarDatos(){
 	Mundo* unMundo;
-	ParserJSON* parser;
 	try {
 			parser = new ParserJSON( ruta_archivo_configuracion );
 			unMundo = parser->cargarMundo();
@@ -39,7 +37,6 @@ Mundo* cargarDatos(){
 			delete parser;
 		} catch ( std::exception &e ) {
 			log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
-			delete parser;
 			if (unMundo)
 				delete unMundo;
 			return NULL;
@@ -99,6 +96,7 @@ int main( int argc, char* args[] )
 			delete menu;
 			delete controlModo;
 			delete mundo;
+			delete parser;
 			return 0;
 		}
 
@@ -123,16 +121,25 @@ int main( int argc, char* args[] )
 			delete menu;
 			delete controlModo;
 			delete mundo;
+			delete parser;
 			return 0;
 		}
+		Personaje* personaje_uno;
+		Personaje* personaje_dos;
 
 		if (selectPlayer->playersSelected()){
-			//mundo->setPersonajesDeJuego(selectPlayer->getPersonajeUno(),selectPlayer->getPersonajeDos());
+			personaje_uno = selectPlayer->getPersonajeUno();
+			personaje_dos = selectPlayer->getPersonajeDos();
 			delete selectPlayer;
 			delete controlSelect;
 		}
 
+		if (personaje_uno == personaje_dos && personaje_uno != NULL ){
+			personaje_dos = parser->cambiarColorPersonaje(personaje_dos);
+		}
+
 		//seteo modo de juego
+		mundo->setPersonajesDeJuego(personaje_uno,personaje_dos);
 		mundo->setModoDeJuego(modoDeJuego);
 
 		//While Juego
@@ -154,7 +161,7 @@ int main( int argc, char* args[] )
 			mundo->reset();
 		}
 	}
-
+	delete parser;
 	delete mundo;
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 

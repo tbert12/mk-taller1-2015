@@ -40,7 +40,7 @@ public:
 	 vector<Escenario*> cargarEscenarios(Json::Value root, Ventana* ventana, float ventana_ancho);
 	 vector<float> cargarColorAlternativo(Json::Value personaje);
 	 vector<Combo*> cargarCombos(Json::Value root);
-	 Personaje* cambiarColorPersonaje(string nombre_personaje);
+	 Personaje* cambiarColorPersonaje(Personaje* personaje);
 
 };
 

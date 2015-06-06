@@ -170,14 +170,14 @@ void MenuSelectPlayer::_renderSeleccion(int opcion_actual1,int opcion_actual2){
 	SDL_RenderCopy( ventana->getRenderer(), textura_1, NULL, &opciones[opcion_actual1].posicion);
 
 	if (opciones[opcion_actual1].personaje != NULL){
-		opciones[0].personaje->setFlip(false);
-		opciones[0].personaje->setPosition(20*ratio_x,300*ratio_y);
-		opciones[0].personaje->renderizar(0,0);
+		opciones[opcion_actual1].personaje->setFlip(false);
+		opciones[opcion_actual1].personaje->setPosition(20*ratio_x,300*ratio_y);
+		opciones[opcion_actual1].personaje->renderizar(0,0);
 	}
 	if (opciones[opcion_actual2].personaje != NULL){
-		opciones[1].personaje->setFlip(true);
-		opciones[1].personaje->setPosition(372*ratio_x,300*ratio_y);
-		opciones[1].personaje->renderizar(0,0);
+		opciones[opcion_actual2].personaje->setFlip(true);
+		opciones[opcion_actual2].personaje->setPosition(372*ratio_x,300*ratio_y);
+		opciones[opcion_actual2].personaje->renderizar(0,0);
 	}
 }
 

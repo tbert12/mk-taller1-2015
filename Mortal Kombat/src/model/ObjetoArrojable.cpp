@@ -98,7 +98,8 @@ void ObjetoArrojable::_terminar(){
 }
 
 void ObjetoArrojable::destruir(){
-	m_destruir = true;
+	if (!m_destruir)
+		m_destruir = true;
 	_avanzarSprite();
 	_avanzarSprite();
 }

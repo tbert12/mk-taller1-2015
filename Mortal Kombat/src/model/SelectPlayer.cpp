@@ -10,11 +10,12 @@
 SelectPlayer::SelectPlayer(Ventana* una_ventana,int modo_de_juego,std::vector<Personaje*> los_personajes) {
 	ModoDeJuego = modo_de_juego;
 	personajes = los_personajes;
+	_verificarPersonajes();
 	Player1 = rand() % MAX_PLAYER + 1;
 	Player2 = rand() % MAX_PLAYER + 1;
 	player1Select = false;
 	player2Select = false;
-	menuPlayers = new MenuSelectPlayer(una_ventana,personajes,ModoDeJuego);
+	menuPlayers = new MenuSelectPlayer(una_ventana,personajes_12,ModoDeJuego);
 	opciones = menuPlayers->getOpciones();
 }
 
@@ -30,10 +31,12 @@ bool SelectPlayer::changeController(){
 }
 
 Personaje* SelectPlayer::getPersonajeUno(){
-	return personajes[Player1];
+	personajes_12[Player1]->reset();
+	return personajes_12[Player1];
 }
 Personaje* SelectPlayer::getPersonajeDos(){
-	return personajes[Player2];
+	personajes_12[Player2]->reset();
+	return personajes_12[Player2];
 }
 
 void SelectPlayer::render(){
@@ -122,6 +125,18 @@ bool SelectPlayer::mousePosition(int x, int y, int jugador){
 	return false;
 }
 
+void SelectPlayer::_verificarPersonajes(){
+	unsigned int cant_real = personajes.size();
+	unsigned int contador = 0;
+	for(unsigned int i = 0; i <= MAX_PLAYER; i++){
+		personajes_12.push_back(personajes[contador]);
+		contador++;
+		if (contador >= cant_real)
+			contador = 0;
+	}
+}
+
 SelectPlayer::~SelectPlayer() {
+	personajes_12.clear();
 }
 

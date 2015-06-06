@@ -32,12 +32,14 @@ public:
 private:
 	MenuSelectPlayer* menuPlayers;
 	std::vector<Personaje*> personajes;
+	std::vector<Personaje*> personajes_12;
 	std::vector<Opcion_Personaje> opciones;
 	int ModoDeJuego;
 	int Player1;
 	int Player2;
 	bool player1Select;
 	bool player2Select;
+	void _verificarPersonajes();
 };
 
 #endif /* SRC_MODEL_SELECTPLAYER_H_ */

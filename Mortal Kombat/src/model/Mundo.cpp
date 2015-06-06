@@ -53,7 +53,7 @@ void Mundo::addPersonaje(Personaje* un_personaje){
 
 void Mundo::setPersonajesDeJuego(Personaje* p_uno, Personaje* p_dos){
 	Personaje_uno = p_uno;
-	Personaje_uno = p_dos;
+	Personaje_dos = p_dos;
 }
 
 void Mundo::addPersonajes(vector<Personaje*> nuevos_personajes) {
