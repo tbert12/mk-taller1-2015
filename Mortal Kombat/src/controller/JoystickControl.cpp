@@ -7,9 +7,9 @@
 
 #include "JoystickControl.h"
 
-JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos,int tiempoMax, int tolerancia) {
+JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos,ComboController* comboCon) {
 	personaje = un_personaje;
-	comboController = new ComboController(tiempoMax,tolerancia,personaje->getCombos());
+	comboController = comboCon;
 	evento = e;
 	pausa = false;
 	comandos = mapa_comandos;
@@ -77,10 +77,14 @@ void JoystickControl::JoyPressed(){
 			//Left of dead zone
 			if( evento->jaxis.value < -JOYSTICK_DEAD_ZONE ){
 				personaje->CaminarIzquierda();
+				if (comboController)
+					comboController->sePresiono(IZQUIERDA);
 			}
 			//Right of dead zone
 			else if( evento->jaxis.value > JOYSTICK_DEAD_ZONE ){
 				personaje->CaminarDerecha();
+				if (comboController)
+					comboController->sePresiono(DERECHA);
 			}
 			else{
 				//NO SE
@@ -91,10 +95,14 @@ void JoystickControl::JoyPressed(){
 			//arriba
 			if( evento->jaxis.value < -JOYSTICK_DEAD_ZONE ){
 				personaje->Saltar();
+				if (comboController)
+					comboController->sePresiono(ARRIBA);
 			}
 			//abajo
 			else if( evento->jaxis.value > JOYSTICK_DEAD_ZONE){
 				personaje->Agachar();
+				if (comboController)
+					comboController->sePresiono(ABAJO);
 			}
 			else{
 				//NADA
@@ -104,22 +112,33 @@ void JoystickControl::JoyPressed(){
 	//Boton
 	else if (evento->type == SDL_JOYBUTTONDOWN){
 		int boton = evento->jbutton.button;
-		if (boton == comandos->operator[](PINA_BAJA) )
+		if (boton == comandos->operator[](PINA_BAJA) ){
 			personaje->pinaBaja();
+			if (comboController)
+				comboController->sePresiono(PINABAJA);
+		}
 		else if( boton == comandos->operator [](PINA_ALTA)){
 			personaje->pinaAlta();
+			if (comboController)
+				comboController->sePresiono(PINAALTA);
 			if (SDL_JoystickGetAxis(joystick,1) > JOYSTICK_DEAD_ZONE )
 				if (joystickHaptic != NULL)
 					SDL_HapticRumblePlay( joystickHaptic, 0.75, 700 );
 		}
 		else if ( boton == comandos->operator [](PATADA_BAJA)){
 			personaje->patadaBaja();
+			if (comboController)
+				comboController->sePresiono(PATADABAJA);
 		}
 		else if ( boton == comandos->operator [](PATADA_ALTA)){
 			personaje->patadaAlta();
+			if (comboController)
+				comboController->sePresiono(PATADAALTA);
 		}
 		else if ( boton == comandos->operator [](LANZAR_ARMA)){
 			personaje->lanzarObjeto();
+			if (comboController)
+				comboController->sePresiono(LANZAR);
 		}
 		else if ( boton == JOY_START){
 			pausa = !pausa;
@@ -143,6 +162,8 @@ void JoystickControl::JoyState(){
 	switch ( SDL_JoystickGetButton(joystick,comandos->operator [](CUBRIRSE)) ){
 		case BUTTON_PRESSED:
 			personaje->cubrirse();
+			if (comboController)
+				comboController->sePresiono(CUBRIR);
 			break;
 		case BUTTON_UNPRESSED:
 			personaje->dejarDeCubrirse();

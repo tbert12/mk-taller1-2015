@@ -14,7 +14,6 @@ Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_
 	m_personajeUno = capaPrincipal->getPersonajSinFlip();
 	m_personajeDos = capaPrincipal->getPersonajConFlip();
 	ganador = NULL;
-	//capas = escenario->getCapas();
 	ventana = la_ventana;
 	tiempoRound = un_tiempo;
 	NumeroRound = 1;
@@ -52,6 +51,10 @@ void Pelea::_renderEstado(){
 
 bool Pelea::peleaFinalizada(){
 	return partida_finalizada;
+}
+
+bool Pelea::roundFinalizado(){
+	return round_finalizado;
 }
 
 void Pelea::render(){
@@ -236,6 +239,7 @@ void Pelea::_resetRound(){
 	//reseteo todos las capas y personajes
 	escenario->reset();
 	tiempo->reset();
+
 	round_finalizado = false;
 	comenzo_round = false;
 }

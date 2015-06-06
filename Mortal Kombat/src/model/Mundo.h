@@ -13,10 +13,10 @@
 #include "Pelea.h"
 #include "Escenario.h"
 #include "../view/Ventana.h"
-#include "../view/BotonesPantalla.h"
 #include "../controller/Controller.h"
 #include "../controller/ComboController.h"
 #include "../controller/Combo.h"
+#include "../view/BotonesPantalla.h"
 #include <vector>
 #include <algorithm>
 #include <unistd.h>
@@ -35,8 +35,8 @@ private:
 	Ventana* ventana;
 	bool empezar;
 	int tiempo_round;
-	BotonesPantalla* botones_pantalla;
 	Controller* control;
+	BotonesPantalla* botones_pantalla;
 	void start();
 	void _mostrar_ganador(string nombre);
 

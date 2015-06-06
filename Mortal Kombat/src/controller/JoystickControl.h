@@ -47,7 +47,7 @@
 
 class JoystickControl {
 public:
-	JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos,int tiempoMax, int tolerancia);
+	JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos,ComboController* comboCon);
 	void JoyPressed();
 	void JoyState();
 	bool pause();

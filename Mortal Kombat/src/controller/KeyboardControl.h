@@ -30,7 +30,7 @@ private:
 	int sleep;
 
 public:
-	KeyboardControl(SDL_Event* e, Personaje* un_personaje,bool como_jugador,int tiempoMax, int tolerancia);
+	KeyboardControl(SDL_Event* e, Personaje* un_personaje,bool como_jugador,ComboController* comboCon);
 	virtual ~KeyboardControl();
 	void KeyPressed();
 	void setPelea(Pelea* una_pelea);

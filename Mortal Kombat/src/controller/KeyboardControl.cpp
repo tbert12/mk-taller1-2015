@@ -12,9 +12,9 @@
 
 using namespace std;
 
-KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador,int tiempoMax,int tolerancia) {
+KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador,ComboController* comboCon) {
 	personaje = un_personaje;
-	comboController = new ComboController(tiempoMax,tolerancia,personaje->getCombos());
+	comboController = comboCon;
 	evento = e;
 	como_jugador = comoJugador;
 	pausa = false;
@@ -25,27 +25,32 @@ KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJ
 bool KeyboardControl::pause(){
 	return pausa;
 }
+
 void KeyboardControl::KeyPressed(){
 	switch( evento->key.keysym.sym ){
 			case  SDLK_UP:
 				if(!como_jugador) return;
 				personaje->Saltar();
-				//comboController->sePresiono(Movimientos[SALTAR]);
+				if (comboController)
+					comboController->sePresiono(ARRIBA);
 				break;
 			case SDLK_DOWN:
 				if(!como_jugador) return;
 				personaje->Agachar();
-				//comboController->sePresiono(Movimientos[AGACHAR]);
+				if (comboController)
+					comboController->sePresiono(ABAJO);
 				break;
 			case SDLK_LEFT:
 				if(!como_jugador) return;
 				personaje->CaminarIzquierda();
-				//comboController->sePresiono(Movimientos[IZQUIERDA]);
+				if (comboController)
+					comboController->sePresiono(IZQUIERDA);
 				break;
 			case SDLK_RIGHT:
 				if(!como_jugador) return;
 				personaje->CaminarDerecha();
-				//comboController->sePresiono(Movimientos[DERECHA]);
+				if (comboController)
+					comboController->sePresiono(DERECHA);
 				break;
 			case SDLK_m:
 				throw std::runtime_error( "Hay que recargar el archivo JSON." );
@@ -57,28 +62,44 @@ void KeyboardControl::KeyPressed(){
 			case SDLK_a:
 				if(!como_jugador) return;
 				personaje->pinaBaja();
-				//comboController->sePresiono(Movimientos[PINABAJA]);
+				if (comboController)
+					comboController->sePresiono(PINABAJA);
 				break;
 			case SDLK_s:
 				if(!como_jugador) return;
 				personaje->patadaBaja();
-				//comboController->sePresiono(Movimientos[PATADABAJA]);
+				if (comboController)
+					comboController->sePresiono(PATADABAJA);
 				break;
 			case SDLK_q:
 				if(!como_jugador) return;
 				personaje->pinaAlta();
+				if (comboController)
+					comboController->sePresiono(PINAALTA);
 				break;
 			case SDLK_w:
 				if(!como_jugador) return;
 				personaje->patadaAlta();
+				if (comboController)
+					comboController->sePresiono(PATADAALTA);
 				break;
 			case SDLK_d:
 				if(!como_jugador) return;
 				personaje->cubrirse();
+				if (comboController)
+					comboController->sePresiono(CUBRIR);
+				break;
+			case SDLK_c:
+				if(!como_jugador) return;
+				personaje->poder2();
 				break;
 			case SDLK_z:
 				if(!como_jugador) return;
-				personaje->lanzarObjeto();
+				personaje->poder1();
+				break;
+			case SDLK_x:
+				if(!como_jugador) return;
+				personaje->toma1();
 				break;
 			case SDLK_p:
 				pausa = !pausa;
@@ -91,6 +112,9 @@ void KeyboardControl::KeyPressed(){
 				if (sleep < 0) sleep = 0;
 				break;
 		}
+	if(comboController->checkCombos() > 0){
+		//combo a jugador
+	}
 }
 
 int KeyboardControl::getSleep(){

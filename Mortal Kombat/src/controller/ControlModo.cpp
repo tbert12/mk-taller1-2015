@@ -11,6 +11,13 @@ ControlModo::ControlModo(MenuSeleccion* un_menu) {
 	menu = un_menu;
 	keystate = SDL_GetKeyboardState(NULL);
 	quit = false;
+	if(SDL_NumJoysticks() > 0)
+		joystick = SDL_JoystickOpen(0);
+		menu->setCantidadComandos(SDL_NumJoysticks()+ 1);
+	if( joystick == NULL )
+		log(string("No se puede leer el joystick! SDL Error:" + string(SDL_GetError())),LOG_ERROR);
+	else
+		log("Joystick cargado correctamente",LOG_DEBUG);
 }
 
 bool ControlModo::PollEvent(){
@@ -72,7 +79,7 @@ void ControlModo::Pressed(){
 		}
 	}
 	//Joystick
-	else if(evento.type == SDL_JOYAXISMOTION){
+	else if(evento.type == SDL_JOYAXISMOTION and evento.jaxis.which == 0){
 		//X axis motion
 		if( evento.jaxis.axis == 0 ){
 			//Left of dead zone
@@ -88,7 +95,7 @@ void ControlModo::Pressed(){
 			}
 		}
 		//Y axis motion
-		else if( evento.jaxis.axis == 1 ){
+		else if( evento.jaxis.axis == 1  and evento.jaxis.which == 0){
 			//arriba
 			if( evento.jaxis.value < -JOYSTICK_DEAD_ZONE ){
 				menu->arriba();
@@ -102,8 +109,26 @@ void ControlModo::Pressed(){
 			}
 		}
 	}
+	//flechas
+	else if (evento.type == SDL_JOYHATMOTION and evento.jhat.which == 0){
+
+		switch (evento.jhat.value){
+			case SDL_HAT_UP :
+				menu->arriba();
+				break;
+			case SDL_HAT_DOWN:
+				menu->abajo();
+				break;
+			case SDL_HAT_LEFT:
+				menu->izquierda();
+				break;
+			case SDL_HAT_RIGHT:
+				menu->derecha();
+				break;
+		}
+	}
 	//Boton
-	else if (evento.type == SDL_JOYBUTTONDOWN){
+	else if (evento.type == SDL_JOYBUTTONDOWN and evento.jaxis.which == 0){
 		//con cualquier boton se selecciona
 		menu->select();
 	}
@@ -115,6 +140,10 @@ bool ControlModo::Quit(){
 
 ControlModo::~ControlModo() {
 	keystate = NULL;
+	if (joystick != NULL && SDL_JoystickGetAttached(joystick)){
+		SDL_JoystickClose( joystick );
+		joystick = NULL;
+	}
 	menu = NULL;
 }
 

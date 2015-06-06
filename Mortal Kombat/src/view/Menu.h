@@ -31,28 +31,33 @@ class Menu {
 public:
 	Menu(Ventana* una_ventana);
 	void render(int opcion_actual);
-	void _loadImage();
 	std::vector<Opcion> getOpciones();
+	void mostrarError(string error);
 	virtual ~Menu();
 private:
 	float ratio_x;
 	float ratio_y;
+	int hayError;
 	std::vector<Opcion> opciones;
 	Ventana* ventana;
 	SDL_Rect* imagen;
 	SDL_Texture* textura;
 	string textoSeleccion;
+	string error;
 	SDL_Texture* texturaTextoSeleccion;
 	TTF_Font* font;
 	SDL_Color Color;
 	SDL_Color ColorRed;
 	SDL_Rect Descripcion;
 	SDL_Rect Select;
+	SDL_Rect rectError;
 
+	void _loadImage();
 	void _crearOpciones();
 	void _renderImagen();
 	void _renderTexto(int opcion_actual);
 	void _renderText(string text, SDL_Color color, SDL_Rect rect);
+	void _renderError();
 };
 
 #endif /* SRC_VIEW_MENU_H_ */

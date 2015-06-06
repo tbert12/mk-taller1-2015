@@ -24,11 +24,11 @@ void Ventana::vibrar(){
 }
 
 int Ventana::getAltoPx(){
-	return m_ancho_px;
+	return m_alto_px;
 }
 
 int Ventana::getAnchoPx(){
-	return m_alto_px;
+	return m_ancho_px;
 }
 
 float Ventana::obtenerRatioX(){

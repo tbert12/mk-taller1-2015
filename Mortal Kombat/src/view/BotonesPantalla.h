@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+enum Movimientos { ARRIBA, ABAJO, DERECHA, IZQUIERDA, PINAALTA, PINABAJA, PATADAALTA, PATADABAJA,CUBRIR};
+
 class BotonesPantalla {
 private:
 	Ventana* ventana;
@@ -23,7 +25,7 @@ private:
 	SDL_Color Color;
 	SDL_Color ColorRED;
 	bool _loadFromRenderedText( std::string textureText,bool red);
-
+	string _limpiarPorAccion(string botones);
 public:
 	BotonesPantalla(Ventana* una_ventana);
 	void render(std::string botones,bool red);

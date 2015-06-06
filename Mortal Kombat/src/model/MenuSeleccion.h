@@ -13,8 +13,6 @@
 #include "../view/Menu.h"
 #include <SDL2/SDL.h>
 
-#define CANT_TOTAL_MODOS 3
-
 class MenuSeleccion {
 private:
 	Ventana* ventana;
@@ -22,6 +20,7 @@ private:
 	std::vector<Opcion> opciones;
 	std::vector<Personaje*> personajes;
 	int ModoDeJuego;
+	int cantComandos;
 	bool selected;
 	void _crearOpciones();
 public:
@@ -35,6 +34,7 @@ public:
 	void render();
 	bool modeSelected();
 	int modoDeJuego();
+	void setCantidadComandos(int cantidad);
 	virtual ~MenuSeleccion();
 };
 

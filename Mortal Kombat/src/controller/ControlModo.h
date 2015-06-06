@@ -19,6 +19,7 @@ private:
 	const Uint8* keystate;
 	SDL_Event evento;
 	bool quit;
+	SDL_Joystick* joystick;
 
 public:
 	ControlModo(MenuSeleccion* un_menu);

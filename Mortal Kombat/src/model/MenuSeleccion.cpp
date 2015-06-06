@@ -13,11 +13,12 @@ MenuSeleccion::MenuSeleccion(Ventana* la_ventana,std::vector<Personaje*> los_per
 	selected = false;
 	menu = new Menu(ventana);
 	opciones = menu->getOpciones();
-	//SI hay un joystick o mas JUGADOR VS JUGADOR.
-	if (SDL_NumJoysticks() >= 1)
-		ModoDeJuego = MODO_JUGADOR_VS_JUGADOR;
-	else
-		ModoDeJuego = MODO_JUGADOR_VS_PC;
+	ModoDeJuego = MODO_JUGADOR_VS_PC;
+	cantComandos = 1;
+}
+
+void MenuSeleccion::setCantidadComandos(int cantidad){
+	cantComandos = cantidad;
 }
 
 void MenuSeleccion::render(){
@@ -25,6 +26,10 @@ void MenuSeleccion::render(){
 }
 
 void MenuSeleccion::select(){
+	if (cantComandos < 2 and ModoDeJuego == MODO_JUGADOR_VS_JUGADOR){
+		menu->mostrarError("No hay Joystick");
+		return;
+	}
 	selected = true;
 }
 

@@ -9,7 +9,7 @@
 
 BotonesPantalla::BotonesPantalla(Ventana* una_ventana) {
 	ventana = una_ventana;
-	font = TTF_OpenFont(RUTA_TTF, (int)(ventana->obtenerAlto()*(0.04)*ventana->obtenerRatioY() +0.5) );
+	font = TTF_OpenFont(RUTA_TTF, (int)(ventana->obtenerAlto()*(0.07)*ventana->obtenerRatioY() +0.5) );
 	if( font == NULL ){
 		log("No se pudo cargar la fuente para los combos",LOG_ERROR);
 	}
@@ -58,10 +58,10 @@ bool BotonesPantalla::_loadFromRenderedText( std::string textureText,bool red){
 }
 
 void BotonesPantalla::render(std::string botones,bool red){
+	string texto = _limpiarPorAccion(botones);
+	_loadFromRenderedText(texto,red);
 
-	_loadFromRenderedText(botones,red);
-
-	int pos_x = (int)(ventana->obtenerAncho()*(0.5)*ventana->obtenerRatioX() + 0.5);
+	int pos_x = (int)(ventana->obtenerAncho()*(0.5)*ventana->obtenerRatioX() + 0.5) - anchoTexto/2;
 	int pos_y = (int)(ventana->obtenerAlto()*(0.25)*ventana->obtenerRatioY() + 0.5);
 
 	SDL_Rect renderQuad = { pos_x, pos_y, anchoTexto, altoTexto };
@@ -69,6 +69,45 @@ void BotonesPantalla::render(std::string botones,bool red){
 	//Render to screen
 	SDL_RenderCopyEx( ventana->getRenderer(), texturaNombreTexto, NULL, &renderQuad, 0.0, NULL,SDL_FLIP_NONE);
 
+}
+
+string BotonesPantalla::_limpiarPorAccion(string botones){
+	string texto = "";
+	for (unsigned int i = 0; i < botones.size(); i++){
+		int boton = botones[i] - 48;
+		switch(boton){
+			case ARRIBA:
+				texto += "U";
+				break;
+			case ABAJO:
+				texto += "D";
+				break;
+			case IZQUIERDA:
+				texto += "L";
+				break;
+			case DERECHA:
+				texto += "R";
+				break;
+			case PINAALTA:
+				texto += "HP";
+				break;
+			case PINABAJA:
+				texto += "LP";
+				break;
+			case PATADAALTA:
+				texto += "HK";
+				break;
+			case PATADABAJA:
+				texto += "LK";
+				break;
+			case CUBRIR:
+				texto += "D";
+				break;
+		}
+		if (i < botones.size() -1)
+			texto += " | ";
+	}
+	return texto;
 }
 
 BotonesPantalla::~BotonesPantalla() {

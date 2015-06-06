@@ -8,9 +8,7 @@
 #include "ComboController.h"
 
 ComboController::ComboController (int tiempoMaximo,int cantidadMaximaErrores, vector<Combo*> combosPosibles) {
-	// TODO Auto-generated constructor stub
 	maxTime = tiempoMaximo * 1000;
-	fprintf(stderr,"%s \n",_keys.c_str());
 	maxErrors = cantidadMaximaErrores;
 	startingTime = SDL_GetTicks();
 

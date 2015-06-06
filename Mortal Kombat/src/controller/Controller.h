@@ -22,11 +22,11 @@ private:
 	KeyboardControl* Teclado;
 	JoystickControl* Joystick_1;
 	JoystickControl* Joystick_2;
+	ComboController* comboController;
 	bool quit;
 	int ModoDeJuego;
 	const Uint8* keystate;
 	SDL_Event evento;
-	ComboController* _comboController;
 
 	void _Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_comandos2,int tiempoMax, int tolerancia);
 	void _JoystickRemoved();
@@ -40,7 +40,8 @@ public:
 	void KeyState();
 	bool pausa();
 	int getSleep();
-	bool checkCombos();
+	string get_stream_teclas();
+	bool checkCombo();
 	virtual ~Controller();
 };
 

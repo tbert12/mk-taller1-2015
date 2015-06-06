@@ -22,7 +22,7 @@
 
 using namespace std;
 
-enum Movimientos { ARRIBA, ABAJO, ADELANTE, ATRAS, PINAALTA, PINABAJA, PATADAALTA, PATADABAJA};
+enum Movimientos { ARRIBA, ABAJO, DERECHA, IZQUIERDA, PINAALTA, PINABAJA, PATADAALTA, PATADABAJA,CUBRIR};
 
 class ComboController {
 public:

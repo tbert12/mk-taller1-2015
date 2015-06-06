@@ -16,13 +16,15 @@
 #include "ParserJSON.h"
 #include <algorithm>
 #include "../controller/ControlModo.h"
+#include "../controller/ControlSelectPlayer.h"
 #include "MenuSeleccion.h"
+#include "SelectPlayer.h"
 #include "../view/Ventana.h"
 #include "Personaje.h"
 
 //Variables
 Mundo* mundo;
-int ModoDeJuego = 0; // 0 P1 vs P2
+//int ModoDeJuego = 0; // 0 P1 vs P2
 
 
 string ruta_archivo_configuracion = "data/config/Parallax.json";
@@ -97,6 +99,32 @@ int main( int argc, char* args[] )
 		delete controlModo;
 		delete mundo;
 		return 0;
+	}
+
+	SelectPlayer* selectPlayer = new SelectPlayer(mundo->getVentana(),menu->modoDeJuego(),mundo->getPersonajes());
+	ControlSelectPlayer* controlSelect = new ControlSelectPlayer(selectPlayer,(menu->modoDeJuego() == MODO_JUGADOR_VS_JUGADOR));
+
+	while(!controlSelect->Quit() && !selectPlayer->playersSelected() ){
+		while( controlSelect->PollEvent() ){
+			controlSelect->Pressed();
+		}
+
+		selectPlayer->render();
+	}
+
+	if (controlSelect->Quit()){
+		delete controlSelect;
+		delete selectPlayer;
+		delete menu;
+		delete controlModo;
+		delete mundo;
+		return 0;
+	}
+	if (selectPlayer->playersSelected()){
+		//player 1
+		//player 2
+		delete selectPlayer;
+		//delete controlSelect;
 	}
 
 	//seteo modo de juego

@@ -18,8 +18,8 @@ Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map
 	tiempo_round = tiempo;
 	empezar = false;
 	partida_finalizada = false;
-	ModoDeJuego = MODO_JUGADOR_VS_PC;
 	botones_pantalla = NULL;
+	ModoDeJuego = MODO_JUGADOR_VS_PC;
 	control = NULL;
 }
 
@@ -33,6 +33,9 @@ void Mundo::start(){
 		pelea = new Pelea(ventana,escenario_actual,tiempo_round,ModoDeJuego);
 		//Creo el Controlador
 		control = new Controller(pelea,mapa_comandos1, mapa_comandos2,tiempoMax,tolerancia);
+		if (ModoDeJuego == MODO_ENTRENAMIENTO){
+			botones_pantalla = new BotonesPantalla(ventana);
+		}
 	}
 }
 
@@ -106,8 +109,9 @@ void Mundo::render(){
 	pelea->render();
 
 	if(ModoDeJuego == MODO_ENTRENAMIENTO){
-		//botones_pantalla->render(combo->get_stream_teclas(),false);
+		botones_pantalla->render(control->get_stream_teclas(),control->checkCombo());
 	}
+
 
 	ventana->Refresh();
 }

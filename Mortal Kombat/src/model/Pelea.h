@@ -62,6 +62,7 @@ public:
 	void start();
 	void render();
 	bool peleaFinalizada();
+	bool roundFinalizado();
 	Personaje* getPersonajeUno();
 	Personaje* getPersonajeDos();
 	void reset();

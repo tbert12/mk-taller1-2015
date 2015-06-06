@@ -12,6 +12,7 @@ Menu::Menu(Ventana* una_ventana) {
 	ventana = una_ventana;
 	imagen = new SDL_Rect;
 	textura = NULL;
+	hayError = 0;
 
 	//Texto
 	font = TTF_OpenFont(RUTA_FONT, (int)(ventana->obtenerAlto()*(0.08)*ventana->obtenerRatioY() +0.5) );
@@ -36,6 +37,7 @@ void Menu::_crearOpciones(){
 	int y = int(51*ventana->obtenerRatioY() + 0.5);
 
 	Descripcion = {int(22*ventana->obtenerRatioX() + 0.5),int(206*ventana->obtenerRatioY() + 0.5),int(356*ventana->obtenerRatioX() + 0.5),int(102*ventana->obtenerRatioY() + 0.5)};
+	rectError = {int(22*ventana->obtenerRatioX() + 0.5),int(206*ventana->obtenerRatioY() + 0.5),int(356*ventana->obtenerRatioX() + 0.5),int(50*ventana->obtenerRatioY() + 0.5)};
 
 	Opcion* opcion1 = new Opcion;
 	opcion1->posicion = SDL_Rect {int(20*ventana->obtenerRatioX() + 0.5),y,ancho,alto};
@@ -134,6 +136,7 @@ void Menu::render(int opcion_actual){
 
 	_renderImagen();
 	_renderTexto(opcion_actual);
+	_renderError();
 	ventana->Refresh();
 }
 void Menu::_renderText(string text, SDL_Color color, SDL_Rect rect){
@@ -167,6 +170,17 @@ void Menu::_renderText(string text, SDL_Color color, SDL_Rect rect){
 	SDL_RenderCopy( ventana->getRenderer(), textura, NULL, &renderQuad);
 	SDL_DestroyTexture( textura );
 
+}
+
+void Menu::_renderError(){
+	if (hayError <= 0) return;
+	_renderText(error,ColorRed,rectError);
+	hayError--;
+}
+
+void Menu::mostrarError(string un_error){
+	error = un_error;
+	hayError = 50;
 }
 
 Menu::~Menu() {
