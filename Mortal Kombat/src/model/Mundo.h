@@ -33,6 +33,8 @@ private:
 	Escenario* escenario_actual;
 	Pelea* pelea;
 	Ventana* ventana;
+	Personaje* Personaje_uno;
+	Personaje* Personaje_dos;
 	bool empezar;
 	int tiempo_round;
 	Controller* control;
@@ -50,10 +52,13 @@ public:
 	void addEscenarios(vector<Escenario*> nuevos_escenarios);
 	Ventana* getVentana();
 	void setModoDeJuego(int modo);
+	void setPersonajesDeJuego(Personaje* p_uno, Personaje* p_dos);
 	void render();
 	bool Quit();
 	bool Pausa();
 	int getSleep();
+	bool Fin();
+	void reset();
 	virtual ~Mundo();
 };
 

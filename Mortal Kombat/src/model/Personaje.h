@@ -108,7 +108,7 @@ private:
 	void _cambiarSprite(int accion);
 	void _UpdatePoder();
 
-	 void _Caminar(bool derecha);
+	void _Caminar(bool derecha);
 
 	void _SaltarHorizontal();
 
@@ -120,7 +120,7 @@ private:
 	float _yDeSalto(float currentY, float currentT);
 
 	/*Ataque*/
-	void _pina(bool alta);
+	void _pina(int sprite,int spriteCombo);
 	void _pinaSaltando();
 	void _patadaSaltando();
 

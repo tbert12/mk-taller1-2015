@@ -11,7 +11,6 @@
 #include "Pelea.h"
 #include "../view/MenuSelectPlayer.h"
 #include "../view/Ventana.h"
-//#include "../controller/ControlSelectPlayer.h"
 
 enum Players {PLAYER_ONE, PLAYER_TWO};
 
@@ -23,7 +22,7 @@ public:
 	void arriba(int jugador);
 	void abajo(int jugador);
 	void select(int jugador);
-	bool mousePosition(int x, int y);
+	bool mousePosition(int x, int y, int jugador);
 	void render();
 	bool playersSelected();
 	bool changeController();

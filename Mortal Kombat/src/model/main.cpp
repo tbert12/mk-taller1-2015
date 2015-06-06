@@ -78,80 +78,83 @@ int main( int argc, char* args[] )
 		return 1;
 	}
 
+	while(!mundo->Quit()){
 
-	MenuSeleccion* menu = new MenuSeleccion(mundo->getVentana(),mundo->getPersonajes());
-	if (menu == NULL)
-		return 1;
-	ControlModo* controlModo = new ControlModo(menu);
-	if (controlModo == NULL)
-		return 1;
+		MenuSeleccion* menu = new MenuSeleccion(mundo->getVentana(),mundo->getPersonajes());
+		if (menu == NULL)
+			return 1;
+		ControlModo* controlModo = new ControlModo(menu);
+		if (controlModo == NULL)
+			return 1;
 
-	//While Seleccion de modo
-	while (!controlModo->Quit() && !menu->modeSelected()){
-		while( controlModo->PollEvent() ){
-			controlModo->Pressed();
+		//While Seleccion de modo
+		while (!controlModo->Quit() && !menu->modeSelected()){
+			while( controlModo->PollEvent() ){
+				controlModo->Pressed();
+			}
+			menu->render();
 		}
-		menu->render();
-	}
 
-	if (controlModo->Quit()){
+		if (controlModo->Quit()){
+			delete menu;
+			delete controlModo;
+			delete mundo;
+			return 0;
+		}
+
+		int modoDeJuego = menu->modoDeJuego();
 		delete menu;
 		delete controlModo;
-		delete mundo;
-		return 0;
-	}
 
-	SelectPlayer* selectPlayer = new SelectPlayer(mundo->getVentana(),menu->modoDeJuego(),mundo->getPersonajes());
-	ControlSelectPlayer* controlSelect = new ControlSelectPlayer(selectPlayer,(menu->modoDeJuego() == MODO_JUGADOR_VS_JUGADOR));
+		SelectPlayer* selectPlayer = new SelectPlayer(mundo->getVentana(),modoDeJuego,mundo->getPersonajes());
+		ControlSelectPlayer* controlSelect = new ControlSelectPlayer(selectPlayer,(modoDeJuego == MODO_JUGADOR_VS_JUGADOR));
 
-	while(!controlSelect->Quit() && !selectPlayer->playersSelected() ){
-		while( controlSelect->PollEvent() ){
-			controlSelect->Pressed();
+		while(!controlSelect->Quit() && !selectPlayer->playersSelected() ){
+			while( controlSelect->PollEvent() ){
+				controlSelect->Pressed();
+			}
+
+			selectPlayer->render();
 		}
 
-		selectPlayer->render();
-	}
-
-	if (controlSelect->Quit()){
-		delete controlSelect;
-		delete selectPlayer;
-		delete menu;
-		delete controlModo;
-		delete mundo;
-		return 0;
-	}
-	if (selectPlayer->playersSelected()){
-		//player 1
-		//player 2
-		delete selectPlayer;
-		//delete controlSelect;
-	}
-
-	//seteo modo de juego
-	mundo->setModoDeJuego(menu->modoDeJuego());
-
-
-	//While Juego
-	while( !mundo->Quit()){
-
-		//si no esta en pausa
-		if (!mundo->Pausa()){
-			if(mundo->partida_finalizada){
-				if(!_recargarMundo()) return 1;
-			}
-			try{
-				mundo->render();
-			} catch ( std::runtime_error &e ) {
-				if(!_recargarMundo()) return 1;
-			}
+		if (controlSelect->Quit()){
+			delete controlSelect;
+			delete selectPlayer;
+			delete menu;
+			delete controlModo;
+			delete mundo;
+			return 0;
 		}
 
-		usleep(mundo->getSleep());
-		//usleep(50000);
+		if (selectPlayer->playersSelected()){
+			//mundo->setPersonajesDeJuego(selectPlayer->getPersonajeUno(),selectPlayer->getPersonajeDos());
+			delete selectPlayer;
+			delete controlSelect;
+		}
+
+		//seteo modo de juego
+		mundo->setModoDeJuego(modoDeJuego);
+
+		//While Juego
+		while( !mundo->Fin() and !mundo->Quit()){
+
+			//si no esta en pausa
+			if (!mundo->Pausa()){
+				try{
+					mundo->render();
+				} catch ( std::runtime_error &e ) {
+					if(!_recargarMundo()) return 1;
+				}
+			}
+
+			usleep(mundo->getSleep());
+			//usleep(50000);
+		}
+		if (mundo->Fin()){
+			mundo->reset();
+		}
 	}
 
-	delete controlModo;
-	delete menu;
 	delete mundo;
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 

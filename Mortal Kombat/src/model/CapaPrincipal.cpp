@@ -21,8 +21,8 @@ CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeF
 	m_velocidad_derecha = 0;
 	m_velocidad_izquierda = 0;
 	m_PersonajeQueScrollea = 0;
-	rectAtaqueAnterior2 = new Rect_Logico;
-	rectAtaqueAnterior1 = new Rect_Logico;
+	rectAtaqueAnterior2 = NULL;
+	rectAtaqueAnterior1 = NULL;
 	m_personajeConFlip = NULL;
 	m_personajeSinFlip = NULL;
 	_scroll = 0;
@@ -91,6 +91,8 @@ void CapaPrincipal::reset(){
 	m_PersonajeQueScrollea = 0;
 	if(rectAtaqueAnterior2)	delete rectAtaqueAnterior2;
 	if(rectAtaqueAnterior1)	delete rectAtaqueAnterior1;
+	rectAtaqueAnterior2 = NULL;
+	rectAtaqueAnterior1 = NULL;
 	m_personajeConFlip = m_PersonajeDos;
 	m_personajeSinFlip = m_PersonajeUno;
 	_scroll = 0;
@@ -229,7 +231,8 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 	if (rectAtaque1 != NULL ){
 
 		if(!rectAtaqueAnterior1){
-			memcpy((void*)rectAtaqueAnterior1,(void*)rectDefensa1,sizeof(Rect_Logico*));
+			delete rectAtaqueAnterior1;
+			rectAtaqueAnterior1 = rectDefensa1;
 		}
 
 		bool antesColisionaX = floatIsBetween(rectDefensa2->x ,rectAtaqueAnterior1->x,rectAtaqueAnterior1->w);
@@ -247,7 +250,8 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 
 	}else if (rectAtaque2 != NULL ){
 		if(!rectAtaqueAnterior2){
-			memcpy((void*)rectAtaqueAnterior2,(void*)rectDefensa2,sizeof(Rect_Logico*));
+			delete rectAtaqueAnterior2;
+			rectAtaqueAnterior2 = rectDefensa2;
 		}
 
 		bool antesColisionaX = floatIsBetween(rectDefensa1->x + rectDefensa1->w, rectAtaqueAnterior2->x, rectAtaqueAnterior2->w);
@@ -264,12 +268,10 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 		}
 	}
 
-	if (rectAtaque1){
-		memcpy((void*)rectAtaqueAnterior1,(void*)rectAtaque1,sizeof(Rect_Logico*));
-	}
-	if (rectAtaque2){
-		memcpy((void*)rectAtaqueAnterior2,(void*)rectAtaque2,sizeof(Rect_Logico*));
-	}
+	if (rectAtaqueAnterior1) delete rectAtaqueAnterior1;
+	rectAtaqueAnterior1 = rectAtaque1;
+	if (rectAtaqueAnterior2) delete rectAtaqueAnterior2;
+	rectAtaqueAnterior2 = rectAtaque2;
 
 	ObjetoArrojable* objetoSinFlip = personaje->getPoderActivo();
 	ObjetoArrojable* objetoConFlip = personajeFlippeado->getPoderActivo();
