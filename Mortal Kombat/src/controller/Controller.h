@@ -45,6 +45,7 @@ public:
 	int getSleep();
 	string get_stream_teclas();
 	bool checkCombo();
+	bool goToMenu();
 	virtual ~Controller();
 };
 

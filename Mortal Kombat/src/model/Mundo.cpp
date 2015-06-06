@@ -65,6 +65,14 @@ bool Mundo::Quit(){
 	return false;
 }
 
+bool Mundo::Fin(){
+	if (!empezar)
+		return false;
+	if(pelea)
+		return pelea->peleaFinalizada() || control->goToMenu();
+	return false;
+}
+
 void Mundo::setModoDeJuego(int modo){
 	if (modo == MODO_ENTRENAMIENTO || modo == MODO_JUGADOR_VS_JUGADOR || modo == MODO_JUGADOR_VS_PC )
 		ModoDeJuego = modo;
@@ -124,6 +132,27 @@ void Mundo::_mostrar_ganador(string nombre){
 
 int Mundo::getSleep(){
 	return control->getSleep();
+}
+
+void Mundo::reset(){
+	escenario_actual = NULL;
+	if (pelea){
+		pelea->reset();
+		delete pelea;
+		pelea = NULL;
+	}
+	if (botones_pantalla){
+		delete botones_pantalla;
+		botones_pantalla = NULL;
+	}
+	if (control){
+		delete control;
+		control = NULL;
+	}
+	empezar = false;
+	partida_finalizada = false;
+	ModoDeJuego = MODO_JUGADOR_VS_PC;
+
 }
 
 Mundo::~Mundo() {

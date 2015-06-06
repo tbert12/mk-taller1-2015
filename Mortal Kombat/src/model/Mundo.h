@@ -54,6 +54,8 @@ public:
 	bool Quit();
 	bool Pausa();
 	int getSleep();
+	bool Fin();
+	void reset();
 	virtual ~Mundo();
 };
 

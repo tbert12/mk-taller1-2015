@@ -17,9 +17,9 @@ Controller::Controller(Pelea* una_pelea,map<string, int>* mapa_comandos1,map<str
 	Joystick_1 = NULL;
 	Joystick_2 = NULL;
 	Teclado = NULL;
+	comboController = NULL;
 	SDL_JoystickEventState(SDL_ENABLE);
 	_Init(mapa_comandos1,mapa_comandos2,tiempoMax,tolerancia);
-
 }
 bool Controller::pausa(){
 	if (Teclado != NULL){
@@ -41,6 +41,11 @@ bool Controller::Quit(){
 	return quit;
 }
 
+bool Controller::goToMenu(){
+	if (ModoDeJuego != MODO_ENTRENAMIENTO) return false;
+	return Teclado->goToMenu();
+}
+
 bool Controller::PollEvent(){
 	SDL_JoystickUpdate();
 	return (SDL_PollEvent( &evento ) != 0);
@@ -57,7 +62,6 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 			p_uno = personaje_1;
 			p_dos = NULL;
 	}
-
 
 	//Si hay dos joystick los uso;
 	if (cant_joy >= 2){
@@ -182,8 +186,6 @@ Controller::~Controller() {
 		delete Joystick_2;
 		Joystick_2 = NULL;
 	}
-	if (comboController)
-		delete comboController;
 }
 
 

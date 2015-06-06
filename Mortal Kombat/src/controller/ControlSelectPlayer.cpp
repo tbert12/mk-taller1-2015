@@ -11,17 +11,21 @@ ControlSelectPlayer::ControlSelectPlayer(SelectPlayer* select, bool dos_jugadore
 	menuPlayers = select;
 	keystate = SDL_GetKeyboardState(NULL);
 	quit = false;
-	if(SDL_NumJoysticks() >= 2 and dos_jugadores){
+	joystick1 = NULL;
+	joystick2 = NULL;
+	if(SDL_NumJoysticks() > 1){
 		joystick1 = SDL_JoystickOpen(0);
 		if( joystick1 == NULL )
 			log(string("No se puede leer el joystick! SDL Error:" + string(SDL_GetError())),LOG_ERROR);
 		else
 			log("Joystick cargado correctamente",LOG_DEBUG);
-		joystick2 = SDL_JoystickOpen(1);
-		if( joystick2 == NULL )
-			log(string("No se puede leer el joystick! SDL Error:" + string(SDL_GetError())),LOG_ERROR);
-		else
-			log("Joystick cargado correctamente",LOG_DEBUG);
+		if (dos_jugadores){
+			joystick2 = SDL_JoystickOpen(1);
+			if( joystick2 == NULL )
+				log(string("No se puede leer el joystick! SDL Error:" + string(SDL_GetError())),LOG_ERROR);
+			else
+				log("Joystick cargado correctamente",LOG_DEBUG);
+		}
 	}
 	else if(SDL_NumJoysticks() == 1){
 		joystick1 = SDL_JoystickOpen(0);
@@ -29,7 +33,6 @@ ControlSelectPlayer::ControlSelectPlayer(SelectPlayer* select, bool dos_jugadore
 			log(string("No se puede leer el joystick! SDL Error:" + string(SDL_GetError())),LOG_ERROR);
 		else
 			log("Joystick cargado correctamente",LOG_DEBUG);
-		joystick2 = NULL;
 	}
 }
 
@@ -79,11 +82,11 @@ void ControlSelectPlayer::Pressed(){
 		switch( evento.type ){
 			case SDL_MOUSEMOTION:
 				//Get mouse position
-				menuPlayers->mousePosition(x,y);
+				menuPlayers->mousePosition(x,y,menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				if (menuPlayers->mousePosition(x,y) and evento.button.button == SDL_BUTTON_LEFT )
+				if (menuPlayers->mousePosition(x,y,menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE) and evento.button.button == SDL_BUTTON_LEFT )
 					menuPlayers->select(menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
 				break;
 		}
@@ -151,11 +154,11 @@ bool ControlSelectPlayer::PollEvent(){
 }
 
 ControlSelectPlayer::~ControlSelectPlayer() {
-	if (joystick1 != NULL && SDL_JoystickGetAttached(joystick1)){
+	if (joystick1 != NULL){// && SDL_JoystickGetAttached(joystick1)){
 		SDL_JoystickClose( joystick1 );
 		joystick1 = NULL;
 	}
-	if (joystick2 != NULL && SDL_JoystickGetAttached(joystick2)){
+	if (joystick2 != NULL){// && SDL_JoystickGetAttached(joystick2)){
 		SDL_JoystickClose( joystick2 );
 		joystick2 = NULL;
 	}
