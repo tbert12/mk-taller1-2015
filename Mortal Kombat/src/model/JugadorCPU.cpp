@@ -8,7 +8,7 @@
 #include "JugadorCPU.h"
 
 
-JugadorCPU::JugadorCPU(Personaje* personaje_1, Personaje* personaje_cpu) {
+JugadorCPU::JugadorCPU(Personaje* personaje_cpu, Personaje* personaje_1) {
 	m_personaje_1 = personaje_1;
 	m_personaje_cpu = personaje_cpu;
 }
@@ -45,6 +45,32 @@ void JugadorCPU::evaluarAgresividad() {
 		else
 			m_agresividad = 1;
 	}
+}
+
+bool JugadorCPU::noHayQueHacerNada() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 10;
+			break;
+		case 1:
+			probabilidad = 5;
+			break;
+		case 2:
+			probabilidad = 2;
+			break;
+		default:
+			probabilidad = 0;
+	}
+	return reaccion(probabilidad);
+}
+
+bool JugadorCPU::hayQuePegarPina() {
+
+}
+
+bool JugadorCPU::hayQuePegarPatada() {
+
 }
 
 bool JugadorCPU::hayQuePegarArriba() {
@@ -89,6 +115,35 @@ bool JugadorCPU::hayQueAgacharse() {
 }
 
 void JugadorCPU::realizarMovimiento() {
+
+	// Modifico actitud de acuerdo al desarrollo del combate.
+	evaluarAgresividad();
+
+	// Posibilidad de no hacer nada.
+	if (noHayQueHacerNada())
+		return;
+
+	// Posibilidades de desplazamiento.
+
+
+	// Posibilidades de ataque.
+	if (hayQueAtacar()) {
+		if (hayQuePegarArriba()) {
+			if (hayQuePegarPina())
+				m_personaje_cpu->pinaAlta();
+			else if (hayQuePegarPatada())
+				m_personaje_cpu->patadaAlta();
+		} else if (hayQuePegarAbajo()) {
+			if (hayQuePegarPina())
+				m_personaje_cpu->pinaBaja();
+			else if (hayQuePegarPatada())
+				m_personaje_cpu->patadaBaja();
+		} else if (hayQueHacerToma()) {
+			m_personaje_cpu->toma1();
+		} else if (hayQueLanzarPoder()) {
+			m_personaje_cpu->poder1();
+		}
+	}
 
 }
 

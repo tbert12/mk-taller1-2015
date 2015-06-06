@@ -12,12 +12,10 @@
 
 class JugadorCPU {
 public:
-	JugadorCPU(Personaje* personaje_1, Personaje* personaje_cpu);
+	JugadorCPU(Personaje* personaje_cpu, Personaje* personaje_1);
 	virtual ~JugadorCPU();
 
 	void realizarMovimiento();
-
-	void evaluarAgresividad();
 
 private:
 	Personaje* m_personaje_1;
@@ -26,6 +24,10 @@ private:
 
 	bool reaccion(int probabilidad);
 
+	void evaluarAgresividad();
+
+	bool noHayQueHacerNada();
+
 	bool hayQueAtacar();
 	bool hayQueCubrirse();
 	bool hayQueSaltar();
@@ -33,6 +35,8 @@ private:
 	bool hayQueAvanzar();
 	bool hayQueRetroceder();
 
+	bool hayQuePegarPina();
+	bool hayQuePegarPatada();
 	bool hayQuePegarArriba();
 	bool hayQuePegarAbajo();
 	bool hayQueLanzarPoder();
