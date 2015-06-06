@@ -117,8 +117,10 @@ void KeyboardControl::KeyPressed(){
 				if (sleep < 0) sleep = 0;
 				break;
 		}
-	if(comboController->checkCombos() > 0){
-		//combo a jugador
+	if (evento->key.keysym.sym != SDLK_r){
+		if(comboController->checkCombos() > 0){
+			//combo a jugador
+		}
 	}
 }
 
