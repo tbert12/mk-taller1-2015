@@ -137,8 +137,6 @@ void JoystickControl::JoyPressed(){
 		}
 		else if ( boton == comandos->operator [](LANZAR_ARMA)){
 			personaje->lanzarObjeto();
-			if (comboController)
-				comboController->sePresiono(LANZAR);
 		}
 		else if ( boton == JOY_START){
 			pausa = !pausa;

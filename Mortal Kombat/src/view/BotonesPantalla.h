@@ -12,8 +12,7 @@
 #include "Ventana.h"
 #include <string>
 #include <vector>
-
-enum Movimientos { ARRIBA, ABAJO, DERECHA, IZQUIERDA, PINAALTA, PINABAJA, PATADAALTA, PATADABAJA,CUBRIR};
+#include "../controller/ComboController.h"
 
 class BotonesPantalla {
 private:
