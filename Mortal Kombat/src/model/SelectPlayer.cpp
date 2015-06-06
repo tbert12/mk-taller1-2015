@@ -23,7 +23,10 @@ bool SelectPlayer::playersSelected(){
 }
 
 bool SelectPlayer::changeController(){
-	return player1Select && !player2Select && (ModoDeJuego != MODO_JUGADOR_VS_JUGADOR);
+	if (ModoDeJuego == MODO_JUGADOR_VS_JUGADOR)
+		return false;
+	else
+		return player1Select && !player2Select;
 }
 
 Personaje* SelectPlayer::getPersonajeUno(){
@@ -102,13 +105,16 @@ void SelectPlayer::select(int jugador){
 	}
 }
 
-bool SelectPlayer::mousePosition(int x, int y){
-	if (player1Select) return false;
+bool SelectPlayer::mousePosition(int x, int y, int jugador){
+	if (player1Select and player2Select) return false;
 	for (unsigned int i = 0 ; i < opciones.size() ; i++){
 		SDL_Rect rect = opciones[i].posicion;
 		if (x >= rect.x and x <= (rect.x + rect.w) ){
 			if (y >= rect.y and y <= (rect.y + rect.h) ){
-				Player1 = i;
+				if (jugador == PLAYER_ONE)
+					Player1 = i;
+				else if (jugador == PLAYER_TWO)
+					Player2 = i;
 				return true;
 			}
 		}

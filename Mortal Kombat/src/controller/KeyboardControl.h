@@ -25,6 +25,7 @@ private:
 	SDL_Event* evento;
 	Pelea* pelea;
 	bool pausa;
+	bool returnMenu;
 	ComboController* comboController;
 	bool como_jugador;
 	int sleep;
@@ -37,6 +38,7 @@ public:
 	void KeyState();
 	int getSleep();
 	bool pause();
+	bool goToMenu();
 };
 
 #endif /* SRC_CONTROLLER_KEYBOARDCONTROL_H_ */

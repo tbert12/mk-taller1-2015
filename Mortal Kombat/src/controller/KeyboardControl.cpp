@@ -18,12 +18,17 @@ KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJ
 	evento = e;
 	como_jugador = comoJugador;
 	pausa = false;
+	returnMenu = false;
 	keystate = SDL_GetKeyboardState(NULL);
 	sleep = 50000;
 	pelea = NULL;
 }
 bool KeyboardControl::pause(){
 	return pausa;
+}
+
+bool KeyboardControl::goToMenu(){
+	return returnMenu;
 }
 
 void KeyboardControl::KeyPressed(){
@@ -53,7 +58,7 @@ void KeyboardControl::KeyPressed(){
 					comboController->sePresiono(DERECHA);
 				break;
 			case SDLK_m:
-				throw std::runtime_error( "Hay que recargar el archivo JSON." );
+				returnMenu = true;
 				break;
 			case SDLK_r:
 				if (pelea)

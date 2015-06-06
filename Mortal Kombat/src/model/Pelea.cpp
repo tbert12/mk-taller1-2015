@@ -61,8 +61,6 @@ bool Pelea::roundFinalizado(){
 }
 
 void Pelea::render(){
-	//if (partida_finalizada)
-	//	return;
 
 	if(!comenzo_round){
 		start();
