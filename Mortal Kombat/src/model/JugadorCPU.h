@@ -10,9 +10,9 @@
 
 #include "Personaje.h"
 
-const int DISTANCIA_PINA = 75;
-const int DISTANCIA_PATADA = 100;
-const int DISTANCIA_TOMA = 50;
+const int DISTANCIA_PINA = 125;
+const int DISTANCIA_PATADA = 150;
+const int DISTANCIA_TOMA = 120;
 
 class JugadorCPU {
 public:
@@ -25,6 +25,7 @@ private:
 	Personaje* m_personaje_1;
 	Personaje* m_personaje_cpu;
 	int m_agresividad = 1;
+	int m_ciclos_delay = 0;
 
 	bool reaccion(int probabilidad);
 

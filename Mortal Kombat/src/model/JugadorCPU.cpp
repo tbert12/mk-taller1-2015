@@ -51,13 +51,13 @@ bool JugadorCPU::noHayQueHacerNada() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 2;
-			break;
-		case 1:
 			probabilidad = 5;
 			break;
-		case 2:
+		case 1:
 			probabilidad = 10;
+			break;
+		case 2:
+			probabilidad = 15;
 			break;
 		default:
 			probabilidad = 100;
@@ -69,13 +69,13 @@ bool JugadorCPU::hayQuePegarPina() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 50;
+			probabilidad = 40;
 			break;
 		case 1:
-			probabilidad = 70;
+			probabilidad = 60;
 			break;
 		case 2:
-			probabilidad = 90;
+			probabilidad = 80;
 			break;
 		default:
 			probabilidad = 0;
@@ -99,13 +99,13 @@ bool JugadorCPU::hayQuePegarPatada() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 40;
+			probabilidad = 30;
 			break;
 		case 1:
-			probabilidad = 60;
+			probabilidad = 50;
 			break;
 		case 2:
-			probabilidad = 80;
+			probabilidad = 70;
 			break;
 		default:
 			probabilidad = 0;
@@ -129,13 +129,13 @@ bool JugadorCPU::hayQuePegarArriba() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 70;
+			probabilidad = 30;
 			break;
 		case 1:
-			probabilidad = 80;
+			probabilidad = 40;
 			break;
 		case 2:
-			probabilidad = 90;
+			probabilidad = 50;
 			break;
 		default:
 			probabilidad = 0;
@@ -156,23 +156,27 @@ bool JugadorCPU::hayQuePegarAbajo() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 70;
+			probabilidad = 30;
 			break;
 		case 1:
-			probabilidad = 80;
+			probabilidad = 40;
 			break;
 		case 2:
-			probabilidad = 90;
+			probabilidad = 50;
 			break;
 		default:
 			probabilidad = 0;
 	}
 
 	if (reaccion(probabilidad)) {
-		if (m_personaje_1->estaCubriendose() && m_personaje_1->estaAgachado()) {
-			if (reaccion(probabilidad))
+		if (m_personaje_1->estaCubriendose()) {
+			if (reaccion(probabilidad)) {
 				return true;
-			return false;
+			} else if (m_personaje_1->estaAgachado()) {
+				return true;
+			} else {
+				return false;
+			}
 		} else
 			return true;
 	}
@@ -189,7 +193,7 @@ bool JugadorCPU::hayQueLanzarPoder() {
 			probabilidad = 5;
 			break;
 		case 2:
-			probabilidad = 10;
+			probabilidad = 8;
 			break;
 		default:
 			probabilidad = 0;
@@ -231,31 +235,143 @@ bool JugadorCPU::hayQueHacerToma() {
 }
 
 bool JugadorCPU::hayQueAtacar() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 20;
+			break;
+		case 1:
+			probabilidad = 40;
+			break;
+		case 2:
+			probabilidad = 60;
+			break;
+		default:
+			probabilidad = 0;
+	}
 
+	if (reaccion(probabilidad)) {
+		if (m_personaje_1->estaCubriendose()) {
+			if (reaccion(probabilidad))
+				return true;
+			return false;
+		} else
+			return true;
+	}
+	return false;
 }
 
 bool JugadorCPU::hayQueCubrirse() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 25;
+			break;
+		case 1:
+			probabilidad = 5;
+			break;
+		case 2:
+			probabilidad = 2;
+			break;
+		default:
+			probabilidad = 0;
+	}
 
+	if (reaccion(probabilidad)) {
+		if (m_personaje_1->estaAtacando()) {
+			if (m_personaje_1->getAccionDeAtaque() == SPRITE_PODER_1
+					|| m_personaje_1->getAccionDeAtaque() == SPRITE_PODER_2) {
+				m_ciclos_delay = 20;
+				return true;
+			} else {
+				float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
+				if (dist <= DISTANCIA_PATADA) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
 
 bool JugadorCPU::hayQueAvanzar() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 20;
+			break;
+		case 1:
+			probabilidad = 40;
+			break;
+		case 2:
+			probabilidad = 50;
+			break;
+		default:
+			probabilidad = 0;
+	}
 
+	if (reaccion(probabilidad)) {
+		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
+		if (dist >= DISTANCIA_PATADA) {
+			m_ciclos_delay = 10;
+			return true;
+		} else if (dist < DISTANCIA_PATADA && dist >= DISTANCIA_TOMA) {
+			if (reaccion(probabilidad))
+				return true;
+		}
+	}
+	return false;
 }
 
 bool JugadorCPU::hayQueRetroceder() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 10;
+			break;
+		case 1:
+			probabilidad = 2;
+			break;
+		case 2:
+			probabilidad = 0;
+			break;
+		default:
+			probabilidad = 0;
+	}
 
+	if (reaccion(probabilidad)) {
+		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
+		if (dist <= DISTANCIA_PATADA) {
+			m_ciclos_delay = 5;
+			return true;
+		}
+	}
+	return false;
 }
 
 // HAY QUE SALTAR, HAY QUE SALTAR, EL QUE NO SALTA ES DE HURACAN!
 bool JugadorCPU::hayQueSaltar() {
-
+	return false;
 }
 
 bool JugadorCPU::hayQueAgacharse() {
-
+	return false;
 }
 
 void JugadorCPU::realizarMovimiento() {
+
+	// Ciclos de delay.
+	if (m_ciclos_delay != 0) {
+		m_ciclos_delay--;
+		return;
+	}
+
+	// Verificaciones de estado de Personaje CPU.
+	if (m_personaje_cpu->estaCubriendose())
+		m_personaje_cpu->dejarDeCubrirse();
+	if (m_personaje_cpu->enMovimiento())
+		m_personaje_cpu->Frenar();
+
 
 	// Modifico actitud de acuerdo al desarrollo del combate.
 	evaluarAgresividad();

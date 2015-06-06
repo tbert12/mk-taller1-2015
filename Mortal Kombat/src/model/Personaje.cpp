@@ -263,6 +263,10 @@ bool Personaje::estaAgachado() {
 	return _estaAgachado;
 }
 
+bool Personaje::estaAtacando() {
+	return _estaAtacando;
+}
+
 float Personaje::getAncho(){
 	return spriteActual->getAncho();
 }

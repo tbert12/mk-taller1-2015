@@ -39,7 +39,7 @@ void Pelea::start(){
 	if (tiempo != NULL)
 		tiempo->start();
 
-	if (ModoDeJuego = MODO_JUGADOR_VS_PC)
+	if (ModoDeJuego == MODO_JUGADOR_VS_PC)
 		cpu = new JugadorCPU(m_personajeDos, m_personajeUno);
 }
 
@@ -274,6 +274,7 @@ Pelea::~Pelea() {
 	if(BarraPersonajeUno) delete BarraPersonajeUno;
 	if(BarraPersonajeDos) delete BarraPersonajeDos;
 	if(tiempo_pantalla) delete tiempo_pantalla;
+	if (cpu) delete cpu;
 
 }
 
