@@ -126,6 +126,9 @@ void KeyboardControl::KeyState(){
 	//si no esta como jugador no verifica nada
 	if(!como_jugador) return;
 
+	if (comboController)
+		comboController->Update();
+
 	//Teclas que deben estar apretadas
 	if ((!keystate[SDL_SCANCODE_RIGHT] && (personaje->getSentidoDeMovimiento() > 0))|| (!keystate[SDL_SCANCODE_LEFT] && (personaje->getSentidoDeMovimiento() < 0)) )
 		personaje->Frenar();

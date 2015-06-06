@@ -71,6 +71,7 @@ void JoystickControl::_Init(int id){
 }
 
 void JoystickControl::JoyPressed(){
+
 	if(evento->type == SDL_JOYAXISMOTION){
 		//X axis motion
 		if( evento->jaxis.axis == 0 ){
@@ -144,6 +145,9 @@ void JoystickControl::JoyPressed(){
 	}
 }
 void JoystickControl::JoyState(){
+	if (comboController)
+		comboController->Update();
+
 	Sint16 x_mov = SDL_JoystickGetAxis(joystick,0);
 	Sint16 y_mov = SDL_JoystickGetAxis(joystick,1);
 	int sentido_personaje = personaje->getSentidoDeMovimiento();
