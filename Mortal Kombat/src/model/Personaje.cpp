@@ -658,25 +658,19 @@ void Personaje::dejarDeCubrirse() {
 //+++++++++++ATAQUE - PINA+++++++++++++++++++++++++++++++++++++++++++
 
 void Personaje::pinaBaja() {
-	_pina(false);
+	_pina(SPRITE_PINA_BAJA,SPRITE_COMBO_PINA_BAJA);
 }
 
 void Personaje::pinaAlta() {
-	_pina(true);
+	_pina(SPRITE_PINA_ALTA,SPRITE_COMBO_PINA_ALTA);
 }
 
-void Personaje::_pina(bool alta){
+void Personaje::_pina(int sprite, int spritecombo){
 	if (_estaCubriendose or _recibioGolpe) return;
-	int sprite = SPRITE_PINA_BAJA;
-	int spritecombo = SPRITE_COMBO_PINA_BAJA;
-	if (alta){
-		sprite = SPRITE_PINA_ALTA;
-		spritecombo = SPRITE_COMBO_PINA_ALTA;
-	}
 	int accionActual = getAccionDeAtaque();
 	if (_estaAtacando and (accionActual != sprite)) return;
 	if ( _estaAgachado ) {
-		if (alta) _gancho();
+		if (sprite == SPRITE_PINA_ALTA) _gancho();
 		else _pinaAgachado();
 	} else if ( _estaSaltando > 0 ) {
 		_pinaSaltando();
