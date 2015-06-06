@@ -66,6 +66,16 @@ bool JugadorCPU::noHayQueHacerNada() {
 }
 
 bool JugadorCPU::hayQuePegarPina() {
+	// Caso particular del gancho para pina alta estando agachado.
+	// No se trabaja con probabilidades en este caso.
+	float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
+	if (dist <= DISTANCIA_PINA) {
+		if (m_personaje_1->estaAtacando() && !m_personaje_1->estaAgachado()) {
+			return true;
+		}
+	}
+
+
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
@@ -82,7 +92,6 @@ bool JugadorCPU::hayQuePegarPina() {
 	}
 
 	if (reaccion(probabilidad)) {
-		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
 		if (dist <= DISTANCIA_PINA) {
 			if (m_personaje_1->estaCubriendose()) {
 				if (reaccion(probabilidad))
@@ -146,7 +155,7 @@ bool JugadorCPU::hayQuePegarArriba() {
 			if (reaccion(probabilidad))
 				return true;
 			return false;
-		} else
+		} else if (!m_personaje_1->estaAgachado())
 			return true;
 	}
 	return false;
@@ -265,13 +274,13 @@ bool JugadorCPU::hayQueCubrirse() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 25;
+			probabilidad = 75;
 			break;
 		case 1:
-			probabilidad = 5;
+			probabilidad = 25;
 			break;
 		case 2:
-			probabilidad = 2;
+			probabilidad = 10;
 			break;
 		default:
 			probabilidad = 0;
@@ -351,12 +360,57 @@ bool JugadorCPU::hayQueRetroceder() {
 
 // HAY QUE SALTAR, HAY QUE SALTAR, EL QUE NO SALTA ES DE HURACAN!
 bool JugadorCPU::hayQueSaltar() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 20;
+			break;
+		case 1:
+			probabilidad = 25;
+			break;
+		case 2:
+			probabilidad = 40;
+			break;
+		default:
+			probabilidad = 0;
+	}
+
+	if (reaccion(probabilidad)) {
+		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
+		if (dist > DISTANCIA_PATADA) {
+			return true;
+		}
+	}
 	return false;
 }
 
 bool JugadorCPU::hayQueAgacharse() {
+	int probabilidad;
+	switch (m_agresividad) {
+		case 0:
+			probabilidad = 10;
+			break;
+		case 1:
+			probabilidad = 5;
+			break;
+		case 2:
+			probabilidad = 2;
+			break;
+		default:
+			probabilidad = 0;
+	}
+
+	if (reaccion(probabilidad)) {
+		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
+		if (dist <= DISTANCIA_PINA) {
+			if (!m_personaje_1->estaAgachado() && !m_personaje_1->estaCubriendose())
+				m_ciclos_delay = 5;
+				return true;
+		}
+	}
 	return false;
 }
+
 
 void JugadorCPU::realizarMovimiento() {
 
@@ -369,8 +423,28 @@ void JugadorCPU::realizarMovimiento() {
 	// Verificaciones de estado de Personaje CPU.
 	if (m_personaje_cpu->estaCubriendose())
 		m_personaje_cpu->dejarDeCubrirse();
-	if (m_personaje_cpu->enMovimiento())
+
+	if (m_personaje_cpu->estaAgachado()) {
+		if (hayQuePegarArriba()) {
+			if (hayQuePegarPina())			// Caso particular del gancho.
+				m_personaje_cpu->pinaAlta();
+			else if (hayQuePegarPatada())
+				m_personaje_cpu->patadaAlta();
+		} else if (hayQuePegarAbajo()) {
+			if (hayQuePegarPina())
+				m_personaje_cpu->pinaBaja();
+			else if (hayQuePegarPatada())
+				m_personaje_cpu->patadaBaja();
+		} else {
+			m_personaje_cpu->Levantarse();
+		}
+		return;
+	}
+
+	if (m_personaje_cpu->enMovimiento() && !m_personaje_cpu->estaSaltando())
 		m_personaje_cpu->Frenar();
+
+
 
 
 	// Modifico actitud de acuerdo al desarrollo del combate.
@@ -388,9 +462,7 @@ void JugadorCPU::realizarMovimiento() {
 		m_personaje_cpu->cubrirse();
 
 	// Posibilidades de desplazamiento.
-	if (hayQueSaltar()) {
-		m_personaje_cpu->Saltar();
-	} else if (hayQueAvanzar()) {
+	if (hayQueAvanzar()) {
 		if (m_personaje_cpu->getFlipState())
 			m_personaje_cpu->CaminarIzquierda();
 		else
@@ -400,6 +472,8 @@ void JugadorCPU::realizarMovimiento() {
 			m_personaje_cpu->CaminarDerecha();
 		else
 			m_personaje_cpu->CaminarIzquierda();
+	} else if (hayQueSaltar()) {
+			m_personaje_cpu->Saltar();
 	} else if (hayQueAgacharse()) {
 		m_personaje_cpu->Agachar();
 	}

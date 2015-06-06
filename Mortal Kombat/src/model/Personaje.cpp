@@ -523,10 +523,10 @@ void Personaje::_Caminar(bool derecha){
 	float factor = 1;
 	if (derecha){
 		if (m_fliped)
-			factor = 0.5;
+			factor = 0.8;
 
 	} else {
-		factor = -0.5;
+		factor = -0.8;
 		if (m_fliped)
 			factor = -1;
 	}
