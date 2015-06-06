@@ -326,6 +326,8 @@ void Personaje::renderizar(float x_dist_ventana,float posOtherPlayer){
 
 Rect_Logico* Personaje::rectanguloAtaque(){
 	if (!_estaAtacando) return NULL;
+
+	//Devuelve Rect_Nuevo, el ue lo pide se encarga de eliminarlo
 	int Accion = getAccionDeAtaque();
 	int propH = 1; //Proporsiones Harcodeadas para formar rectangulos acordes
 	int propY = 1;
@@ -337,7 +339,10 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	 * 	OK	-Gancho
 	 */
 
-	Rect_Logico* rectangulo = m_rectanguloAtaque;
+	Rect_Logico* rectangulo = new Rect_Logico{ m_rectanguloAtaque->x,
+								m_rectanguloAtaque->y,
+								m_rectanguloAtaque->w,
+								m_rectanguloAtaque->h};
 	if(m_fliped)
 		rectangulo->x = m_xActual - getAncho();
 	else
@@ -374,7 +379,11 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 }
 
 Rect_Logico* Personaje::rectanguloDefensa(){
-	Rect_Logico* rectangulo = m_rectanguloDefensa;
+	//Devuelve Rect_Nuevo, el ue lo pide se encarga de eliminarlo
+	Rect_Logico* rectangulo = new Rect_Logico{m_rectanguloDefensa->x,
+							   m_rectanguloDefensa->y,
+							   m_rectanguloDefensa->w,
+							   m_rectanguloDefensa->h};
 	float MinAncho = sprites[SPRITE_CUBRIRSE]->getAncho();
 	rectangulo->y=  m_yActual;
 	if(m_fliped)
@@ -466,12 +475,6 @@ void Personaje::AvanzarSprite(){
 
 void Personaje::_cambiarSprite(int SpriteAccion){
 	if (_estaMuerto) return;
-
-	if(_estaSaltando > 0) {
-		//Ataque en saltos
-		bool SpriteAtaqueEnSalto = (SpriteAccion == SPRITE_PINA_SALTANDO or SpriteAccion == SPRITE_PATADA_SALTANDO);
-		if (!SpriteAtaqueEnSalto) return;
-	}
 	//Excepcion del caminar para cambiarlo repentinamente
 	if (sprites[SpriteAccion] == spriteActual and SpriteAccion != SPRITE_CAMINAR) return;
 	//Dejo el Sprite Limpio antes de cambiarlo
@@ -655,25 +658,19 @@ void Personaje::dejarDeCubrirse() {
 //+++++++++++ATAQUE - PINA+++++++++++++++++++++++++++++++++++++++++++
 
 void Personaje::pinaBaja() {
-	_pina(false);
+	_pina(SPRITE_PINA_BAJA,SPRITE_COMBO_PINA_BAJA);
 }
 
 void Personaje::pinaAlta() {
-	_pina(true);
+	_pina(SPRITE_PINA_ALTA,SPRITE_COMBO_PINA_ALTA);
 }
 
-void Personaje::_pina(bool alta){
+void Personaje::_pina(int sprite, int spritecombo){
 	if (_estaCubriendose or _recibioGolpe) return;
-	int sprite = SPRITE_PINA_BAJA;
-	int spritecombo = SPRITE_COMBO_PINA_BAJA;
-	if (alta){
-		sprite = SPRITE_PINA_ALTA;
-		spritecombo = SPRITE_COMBO_PINA_ALTA;
-	}
 	int accionActual = getAccionDeAtaque();
 	if (_estaAtacando and (accionActual != sprite)) return;
 	if ( _estaAgachado ) {
-		if (alta) _gancho();
+		if (sprite == SPRITE_PINA_ALTA) _gancho();
 		else _pinaAgachado();
 	} else if ( _estaSaltando > 0 ) {
 		_pinaSaltando();
@@ -786,9 +783,16 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	*/
 	if (_recibioGolpe) return false;
 	if (_estaCubriendose){
-		QuitarVida(1);
-		spriteActual->vibrar();
-		return false;
+		bool puedeRecibirCubierto = (!_estaAgachado) and
+									(CodigoGolpe == SPRITE_PINA_AGACHADO or
+									 CodigoGolpe == SPRITE_PATADA_BAJA_AGACHADO or
+									 CodigoGolpe == SPRITE_PATADA_CIRCULAR);
+
+		if (!puedeRecibirCubierto){
+			QuitarVida(1);
+			spriteActual->vibrar();
+			return false;
+		}
 	}
 	bool golpeFuerte = false;
 
@@ -796,8 +800,8 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	reaccionesAGolpes[SPRITE_GANCHO] = 				SPRITE_RECIBE_GANCHO;
 	reaccionesAGolpes[SPRITE_PINA_ALTA] = 			SPRITE_RECIBE_ALTO;
 	reaccionesAGolpes[SPRITE_PATADA_ALTA] = 		SPRITE_RECIBE_ALTO;
-	reaccionesAGolpes[SPRITE_PATADA_SALTANDO] = 	SPRITE_RECIBE_FUERTE;
-	reaccionesAGolpes[SPRITE_PINA_SALTANDO] = 		SPRITE_RECIBE_FUERTE;
+	reaccionesAGolpes[SPRITE_PATADA_SALTANDO] = 	SPRITE_RECIBE_GANCHO;
+	reaccionesAGolpes[SPRITE_PINA_SALTANDO] = 		SPRITE_RECIBE_GANCHO;
 	reaccionesAGolpes[GOLPE_DE_PODER] = 			SPRITE_RECIBE_FUERTE; //PODER
 	reaccionesAGolpes[SPRITE_PATADA_ALTA_AGACHADO]= _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
 	reaccionesAGolpes[SPRITE_PATADA_BAJA_AGACHADO]= _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
@@ -820,12 +824,23 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	DanioPorGolpe[SPRITE_PATADA_CIRCULAR]=  	QUITAR_VIDA_PATADA_CIRCULAR;
 	DanioPorGolpe[GOLPE_DE_PODER]=  			Danio;
 
+	if (_estaSaltando > 0){
+		if (CodigoGolpe != SPRITE_GANCHO) CodigoGolpe = SPRITE_PATADA_SALTANDO;
+	}
+
 	_cambiarSprite(reaccionesAGolpes[CodigoGolpe]);
 	QuitarVida(DanioPorGolpe[CodigoGolpe]);
 	spriteActual->freezeSprite();
+	float velocidadDeRetroceso = m_velocidad;
 
-	if (CodigoGolpe == SPRITE_GANCHO){
-		maxAlturaDeSalto = ALTURA_SALTO_GANCHO * getAlto();
+	if (reaccionesAGolpes[CodigoGolpe] == SPRITE_RECIBE_GANCHO){
+		velocidadDeRetroceso = 2.5 * m_velocidad;
+		float prop_altura = 0.8;
+		if (CodigoGolpe == SPRITE_GANCHO) {
+			prop_altura = ALTURA_SALTO_GANCHO;
+			velocidadDeRetroceso = m_velocidad;
+		}
+		maxAlturaDeSalto = prop_altura * getAlto() + (m_yPiso - m_yActual);
 		tiempoDeSalto = 1;
 		_estaSaltando = 1;
 		spriteActual->doLoop(true);
@@ -833,11 +848,9 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 
 	if (DanioPorGolpe[CodigoGolpe] >= MIN_GOLPE_FUERTE and CodigoGolpe != SPRITE_PATADA_CIRCULAR){
 		golpeFuerte = true;
-		if (m_fliped){
-			m_velocidadActual = m_velocidad;
-		} else {
-			m_velocidadActual = -m_velocidad;
-		}
+		m_velocidadActual = -velocidadDeRetroceso;
+		if (m_fliped)
+			m_velocidadActual = velocidadDeRetroceso;
 	}
 
 	_recibioGolpe = true;
