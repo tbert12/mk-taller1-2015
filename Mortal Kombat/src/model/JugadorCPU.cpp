@@ -29,9 +29,9 @@ void JugadorCPU::evaluarAgresividad() {
 
 	if (vida_propia > 75) {
 		if (vida_rival > 75)
-			m_agresividad = 0;	// Modo conservador.
-		else
 			m_agresividad = 1;	// Modo normal.
+		else
+			m_agresividad = 0;	// Modo conservador.
 	} else if (vida_propia < 25) {
 		if (vida_rival > 75 || vida_rival < vida_propia)
 			m_agresividad = 2;	// Modo agresivo.
@@ -74,7 +74,6 @@ bool JugadorCPU::hayQuePegarPina() {
 			return true;
 		}
 	}
-
 
 	int probabilidad;
 	switch (m_agresividad) {
@@ -196,13 +195,13 @@ bool JugadorCPU::hayQueLanzarPoder() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 2;
+			probabilidad = 15;
 			break;
 		case 1:
-			probabilidad = 5;
+			probabilidad = 10;
 			break;
 		case 2:
-			probabilidad = 8;
+			probabilidad = 10;
 			break;
 		default:
 			probabilidad = 0;
@@ -223,13 +222,13 @@ bool JugadorCPU::hayQueHacerToma() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 2;
+			probabilidad = 5;
 			break;
 		case 1:
 			probabilidad = 5;
 			break;
 		case 2:
-			probabilidad = 8;
+			probabilidad = 10;
 			break;
 		default:
 			probabilidad = 0;
@@ -247,13 +246,13 @@ bool JugadorCPU::hayQueAtacar() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 20;
+			probabilidad = 30;
 			break;
 		case 1:
 			probabilidad = 40;
 			break;
 		case 2:
-			probabilidad = 60;
+			probabilidad = 75;
 			break;
 		default:
 			probabilidad = 0;
@@ -277,10 +276,10 @@ bool JugadorCPU::hayQueCubrirse() {
 			probabilidad = 75;
 			break;
 		case 1:
-			probabilidad = 25;
+			probabilidad = 50;
 			break;
 		case 2:
-			probabilidad = 10;
+			probabilidad = 25;
 			break;
 		default:
 			probabilidad = 0;
@@ -295,6 +294,7 @@ bool JugadorCPU::hayQueCubrirse() {
 			} else {
 				float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
 				if (dist <= DISTANCIA_PATADA) {
+					m_ciclos_delay = 5;
 					return true;
 				}
 			}
@@ -307,7 +307,7 @@ bool JugadorCPU::hayQueAvanzar() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 20;
+			probabilidad = 30;
 			break;
 		case 1:
 			probabilidad = 40;
@@ -369,7 +369,7 @@ bool JugadorCPU::hayQueSaltar() {
 			probabilidad = 25;
 			break;
 		case 2:
-			probabilidad = 40;
+			probabilidad = 30;
 			break;
 		default:
 			probabilidad = 0;
