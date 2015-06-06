@@ -9,6 +9,7 @@
 
 Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, std::vector<ObjetoArrojable*> arrojables ,float velocidad, bool fliped) {
 	nombre = nombre_personaje;
+	logo = "";
 	vida = 100;
 	sprites = Sprites;
 	spriteActual = sprites[SPRITE_INICIAL];
@@ -72,6 +73,14 @@ ObjetoArrojable* Personaje::getPoderActivo(){
 			return poderes[0];
 	}
 	return NULL;
+}
+
+void Personaje::setPathLogo( std::string ruta ){
+	logo = ruta;
+}
+
+std::string Personaje::getPathLogo(){
+	return logo;
 }
 
 void Personaje::lanzarObjeto(){
