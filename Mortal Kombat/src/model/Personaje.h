@@ -69,6 +69,7 @@ const float ALTURA_SALTO_DIAG=    1.2;
 class Personaje {
 private:
 	std::string nombre;
+	std::string logo;
 
 	int vida;
 
@@ -144,7 +145,8 @@ public:
 	void AvanzarSprite();
 	void setScroll(bool scrollear);
 	void setFlip(bool flip);
-
+	void setPathLogo(std::string ruta);
+	std::string getPathLogo();
 	Rect_Logico* rectanguloAtaque();
 	Rect_Logico* nextRectAtaque();
 	Rect_Logico* rectanguloDefensa();
