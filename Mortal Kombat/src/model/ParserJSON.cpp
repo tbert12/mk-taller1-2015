@@ -587,6 +587,10 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, string ruta_sonid
 	Sprite* sprite_fatality_1 =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "fatality1", SPRITESHEET_FATALITY_1_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_fatality_1 );
 
+	log( "Se cargara el sprite para la accion de ser tomado del personaje", LOG_DEBUG );
+	Sprite* sprite_tomado =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "esTomado", SPRITESHEET_TOMADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_tomado );
+
 	log( "Se crearon todos los sprites del personaje.", LOG_DEBUG );
 	return sprites;
 
@@ -767,7 +771,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 
 	Personaje* personaje;
 	float personaje_ancho, personaje_alto, personaje_velocidad;
-	string personaje_carpeta_sprites, personaje_carpeta_arrojables, personaje_carpeta_sonidos, personaje_nombre;
+	string personaje_carpeta_sprites, personaje_carpeta_arrojables, personaje_carpeta_sonidos, personaje_nombre, personaje_foto;
 	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
 		personaje = generarPersonajeDefault(ventana);
 		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan el personaje por defecto.", LOG_ERROR );
@@ -844,6 +848,24 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 								log( "La ruta a la carpeta contenedora de los sprites del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 							}
 						}
+
+						if ( ! root["personajes"][k].isMember("foto") ) {
+							personaje_foto = PERSONAJE_FOTO_DEFAULT;
+							log( "No se especifico la foto del personaje. Se utiliza una por defecto.", LOG_WARNING );
+						} else {
+							try {
+								personaje_foto = root["personajes"][k].get( "foto", PERSONAJE_FOTO_DEFAULT ).asString();
+								struct stat sb;
+								if ( stat(personaje_foto.c_str(), &sb) != 0 ) {
+									log( "La ruta a la foto del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
+									personaje_foto = PERSONAJE_FOTO_DEFAULT;
+								} else	log ( "Se cargo correctamente la ruta a la foto del personaje.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								personaje_foto = PERSONAJE_FOTO_DEFAULT;
+								log( "La ruta a la foto del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+							}
+						}
+
 						if ( ! root["personajes"][k].isMember("poderes") ) {
 							personaje_carpeta_arrojables = PERSONAJE_CARPETA_ARROJABLES_DEFAULT;
 							log( "No se especifico la carpeta contenedora de los poderes arrojables del personaje. Se utiliza carpeta por defecto.", LOG_ERROR );
@@ -892,8 +914,13 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 
 						// Crear personaje.
 						Personaje* personaje = new Personaje(personaje_nombre, sprites, arrojables, personaje_velocidad);
-						personaje->setCombos(combos);
 						log( "Se creo correctamente el personaje.", LOG_DEBUG );
+
+						personaje->setCombos(combos);
+						log("Se le asignaron los combos correspondientes.", LOG_DEBUG);
+
+						personaje->setPathLogo(personaje_foto);
+						log("Se le asigno al personaje su foto de perfil.", LOG_DEBUG);
 
 						return personaje;
 					}

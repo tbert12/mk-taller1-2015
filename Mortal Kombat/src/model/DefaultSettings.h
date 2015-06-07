@@ -34,6 +34,7 @@ const float CAPA_1_ANCHO_DEFAULT = 226.6;
 const float CAPA_2_ANCHO_DEFAULT = 600.0;
 const int CAPA_Z_INDEX_DEFAULT = 0;
 const int PERSONAJES_Z_INDEX_DEFAULT = 3;
+const char* const PERSONAJE_FOTO_DEFAULT = "data/players/default/face.png";
 const char* const PERSONAJE_CARPETA_SPRITES_DEFAULT = "data/players/default/sprites/";
 const char* const PERSONAJE_CARPETA_ARROJABLES_DEFAULT = "data/players/default/poderes/";
 const char* const PERSONAJE_CARPETA_SONIDOS_DEFAULT = "data/players/default/sound/";
@@ -84,6 +85,7 @@ const char* const SPRITESHEET_PODER_1_DEFAULT = "poder1.png";
 const char* const SPRITESHEET_PODER_2_DEFAULT = "poder2.png";
 const char* const SPRITESHEET_FINISH_DEFAULT = "finish.png";
 const char* const SPRITESHEET_FATALITY_1_DEFAULT = "fatality1.png";
+const char* const SPRITESHEET_TOMADO_DEFAULT = "esTomado.png";
 
 const char* const SPRITESHEET_OBJETO_ARROJABLE_DEFAULT = "objetoArrojable.png";
 const char* const ARROJABLE_NOMBRE_DEFAULT = "Poder";

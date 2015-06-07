@@ -56,6 +56,7 @@
 	"personajes": [
 		{
 			"nombre": "Liu Kang",
+			"foto": "data/players/liukang/face.png",
 			"sprites": "data/players/liukang/sprites/",
 			"poderes": "data/players/liukang/poderes/",
 			"sonidos": "data/players/liukang/sound/",
@@ -73,9 +74,10 @@
 		},
 		{
 			"nombre": "Sub-Zero",
+			"foto": "data/players/subzero/face.png",
 			"sprites": "data/players/liukang/sprites/",
-			"poderes": "data/players/liukang/poderes/",
-			"sonidos": "data/players/liukang/sound/",
+			"poderes": "data/players/subzero/poderes/",
+			"sonidos": "data/players/subzero/sound/",
 			"combos": [
 				"1335"
 			],
