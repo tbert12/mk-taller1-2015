@@ -105,6 +105,8 @@ const int COLOR_DESPLAZAMIENTO_DEFAULT = 0;
 
 const char* const IMAGEN_CARGANDO_JUEGO = "data/img/background/inicio.png";
 
+const int CANTIDAD_PERSONAJES_DEFAULT = 12;
+
 
 const float PERSONAJE_VELOCIDAD_DEFAULT = 5.0;
 

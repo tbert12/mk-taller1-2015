@@ -947,6 +947,18 @@ vector<Personaje*> ParserJSON::cargarPersonajes(Json::Value root, Ventana* venta
 		log( "No se cargo ningun personaje. Se setea un personaje por defecto.", LOG_ERROR );
 	}
 
+	// Verifico que haya 12 personajes. Sino, se repite la carga hasta completarlos.
+	int cant_personajes_inicial = personajes.size();
+	while (personajes.size() < CANTIDAD_PERSONAJES_DEFAULT) {
+		for (int j = 0; j < cant_personajes_inicial; j++) {
+			if (personajes.size() >= CANTIDAD_PERSONAJES_DEFAULT)
+				break;
+			nombre = personajes[j]->getNombre();
+			personaje = cargarPersonaje(nombre, root, ventana, false);
+			personajes.push_back(personaje);
+		}
+	}
+
 	return personajes;
 
 }

@@ -14,7 +14,7 @@ namespace std {
 
 class LiuKang : public Personaje{
 public:
-	LiuKang(string nombre_personaje,vector<Sprite*> Sprites,vector<ObjetoArrojable*> arrojables ,float velocidad, bool fliped);
+	LiuKang(string nombre_personaje,vector<Sprite*> Sprites,vector<ObjetoArrojable*> arrojables ,float velocidad, bool fliped=false);
 	virtual ~LiuKang();
 
 	void poder2();
