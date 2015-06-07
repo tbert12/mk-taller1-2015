@@ -1,7 +1,4 @@
 {
-	"face":{
-		"nombre":"face.png",
-	},
 	"agachadoPatadaAlta":{
 		"nombre":"agachadoPatadaAlta.png",
 		"frames":[

@@ -102,9 +102,11 @@ void SelectPlayer::abajo(int jugador){
 void SelectPlayer::select(int jugador){
 	if (jugador == PLAYER_ONE){
 		player1Select = true;
+		opciones[Player1].personaje->victoria();
 	}
 	else if (jugador == PLAYER_TWO){
 		player2Select = true;
+		opciones[Player2].personaje->victoria();
 	}
 }
 
