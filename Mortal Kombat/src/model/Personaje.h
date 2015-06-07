@@ -67,6 +67,20 @@ const float ALTURA_SALTO_DIAG=    1.2;
 
 
 class Personaje {
+protected:
+
+	void _cambiarSprite(int accion);
+	float m_velocidad;
+	float m_velocidadActual;
+	bool m_fliped;
+	bool _estaAtacando;
+
+	/* Logica de Salto */
+	float maxAlturaDeSalto;
+	int tiempoDeSalto;
+	// 0 Cae del Salto, 1 Saltando, -1 No esta Saltanto
+	short _estaSaltando;
+
 private:
 	std::string nombre;
 	std::string logo;
@@ -79,22 +93,11 @@ private:
 	float m_AltoMundo;
 	float m_AnchoMundo;
 
-	float m_velocidad;
-	float m_velocidadActual;
 	bool m_mover;
-
-	bool m_fliped;
 	bool nextFlip;
-
-	/* Logica de Salto */
-	float maxAlturaDeSalto;
-	int tiempoDeSalto;
-	// 0 Cae del Salto, 1 Saltando, -1 No esta Saltanto
-	short _estaSaltando;
 
 	bool _estaCubriendose;
 	bool _estaAgachado;
-	bool _estaAtacando;
 	bool _recibioGolpe;
 	bool _estaMuerto;
 
@@ -106,7 +109,7 @@ private:
 	Sprite* spriteActual;
 	std::vector<Sprite*> sprites;
 	std::vector<ObjetoArrojable*> poderes;
-	void _cambiarSprite(int accion);
+
 	void _UpdatePoder();
 
 	void _Caminar(bool derecha);
@@ -140,6 +143,9 @@ private:
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, std::vector<ObjetoArrojable*> arrojables,float velocidad, bool fliped = false);
 	virtual ~Personaje();
+	/* Solo para el Menu de Opciones */
+	Personaje* copy();
+
 	std::vector<Sprite*> getSprites();
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
@@ -150,6 +156,7 @@ public:
 	Rect_Logico* rectanguloAtaque();
 	Rect_Logico* nextRectAtaque();
 	Rect_Logico* rectanguloDefensa();
+
 
 	ObjetoArrojable* getPoderActivo();
 
@@ -204,9 +211,12 @@ public:
 	void dejarDeCubrirse();
 	void lanzarObjeto();
 
-	void toma1();
+	void toma1();  /* Toma clasica que lo lanza para tras */
 	void poder1(); /* Relacionado a lanzar un objeto */
-	void poder2();
+
+	/* Cada personaje tiene el suyo */
+	virtual void poder2();
+	virtual void fatality1(Personaje* otroPersonaje);
 
 	void finishHim();
 	void morir();

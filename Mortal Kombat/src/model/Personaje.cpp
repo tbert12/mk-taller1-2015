@@ -429,7 +429,10 @@ void Personaje::AvanzarSprite(){
 	if ( _estaCubriendose and spriteActual->ultimoFrame() ) {
 		//Deja de Cubrirse
 		if ( !_estaAgachado ) {
-			_cambiarSprite(SPRITE_INICIAL);
+			if (!m_velocidad)
+				_cambiarSprite(SPRITE_INICIAL);
+			else
+				_Caminar( ( m_velocidadActual > 0 ) );
 		} else {
 			_cambiarSprite(SPRITE_AGACHAR);
 			spriteActual->doLoop(true);
@@ -872,24 +875,23 @@ void Personaje::toma1(){
 	spriteActual->freezeSprite();
 	_estaAtacando = true;
 }
-//+++++++++++++++++++++PODER Y FATALITY++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++PODER1++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void Personaje::poder1(){
+	if (poderes[0]->getVida()) return;
 	/*Siempre relacionado a lanzar un objeto*/
 	_cambiarSprite(SPRITE_PODER_1);
+	/* Depende de la posicion del sprite se lanza el poder */
 	spriteActual->freezeSprite();
 	_estaAtacando = true;
 }
 
-void Personaje::poder2(){
-	/* Hay que pensar algo de las fatalityes
-	 * Porque son todas distintas, puede haber una clase global que sea Fatality
-	 * en donde Fatality1-Liukang / Fatality2-SubZero Hereda de Fatality y minupulan
-	 * cosas del personaje.
-	 *
-	 * */
-}
+//+++++++++++++++++++++++++PODER2 y FATALITY++++++++++++++++++++++++
+/* Cada personaje tiene el suyo */
+void Personaje::poder2(){}
+void Personaje::fatality1(Personaje* otroPersonaje){}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 //+++++++++++++++++++++DEAD o FINISH HIM+++++++++++++++++++++++++++
@@ -916,6 +918,14 @@ void Personaje::victoria() {
 
 //-------------------------------------------------------------------------------------------------------------------------
 //FIN MANEJO DE SPRITES :)
+
+//Genera copia del personaje para repetirlo
+Personaje* Personaje::copy(){
+	Personaje* copiaPersonaje = new Personaje(nombre,sprites,poderes,m_velocidad,m_fliped);
+	//Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, std::vector<ObjetoArrojable*> arrojables,float velocidad, bool fliped = false);
+	copiaPersonaje->setPathLogo(logo);
+	return copiaPersonaje;
+}
 
 Personaje::~Personaje() {
 	spriteActual = NULL;
