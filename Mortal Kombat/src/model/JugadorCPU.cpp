@@ -192,17 +192,14 @@ bool JugadorCPU::hayQuePegarAbajo() {
 }
 
 bool JugadorCPU::hayQueLanzarPoder() {
-	// No puede tirar poder mientras salta.
-	if (m_personaje_cpu->estaSaltando())
-		return false;
 
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 15;
+			probabilidad = 20;
 			break;
 		case 1:
-			probabilidad = 12;
+			probabilidad = 15;
 			break;
 		case 2:
 			probabilidad = 10;
@@ -212,15 +209,18 @@ bool JugadorCPU::hayQueLanzarPoder() {
 	}
 
 	if (reaccion(probabilidad)) {
-		if (m_personaje_1->estaCubriendose()) {
-			if (reaccion(probabilidad)) {
+		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
+		if (dist <= DISTANCIA_PATADA * 2) {
+			if (m_personaje_1->estaCubriendose()) {
+				if (reaccion(probabilidad)) {
+					m_ciclos_delay = 20;
+					return true;
+				}
+				return false;
+			} else {
 				m_ciclos_delay = 20;
 				return true;
 			}
-			return false;
-		} else {
-			m_ciclos_delay = 20;
-			return true;
 		}
 	}
 	return false;
@@ -330,7 +330,7 @@ bool JugadorCPU::hayQueAvanzar() {
 	if (reaccion(probabilidad)) {
 		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
 		if (dist >= DISTANCIA_PATADA) {
-			m_ciclos_delay = 10;
+			m_ciclos_delay = 2;
 			return true;
 		} else if (dist < DISTANCIA_PATADA && dist >= DISTANCIA_TOMA) {
 			if (reaccion(probabilidad))
@@ -359,7 +359,7 @@ bool JugadorCPU::hayQueRetroceder() {
 	if (reaccion(probabilidad)) {
 		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
 		if (dist <= DISTANCIA_PATADA) {
-			m_ciclos_delay = 5;
+			m_ciclos_delay = 2;
 			return true;
 		}
 	}
@@ -386,6 +386,7 @@ bool JugadorCPU::hayQueSaltar() {
 	if (reaccion(probabilidad)) {
 		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
 		if (dist > DISTANCIA_PATADA) {
+			m_ciclos_delay = 2;
 			return true;
 		}
 	}
@@ -422,6 +423,12 @@ bool JugadorCPU::hayQueAgacharse() {
 
 void JugadorCPU::realizarMovimiento() {
 
+	// Si termino el round, no puede moverse.
+	if (m_personaje_cpu->estaMuerto() || m_personaje_cpu->getAccionDeAtaque() == SPRITE_GANA
+|| m_personaje_cpu->getAccionDeAtaque() == SPRITE_FINISH) {
+		return;
+	}
+
 	// Ciclos de delay.
 	if (m_ciclos_delay != 0) {
 		m_ciclos_delay--;
@@ -434,9 +441,10 @@ void JugadorCPU::realizarMovimiento() {
 
 	if (m_personaje_cpu->estaAgachado()) {
 		if (hayQuePegarArriba()) {
-			if (hayQuePegarPina())			// Caso particular del gancho.
+			if (hayQuePegarPina())	{		// Caso particular del gancho.
 				m_personaje_cpu->pinaAlta();
-			else if (hayQuePegarPatada())
+				m_ciclos_delay = 20;
+			} else if (hayQuePegarPatada())
 				m_personaje_cpu->patadaAlta();
 		} else if (hayQuePegarAbajo()) {
 			if (hayQuePegarPina())
@@ -486,14 +494,17 @@ void JugadorCPU::realizarMovimiento() {
 		m_personaje_cpu->Saltar();
 	} else if (hayQueAgacharse()) {
 		m_personaje_cpu->Agachar();
+		return;
 	}
 
 	// Posibilidades de ataque.
 	if (hayQueAtacar()) {
 		if (hayQueLanzarPoder()) {
-			m_personaje_cpu->poder1();
+			if (!m_personaje_cpu->estaSaltando())
+				m_personaje_cpu->poder1();
 		} else if (hayQueHacerToma()) {
-			m_personaje_cpu->toma1();
+			if (!m_personaje_cpu->estaSaltando())
+				m_personaje_cpu->toma1();
 		} else if (hayQuePegarArriba()) {
 			if (hayQuePegarPina())
 				m_personaje_cpu->pinaAlta();

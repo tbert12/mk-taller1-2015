@@ -976,6 +976,8 @@ vector<Personaje*> ParserJSON::cargarPersonajes(Json::Value root, Ventana* venta
 
 	// Verifico que haya 12 personajes. Sino, se repite la carga hasta completarlos.
 	int cant_personajes_inicial = personajes.size();
+	if (cant_personajes_inicial < CANTIDAD_PERSONAJES_DEFAULT)
+		log("Se requiere un minimo de 12 personajes. Se repite la carga de los personajes en orden hasta alcanzar esa cantidad.", LOG_WARNING);
 	while (personajes.size() < CANTIDAD_PERSONAJES_DEFAULT) {
 		for (int j = 0; j < cant_personajes_inicial; j++) {
 			if (personajes.size() >= CANTIDAD_PERSONAJES_DEFAULT)

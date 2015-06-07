@@ -259,7 +259,7 @@ bool Personaje::enMovimiento(){
 	return (m_velocidadActual != 0);
 }
 bool Personaje::estaSaltando(){
-	return _estaSaltando <= 0;
+	return _estaSaltando >= 0;
 }
 
 bool Personaje::estaCubriendose() {
@@ -272,6 +272,10 @@ bool Personaje::estaAgachado() {
 
 bool Personaje::estaAtacando() {
 	return _estaAtacando;
+}
+
+bool Personaje::estaMuerto() {
+	return _estaMuerto;
 }
 
 float Personaje::getAncho(){

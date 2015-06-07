@@ -193,6 +193,7 @@ public:
 	bool estaSaltando();
 	bool estaCubriendose();
 	bool estaAtacando();
+	bool estaMuerto();
 
 	bool recibirGolpe(int CodigoGolpe, int Danio = 0);
 	void QuitarVida(int valor);
