@@ -153,6 +153,7 @@ bool SelectPlayer::mouseinTextBox(int x, int y){
 	if (x >= NameJug1.x and x <= (NameJug1.x + NameJug1.w) ){
 		if (y >= NameJug1.y and y <= (NameJug1.y + NameJug1.h) ){
 			textBoxPlayer1 = true;
+			text_Box_1->focus(true);
 			textBoxPlayer2 = false;
 			return true;
 		}
@@ -161,13 +162,20 @@ bool SelectPlayer::mouseinTextBox(int x, int y){
 	if (x >= NameJug2.x and x <= (NameJug2.x + NameJug2.w) ){
 		if (y >= NameJug2.y and y <= (NameJug2.y + NameJug2.h) ){
 			textBoxPlayer2 = true;
+			text_Box_2->focus(true);
 			textBoxPlayer1 = false;
 			return true;
 		}
 	}
 
-	if (textBoxPlayer1) textBoxPlayer1 = false;
-	if (textBoxPlayer2) textBoxPlayer2 = false;
+	if (textBoxPlayer1){
+		textBoxPlayer1 = false;
+		text_Box_1->focus(false);
+	}
+	if (textBoxPlayer2) {
+		text_Box_2->focus(false);
+		textBoxPlayer2 = false;
+	}
 
 	return false;
 }
