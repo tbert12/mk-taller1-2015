@@ -75,7 +75,7 @@
 		{
 			"nombre": "Sub-Zero",
 			"foto": "data/players/subzero/face.png",
-			"sprites": "data/players/liukang/sprites/",
+			"sprites": "data/players/subzero/sprites/",
 			"poderes": "data/players/subzero/poderes/",
 			"sonidos": "data/players/subzero/sound/",
 			"combos": [
