@@ -111,7 +111,10 @@ void Menu::_renderImagen(){
 void Menu::_renderTexto(int opcion_actual){
 
 	for (unsigned int i = 0; i < opciones.size(); i++){
-
+		SDL_Rect pos = opciones[i].posicion;
+		SDL_Rect pos_sombra = {pos.x - 3,pos.y + 1,pos.w,pos.h};
+		SDL_Color colorSombra = {0,0,0,255};
+		_renderText(opciones[i].texto,colorSombra,pos_sombra);
 		if ((int)i == opcion_actual){
 			_renderText(opciones[i].texto,ColorRed,opciones[i].posicion);
 			_renderText(opciones[i].descripcion,Color,Descripcion);

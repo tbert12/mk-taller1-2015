@@ -23,10 +23,11 @@ SelectPlayer::SelectPlayer(Ventana* una_ventana,int modo_de_juego,std::vector<Pe
 	text_Box_1 = new TextBox(NameJug1,una_ventana);
 	text_Box_2 = new TextBox(NameJug2,una_ventana);
 	opciones = menuPlayers->getOpciones();
+	ciclosDelay = 20;
 }
 
 bool SelectPlayer::playersSelected(){
-	return player1Select && player2Select;
+	return (player1Select and player2Select and (ciclosDelay <= 0));
 }
 
 TextBox* SelectPlayer::getTextBox(){
@@ -54,13 +55,14 @@ Personaje* SelectPlayer::getPersonajeDos(){
 }
 
 void SelectPlayer::render(){
-	menuPlayers->render(Player1,Player2);
 	if (!textBoxPlayer1)
 		text_Box_1->setText(personajes_12[Player1]->getNombre());
 	if (!textBoxPlayer2)
 		text_Box_2->setText(personajes_12[Player2]->getNombre());
-	text_Box_1->render();
-	text_Box_2->render();
+	menuPlayers->render(Player1,Player2,text_Box_1,text_Box_2);
+	if (player1Select and player2Select){
+		ciclosDelay--;
+	}
 }
 
 void SelectPlayer::izquierda(int jugador){

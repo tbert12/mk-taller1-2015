@@ -42,6 +42,7 @@ private:
 	int ModoDeJuego;
 	int Player1;
 	int Player2;
+	int ciclosDelay;
 	SDL_Rect NameJug1;
 	SDL_Rect NameJug2;
 	bool player1Select;

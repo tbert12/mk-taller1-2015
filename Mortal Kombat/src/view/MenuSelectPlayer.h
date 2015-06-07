@@ -14,6 +14,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "Ventana.h"
+#include "TextBox.h"
 #include "../model/Personaje.h"
 #include "../model/Pelea.h"
 
@@ -30,7 +31,7 @@ typedef struct Opcion_Personaje {
 class MenuSelectPlayer {
 public:
 	MenuSelectPlayer(Ventana* ventana,std::vector<Personaje*> personajes, int modo_de_juego);
-	void render(int opcion_actual1, int opcion_actual2);
+	void render(int opcion_actual1, int opcion_actual2,TextBox* textbox1,TextBox* textbox2);
 	std::vector<Opcion_Personaje> getOpciones();
 	SDL_Rect getRectName1();
 	SDL_Rect getRectName2();

@@ -15,7 +15,7 @@ TextBox::TextBox(SDL_Rect rect, Ventana* ventana) {
 	mVentana = ventana;
 	mDimension = rect;
 	mTexto = " ";
-	textColor = {0,0,0,255};
+	textColor = {255,0,0,255};
 	borderColor = {0,255,0,255};
 	dcolor = 0; /* diferencial color */
 	_loadFont();
@@ -75,18 +75,18 @@ void TextBox::render(){
 	}
 	borderColor.b = (Uint8)variacion;
 	//SDL_SetRenderDrawColor(mVentana->getRenderer(), borderColor.r, borderColor.g, borderColor.b, borderColor.a);
+
 	SDL_SetRenderDrawColor(mVentana->getRenderer(), 255, 0, 0, 255);
-	SDL_Rect rect = {0,0,mDimension.w,mDimension.h};
-	SDL_RenderDrawRect(mVentana->getRenderer(), &rect);
+	SDL_RenderDrawRect(mVentana->getRenderer(), &mDimension);
 
 	int ancho = mDimension.w;
-	int x = mWidth - mDimension.x;
+	int x = mWidth - mDimension.w;
 	if ( x < 0){
 		x = 0;
 		ancho = mWidth;
 	}
 	SDL_Rect CorteDeString = { x , 0 , ancho, mDimension.h };
-	_renderText( mDimension.x, mDimension.y + mHeight*0.5, &CorteDeString);
+	_renderText( mDimension.x, mDimension.y + mHeight * 0.2, &CorteDeString);
 }
 
 void TextBox::_loadFromRenderedText( string textureText){

@@ -109,14 +109,6 @@ void KeyboardControl::KeyPressed(){
 			case SDLK_p:
 				pausa = !pausa;
 				break;
-			case SDLK_l:
-				if(!como_jugador) return;
-				personaje->morir();
-				break;
-			case SDLK_i:
-				if(!como_jugador) return;
-				personaje->victoria();
-				break;
 			case SDLK_F1:
 				sleep+=10000;
 				break;

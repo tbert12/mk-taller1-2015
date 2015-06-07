@@ -40,8 +40,8 @@ void MenuSelectPlayer::_crearOpciones(){
 	int y_fila_2 = int(197*ratio_y + 0.5);
 	int y_fila_3 = int(307*ratio_y + 0.5);
 
-	NameJug1 = {int(10*ratio_x + 0.5),int(440*ratio_y + 0.5),int(150*ratio_x + 0.5),int(40*ratio_y + 0.5)};
-	NameJug2 = {int(475*ratio_x + 0.5),int(440*ratio_y + 0.5),int(150*ratio_x + 0.5),int(40*ratio_y + 0.5)};
+	NameJug1 = {int(10*ratio_x + 0.5),int(430*ratio_y + 0.5),int(150*ratio_x + 0.5),int(40*ratio_y + 0.5)};
+	NameJug2 = {int(475*ratio_x + 0.5),int(430*ratio_y + 0.5),int(150*ratio_x + 0.5),int(40*ratio_y + 0.5)};
 
 	Opcion_Personaje* opcion1 = new Opcion_Personaje;
 	opcion1->posicion = SDL_Rect {int(101*ratio_x + 0.5),y_fila_1,ancho,alto};
@@ -139,12 +139,14 @@ SDL_Texture* MenuSelectPlayer::_loadImage(SDL_Rect* rect, string ruta){
 	log("Se cargo correctamente la textura de la imagen del menu inicial",LOG_DEBUG);
 }
 
-void MenuSelectPlayer::render(int opcion_actual1,int opcion_actual2){
+void MenuSelectPlayer::render(int opcion_actual1,int opcion_actual2,TextBox* textbox1,TextBox* textbox2){
 	ventana->clear();
 
 	_renderImagen();
 	_renderFaces();
 	_renderSeleccion(opcion_actual1,opcion_actual2);
+	textbox1->render();
+	textbox2->render();
 
 	ventana->Refresh();
 
