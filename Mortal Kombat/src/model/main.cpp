@@ -135,6 +135,7 @@ int main( int argc, char* args[] )
 		}
 
 		if (personaje_uno->getNombreDeCarga() == personaje_dos->getNombreDeCarga() ){
+			printf("CAMBIO DE COLOR\n");
 			personaje_dos = parser->cambiarColorPersonaje(personaje_dos);
 		}
 

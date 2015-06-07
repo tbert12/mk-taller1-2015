@@ -10,14 +10,14 @@
 SelectPlayer::SelectPlayer(Ventana* una_ventana,int modo_de_juego,std::vector<Personaje*> los_personajes) {
 	ModoDeJuego = modo_de_juego;
 	personajes = los_personajes;
-	_verificarPersonajes();
+	//_verificarPersonajes();
 	Player1 = rand() % MAX_PLAYER + 1;
 	Player2 = rand() % MAX_PLAYER + 1;
 	player1Select = false;
 	player2Select = false;
 	textBoxPlayer1 = false;
 	textBoxPlayer2 = false;
-	menuPlayers = new MenuSelectPlayer(una_ventana,personajes_12,ModoDeJuego);
+	menuPlayers = new MenuSelectPlayer(una_ventana,personajes,ModoDeJuego);
 	NameJug1 = menuPlayers->getRectName1();
 	NameJug2 = menuPlayers->getRectName2();
 	text_Box_1 = new TextBox(NameJug1,una_ventana);
@@ -46,19 +46,19 @@ bool SelectPlayer::changeController(){
 }
 
 Personaje* SelectPlayer::getPersonajeUno(){
-	personajes_12[Player1]->reset();
-	return personajes_12[Player1];
+	personajes[Player1]->reset();
+	return personajes[Player1];
 }
 Personaje* SelectPlayer::getPersonajeDos(){
-	personajes_12[Player2]->reset();
-	return personajes_12[Player2];
+	personajes[Player2]->reset();
+	return personajes[Player2];
 }
 
 void SelectPlayer::render(){
 	if (!textBoxPlayer1)
-		text_Box_1->setText(personajes_12[Player1]->getNombre());
+		text_Box_1->setText(personajes[Player1]->getNombre());
 	if (!textBoxPlayer2)
-		text_Box_2->setText(personajes_12[Player2]->getNombre());
+		text_Box_2->setText(personajes[Player2]->getNombre());
 	menuPlayers->render(Player1,Player2,text_Box_1,text_Box_2);
 	if (player1Select and player2Select){
 		ciclosDelay--;
@@ -171,7 +171,7 @@ bool SelectPlayer::mouseinTextBox(int x, int y){
 
 	return false;
 }
-
+/*
 void SelectPlayer::_verificarPersonajes(){
 	unsigned int cant_real = personajes.size();
 	bool copy = false;
@@ -189,7 +189,7 @@ void SelectPlayer::_verificarPersonajes(){
 		}
 	}
 }
-
+*/
 bool SelectPlayer::textBox(){
 	return textBoxPlayer1 || textBoxPlayer2;
 }
@@ -197,17 +197,16 @@ bool SelectPlayer::textBox(){
 void SelectPlayer::textBoxEnter(){
 
 	if (textBoxPlayer1){
-		//personajes_12[Player1]->setNombre(text_Box_1->getText());
+		personajes[Player1]->setNombre(text_Box_1->getText());
 		textBoxPlayer1 = false;
 	}
 	if (textBoxPlayer2){
-		//personajes_12[Player2]->setNombre(text_Box_2->getText());
+		personajes[Player2]->setNombre(text_Box_2->getText());
 		textBoxPlayer2 = false;
 	}
 }
 
 SelectPlayer::~SelectPlayer() {
-	personajes_12.clear();
 	delete text_Box_1;
 	delete text_Box_2;
 }

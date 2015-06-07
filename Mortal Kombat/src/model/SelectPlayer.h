@@ -37,7 +37,6 @@ public:
 private:
 	MenuSelectPlayer* menuPlayers;
 	std::vector<Personaje*> personajes;
-	std::vector<Personaje*> personajes_12;
 	std::vector<Opcion_Personaje> opciones;
 	int ModoDeJuego;
 	int Player1;
@@ -51,7 +50,6 @@ private:
 	bool textBoxPlayer2;
 	TextBox* text_Box_1;
 	TextBox* text_Box_2;
-	void _verificarPersonajes();
 };
 
 #endif /* SRC_MODEL_SELECTPLAYER_H_ */

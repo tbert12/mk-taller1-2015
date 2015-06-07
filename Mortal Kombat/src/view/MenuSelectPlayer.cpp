@@ -180,8 +180,7 @@ void MenuSelectPlayer::_renderFaces(){
 }
 
 void MenuSelectPlayer::_renderFace(Opcion_Personaje opcion){
-	//string ruta = opcion.personaje->getPathLogo();
-	string ruta = "data/players/liukang/sprites/face.png";
+	string ruta = opcion.personaje->getPathLogo();
 	SDL_Rect posicion = opcion.posicion;
 
 	SDL_Texture* textura;
