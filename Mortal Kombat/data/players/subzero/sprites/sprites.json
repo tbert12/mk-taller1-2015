@@ -1,8 +1,5 @@
 {
-	
-	"face":{
-		"nombre":"face.png",
-	},
+
 	"agachar":{
 		"nombre":"agachar.png",
 		"frames":[
