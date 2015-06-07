@@ -8,6 +8,8 @@
 #include "CapaPrincipal.h"
 #include "../view/LSound.h"
 
+#include "personajes/LiuKang.h"
+
 
 using namespace std;
 

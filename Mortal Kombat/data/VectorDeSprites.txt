@@ -33,15 +33,4 @@ ORDEN DE CARGA DE SPRITES EN VECTOR<SPRITE*>:
 	30	PODER_2							30
 	31	FINISH							31
 	32	FATALITY_1						32
-	
-	
-							FALTA BUSCAR SPRITE DE RECIBIR_TOMA !!!
-							
-BUBI AGREGA:
-	- esTomado 
-	- face
-	
-
-Face es el logo del personaje 
-solo tiene una ruta, ojo la ruta completa "data/players/[personaje]/sprites/"face.png"
-Se lo tenes que setear a personaje con Personaje->setPathlogo( ruta img )
+	33	ES_TOMADO						33
