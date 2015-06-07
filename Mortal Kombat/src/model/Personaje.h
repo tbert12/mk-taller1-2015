@@ -83,6 +83,7 @@ protected:
 
 private:
 	std::string nombre;
+	std::string nombreDeCarga;
 	std::string logo;
 
 	int vida;
@@ -147,6 +148,7 @@ public:
 	Personaje* copy();
 
 	std::vector<Sprite*> getSprites();
+	void setNombre(std::string);
 	Sprite* getSpriteActual();
 	void AvanzarSprite();
 	void setScroll(bool scrollear);
@@ -176,6 +178,7 @@ public:
 	float getVelocidad();
 	int getVida();
 	string getNombre();
+	string getNombreDeCarga();
 	float getAncho();
 	float getAlto();
 	float getX();

@@ -9,6 +9,7 @@
 
 Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, std::vector<ObjetoArrojable*> arrojables ,float velocidad, bool fliped) {
 	nombre = nombre_personaje;
+	nombreDeCarga = nombre;
 	logo = "";
 	vida = 100;
 	sprites = Sprites;
@@ -81,6 +82,14 @@ void Personaje::setPathLogo( std::string ruta ){
 
 std::string Personaje::getPathLogo(){
 	return logo;
+}
+
+void Personaje::setNombre(string nombre_nuevo){
+	nombre = nombre_nuevo;
+}
+
+std::string Personaje::getNombreDeCarga(){
+	return nombreDeCarga;
 }
 
 void Personaje::lanzarObjeto(){
@@ -194,17 +203,6 @@ void Personaje::setFlip(bool flip){
 
 void Personaje::Update(float posDeOtroJugador,bool forzado){
 	//Actualizo La X para cada caso y verificando limites
-	if (_estaMuerto){
-		if (!spriteActual->inLoop()){
-			if (m_fliped){
-				m_xActual += m_velocidad;
-			}
-			else {
-				m_xActual -=m_velocidad;
-			}
-		}
-		return;
-	}
 	float renderX = m_xActual + m_velocidadActual;
 	float maximo,minimo;
 	if(m_fliped){
@@ -314,7 +312,25 @@ float Personaje::getVelocidadIzquierda(){
 }
 
 void Personaje::renderizar(float x_dist_ventana,float posOtherPlayer){
-	spriteActual->render(m_xActual - x_dist_ventana,m_yActual ,m_fliped);
+	float corrimiento = 0;
+	float corr2 = 0;
+	if (_estaMuerto) {
+		corr2 = sprites[SPRITE_CUBRIRSE]->getAncho();
+		corrimiento = getAncho();
+		if (m_fliped){
+			corr2 = -corr2;
+			corrimiento = -corrimiento;
+		}
+	}
+	if ( spriteActual == sprites[SPRITE_GANA] ){
+		corrimiento = getAncho()/2;
+		corr2 = sprites[SPRITE_CUBRIRSE]->getAncho();
+		if (m_fliped){
+			corrimiento = -corrimiento;
+			corr2 = -corr2;
+		}
+	}
+	spriteActual->render( (m_xActual+corr2) - x_dist_ventana - corrimiento,m_yActual ,m_fliped);
 
 	//render poderes
 	if(poderes.size() > 0){
@@ -324,7 +340,7 @@ void Personaje::renderizar(float x_dist_ventana,float posOtherPlayer){
 	}
 
 	//* Para test de colisiones *//
-	//spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
+	spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
 	//* Fin de test para mostrar colisiones *//
 
 	AvanzarSprite();
@@ -365,13 +381,16 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	} else if (Accion == SPRITE_PATADA_BAJA or Accion == SPRITE_PINA_BAJA or Accion == SPRITE_PINA_AGACHADO or Accion == SPRITE_PATADA_ALTA_AGACHADO){
 		propH = 6;
 		propY = 2;
-	} else if (Accion == SPRITE_PATADA_CIRCULAR or Accion == SPRITE_PATADA_SALTANDO or Accion == SPRITE_PATADA_BAJA_AGACHADO){
+	} else if (Accion == SPRITE_PATADA_CIRCULAR or Accion == SPRITE_PATADA_BAJA_AGACHADO){
 		propH = 2;
 		propY = propH;
 	} else if (Accion == SPRITE_PINA_SALTANDO){
 		propH = 3;
 		propY = 2;
-	} else if (Accion == SPRITE_GANCHO){
+	} else if (Accion == SPRITE_PATADA_SALTANDO){
+		propH = 2;
+		propY = propH;
+	}else if (Accion == SPRITE_GANCHO){
 		if (!spriteActual->proxFrameUltimo()){
 			propH = 0; //Por lo que veo C++ sabe dividir por 0
 		} else {
@@ -684,14 +703,16 @@ void Personaje::_pina(int sprite, int spritecombo){
 	if ( _estaAgachado ) {
 		if (sprite == SPRITE_PINA_ALTA) _gancho();
 		else _pinaAgachado();
-	} else if ( _estaSaltando > 0 ) {
+		return;
+	}
+	if ( _estaSaltando > 0 ) {
 		_pinaSaltando();
+		return;
+	}
+	if (accionActual == sprite or accionActual == spritecombo){
+		_cambiarSprite(spritecombo);
 	} else {
-		if (accionActual == sprite or accionActual == spritecombo){
-			_cambiarSprite(spritecombo);
-		} else {
-			_cambiarSprite(sprite);
-		}
+		_cambiarSprite(sprite);
 	}
 	_estaAtacando = true;
 
@@ -699,18 +720,21 @@ void Personaje::_pina(int sprite, int spritecombo){
 
 void Personaje::_pinaAgachado() {
 	_cambiarSprite(SPRITE_PINA_AGACHADO);
+	_estaAtacando = true;
 }
 
 void Personaje::_gancho() {
 	//Destrabarlo
 	_cambiarSprite(SPRITE_GANCHO);
 	spriteActual->freezeSprite();
+	_estaAtacando = true;
 }
 
 void Personaje::_pinaSaltando() {
 	if ( tiempoDeSalto >= TIEMPOTOTALDESALTO/3 ){
 		_cambiarSprite(SPRITE_PINA_SALTANDO);
 		spriteActual->doLoop(true);
+		_estaAtacando = true;
 	}
 }
 
@@ -813,7 +837,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	reaccionesAGolpes[SPRITE_PINA_ALTA] = 			SPRITE_RECIBE_ALTO;
 	reaccionesAGolpes[SPRITE_PATADA_ALTA] = 		SPRITE_RECIBE_ALTO;
 	reaccionesAGolpes[SPRITE_PATADA_SALTANDO] = 	SPRITE_RECIBE_GANCHO;
-	reaccionesAGolpes[SPRITE_PINA_SALTANDO] = 		SPRITE_RECIBE_GANCHO;
+	reaccionesAGolpes[SPRITE_PINA_SALTANDO] = 		SPRITE_RECIBE_FUERTE;
 	reaccionesAGolpes[GOLPE_DE_PODER] = 			SPRITE_RECIBE_FUERTE; //PODER
 	reaccionesAGolpes[SPRITE_PATADA_ALTA_AGACHADO]= _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
 	reaccionesAGolpes[SPRITE_PATADA_BAJA_AGACHADO]= _estaAgachado ? SPRITE_RECIBE_AGACHADO : SPRITE_RECIBE_BAJO;
@@ -921,8 +945,11 @@ void Personaje::victoria() {
 
 //Genera copia del personaje para repetirlo
 Personaje* Personaje::copy(){
-	Personaje* copiaPersonaje = new Personaje(nombre,sprites,poderes,m_velocidad,m_fliped);
-	//Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, std::vector<ObjetoArrojable*> arrojables,float velocidad, bool fliped = false);
+	std::vector<ObjetoArrojable*> copiObjetos;
+	for (size_t i = 0; i < poderes.size();i++){
+		copiObjetos.push_back(poderes[i]->copy());
+	}
+	Personaje* copiaPersonaje = new Personaje(nombre,sprites,copiObjetos,m_velocidad,m_fliped);
 	copiaPersonaje->setPathLogo(logo);
 	return copiaPersonaje;
 }

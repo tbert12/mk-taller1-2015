@@ -1440,7 +1440,7 @@ Mundo* ParserJSON::cargarMundo() {
 Personaje* ParserJSON::cambiarColorPersonaje(Personaje* el_personaje) {
 
 	string nombre_personaje = el_personaje->getNombre();
-	delete el_personaje;
+	//delete el_personaje;
 	Json::Value root;
 	Json::Reader reader;
 

@@ -77,7 +77,7 @@ int main( int argc, char* args[] )
 
 	while(!mundo->Quit()){
 
-		MenuSeleccion* menu = new MenuSeleccion(mundo->getVentana(),mundo->getPersonajes());
+		MenuSeleccion* menu = new MenuSeleccion(mundo->getVentana());
 		if (menu == NULL)
 			return 1;
 		ControlModo* controlModo = new ControlModo(menu);
@@ -134,7 +134,7 @@ int main( int argc, char* args[] )
 			delete selectPlayer;
 		}
 
-		if (personaje_uno == personaje_dos && personaje_uno != NULL ){
+		if (personaje_uno->getNombreDeCarga() == personaje_dos->getNombreDeCarga() ){
 			personaje_dos = parser->cambiarColorPersonaje(personaje_dos);
 		}
 
@@ -146,13 +146,7 @@ int main( int argc, char* args[] )
 		while( !mundo->Fin() and !mundo->Quit()){
 
 			//si no esta en pausa
-			if (!mundo->Pausa()){
-				try{
-					mundo->render();
-				} catch ( std::runtime_error &e ) {
-					if(!_recargarMundo()) return 1;
-				}
-			}
+			mundo->render();
 
 			usleep(mundo->getSleep());
 			//usleep(50000);

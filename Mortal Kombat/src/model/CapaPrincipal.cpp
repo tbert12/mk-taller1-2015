@@ -41,7 +41,7 @@ void CapaPrincipal::addPersonajes(Personaje* uno,Personaje* dos){
 		m_PersonajeDos = dos;
 		m_PersonajeDos->setDimensionesMundo(rect->h,rect->w);
 		m_PersonajeDos->setPosition(pos_inicial_personajeDos,pos_inicial_piso);
-		m_PersonajeUno->setFlip(true);
+		m_PersonajeDos->setFlip(true);
 		m_personajeConFlip = dos;
 		m_velocidad_izquierda = m_PersonajeUno->getVelocidadIzquierda();
 	}

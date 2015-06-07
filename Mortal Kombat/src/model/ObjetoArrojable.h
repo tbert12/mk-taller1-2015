@@ -34,6 +34,7 @@ private:
 
 public:
 	ObjetoArrojable(string un_nombre,float velocidad,Sprite* un_sprites,int danio);
+	ObjetoArrojable* copy();
 	bool lanzar(float pos_x,float pos_y,bool flipeo);
 	void renderizar(float x_dist_ventana);
 	void setDimensionesMundo(float alto,float ancho);

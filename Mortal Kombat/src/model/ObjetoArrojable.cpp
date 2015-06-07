@@ -132,6 +132,12 @@ bool ObjetoArrojable::getVida(){
 	return false;
 }
 
+
+ObjetoArrojable* ObjetoArrojable::copy(){
+	ObjetoArrojable* objetoCopy = new ObjetoArrojable(nombre,m_velocidad_x,sprite,danio);
+	return objetoCopy;
+}
+
 ObjetoArrojable::~ObjetoArrojable() {
 	if(sprite != NULL)
 		delete sprite;

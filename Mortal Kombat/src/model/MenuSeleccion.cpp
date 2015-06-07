@@ -7,8 +7,7 @@
 
 #include "MenuSeleccion.h"
 
-MenuSeleccion::MenuSeleccion(Ventana* la_ventana,std::vector<Personaje*> los_personajes) {
-	personajes = los_personajes;
+MenuSeleccion::MenuSeleccion(Ventana* la_ventana) {
 	ventana = la_ventana;
 	selected = false;
 	menu = new Menu(ventana);

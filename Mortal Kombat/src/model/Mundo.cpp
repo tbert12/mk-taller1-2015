@@ -118,6 +118,7 @@ void Mundo::render(){
 			control->Pressed();
 		}
 	}
+	if (control->pausa()) return;
 
 	//limpio pantalla
 	ventana->clear();
