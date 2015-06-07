@@ -18,19 +18,6 @@ MenuSelectPlayer::MenuSelectPlayer(Ventana* una_ventana,std::vector<Personaje*> 
 	textura_1 = NULL;
 	textura_2 = NULL;
 
-	/* //Texto
-	font = TTF_OpenFont(RUTA_FONT, (int)(ventana->obtenerAlto()*(0.08)*ratio_y +0.5) );
-	if( font == NULL ){
-		log("No se pudo cargar la fuente del tiempo",LOG_ERROR);
-	}
-	else{
-		texturaTextoSeleccion = NULL;
-		textoSeleccion = "Seleccionar modo de juego";
-		Color = { 255, 247, 0 };
-		ColorRed = { 255, 0, 0 };
-	}
-	*/
-
 	textura_1 = _loadImage(rect_1,RUTA_RECT_1);
 	if (ModoDeJuego == MODO_JUGADOR_VS_JUGADOR)
 		textura_2 =_loadImage(rect_2,RUTA_RECT_2);
@@ -52,6 +39,9 @@ void MenuSelectPlayer::_crearOpciones(){
 	int y_fila_1 = int(85*ratio_y + 0.5);
 	int y_fila_2 = int(197*ratio_y + 0.5);
 	int y_fila_3 = int(307*ratio_y + 0.5);
+
+	NameJug1 = {int(10*ratio_x + 0.5),int(440*ratio_y + 0.5),int(150*ratio_x + 0.5),int(40*ratio_y + 0.5)};
+	NameJug2 = {int(475*ratio_x + 0.5),int(440*ratio_y + 0.5),int(150*ratio_x + 0.5),int(40*ratio_y + 0.5)};
 
 	Opcion_Personaje* opcion1 = new Opcion_Personaje;
 	opcion1->posicion = SDL_Rect {int(101*ratio_x + 0.5),y_fila_1,ancho,alto};
@@ -155,7 +145,6 @@ void MenuSelectPlayer::render(int opcion_actual1,int opcion_actual2){
 	_renderImagen();
 	_renderFaces();
 	_renderSeleccion(opcion_actual1,opcion_actual2);
-	//_renderTexto(opcion_actual);
 
 	ventana->Refresh();
 
@@ -220,6 +209,14 @@ void MenuSelectPlayer::_renderFace(Opcion_Personaje opcion){
 
 std::vector<Opcion_Personaje> MenuSelectPlayer::getOpciones(){
 	return opciones;
+}
+
+SDL_Rect MenuSelectPlayer::getRectName1(){
+	return NameJug1;
+}
+
+SDL_Rect MenuSelectPlayer::getRectName2(){
+	return NameJug2;
 }
 
 MenuSelectPlayer::~MenuSelectPlayer() {

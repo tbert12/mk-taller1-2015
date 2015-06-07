@@ -32,6 +32,8 @@ public:
 	MenuSelectPlayer(Ventana* ventana,std::vector<Personaje*> personajes, int modo_de_juego);
 	void render(int opcion_actual1, int opcion_actual2);
 	std::vector<Opcion_Personaje> getOpciones();
+	SDL_Rect getRectName1();
+	SDL_Rect getRectName2();
 	virtual ~MenuSelectPlayer();
 private:
 	Ventana* ventana;
@@ -43,6 +45,8 @@ private:
 	SDL_Rect* imagen;
 	SDL_Rect* rect_1;
 	SDL_Rect* rect_2;
+	SDL_Rect NameJug1;
+	SDL_Rect NameJug2;
 	SDL_Texture* textura_imagen;
 	SDL_Texture* textura_1;
 	SDL_Texture* textura_2;

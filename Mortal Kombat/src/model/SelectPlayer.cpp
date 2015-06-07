@@ -15,12 +15,26 @@ SelectPlayer::SelectPlayer(Ventana* una_ventana,int modo_de_juego,std::vector<Pe
 	Player2 = rand() % MAX_PLAYER + 1;
 	player1Select = false;
 	player2Select = false;
+	textBoxPlayer1 = false;
+	textBoxPlayer2 = false;
 	menuPlayers = new MenuSelectPlayer(una_ventana,personajes_12,ModoDeJuego);
+	NameJug1 = menuPlayers->getRectName1();
+	NameJug2 = menuPlayers->getRectName2();
+	text_Box_1 = new TextBox(NameJug1,una_ventana);
+	text_Box_2 = new TextBox(NameJug2,una_ventana);
 	opciones = menuPlayers->getOpciones();
 }
 
 bool SelectPlayer::playersSelected(){
 	return player1Select && player2Select;
+}
+
+TextBox* SelectPlayer::getTextBox(){
+	if (textBoxPlayer1)
+		return text_Box_1;
+	else if (textBoxPlayer2)
+		return text_Box_2;
+	else return NULL;
 }
 
 bool SelectPlayer::changeController(){
@@ -41,6 +55,12 @@ Personaje* SelectPlayer::getPersonajeDos(){
 
 void SelectPlayer::render(){
 	menuPlayers->render(Player1,Player2);
+	if (!textBoxPlayer1)
+		text_Box_1->setText(personajes_12[Player1]->getNombre());
+	if (!textBoxPlayer2)
+		text_Box_2->setText(personajes_12[Player2]->getNombre());
+	text_Box_1->render();
+	text_Box_2->render();
 }
 
 void SelectPlayer::izquierda(int jugador){
@@ -127,18 +147,66 @@ bool SelectPlayer::mousePosition(int x, int y, int jugador){
 	return false;
 }
 
+bool SelectPlayer::mouseinTextBox(int x, int y){
+	if (x >= NameJug1.x and x <= (NameJug1.x + NameJug1.w) ){
+		if (y >= NameJug1.y and y <= (NameJug1.y + NameJug1.h) ){
+			textBoxPlayer1 = true;
+			textBoxPlayer2 = false;
+			return true;
+		}
+	}
+
+	if (x >= NameJug2.x and x <= (NameJug2.x + NameJug2.w) ){
+		if (y >= NameJug2.y and y <= (NameJug2.y + NameJug2.h) ){
+			textBoxPlayer2 = true;
+			textBoxPlayer1 = false;
+			return true;
+		}
+	}
+
+	if (textBoxPlayer1) textBoxPlayer1 = false;
+	if (textBoxPlayer2) textBoxPlayer2 = false;
+
+	return false;
+}
+
 void SelectPlayer::_verificarPersonajes(){
 	unsigned int cant_real = personajes.size();
+	bool copy = false;
 	unsigned int contador = 0;
 	for(unsigned int i = 0; i <= MAX_PLAYER; i++){
-		personajes_12.push_back(personajes[contador]);
+		if (copy)
+			personajes_12.push_back(personajes[contador]->copy());
+		else
+			personajes_12.push_back(personajes[contador]);
 		contador++;
-		if (contador >= cant_real)
+		if (contador >= cant_real){
 			contador = 0;
+			if (!copy)
+				copy = true;
+		}
+	}
+}
+
+bool SelectPlayer::textBox(){
+	return textBoxPlayer1 || textBoxPlayer2;
+}
+
+void SelectPlayer::textBoxEnter(){
+
+	if (textBoxPlayer1){
+		//personajes_12[Player1]->setNombre(text_Box_1->getText());
+		textBoxPlayer1 = false;
+	}
+	if (textBoxPlayer2){
+		//personajes_12[Player2]->setNombre(text_Box_2->getText());
+		textBoxPlayer2 = false;
 	}
 }
 
 SelectPlayer::~SelectPlayer() {
 	personajes_12.clear();
+	delete text_Box_1;
+	delete text_Box_2;
 }
 

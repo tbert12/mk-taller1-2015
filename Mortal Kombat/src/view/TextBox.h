@@ -44,12 +44,13 @@ private:
 
 
 public:
-	TextBox(int x,int y,int h,int w, Ventana* ventana);
+	TextBox(SDL_Rect rect, Ventana* ventana);
 	void focus(bool enfocar);
 	void render();
 	void borrarUltimoChar();
 	void appendString( char* frase);
 	string getText();
+	void setText(string text);
 	virtual ~TextBox();
 
 };

@@ -10,10 +10,10 @@
 
 namespace std {
 
-TextBox::TextBox(int x,int y,int h,int w, Ventana* ventana) {
+TextBox::TextBox(SDL_Rect rect, Ventana* ventana) {
 	/* x,y,w,h correspondientes a la poscion y tamaño del cuadro de texto */
 	mVentana = ventana;
-	mDimension = {x,y,w,h};
+	mDimension = rect;
 	mTexto = " ";
 	textColor = {0,0,0,255};
 	borderColor = {0,255,0,255};
@@ -37,6 +37,10 @@ void TextBox::focus(bool enfocar){
 		borderColor = {255,0,0,255};
 		dcolor = 0;
 	}
+}
+
+void TextBox::setText(string text){
+	mTexto = text;
 }
 
 
@@ -70,8 +74,10 @@ void TextBox::render(){
 		dcolor = -dcolor;
 	}
 	borderColor.b = (Uint8)variacion;
-	SDL_SetRenderDrawColor(mVentana->getRenderer(), borderColor.r, borderColor.g, borderColor.b, borderColor.a);
-	SDL_RenderDrawRect(mVentana->getRenderer(), &mDimension);
+	//SDL_SetRenderDrawColor(mVentana->getRenderer(), borderColor.r, borderColor.g, borderColor.b, borderColor.a);
+	SDL_SetRenderDrawColor(mVentana->getRenderer(), 255, 0, 0, 255);
+	SDL_Rect rect = {0,0,mDimension.w,mDimension.h};
+	SDL_RenderDrawRect(mVentana->getRenderer(), &rect);
 
 	int ancho = mDimension.w;
 	int x = mWidth - mDimension.x;

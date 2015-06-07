@@ -130,8 +130,8 @@ int main( int argc, char* args[] )
 		if (selectPlayer->playersSelected()){
 			personaje_uno = selectPlayer->getPersonajeUno();
 			personaje_dos = selectPlayer->getPersonajeDos();
-			delete selectPlayer;
 			delete controlSelect;
+			delete selectPlayer;
 		}
 
 		if (personaje_uno == personaje_dos && personaje_uno != NULL ){

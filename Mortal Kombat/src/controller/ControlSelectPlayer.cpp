@@ -11,6 +11,7 @@ ControlSelectPlayer::ControlSelectPlayer(SelectPlayer* select, bool dos_jugadore
 	menuPlayers = select;
 	keystate = SDL_GetKeyboardState(NULL);
 	quit = false;
+	textBoxOpen = false;
 	joystick1 = NULL;
 	joystick2 = NULL;
 	if(SDL_NumJoysticks() > 1){
@@ -41,8 +42,13 @@ void ControlSelectPlayer::Pressed(){
 		quit = true;
 		return;
 	}
+	//textBox
+	else if (textBoxOpen){
+		_textBoxPressed();
+	}
 	//teclado
 	else if (evento.type == SDL_KEYDOWN){
+
 		int player = menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE;
 		if (SDL_NumJoysticks() < 2 and SDL_NumJoysticks() != 0) player = PLAYER_TWO;
 		switch( evento.key.keysym.sym ){
@@ -86,6 +92,9 @@ void ControlSelectPlayer::Pressed(){
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
+				if (menuPlayers->mouseinTextBox(x,y) and !textBoxOpen){
+					openTextBox();
+				}
 				if (menuPlayers->mousePosition(x,y,menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE) and evento.button.button == SDL_BUTTON_LEFT )
 					menuPlayers->select(menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
 				break;
@@ -151,6 +160,60 @@ bool ControlSelectPlayer::Quit(){
 bool ControlSelectPlayer::PollEvent(){
 	SDL_JoystickUpdate();
 	return (SDL_PollEvent( &evento ) != 0);
+}
+
+void ControlSelectPlayer::openTextBox(){
+	SDL_StartTextInput();
+	textBoxOpen = true;
+}
+
+void ControlSelectPlayer::closeTextBox(){
+	SDL_StopTextInput();
+	textBoxOpen = false;
+}
+
+void ControlSelectPlayer::_textBoxPressed(){
+	TextBox* textBox = menuPlayers->getTextBox();
+	string inputText = textBox->getText();
+
+	if( evento.type == SDL_KEYDOWN ){
+		//Handle backspace
+		if( evento.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0 )
+		{
+			//lop off character
+			textBox->borrarUltimoChar();
+		}
+		//Quit
+		else if(evento.key.keysym.sym == SDLK_RETURN){
+			menuPlayers->textBoxEnter();
+			closeTextBox();
+		}
+
+		//Handle copy
+		else if( evento.key.keysym.sym == SDLK_c && (SDL_GetModState() & KMOD_CTRL) )
+		{
+			SDL_SetClipboardText( inputText.c_str() );
+		}
+
+
+		//Handle paste
+		else if( evento.key.keysym.sym == SDLK_v && (SDL_GetModState() & KMOD_CTRL) )
+		{
+			/* inputText += SDL_GetClipboardText();*/
+			textBox->appendString( SDL_GetClipboardText() );
+		}
+	}
+	else if( evento.type == SDL_TEXTINPUT )
+	{
+		//No se detecta copy and paste
+		char firstChar = evento.text.text[ 0 ];
+		bool hayCopyPaste = ( firstChar == 'c' or firstChar == 'C' ) and ( firstChar == 'v' or firstChar == 'V' ) and (SDL_GetModState() & KMOD_CTRL);
+		bool espaciosSinNada = (inputText == "" and firstChar == ' ');
+		if( !(hayCopyPaste or espaciosSinNada) ){
+				//Append character
+				textBox->appendString( evento.text.text );
+		}
+	}
 }
 
 ControlSelectPlayer::~ControlSelectPlayer() {
