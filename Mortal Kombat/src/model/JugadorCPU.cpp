@@ -192,13 +192,17 @@ bool JugadorCPU::hayQuePegarAbajo() {
 }
 
 bool JugadorCPU::hayQueLanzarPoder() {
+	// No puede tirar poder mientras salta.
+	if (m_personaje_cpu->estaSaltando())
+		return false;
+
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
 			probabilidad = 15;
 			break;
 		case 1:
-			probabilidad = 10;
+			probabilidad = 12;
 			break;
 		case 2:
 			probabilidad = 10;
@@ -209,11 +213,15 @@ bool JugadorCPU::hayQueLanzarPoder() {
 
 	if (reaccion(probabilidad)) {
 		if (m_personaje_1->estaCubriendose()) {
-			if (reaccion(probabilidad))
+			if (reaccion(probabilidad)) {
+				m_ciclos_delay = 20;
 				return true;
+			}
 			return false;
-		} else
+		} else {
+			m_ciclos_delay = 20;
 			return true;
+		}
 	}
 	return false;
 }
@@ -458,8 +466,10 @@ void JugadorCPU::realizarMovimiento() {
 		return;
 
 	// Posibilidades de defensa.
-	if (hayQueCubrirse())
+	if (hayQueCubrirse()) {
 		m_personaje_cpu->cubrirse();
+		return;
+	}
 
 	// Posibilidades de desplazamiento.
 	if (hayQueAvanzar()) {
@@ -473,7 +483,7 @@ void JugadorCPU::realizarMovimiento() {
 		else
 			m_personaje_cpu->CaminarIzquierda();
 	} else if (hayQueSaltar()) {
-			m_personaje_cpu->Saltar();
+		m_personaje_cpu->Saltar();
 	} else if (hayQueAgacharse()) {
 		m_personaje_cpu->Agachar();
 	}
