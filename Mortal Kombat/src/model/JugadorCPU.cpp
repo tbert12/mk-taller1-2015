@@ -228,13 +228,13 @@ bool JugadorCPU::hayQueHacerToma() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 5;
+			probabilidad = 15;
 			break;
 		case 1:
-			probabilidad = 5;
+			probabilidad = 20;
 			break;
 		case 2:
-			probabilidad = 10;
+			probabilidad = 25;
 			break;
 		default:
 			probabilidad = 0;
@@ -242,7 +242,7 @@ bool JugadorCPU::hayQueHacerToma() {
 
 	if (reaccion(probabilidad)) {
 		float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
-		if (dist <= DISTANCIA_TOMA)
+		if (dist <= DISTANCIA_TOMA && m_personaje_1->estaCubriendose())
 			return true;
 	}
 	return false;
