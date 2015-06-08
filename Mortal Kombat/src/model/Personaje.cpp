@@ -495,10 +495,8 @@ void Personaje::AvanzarSprite(){
 			spriteActual->doLoop(true);
 			spriteActual->Advance();
 		} else {
-			if (!m_velocidad)
-				_cambiarSprite(SPRITE_INICIAL);
-			else
-				_Caminar( ( m_velocidadActual > 0 ) );
+			m_velocidadActual = 0;
+			_cambiarSprite(SPRITE_INICIAL);
 		}
 		_recibioGolpe = false;
 	}
