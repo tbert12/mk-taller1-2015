@@ -42,21 +42,21 @@ void Menu::_crearOpciones(){
 	Opcion* opcion1 = new Opcion;
 	opcion1->posicion = SDL_Rect {int(20*ventana->obtenerRatioX() + 0.5),y,ancho,alto};
 	opcion1->texto = string("Player\n  vs \nPlayer");
-	opcion1->descripcion =  string("Player vs Player");
+	opcion1->descripcion =  string("Matense a trompadas \n     con un amigo");
 	opcion1->textura = NULL;
 	opciones.push_back(opcion1);
 
 	Opcion* opcion2 = new Opcion;
 	opcion2->posicion = SDL_Rect {int(150*ventana->obtenerRatioX() + 0.5),y,ancho,alto};
 	opcion2->texto = string("Player\n  vs\n CPU");
-	opcion2->descripcion =  string("Player vs CPU");
+	opcion2->descripcion =  string("Que la maquina sangre");
 	opcion2->textura = NULL;
 	opciones.push_back(opcion2);
 
 	Opcion* opcion3 = new Opcion;
 	opcion3->posicion = SDL_Rect {int(280*ventana->obtenerRatioX() + 0.5),y,ancho,alto};
 	opcion3->texto = string("Training");
-	opcion3->descripcion =  string("Entrenamiento");
+	opcion3->descripcion =  string("Pa' probar los combos");
 	opcion3->textura = NULL;
 	opciones.push_back(opcion3);
 

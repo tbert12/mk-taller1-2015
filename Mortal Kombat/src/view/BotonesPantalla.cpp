@@ -22,19 +22,16 @@ BotonesPantalla::BotonesPantalla(Ventana* una_ventana) {
 	ColorRED = { 255, 0 , 0 };
 }
 
-bool BotonesPantalla::_loadFromRenderedText( std::string textureText,bool red){
+bool BotonesPantalla::_loadFromRenderedText( std::string textureText,SDL_Color un_color){
 	//Get rid of preexisting texture
 	if( texturaNombreTexto != NULL ){
 		SDL_DestroyTexture( texturaNombreTexto );
 		texturaNombreTexto = NULL;
 	}
 
-	SDL_Color textColor = Color;
-	if (red)
-		textColor = ColorRED;
 
 	//Render text surface
-	SDL_Surface* textSurface = TTF_RenderText_Blended_Wrapped( font, textureText.c_str(), textColor , ventana->getAnchoPx());
+	SDL_Surface* textSurface = TTF_RenderText_Blended_Wrapped( font, textureText.c_str(), un_color , ventana->getAnchoPx());
 	if( textSurface == NULL ){
 		log("No se puede crear la textura del tiempo",LOG_ERROR);
 	}
@@ -60,13 +57,20 @@ bool BotonesPantalla::_loadFromRenderedText( std::string textureText,bool red){
 
 void BotonesPantalla::render(std::string botones,bool red){
 	string texto = _limpiarPorAccion(botones);
-	_loadFromRenderedText(texto,red);
 
 	int pos_x = (int)(ventana->obtenerAncho()*(0.5)*ventana->obtenerRatioX() + 0.5) - anchoTexto/2;
 	int pos_y = (int)(ventana->obtenerAlto()*(0.25)*ventana->obtenerRatioY() + 0.5);
-
 	SDL_Rect renderQuad = { pos_x, pos_y, anchoTexto, altoTexto };
 
+
+	//SOMBRA
+	SDL_Rect pos_sombra = {renderQuad.x - 3,renderQuad.y + 1,renderQuad.w,renderQuad.h};
+	SDL_Color colorSombra = {0,0,0,255};
+	_loadFromRenderedText(texto,colorSombra);
+
+	SDL_RenderCopyEx( ventana->getRenderer(), texturaNombreTexto, NULL, &pos_sombra, 0.0, NULL,SDL_FLIP_NONE);
+
+	_loadFromRenderedText(texto,red? ColorRED:Color);
 	//Render to screen
 	SDL_RenderCopyEx( ventana->getRenderer(), texturaNombreTexto, NULL, &renderQuad, 0.0, NULL,SDL_FLIP_NONE);
 
@@ -84,10 +88,10 @@ string BotonesPantalla::_limpiarPorAccion(string botones){
 				texto += "D";
 				break;
 			case IZQUIERDA:
-				texto += "L";
+				texto += "B";
 				break;
 			case DERECHA:
-				texto += "R";
+				texto += "F";
 				break;
 			case PINAALTA:
 				texto += "HP";
@@ -102,7 +106,7 @@ string BotonesPantalla::_limpiarPorAccion(string botones){
 				texto += "LK";
 				break;
 			case CUBRIR:
-				texto += "D";
+				texto += "C";
 				break;
 		}
 		if (i < botones.size() -1)

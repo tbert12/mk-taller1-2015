@@ -170,8 +170,8 @@ string Controller::get_stream_teclas(){
 
 bool Controller::checkCombo(){
 	if (comboController == NULL)
-		return NULL;
-	return (comboController->checkCombos() > 0 ) ;
+		return false;
+	return (comboController->combosInString()) ;
 }
 
 Controller::~Controller() {

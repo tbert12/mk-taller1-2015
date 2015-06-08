@@ -97,12 +97,10 @@ void ControlSelectPlayer::Pressed(){
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				//if (menuPlayers->mouseinTextBox(x,y) and !textBoxOpen){
-				//	openTextBox();
-				//}
-				if (menuPlayers->mousePosition(x,y,menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE) and evento.button.button == SDL_BUTTON_LEFT )
+				if (menuPlayers->mousePosition(x,y,menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE) and evento.button.button == SDL_BUTTON_LEFT ){
 					menuPlayers->select(menuPlayers->changeMouseController()? PLAYER_TWO:PLAYER_ONE);
 					openTextBox();
+				}
 				break;
 		}
 	}

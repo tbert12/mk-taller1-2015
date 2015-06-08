@@ -81,6 +81,9 @@ int ComboController::checkCombos(){
 			break;
 		}
 	}
+	if (encontrado > -1 ){
+		_keys="";
+	}
 	return encontrado;
 }
 
@@ -157,9 +160,9 @@ void ComboController::Update(){
 	if(currentTime > (keyTime[0]+ maxTime)){
 		if(_keys.length() > 1)
 			_keys = _keys.substr(1 ,_keys.length() -1);
-		else
+		else{
 			_keys = "";
-		keyTime.erase(keyTime.begin());
+		}keyTime.erase(keyTime.begin());
 	}
 
 	/*
@@ -174,12 +177,53 @@ void ComboController::sePresiono(int key){
 	keyTime.push_back(SDL_GetTicks());
 }
 
+bool ComboController::combosInString(){
+	if(_keys.compare("") == 0){
+			return false;
+	}
+	unsigned int errores = 0;
+	unsigned int encuentros = 0;
+	int encontrado = -1;
+	bool encontre = false;
+
+	string botonesDelCombo;
+	for(unsigned int i=0; i < _combosPosibles.size();i++){
+		errores=0;
+		botonesDelCombo = _combosPosibles[i]->m_botones;
+
+		if(_keys[0] != botonesDelCombo[0])
+			continue;
+		encuentros = 1;
+		for(std::string::size_type i = 0; i < _keys.size(); ++i) {
+			if(botonesDelCombo[encuentros] == _keys[i]){
+				encuentros++;
+			}else{
+				errores++;
+			}
+			if(errores>maxErrors){
+				break;
+			}
+			if(encuentros == botonesDelCombo.size()){
+				encontre = true;
+				break;
+			}
+		}
+		if(encontre){
+			encontrado = i;
+			break;
+		}
+	}
+	if (encontrado > -1 ){
+		return true;
+	}
+	return false;
+}
+
 ComboController::~ComboController() {
 	maxTime = 0;
 	maxErrors = 0;
 	startingTime = 0;
 	currentTime = 0;
-	_keys = "";
 }
 
 

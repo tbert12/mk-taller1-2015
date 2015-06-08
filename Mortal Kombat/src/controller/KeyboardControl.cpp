@@ -53,14 +53,24 @@ void KeyboardControl::KeyPressed(){
 			case SDLK_LEFT:
 				if(!como_jugador) return;
 				personaje->CaminarIzquierda();
-				if (comboController)
-					comboController->sePresiono(IZQUIERDA);
+				if (comboController){
+					int accion;
+					if (!personaje->getFlipState())
+						accion = IZQUIERDA;
+					else accion = DERECHA;
+					comboController->sePresiono(accion);
+				}
 				break;
 			case SDLK_RIGHT:
 				if(!como_jugador) return;
 				personaje->CaminarDerecha();
-				if (comboController)
-					comboController->sePresiono(DERECHA);
+				if (comboController){
+					int accion;
+					if (!personaje->getFlipState())
+						accion = DERECHA;
+					else accion = IZQUIERDA;
+					comboController->sePresiono(accion);
+				}
 				break;
 			case SDLK_m:
 				returnMenu = true;

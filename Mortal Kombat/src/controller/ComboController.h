@@ -37,6 +37,7 @@ public:
 	void Update();
 
 	string get_stream_teclas();
+	bool combosInString();
 	virtual ~ComboController();
 private:
 
