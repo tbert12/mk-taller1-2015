@@ -855,7 +855,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 									 CodigoGolpe == SPRITE_PATADA_BAJA_AGACHADO or
 									 CodigoGolpe == SPRITE_PATADA_CIRCULAR);
 
-		puedeRecibirCubierto = CodigoGolpe ==  SPRITE_TOMA_1;
+		puedeRecibirCubierto = (CodigoGolpe ==  SPRITE_TOMA_1);
 
 		if (!puedeRecibirCubierto){
 			QuitarVida(1);
