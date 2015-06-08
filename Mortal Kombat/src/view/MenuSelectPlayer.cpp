@@ -40,8 +40,8 @@ void MenuSelectPlayer::_crearOpciones(){
 	int y_fila_2 = int(197*ratio_y + 0.5);
 	int y_fila_3 = int(307*ratio_y + 0.5);
 
-	NameJug1 = {int(10*ratio_x + 0.5),int(430*ratio_y + 0.5),int(150*ratio_x + 0.5),int(40*ratio_y + 0.5)};
-	NameJug2 = {int(475*ratio_x + 0.5),int(430*ratio_y + 0.5),int(150*ratio_x + 0.5),int(40*ratio_y + 0.5)};
+	NameJug1 = {int(10*ratio_x + 0.5),int(425*ratio_y + 0.5),int(140*ratio_x + 0.5),int(50*ratio_y + 0.5)};
+	NameJug2 = {int(485*ratio_x + 0.5),int(423*ratio_y + 0.5),int(142*ratio_x + 0.5),int(50*ratio_y + 0.5)};
 
 	Opcion_Personaje* opcion1 = new Opcion_Personaje;
 	opcion1->posicion = SDL_Rect {int(101*ratio_x + 0.5),y_fila_1,ancho,alto};
@@ -166,6 +166,7 @@ void MenuSelectPlayer::_renderSeleccion(int opcion_actual1,int opcion_actual2){
 		opciones[opcion_actual1].personaje->setPosition(20*ratio_x,300*ratio_y);
 		opciones[opcion_actual1].personaje->renderizar(0,0);
 	}
+
 	if (opciones[opcion_actual2].personaje != NULL){
 		opciones[opcion_actual2].personaje->setFlip(true);
 		opciones[opcion_actual2].personaje->setPosition(372*ratio_x,300*ratio_y);

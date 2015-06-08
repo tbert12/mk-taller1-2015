@@ -18,7 +18,7 @@
 #include "../model/Personaje.h"
 #include "../model/Pelea.h"
 
-#define RUTA_FONDO "data/img/etc/MenuSelection12.png"
+#define RUTA_FONDO "data/img/etc/MenuSelection.png"
 #define RUTA_RECT_1 "data/img/etc/1.png"
 #define RUTA_RECT_2 "data/img/etc/2.png"
 #define RUTA_RECT_CPU "data/img/etc/cpu.png"
