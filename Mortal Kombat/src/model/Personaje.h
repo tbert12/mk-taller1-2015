@@ -82,7 +82,6 @@ protected:
 	// 0 Cae del Salto, 1 Saltando, -1 No esta Saltanto
 	short _estaSaltando;
 
-private:
 	std::string nombre;
 	std::string nombreDeCarga;
 	std::string logo;

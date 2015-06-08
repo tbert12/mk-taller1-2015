@@ -7,6 +7,8 @@
 
 #ifndef SRC_MODEL_PERSONAJES_SUBZERO_H_
 #define SRC_MODEL_PERSONAJES_SUBZERO_H_
+#include "../Personaje.h"
+
 
 namespace std {
 
