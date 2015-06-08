@@ -9,6 +9,8 @@
 
 JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos,ComboController* comboCon) {
 	personaje = un_personaje;
+	if (personaje)
+		combosPosibles = personaje->getCombos();
 	comboController = NULL;
 	comboController = comboCon;
 	evento = e;
@@ -144,6 +146,11 @@ void JoystickControl::JoyPressed(){
 		else if ( boton == JOY_START){
 			pausa = !pausa;
 		}
+	}
+	if (comboController){
+		Combo* combo = combosPosibles[0];
+		if (comboController->checkCombo(combo))
+				personaje->poder1();
 	}
 }
 void JoystickControl::JoyState(){

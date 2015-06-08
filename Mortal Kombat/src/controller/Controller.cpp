@@ -138,7 +138,6 @@ void Controller::Pressed(){
 	//evento es del teclado
 	else if(evento.type == SDL_KEYDOWN){
 		if (Teclado != NULL){
-
 			Teclado->KeyPressed();
 		}
 	}

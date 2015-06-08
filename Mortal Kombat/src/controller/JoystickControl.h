@@ -41,6 +41,7 @@
 #include "../model/logging.h"
 #include "../model/Personaje.h"
 #include "ComboController.h"
+#include "Combo.h"
 #include <SDL2/SDL.h>
 #include <string>
 #include <map>
@@ -61,6 +62,7 @@ private:
 	map<string, int>* comandos;
 	bool pausa;
 	ComboController* comboController;
+	std::vector<Combo*> combosPosibles;
 
 	void _Init(int id);
 	void _verificarMapaComandos();

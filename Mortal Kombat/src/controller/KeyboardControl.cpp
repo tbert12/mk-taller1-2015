@@ -34,6 +34,9 @@ bool KeyboardControl::goToMenu(){
 }
 
 void KeyboardControl::KeyPressed(){
+	if (evento->key.repeat) {
+		return;
+	}
 	switch( evento->key.keysym.sym ){
 			case  SDLK_UP:
 				if(!como_jugador) return;
