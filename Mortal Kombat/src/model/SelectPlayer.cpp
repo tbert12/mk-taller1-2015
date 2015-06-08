@@ -168,15 +168,6 @@ bool SelectPlayer::mouseinTextBox(int x, int y){
 		}
 	}
 
-	if (textBoxPlayer1){
-		textBoxPlayer1 = false;
-		text_Box_1->focus(false);
-	}
-	if (textBoxPlayer2) {
-		text_Box_2->focus(false);
-		textBoxPlayer2 = false;
-	}
-
 	return false;
 }
 /*
@@ -206,10 +197,12 @@ void SelectPlayer::textBoxEnter(){
 
 	if (textBoxPlayer1){
 		personajes[Player1]->setNombre(text_Box_1->getText());
+		text_Box_1->focus(false);
 		textBoxPlayer1 = false;
 	}
 	if (textBoxPlayer2){
 		personajes[Player2]->setNombre(text_Box_2->getText());
+		text_Box_2->focus(false);
 		textBoxPlayer2 = false;
 	}
 }

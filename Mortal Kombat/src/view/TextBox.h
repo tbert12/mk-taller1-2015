@@ -32,6 +32,8 @@ private:
 
 	/* Posicion */
 	SDL_Rect mDimension;
+	bool titilar;
+	bool estadoTitilar;
 
 	int mWidth;
 	int mHeight;

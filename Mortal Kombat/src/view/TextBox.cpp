@@ -16,6 +16,8 @@ TextBox::TextBox(SDL_Rect rect, Ventana* ventana) {
 	mDimension = rect;
 	mTexto = " ";
 	textColor = {255,255,0,255};
+	titilar = false;
+	estadoTitilar = false;
 	borderColor = {0,255,0,255};
 	dcolor = 0; /* diferencial color */
 	_loadFont();
@@ -32,12 +34,13 @@ void TextBox::_loadFont(){
 	}
 }
 void TextBox::focus(bool enfocar){
-	if (enfocar)
+	if (enfocar){
 		dcolor += 70; //Altena el color del borde para saber que esta enfocado
-	else {
+	}else {
 		borderColor = {255,0,0,255};
 		dcolor = 0;
 	}
+	titilar = enfocar;
 }
 
 void TextBox::setText(string text){
@@ -61,6 +64,13 @@ void TextBox::_renderText(int x, int y, SDL_Rect* clip){
 }
 
 void TextBox::render(){
+
+	if (titilar){
+		estadoTitilar = !estadoTitilar;
+		if (!estadoTitilar)
+			return;
+	}
+
 	//Generar Textura con texto
 	if( mTexto != "" ){
 		_loadFromRenderedText( mTexto.c_str());
@@ -77,8 +87,8 @@ void TextBox::render(){
 	borderColor.g = (Uint8)variacion;
 	//SDL_SetRenderDrawColor(mVentana->getRenderer(), borderColor.r, borderColor.g, borderColor.b, borderColor.a);
 
-	SDL_SetRenderDrawColor(mVentana->getRenderer(), borderColor.r, borderColor.g, borderColor.b, 255);
-	SDL_RenderDrawRect(mVentana->getRenderer(), &mDimension);
+	//SDL_SetRenderDrawColor(mVentana->getRenderer(), borderColor.r, borderColor.g, borderColor.b, 255);
+	//SDL_RenderDrawRect(mVentana->getRenderer(), &mDimension);
 
 	int ancho = mDimension.w;
 	int x = mWidth - mDimension.w;
