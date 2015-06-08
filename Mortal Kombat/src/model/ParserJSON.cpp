@@ -913,7 +913,11 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 						vector<ObjetoArrojable*> arrojables = cargarArrojables(personaje_carpeta_arrojables, personaje_carpeta_sonidos, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
 
 						// Crear personaje.
-						Personaje* personaje = new Personaje(personaje_nombre, sprites, arrojables, personaje_velocidad);
+						Personaje* personaje;
+						if (!personaje_nombre.string::compare(string("Liu Kang")))
+							personaje = new LiuKang(personaje_nombre, sprites, arrojables, personaje_velocidad);
+						else
+							personaje = new Personaje(personaje_nombre, sprites, arrojables, personaje_velocidad);
 						log( "Se creo correctamente el personaje.", LOG_DEBUG );
 
 						personaje->setCombos(combos);
