@@ -1451,7 +1451,8 @@
 				"y":0,
 				"Alto":62
 ,
-				"Ancho":93
+				"Ancho":93,
+				"freeze":5
 			},
 			{
 				"x":83,
@@ -1465,7 +1466,8 @@
 				"y":0,
 				"Alto":49
 ,
-				"Ancho":125
+				"Ancho":125,
+				"loop": true
 			},
 			{
 				"x":0,
@@ -1583,8 +1585,8 @@
 				"Alto":79
 ,
 				"Ancho":73,
-				"freeze" : 5,
-				"pong":true
+				"pong":true,
+				"freeze" : 3
 			},
 			{
 				"x":87,

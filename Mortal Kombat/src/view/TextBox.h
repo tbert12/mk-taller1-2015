@@ -14,7 +14,7 @@
 #include "../model/logging.h"
 #include "Ventana.h"
 
-#define PATH_FONT "data/font/textbox.ttf"
+#define PATH_FONT "data/font/mortalkombat1.ttf"
 #define SIZE_FONT 28
 
 namespace std {
