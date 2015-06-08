@@ -219,6 +219,10 @@ void Sprite::setFrezeeFrame(int frame,int time){
 	frezeeFrame = frame;
 }
 
+bool Sprite::inReverse(){
+	return reverse;
+}
+
 void Sprite::freezeSprite(){
 	frezee = true;
 }

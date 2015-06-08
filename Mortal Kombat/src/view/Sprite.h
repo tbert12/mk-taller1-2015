@@ -67,6 +67,7 @@ class Sprite {
 		bool primerFrame();
 		bool inLoop();
 		bool loop();
+		bool inReverse();
 
 		float getAncho();
 		float getAlto();
