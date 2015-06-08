@@ -28,10 +28,13 @@ void LiuKang::poder2(){
 }
 
 void LiuKang::fatality1(Personaje* personajeQueRecibe){
+	_cambiarSprite(SPRITE_FATALITY_1);
+	spriteActual->doLoop(true);
 
 }
 
 LiuKang::~LiuKang() {
+	// Llama automaticante al destructor de Personaje
 }
 
 } /* namespace std */
