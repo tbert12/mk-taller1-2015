@@ -417,7 +417,7 @@ bool JugadorCPU::hayQueAgacharse() {
 void JugadorCPU::realizarMovimiento() {
 
 	// Si termino el round, no puede moverse.
-	if (m_personaje_cpu->estaMuerto() || m_personaje_cpu->getAccionDeAtaque() == SPRITE_FINISH
+	if (m_personaje_cpu->getAccionDeAtaque() == SPRITE_MUERE || m_personaje_cpu->getAccionDeAtaque() == SPRITE_FINISH
 || m_personaje_cpu->getAccionDeAtaque() == SPRITE_GANA) {
 		return;
 	}
@@ -438,7 +438,7 @@ void JugadorCPU::realizarMovimiento() {
 		if (hayQuePegarArriba()) {
 			if (hayQuePegarPina())	{		// Caso particular del gancho.
 				m_personaje_cpu->pinaAlta();
-				m_ciclos_delay = 30;
+				m_ciclos_delay = 20;
 			} else if (hayQuePegarPatada()) {
 				m_personaje_cpu->patadaAlta();
 				m_ciclos_delay = 5;
@@ -471,7 +471,7 @@ void JugadorCPU::realizarMovimiento() {
 	// Posibilidades de defensa.
 	if (hayQueCubrirse()) {
 		m_personaje_cpu->cubrirse();
-		m_ciclos_delay = 20;
+		m_ciclos_delay = 5;
 		return;
 	}
 
