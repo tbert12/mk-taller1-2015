@@ -9,6 +9,7 @@
 #include "../view/LSound.h"
 
 #include "personajes/LiuKang.h"
+#include "personajes/SubZero.h"
 
 
 using namespace std;
