@@ -8,7 +8,7 @@
 #ifndef SRC_VIEW_BOTONESPANTALLA_H_
 #define SRC_VIEW_BOTONESPANTALLA_H_
 
-#define RUTA_TTF "data/font/fuente.ttf"
+#define RUTA_BOTONES "data/font/mortalkombat1.ttf"
 #include "Ventana.h"
 #include <string>
 #include <vector>

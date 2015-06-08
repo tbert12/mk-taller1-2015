@@ -44,21 +44,22 @@ void Menu::_crearOpciones(){
 	opcion1->texto = string("Player\n  vs \nPlayer");
 	opcion1->descripcion =  string("Player vs Player");
 	opcion1->textura = NULL;
-	opciones.push_back(*opcion1);
+	opciones.push_back(opcion1);
 
 	Opcion* opcion2 = new Opcion;
 	opcion2->posicion = SDL_Rect {int(150*ventana->obtenerRatioX() + 0.5),y,ancho,alto};
 	opcion2->texto = string("Player\n  vs\n CPU");
 	opcion2->descripcion =  string("Player vs CPU");
 	opcion2->textura = NULL;
-	opciones.push_back(*opcion2);
+	opciones.push_back(opcion2);
 
 	Opcion* opcion3 = new Opcion;
 	opcion3->posicion = SDL_Rect {int(280*ventana->obtenerRatioX() + 0.5),y,ancho,alto};
 	opcion3->texto = string("Training");
 	opcion3->descripcion =  string("Entrenamiento");
 	opcion3->textura = NULL;
-	opciones.push_back(*opcion3);
+	opciones.push_back(opcion3);
+
 }
 
 void Menu::_loadImage(){
@@ -100,7 +101,7 @@ void Menu::_loadImage(){
 	log("Se cargo correctamente la textura de la imagen del menu inicial",LOG_DEBUG);
 }
 
-std::vector<Opcion> Menu::getOpciones(){
+std::vector<Opcion*> Menu::getOpciones(){
 	return opciones;
 }
 
@@ -111,21 +112,21 @@ void Menu::_renderImagen(){
 void Menu::_renderTexto(int opcion_actual){
 
 	for (unsigned int i = 0; i < opciones.size(); i++){
-		SDL_Rect pos = opciones[i].posicion;
+		SDL_Rect pos = opciones[i]->posicion;
 		SDL_Rect pos_sombra = {pos.x - 3,pos.y + 1,pos.w,pos.h};
 		SDL_Color colorSombra = {0,0,0,255};
-		_renderText(opciones[i].texto,colorSombra,pos_sombra);
+		_renderText(opciones[i]->texto,colorSombra,pos_sombra);
 		if ((int)i == opcion_actual){
-			_renderText(opciones[i].texto,ColorRed,opciones[i].posicion);
-			_renderText(opciones[i].descripcion,Color,Descripcion);
+			_renderText(opciones[i]->texto,ColorRed,opciones[i]->posicion);
+			_renderText(opciones[i]->descripcion,Color,Descripcion);
 		}
 		else
-			_renderText(opciones[i].texto,Color,opciones[i].posicion);
+			_renderText(opciones[i]->texto,Color,opciones[i]->posicion);
 	}
 
 	//cuadrado rojo del seleccionado
 	SDL_SetRenderDrawColor(ventana->getRenderer(), 255, 0, 0, 255);
-	SDL_Rect rect = opciones[opcion_actual].posicion;
+	SDL_Rect rect = opciones[opcion_actual]->posicion;
 	rect.x -= 15;
 	rect.y -= 12;
 	rect.w += 2*15 + 2;
@@ -200,10 +201,11 @@ Menu::~Menu() {
 		TTF_CloseFont( font );
 
 	for (unsigned int i = 0 ; i < opciones.size() ; i++){
-		if( opciones[i].textura != NULL ){
-			SDL_DestroyTexture( opciones[i].textura );
-			opciones[i].textura = NULL;
-			free(&opciones[i]);
+		if( opciones[i]->textura != NULL ){
+			SDL_DestroyTexture( opciones[i]->textura );
+			opciones[i]->textura = NULL;
+			delete &(opciones[i]->rect_textura);
+			delete opciones[i];
 		}
 	}
 	opciones.clear();

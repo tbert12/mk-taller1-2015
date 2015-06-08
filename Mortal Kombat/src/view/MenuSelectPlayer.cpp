@@ -41,67 +41,67 @@ void MenuSelectPlayer::_crearOpciones(){
 	int y_fila_3 = int(307*ratio_y + 0.5);
 
 	NameJug1 = {int(10*ratio_x + 0.5),int(425*ratio_y + 0.5),int(140*ratio_x + 0.5),int(50*ratio_y + 0.5)};
-	NameJug2 = {int(485*ratio_x + 0.5),int(423*ratio_y + 0.5),int(142*ratio_x + 0.5),int(50*ratio_y + 0.5)};
+	NameJug2 = {int(487*ratio_x + 0.5),int(423*ratio_y + 0.5),int(142*ratio_x + 0.5),int(50*ratio_y + 0.5)};
 
 	Opcion_Personaje* opcion1 = new Opcion_Personaje;
 	opcion1->posicion = SDL_Rect {int(101*ratio_x + 0.5),y_fila_1,ancho,alto};
 	opcion1->personaje = personajes[0];
-	opciones.push_back(*opcion1);
+	opciones.push_back(opcion1);
 
 	Opcion_Personaje* opcion2 = new Opcion_Personaje;
 	opcion2->posicion = SDL_Rect {int(192*ratio_x + 0.5),y_fila_1,ancho,alto};
 	opcion2->personaje = personajes[1];
-	opciones.push_back(*opcion2);
+	opciones.push_back(opcion2);
 
 	Opcion_Personaje* opcion3 = new Opcion_Personaje;
 	opcion3->posicion = SDL_Rect {int(372*ratio_x + 0.5),y_fila_1,ancho,alto};
 	opcion3->personaje = personajes[2];
-	opciones.push_back(*opcion3);
+	opciones.push_back(opcion3);
 
 	Opcion_Personaje* opcion4 = new Opcion_Personaje;
 	opcion4->posicion = SDL_Rect {int(463*ratio_x + 0.5),y_fila_1,ancho,alto};
 	opcion4->personaje = personajes[3];
-	opciones.push_back(*opcion4);
+	opciones.push_back(opcion4);
 
 	Opcion_Personaje* opcion5 = new Opcion_Personaje;
 	opcion5->posicion = SDL_Rect {int(100*ratio_x + 0.5),y_fila_2,ancho,alto};
 	opcion5->personaje = personajes[4];
-	opciones.push_back(*opcion5);
+	opciones.push_back(opcion5);
 
 	Opcion_Personaje* opcion6 = new Opcion_Personaje;
 	opcion6->posicion = SDL_Rect {int(191*ratio_x + 0.5),y_fila_2,ancho,alto};
 	opcion6->personaje = personajes[5];
-	opciones.push_back(*opcion6);
+	opciones.push_back(opcion6);
 
 	Opcion_Personaje* opcion7 = new Opcion_Personaje;
 	opcion7->posicion = SDL_Rect {int(282*ratio_x + 0.5),y_fila_2,ancho,alto};
 	opcion7->personaje = personajes[6];
-	opciones.push_back(*opcion7);
+	opciones.push_back(opcion7);
 
 	Opcion_Personaje* opcion8 = new Opcion_Personaje;
 	opcion8->posicion = SDL_Rect {int(372*ratio_x + 0.5),y_fila_2,ancho,alto};
 	opcion8->personaje = personajes[7];
-	opciones.push_back(*opcion8);
+	opciones.push_back(opcion8);
 
 	Opcion_Personaje* opcion9 = new Opcion_Personaje;
 	opcion9->posicion = SDL_Rect {int(463*ratio_x + 0.5),y_fila_2,ancho,alto};
 	opcion9->personaje = personajes[8];
-	opciones.push_back(*opcion9);
+	opciones.push_back(opcion9);
 
 	Opcion_Personaje* opcion10 = new Opcion_Personaje;
 	opcion10->posicion = SDL_Rect {int(191*ratio_x + 0.5),y_fila_3,ancho,alto};
 	opcion10->personaje = personajes[9];
-	opciones.push_back(*opcion10);
+	opciones.push_back(opcion10);
 
 	Opcion_Personaje* opcion11 = new Opcion_Personaje;
 	opcion11->posicion = SDL_Rect {int(282*ratio_x + 0.5),y_fila_3,ancho,alto};
 	opcion11->personaje = personajes[10];
-	opciones.push_back(*opcion11);
+	opciones.push_back(opcion11);
 
 	Opcion_Personaje* opcion12 = new Opcion_Personaje;
 	opcion12->posicion = SDL_Rect {int(372*ratio_x + 0.5),y_fila_3,ancho,alto};
 	opcion12->personaje = personajes[11];
-	opciones.push_back(*opcion12);
+	opciones.push_back(opcion12);
 }
 
 SDL_Texture* MenuSelectPlayer::_loadImage(SDL_Rect* rect, string ruta){
@@ -158,19 +158,19 @@ void MenuSelectPlayer::_renderImagen(){
 }
 
 void MenuSelectPlayer::_renderSeleccion(int opcion_actual1,int opcion_actual2){
-	SDL_RenderCopy( ventana->getRenderer(), textura_2, NULL, &opciones[opcion_actual2].posicion);
-	SDL_RenderCopy( ventana->getRenderer(), textura_1, NULL, &opciones[opcion_actual1].posicion);
+	SDL_RenderCopy( ventana->getRenderer(), textura_2, NULL, &opciones[opcion_actual2]->posicion);
+	SDL_RenderCopy( ventana->getRenderer(), textura_1, NULL, &opciones[opcion_actual1]->posicion);
 
-	if (opciones[opcion_actual1].personaje != NULL){
-		opciones[opcion_actual1].personaje->setFlip(false);
-		opciones[opcion_actual1].personaje->setPosition(20*ratio_x,300*ratio_y);
-		opciones[opcion_actual1].personaje->renderizar(0,0);
+	if (opciones[opcion_actual1]->personaje != NULL){
+		opciones[opcion_actual1]->personaje->setFlip(false);
+		opciones[opcion_actual1]->personaje->setPosition(20*ratio_x,300*ratio_y);
+		opciones[opcion_actual1]->personaje->renderizar(0,0);
 	}
 
-	if (opciones[opcion_actual2].personaje != NULL){
-		opciones[opcion_actual2].personaje->setFlip(true);
-		opciones[opcion_actual2].personaje->setPosition(372*ratio_x,300*ratio_y);
-		opciones[opcion_actual2].personaje->renderizar(0,0);
+	if (opciones[opcion_actual2]->personaje != NULL){
+		opciones[opcion_actual2]->personaje->setFlip(true);
+		opciones[opcion_actual2]->personaje->setPosition(372*ratio_x,300*ratio_y);
+		opciones[opcion_actual2]->personaje->renderizar(0,0);
 	}
 }
 
@@ -180,9 +180,9 @@ void MenuSelectPlayer::_renderFaces(){
 	}
 }
 
-void MenuSelectPlayer::_renderFace(Opcion_Personaje opcion){
-	string ruta = opcion.personaje->getPathLogo();
-	SDL_Rect posicion = opcion.posicion;
+void MenuSelectPlayer::_renderFace(Opcion_Personaje* opcion){
+	string ruta = opcion->personaje->getPathLogo();
+	SDL_Rect posicion = opcion->posicion;
 
 	SDL_Texture* textura;
 	//Render text surface
@@ -209,7 +209,7 @@ void MenuSelectPlayer::_renderFace(Opcion_Personaje opcion){
 	SDL_DestroyTexture( textura );
 }
 
-std::vector<Opcion_Personaje> MenuSelectPlayer::getOpciones(){
+std::vector<Opcion_Personaje*> MenuSelectPlayer::getOpciones(){
 	return opciones;
 }
 
@@ -232,7 +232,8 @@ MenuSelectPlayer::~MenuSelectPlayer() {
 		SDL_DestroyTexture( textura_2 );
 	delete rect_2;
 	for (unsigned int i = 0 ; i < opciones.size() ; i++){
-		delete &opciones[i];
+		//delete opciones[i]->posicion;
+		delete opciones[i];
 	}
 	opciones.clear();
 

@@ -164,10 +164,14 @@ int Controller::getSleep(){
 }
 
 string Controller::get_stream_teclas(){
+	if (comboController == NULL)
+			return "";
 	return comboController->get_stream_teclas();
 }
 
 bool Controller::checkCombo(){
+	if (comboController == NULL)
+		return NULL;
 	return (comboController->checkCombos() > 0 ) ;
 }
 

@@ -9,6 +9,7 @@
 
 JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos,ComboController* comboCon) {
 	personaje = un_personaje;
+	comboController = NULL;
 	comboController = comboCon;
 	evento = e;
 	pausa = false;
@@ -23,7 +24,7 @@ bool JoystickControl::pause(){
 
 void JoystickControl::_verificarMapaComandos(){
 	bool mapa_correcto = false;
-	/*
+
 	if (comandos != NULL && joystick != NULL){
 		mapa_correcto = true;
 		for (std::map<string,int>::const_iterator it=comandos->begin(); it!=comandos->end(); ++it){
@@ -32,7 +33,6 @@ void JoystickControl::_verificarMapaComandos(){
 				mapa_correcto = false;
 		}
 	}
-	*/
 	//si no es correcto hago uno propio
 	if(!mapa_correcto){
 		log("Los botones del joystick especificados en el Json no son correctos, se crean unos por defecto",LOG_WARNING);
@@ -137,6 +137,10 @@ void JoystickControl::JoyPressed(){
 		else if ( boton == comandos->operator [](LANZAR_ARMA)){
 			personaje->poder1();
 		}
+		else if ( boton == comandos->operator [](CUBRIRSE)){
+			if (comboController)
+			comboController->sePresiono(CUBRIR);
+		}
 		else if ( boton == JOY_START){
 			pausa = !pausa;
 		}
@@ -162,8 +166,6 @@ void JoystickControl::JoyState(){
 	switch ( SDL_JoystickGetButton(joystick,comandos->operator [](CUBRIRSE)) ){
 		case BUTTON_PRESSED:
 			personaje->cubrirse();
-			if (comboController)
-				comboController->sePresiono(CUBRIR);
 			break;
 		case BUTTON_UNPRESSED:
 			personaje->dejarDeCubrirse();
@@ -173,7 +175,7 @@ void JoystickControl::JoyState(){
 
 JoystickControl::~JoystickControl() {
 	personaje = NULL;
-	if (comboController) delete comboController;
+	//if (comboController) delete comboController;
 	if (joystick != NULL && SDL_JoystickGetAttached(joystick)){
 		SDL_JoystickClose( joystick );
 		joystick = NULL;
@@ -182,7 +184,5 @@ JoystickControl::~JoystickControl() {
 		SDL_HapticClose(joystickHaptic);
 		joystickHaptic = NULL;
 	}
-	if (comandos != NULL)
-		comandos->clear();
 }
 

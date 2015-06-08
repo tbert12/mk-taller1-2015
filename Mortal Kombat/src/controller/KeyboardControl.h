@@ -29,6 +29,7 @@ private:
 	ComboController* comboController;
 	bool como_jugador;
 	int sleep;
+	std::vector<Combo*> combosPosibles;
 
 public:
 	KeyboardControl(SDL_Event* e, Personaje* un_personaje,bool como_jugador,ComboController* comboCon);

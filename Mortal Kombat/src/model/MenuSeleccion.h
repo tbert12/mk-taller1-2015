@@ -16,7 +16,7 @@ class MenuSeleccion {
 private:
 	Ventana* ventana;
 	Menu* menu;
-	std::vector<Opcion> opciones;
+	std::vector<Opcion*> opciones;
 	int ModoDeJuego;
 	int cantComandos;
 	bool selected;

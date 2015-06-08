@@ -15,6 +15,8 @@ using namespace std;
 KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador,ComboController* comboCon) {
 	personaje = un_personaje;
 	comboController = comboCon;
+	if (personaje)
+		combosPosibles = personaje->getCombos();
 	evento = e;
 	como_jugador = comoJugador;
 	pausa = false;
@@ -63,6 +65,7 @@ void KeyboardControl::KeyPressed(){
 			case SDLK_r:
 				if (pelea)
 					pelea->reset();
+				return;
 				break;
 			case SDLK_a:
 				if(!como_jugador) return;
@@ -117,10 +120,9 @@ void KeyboardControl::KeyPressed(){
 				if (sleep < 0) sleep = 0;
 				break;
 		}
-	if (evento->key.keysym.sym != SDLK_r){
-		if(comboController->checkCombos() > 0){
-			//combo a jugador
-		}
+
+	if(comboController and comboController->checkCombos() > 0){
+		//combo a jugador
 	}
 }
 

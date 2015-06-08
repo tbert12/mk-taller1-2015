@@ -66,18 +66,23 @@ void ControlSelectPlayer::Pressed(){
 				break;
 			case SDLK_a:
 				menuPlayers->select(player);
+				openTextBox();
 				break;
 			case SDLK_s:
 				menuPlayers->select(player);
+				openTextBox();
 				break;
 			case SDLK_RETURN:
 				menuPlayers->select(player);
+				openTextBox();
 				break;
 			case SDLK_SPACE:
 				menuPlayers->select(player);
+				openTextBox();
 				break;
 			case SDLK_d:
 				menuPlayers->select(player);
+				openTextBox();
 				break;
 		}
 	}
@@ -88,15 +93,16 @@ void ControlSelectPlayer::Pressed(){
 		switch( evento.type ){
 			case SDL_MOUSEMOTION:
 				//Get mouse position
-				menuPlayers->mousePosition(x,y,menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
+				menuPlayers->mousePosition(x,y,menuPlayers->changeMouseController()? PLAYER_TWO:PLAYER_ONE);
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				if (menuPlayers->mouseinTextBox(x,y) and !textBoxOpen){
-					openTextBox();
-				}
+				//if (menuPlayers->mouseinTextBox(x,y) and !textBoxOpen){
+				//	openTextBox();
+				//}
 				if (menuPlayers->mousePosition(x,y,menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE) and evento.button.button == SDL_BUTTON_LEFT )
-					menuPlayers->select(menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
+					menuPlayers->select(menuPlayers->changeMouseController()? PLAYER_TWO:PLAYER_ONE);
+					openTextBox();
 				break;
 		}
 	}
@@ -146,10 +152,14 @@ void ControlSelectPlayer::Pressed(){
 	//Boton
 	else if (evento.type == SDL_JOYBUTTONDOWN){
 		//con cualquier boton se selecciona
-		if (evento.jaxis.which == SDL_JoystickInstanceID(joystick1))
+		if (evento.jaxis.which == SDL_JoystickInstanceID(joystick1)){
 			menuPlayers->select(menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
-		else if (evento.jaxis.which == SDL_JoystickInstanceID(joystick2))
+			openTextBox();
+		}
+		else if (evento.jaxis.which == SDL_JoystickInstanceID(joystick2)){
 			menuPlayers->select(PLAYER_TWO);
+			openTextBox();
+		}
 	}
 }
 
@@ -185,10 +195,9 @@ void ControlSelectPlayer::_textBoxPressed(){
 		}
 		//Quit
 		else if(evento.key.keysym.sym == SDLK_RETURN){
-			menuPlayers->textBoxEnter();
-			closeTextBox();
+			if(menuPlayers->textBoxEnter(menuPlayers->changeControllerTextBox()? PLAYER_TWO:PLAYER_ONE))
+				closeTextBox();
 		}
-
 		//Handle copy
 		else if( evento.key.keysym.sym == SDLK_c && (SDL_GetModState() & KMOD_CTRL) )
 		{
@@ -201,6 +210,19 @@ void ControlSelectPlayer::_textBoxPressed(){
 		{
 			/* inputText += SDL_GetClipboardText();*/
 			textBox->appendString( SDL_GetClipboardText() );
+		}
+	}
+	else if (evento.type == SDL_JOYBUTTONDOWN ){
+		if(menuPlayers->textBoxEnter((evento.jaxis.which == SDL_JoystickInstanceID(joystick1))? PLAYER_ONE:PLAYER_TWO))
+			closeTextBox();
+	}
+	//mouse
+	else if (evento.type == SDL_MOUSEBUTTONDOWN){
+		int x, y;
+		SDL_GetMouseState( &x, &y );
+		if (menuPlayers->mouseinTextBox(x,y)){
+			if(menuPlayers->textBoxButtonMouse(x,y))
+				closeTextBox();
 		}
 	}
 	else if( evento.type == SDL_TEXTINPUT )
@@ -217,11 +239,11 @@ void ControlSelectPlayer::_textBoxPressed(){
 }
 
 ControlSelectPlayer::~ControlSelectPlayer() {
-	if (joystick1 != NULL){// && SDL_JoystickGetAttached(joystick1)){
+	if (joystick1 != NULL && SDL_JoystickGetAttached(joystick1)){
 		SDL_JoystickClose( joystick1 );
 		joystick1 = NULL;
 	}
-	if (joystick2 != NULL){// && SDL_JoystickGetAttached(joystick2)){
+	if (joystick2 != NULL && SDL_JoystickGetAttached(joystick2)){
 		SDL_JoystickClose( joystick2 );
 		joystick2 = NULL;
 	}

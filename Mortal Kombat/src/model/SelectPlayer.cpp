@@ -13,6 +13,8 @@ SelectPlayer::SelectPlayer(Ventana* una_ventana,int modo_de_juego,std::vector<Pe
 	//_verificarPersonajes();
 	Player1 = rand() % MAX_PLAYER + 1;
 	Player2 = rand() % MAX_PLAYER + 1;
+	while (Player1 == Player2)
+		Player2 = rand() % MAX_PLAYER + 1;
 	player1Select = false;
 	player2Select = false;
 	textBoxPlayer1 = false;
@@ -27,7 +29,7 @@ SelectPlayer::SelectPlayer(Ventana* una_ventana,int modo_de_juego,std::vector<Pe
 }
 
 bool SelectPlayer::playersSelected(){
-	return (player1Select and player2Select and (ciclosDelay <= 0));
+	return (player1Select and player2Select and (ciclosDelay <= 0) and !textBoxPlayer1 and !textBoxPlayer2);
 }
 
 TextBox* SelectPlayer::getTextBox(){
@@ -39,10 +41,19 @@ TextBox* SelectPlayer::getTextBox(){
 }
 
 bool SelectPlayer::changeController(){
-	if (ModoDeJuego == MODO_JUGADOR_VS_JUGADOR)
+	if (ModoDeJuego == MODO_JUGADOR_VS_JUGADOR){
 		return false;
+	}
 	else
 		return player1Select && !player2Select;
+}
+
+bool SelectPlayer::changeMouseController(){
+	return player1Select && !player2Select;
+}
+
+bool SelectPlayer::changeControllerTextBox(){
+	return !textBoxPlayer1 and textBoxPlayer2;
 }
 
 Personaje* SelectPlayer::getPersonajeUno(){
@@ -124,18 +135,25 @@ void SelectPlayer::abajo(int jugador){
 void SelectPlayer::select(int jugador){
 	if (jugador == PLAYER_ONE){
 		player1Select = true;
-		opciones[Player1].personaje->victoria();
+		textBoxPlayer1 = true;
+		text_Box_1->focus(true);
+		opciones[Player1]->personaje->victoria();
 	}
 	else if (jugador == PLAYER_TWO){
 		player2Select = true;
-		opciones[Player2].personaje->victoria();
+		textBoxPlayer2 = true;
+		text_Box_2->focus(true);
+		opciones[Player2]->personaje->victoria();
 	}
 }
 
 bool SelectPlayer::mousePosition(int x, int y, int jugador){
-	if (player1Select and player2Select) return false;
+
+	if (player1Select and jugador == PLAYER_ONE) return false;
+	if (player2Select and jugador == PLAYER_TWO) return false;
+
 	for (unsigned int i = 0 ; i < opciones.size() ; i++){
-		SDL_Rect rect = opciones[i].posicion;
+		SDL_Rect rect = opciones[i]->posicion;
 		if (x >= rect.x and x <= (rect.x + rect.w) ){
 			if (y >= rect.y and y <= (rect.y + rect.h) ){
 				if (jugador == PLAYER_ONE)
@@ -152,18 +170,12 @@ bool SelectPlayer::mousePosition(int x, int y, int jugador){
 bool SelectPlayer::mouseinTextBox(int x, int y){
 	if (x >= NameJug1.x and x <= (NameJug1.x + NameJug1.w) ){
 		if (y >= NameJug1.y and y <= (NameJug1.y + NameJug1.h) ){
-			textBoxPlayer1 = true;
-			text_Box_1->focus(true);
-			textBoxPlayer2 = false;
 			return true;
 		}
 	}
 
 	if (x >= NameJug2.x and x <= (NameJug2.x + NameJug2.w) ){
 		if (y >= NameJug2.y and y <= (NameJug2.y + NameJug2.h) ){
-			textBoxPlayer2 = true;
-			text_Box_2->focus(true);
-			textBoxPlayer1 = false;
 			return true;
 		}
 	}
@@ -193,22 +205,51 @@ bool SelectPlayer::textBox(){
 	return textBoxPlayer1 || textBoxPlayer2;
 }
 
-void SelectPlayer::textBoxEnter(){
-
-	if (textBoxPlayer1){
+bool SelectPlayer::textBoxEnter(int jugador){
+	if (ModoDeJuego != MODO_JUGADOR_VS_JUGADOR)
+		jugador = textBoxPlayer1 ?PLAYER_ONE: PLAYER_TWO;
+	if (textBoxPlayer1 and jugador == PLAYER_ONE){
 		personajes[Player1]->setNombre(text_Box_1->getText());
 		text_Box_1->focus(false);
 		textBoxPlayer1 = false;
+		return true;
 	}
-	if (textBoxPlayer2){
+	if (textBoxPlayer2 and jugador == PLAYER_TWO){
 		personajes[Player2]->setNombre(text_Box_2->getText());
 		text_Box_2->focus(false);
 		textBoxPlayer2 = false;
+		return true;
 	}
+	return false;
+}
+
+bool SelectPlayer::textBoxButtonMouse(int x,int y){
+	if (textBoxPlayer1){
+		if (x >= NameJug1.x and x <= (NameJug1.x + NameJug1.w) ){
+			if (y >= NameJug1.y and y <= (NameJug1.y + NameJug1.h) ){
+				personajes[Player1]->setNombre(text_Box_1->getText());
+				text_Box_1->focus(false);
+				textBoxPlayer1 = false;
+				return true;
+			}
+		}
+	}
+	if (textBoxPlayer2){
+		if (x >= NameJug2.x and x <= (NameJug2.x + NameJug2.w) ){
+			if (y >= NameJug2.y and y <= (NameJug2.y + NameJug2.h) ){
+				personajes[Player2]->setNombre(text_Box_2->getText());
+				text_Box_2->focus(false);
+				textBoxPlayer2 = false;
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 SelectPlayer::~SelectPlayer() {
 	delete text_Box_1;
 	delete text_Box_2;
+	delete menuPlayers;
 }
 

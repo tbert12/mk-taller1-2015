@@ -9,7 +9,8 @@
 
 BotonesPantalla::BotonesPantalla(Ventana* una_ventana) {
 	ventana = una_ventana;
-	font = TTF_OpenFont(RUTA_TTF, (int)(ventana->obtenerAlto()*(0.07)*ventana->obtenerRatioY() +0.5) );
+	font = NULL;
+	font = TTF_OpenFont(RUTA_BOTONES, (int)(ventana->obtenerAlto()*(0.07)*ventana->obtenerRatioY() +0.5) );
 	if( font == NULL ){
 		log("No se pudo cargar la fuente para los combos",LOG_ERROR);
 	}

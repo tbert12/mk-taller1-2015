@@ -27,17 +27,20 @@ public:
 	void render();
 	bool playersSelected();
 	bool changeController();
+	bool changeControllerTextBox();
+	bool changeMouseController();
 	bool textBox();
 	Personaje* getPersonajeUno();
 	Personaje* getPersonajeDos();
 	TextBox* getTextBox();
-	void textBoxEnter();
+	bool textBoxEnter(int jugador);
+	bool textBoxButtonMouse(int x,int y);
 	bool mouseinTextBox(int x , int y);
 	virtual ~SelectPlayer();
 private:
 	MenuSelectPlayer* menuPlayers;
 	std::vector<Personaje*> personajes;
-	std::vector<Opcion_Personaje> opciones;
+	std::vector<Opcion_Personaje*> opciones;
 	int ModoDeJuego;
 	int Player1;
 	int Player2;

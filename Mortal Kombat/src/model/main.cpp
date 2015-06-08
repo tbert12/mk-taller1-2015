@@ -29,7 +29,7 @@ ParserJSON* parser;
 string ruta_archivo_configuracion = "data/config/Parallax.json";
 
 Mundo* cargarDatos(){
-	Mundo* unMundo;
+	Mundo* unMundo = NULL;
 	try {
 			parser = new ParserJSON( ruta_archivo_configuracion );
 			unMundo = parser->cargarMundo();
@@ -41,22 +41,6 @@ Mundo* cargarDatos(){
 			return NULL;
 	}
 	return unMundo;
-}
-
-bool _recargarMundo(){
-
-	log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_WARNING );
-	delete mundo;
-	delete parser;
-	log ( "Refresh: se libero la memoria de lo cargado anteriormente", LOG_WARNING );
-
-	mundo = cargarDatos();
-	if (mundo == NULL){
-		log ( "No se pudo cargar el mundo luego del refresh, se cierra el programa", LOG_ERROR );
-		return false;
-	}
-	log( "Se creo correctamente el Mundo de la partida, luego del refresh", LOG_DEBUG );
-	return true;
 }
 
 int main( int argc, char* args[] )

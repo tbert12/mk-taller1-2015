@@ -383,10 +383,8 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	 * 	OK	-Gancho
 	 */
 
-	Rect_Logico* rectangulo = new Rect_Logico{ m_rectanguloAtaque->x,
-								m_rectanguloAtaque->y,
-								m_rectanguloAtaque->w,
-								m_rectanguloAtaque->h};
+	Rect_Logico* rectangulo = new Rect_Logico;
+
 	if(m_fliped)
 		rectangulo->x = m_xActual - getAncho();
 	else
@@ -422,15 +420,18 @@ Rect_Logico* Personaje::rectanguloAtaque(){
 	rectangulo->y = m_yActual - getAlto() + rectangulo->h*propY;
 	rectangulo->w = spriteActual->getAncho() - sprites[SPRITE_CUBRIRSE]->getAncho()*0.50;
 
+	m_rectanguloAtaque->x = rectangulo->x;
+	m_rectanguloAtaque->y = rectangulo->y;
+	m_rectanguloAtaque->w = rectangulo->w;
+	m_rectanguloAtaque->h = rectangulo->h;
+
 	return rectangulo;
 }
 
 Rect_Logico* Personaje::rectanguloDefensa(){
 	//Devuelve Rect_Nuevo, el ue lo pide se encarga de eliminarlo
-	Rect_Logico* rectangulo = new Rect_Logico{m_rectanguloDefensa->x,
-							   m_rectanguloDefensa->y,
-							   m_rectanguloDefensa->w,
-							   m_rectanguloDefensa->h};
+	Rect_Logico* rectangulo = new Rect_Logico;
+
 	float MinAncho = sprites[SPRITE_CUBRIRSE]->getAncho();
 	rectangulo->y=  m_yActual;
 	if(m_fliped)
@@ -442,6 +443,12 @@ Rect_Logico* Personaje::rectanguloDefensa(){
 		rectangulo->w = MinAncho;
 	}
 	rectangulo->h = spriteActual->getAlto();
+
+	m_rectanguloAtaque->x = rectangulo->x;
+	m_rectanguloAtaque->y = rectangulo->y;
+	m_rectanguloAtaque->w = rectangulo->w;
+	m_rectanguloAtaque->h = rectangulo->h;
+
 	return rectangulo;
 }
 
