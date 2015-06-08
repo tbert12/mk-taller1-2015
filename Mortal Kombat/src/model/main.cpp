@@ -34,7 +34,6 @@ Mundo* cargarDatos(){
 			parser = new ParserJSON( ruta_archivo_configuracion );
 			unMundo = parser->cargarMundo();
 			log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
-			delete parser;
 		} catch ( std::exception &e ) {
 			log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
 			if (unMundo)
@@ -48,8 +47,8 @@ bool _recargarMundo(){
 
 	log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_WARNING );
 	delete mundo;
+	delete parser;
 	log ( "Refresh: se libero la memoria de lo cargado anteriormente", LOG_WARNING );
-
 
 	mundo = cargarDatos();
 	if (mundo == NULL){
