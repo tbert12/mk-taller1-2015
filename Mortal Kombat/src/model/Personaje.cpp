@@ -964,7 +964,7 @@ void Personaje::toma1(){
 
 void Personaje::poder1(){
 	if (poderes[0]->getVida()) return;
-	if (_recibioGolpe or _estaCubriendose or _estaAtacando) return;
+	//if (_recibioGolpe or _estaCubriendose or _estaAtacando) return;
 	/*Siempre relacionado a lanzar un objeto*/
 	_cambiarSprite(SPRITE_PODER_1);
 	/* Depende de la posicion del sprite se lanza el poder */

@@ -34,7 +34,7 @@ bool BotonesPantalla::_loadFromRenderedText( std::string textureText,bool red){
 		textColor = ColorRED;
 
 	//Render text surface
-	SDL_Surface* textSurface = TTF_RenderText_Solid( font, textureText.c_str(), textColor );
+	SDL_Surface* textSurface = TTF_RenderText_Blended_Wrapped( font, textureText.c_str(), textColor , ventana->getAnchoPx());
 	if( textSurface == NULL ){
 		log("No se puede crear la textura del tiempo",LOG_ERROR);
 	}

@@ -106,7 +106,7 @@ void KeyboardControl::KeyPressed(){
 				break;
 			case SDLK_z:
 				if(!como_jugador) return;
-				personaje->poder1();
+				//personaje->poder1();
 				break;
 			case SDLK_x:
 				if(!como_jugador) return;
@@ -124,8 +124,14 @@ void KeyboardControl::KeyPressed(){
 				break;
 		}
 
-	if(comboController and comboController->checkCombos() > 0){
-		//combo a jugador
+	if(comboController){
+		int combo_a_realizar =  comboController->checkCombos();
+		if (combo_a_realizar < 0) return;
+		switch (combo_a_realizar){
+			case 0:
+				personaje->poder1();
+				break;
+		}
 	}
 }
 
