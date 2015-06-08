@@ -218,7 +218,8 @@ void printbools(std::string nombrem,bool a,bool b,bool c,bool d){
 }
 
 void Personaje::Update(float posDeOtroJugador,bool forzado){
-	printbools(nombre,_estaSaltando > 0,_estaAgachado,_estaCubriendose,_recibioGolpe);
+	//printbools(nombre,_estaSaltando > 0,_estaAgachado,_estaCubriendose,_recibioGolpe);
+	//printf("----SpriteActual: %d\n",getAccionDeAtaque());
 	//Actualizo La X para cada caso y verificando limites
 	float renderX = m_xActual + m_velocidadActual;
 	float maximo,minimo;
@@ -357,7 +358,7 @@ void Personaje::renderizar(float x_dist_ventana,float posOtherPlayer){
 	}
 
 	//* Para test de colisiones *//
-	spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
+	//spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
 	//* Fin de test para mostrar colisiones *//
 
 	AvanzarSprite();
@@ -450,7 +451,9 @@ void Personaje::AvanzarSprite(){
 	//Los If son muy parecidos, pero hay que tenerlos separados para entender el codigo
 	if (spriteActual->ultimoFrame() or (!_estaSaltando and !_recibioGolpe) ){
 		//Termina de atacar o agacharse o saltando = 0 (justo en el momento que cae)
-		if ( (_estaAtacando and !_estaAgachado) or (_estaAgachado and !_estaCubriendose and !_estaAtacando and !_recibioGolpe) or !_estaSaltando ){
+		if ( (_estaAtacando and !_estaAgachado)
+				or (!_estaAgachado and !_estaCubriendose and !_estaAtacando and !_recibioGolpe and _estaSaltando < 0)
+				or !_estaSaltando ){
 			if (!m_velocidadActual){
 				_cambiarSprite(SPRITE_INICIAL);
 			} else {
@@ -491,14 +494,21 @@ void Personaje::AvanzarSprite(){
 	if (_recibioGolpe and spriteActual->ultimoFrame()){
 		//Termina de recibir Golpe (Ya sea agachado o parado)
 		if ( _estaAgachado ){
-			_cambiarSprite(SPRITE_AGACHAR);
-			spriteActual->doLoop(true);
-			spriteActual->Advance();
+			if (_estaCubriendose){
+				_cubrirseAgachado();
+			} else {
+				_cambiarSprite(SPRITE_AGACHAR);
+				spriteActual->doLoop(true);
+				spriteActual->Advance();
+			}
+
 		} else {
-			if (!m_velocidad)
+			m_velocidadActual = 0;
+			if (_estaCubriendose){
+				_cubrirseParado();
+			} else {
 				_cambiarSprite(SPRITE_INICIAL);
-			else
-				_Caminar( ( m_velocidadActual > 0 ) );
+			}
 		}
 		_recibioGolpe = false;
 	}
@@ -563,12 +573,12 @@ void Personaje::Frenar(){
 }
 
 void Personaje::CaminarDerecha(){
-	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe) return;
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
 	_Caminar(true);
 }
 
 void Personaje::CaminarIzquierda(){
-	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe) return;
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
 	_Caminar(false);
 }
 
@@ -630,6 +640,7 @@ void Personaje::_actualizarY(){
 		tiempoDeSalto = 0;
 		_estaSaltando = 0;
 		if (_recibioGolpe){
+			m_velocidadActual = 0;
 			spriteActual->doLoop(false);
 		} else {
 			if (m_velocidadActual) {
@@ -669,6 +680,7 @@ void Personaje::Levantarse(){
 	}
 	spriteActual->doLoop(false);
 	spriteActual->doReverse(true);
+	_estaAgachado = false;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -912,7 +924,6 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	}
 
 	if (reaccionesAGolpes[CodigoGolpe] == SPRITE_ES_TOMADO){
-		printf("ES TOMADO\n");
 		velocidadDeRetroceso = -3*m_velocidad;
 		maxAlturaDeSalto = 0.3 * getAlto() + (m_yPiso - m_yActual);
 		tiempoDeSalto = 1;
