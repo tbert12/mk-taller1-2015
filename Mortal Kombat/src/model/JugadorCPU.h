@@ -33,7 +33,6 @@ private:
 
 	bool noHayQueHacerNada();
 
-	bool hayQueAtacar();
 	bool hayQueCubrirse();
 	bool hayQueSaltar();
 	bool hayQueAgacharse();
