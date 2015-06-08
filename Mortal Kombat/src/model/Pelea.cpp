@@ -36,6 +36,7 @@ void Pelea::_crearEstado(){
 }
 
 void Pelea::start(){
+
 	if (tiempo != NULL)
 		tiempo->start();
 
