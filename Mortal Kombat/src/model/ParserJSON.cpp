@@ -1481,7 +1481,6 @@ Mundo* ParserJSON::cargarMundo() {
 Personaje* ParserJSON::cambiarColorPersonaje(Personaje* el_personaje) {
 	string nombre_personaje = el_personaje->getNombreDeCarga();
 	string nombre_personaje_cambiado = el_personaje->getNombre();
-	printf("NOMBRE: %s - otro nombre: %s\n",nombre_personaje.c_str(),nombre_personaje_cambiado.c_str());
 	Json::Value root;
 	Json::Reader reader;
 

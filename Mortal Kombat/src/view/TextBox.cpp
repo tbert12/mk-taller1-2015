@@ -79,6 +79,7 @@ void TextBox::render(){
 	}
 
 	//Borde Con Focus
+	/*
 	int variacion = borderColor.g + dcolor;
 	if (variacion > 255 or variacion < 0) {
 		variacion = borderColor.g;
@@ -89,6 +90,7 @@ void TextBox::render(){
 
 	//SDL_SetRenderDrawColor(mVentana->getRenderer(), borderColor.r, borderColor.g, borderColor.b, 255);
 	//SDL_RenderDrawRect(mVentana->getRenderer(), &mDimension);
+	*/
 
 	int ancho = mDimension.w;
 	int x = mWidth - mDimension.w;
@@ -101,6 +103,15 @@ void TextBox::render(){
 }
 
 void TextBox::_loadFromRenderedText( string textureText){
+
+	/*
+	int variacion = textColor.g + dcolor;
+	if (variacion > 255 or variacion < 0) {
+		variacion = textColor.g;
+		dcolor = -dcolor;
+	}
+	textColor.g = (Uint8)variacion;
+	*/
 	//Render text surface
 	SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
 	if( textSurface != NULL )
