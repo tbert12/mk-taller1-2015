@@ -720,7 +720,7 @@ float Personaje::_yDeSalto(float currentY, float currentT)
 
 void Personaje::Agachar(){
 	if (_gano or _estaMuerto) return;
-	if (_estaSaltando > 0 or  _estaAgachado or _recibioGolpe or _estaAtacando ) return;
+	if (_estaSaltando > 0 or  _estaAgachado or _recibioGolpe or _estaAtacando or _estaCubriendose) return;
 
 	_cambiarSprite(SPRITE_AGACHAR);
 	_estaAgachado = true;
@@ -730,7 +730,7 @@ void Personaje::Agachar(){
 
 void Personaje::Levantarse(){
 	if (_gano or _estaMuerto) return;
-	if (_estaSaltando > 0 or !_estaAgachado or _recibioGolpe) return;
+	if (_estaSaltando > 0 or !_estaAgachado or _recibioGolpe or _estaAtacando or _estaCubriendose) return;
 	if (_estaCubriendose){
 		dejarDeCubrirse();
 	}
