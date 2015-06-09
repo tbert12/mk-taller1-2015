@@ -15,14 +15,12 @@ LiuKang::LiuKang(string nombre_personaje,vector<Sprite*> Sprites,vector<ObjetoAr
 
 void LiuKang::poder2(){
 	_cambiarSprite(SPRITE_PODER_2);
-	maxAlturaDeSalto = getAlto();
-	tiempoDeSalto = 1;
-	_estaSaltando = 1;
+	m_yActual = m_yPiso - getAlto();
 	float velocidad = 3 * m_velocidad;
 	if (m_fliped){
 		velocidad = - velocidad;
 	}
-	m_velocidadActual = 3 * m_velocidad;
+	m_velocidadActual = velocidad;
 	_estaAtacando = true;
 
 }
