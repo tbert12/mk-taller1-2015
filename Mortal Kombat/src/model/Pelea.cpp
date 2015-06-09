@@ -7,9 +7,10 @@
 
 #include "Pelea.h"
 
-Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_de_juego) {
+Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_de_juego,TextoPelea* texto_Pelea) {
 	ModoDeJuego = modo_de_juego;
 	escenario = un_escenario;
+	textoPelea = texto_Pelea;
 	capaPrincipal = escenario->getCapaPrincipal();
 	m_personajeUno = capaPrincipal->getPersonajSinFlip();
 	m_personajeDos = capaPrincipal->getPersonajConFlip();
@@ -325,6 +326,6 @@ Pelea::~Pelea() {
 	if(BarraPersonajeDos) delete BarraPersonajeDos;
 	if(tiempo_pantalla) delete tiempo_pantalla;
 	if (cpu) delete cpu;
-
+	textoPelea = NULL;
 }
 

@@ -78,6 +78,7 @@ class Sprite {
 		void vibrar();
 		void setRender(SDL_Renderer* Renderer);
 		void render(float x,float y, bool fliped);
+		void renderSpecialText(int x,int y);
 
 		//PARA TESTEO
 		LTexture* RectanguloTest1;

@@ -138,8 +138,14 @@ void Sprite::Reset(){
 
 void Sprite::render(float x, float y, bool fliped){
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
-	printf("Frame: %i | Total: %i | Loop:%s\n",frameActual,cantidadFrames,doloop ? "T" : "F");
+	//printf("Frame: %i | Total: %i | Loop:%s\n",frameActual,cantidadFrames,doloop ? "T" : "F");
 	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h_log, fliped);
+	playSound();
+}
+
+void Sprite::renderSpecialText(int x, int y){
+	Rect_Objeto* currentClip = &spriteFrames[frameActual];
+	SpriteSheetTexture->renderSpecialText(currentClip,x,y);
 	playSound();
 }
 

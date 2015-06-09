@@ -16,11 +16,13 @@ TextoPelea::TextoPelea(Sprite* el_sprite) {
 }
 
 void TextoPelea::render() {
-	//sprite->renderTexto();
+	int x = 0; //pos x de la ventana en pixels
+	int y = 0; //pos y de la ventana en pixels
+	sprite->renderSpecialText(x,y);
 	sprite->Advance();
 }
 
 TextoPelea::~TextoPelea() {
-	// TODO Auto-generated destructor stub
+	delete sprite;
 }
 

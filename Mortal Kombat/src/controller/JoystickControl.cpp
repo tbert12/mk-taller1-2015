@@ -190,6 +190,11 @@ void JoystickControl::JoyState(){
 	if ( ( sentido_personaje > 0 && x_mov < JOYSTICK_DEAD_ZONE ) || (sentido_personaje < 0 && x_mov > -JOYSTICK_DEAD_ZONE)  )
 		personaje->Frenar();
 
+	//salta si mantiene para arriba el analogico
+	if ((y_mov < -JOYSTICK_DEAD_ZONE)){
+		personaje->Saltar();
+	}
+
 	//se levanta si no esta manteniendo para abajo el analogico
 	if (!(y_mov > JOYSTICK_DEAD_ZONE))
 		personaje->Levantarse();

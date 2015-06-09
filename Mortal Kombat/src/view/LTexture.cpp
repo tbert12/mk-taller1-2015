@@ -282,7 +282,11 @@ void LTexture::renderFondo( Rect_Logico* clip)
 	SDL_RenderCopy( gRenderer, mTexture, &clip_px, &camera );
 }
 
-
+void LTexture::renderSpecialText(Rect_Objeto* rect,int x , int y){
+	SDL_Rect camera = { x,y, (int)(rect->w_log*ratio_x_ventana +0.5), (int)(rect->h_log*ratio_y_ventana +0.5)};
+	SDL_Rect clip = {rect->x,rect->y,rect->h,rect->w};
+	SDL_RenderCopy( gRenderer, mTexture, &clip, &camera);
+}
 
 void LTexture::renderImagen(){
 	SDL_Rect camera = { 0,0, w_ventana, h_ventana};
