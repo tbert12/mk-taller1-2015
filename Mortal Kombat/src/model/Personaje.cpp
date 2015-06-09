@@ -472,9 +472,10 @@ void Personaje::AvanzarSprite(){
 	//Los If son muy parecidos, pero hay que tenerlos separados para entender el codigo
 	if (spriteActual->ultimoFrame() or (!_estaSaltando and !_recibioGolpe) ){
 		//Termina de atacar o agacharse o saltando = 0 (justo en el momento que cae)
-		if ( (_estaAtacando and !_estaAgachado)
+		if (	   (_estaAtacando and !_estaAgachado)
 				or (!_estaAgachado and !_estaCubriendose and !_estaAtacando and !_recibioGolpe and _estaSaltando < 0)
 				or !_estaSaltando ){
+
 			if (!m_velocidadActual){
 				_cambiarSprite(SPRITE_INICIAL);
 			} else {
@@ -594,16 +595,17 @@ void Personaje::Frenar(){
 }
 
 void Personaje::CaminarDerecha(){
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
 	_Caminar(true);
 }
 
 void Personaje::CaminarIzquierda(){
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
 	_Caminar(false);
 }
 
 void Personaje::_Caminar(bool derecha){
 	if (_gano or _estaMuerto) return;
-	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
 	float factor = 1;
 	if (derecha){
 		if (m_fliped)
