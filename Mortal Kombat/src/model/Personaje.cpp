@@ -67,6 +67,7 @@ void Personaje::reset(){
 	_estaAtacando = false;
 	_recibioGolpe = false;
 	_estaMuerto = false;
+	_gano = false;
 }
 
 //-------------------------------------------------------------------------------------------------------------------------
