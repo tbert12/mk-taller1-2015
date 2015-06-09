@@ -12,7 +12,7 @@
 
 using namespace std;
 
-KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador,ComboController* comboCon) {
+KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador,ComboController* comboCon,Pelea* una_pelea) {
 	personaje = un_personaje;
 	comboController = comboCon;
 	if (personaje)
@@ -23,7 +23,7 @@ KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJ
 	returnMenu = false;
 	keystate = SDL_GetKeyboardState(NULL);
 	sleep = 50000;
-	pelea = NULL;
+	pelea = una_pelea;
 }
 bool KeyboardControl::pause(){
 	return pausa;
@@ -74,9 +74,10 @@ void KeyboardControl::KeyPressed(){
 				break;
 			case SDLK_m:
 				returnMenu = true;
+				return;
 				break;
 			case SDLK_r:
-				if (pelea)
+				if (pelea->modoDeJuego() == MODO_ENTRENAMIENTO)
 					pelea->reset();
 				return;
 				break;
@@ -113,10 +114,6 @@ void KeyboardControl::KeyPressed(){
 			case SDLK_c:
 				if(!como_jugador) return;
 				personaje->poder2();
-				break;
-			case SDLK_z:
-				if(!como_jugador) return;
-				//personaje->poder1();
 				break;
 			case SDLK_x:
 				if(!como_jugador) return;
@@ -166,10 +163,6 @@ void KeyboardControl::KeyState(){
 
 	if(!keystate[SDL_SCANCODE_D])
 		personaje->dejarDeCubrirse();
-}
-
-void KeyboardControl::setPelea(Pelea* una_pelea){
-	pelea = una_pelea;
 }
 
 KeyboardControl::~KeyboardControl() {

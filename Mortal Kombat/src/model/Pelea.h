@@ -76,6 +76,7 @@ public:
 	Personaje* getPersonajeUno();
 	Personaje* getPersonajeDos();
 	void reset();
+	int modoDeJuego();
 	int getModoDeJuego();
 	virtual ~Pelea();
 };

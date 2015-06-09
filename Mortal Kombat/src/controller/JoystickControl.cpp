@@ -7,14 +7,16 @@
 
 #include "JoystickControl.h"
 
-JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos,ComboController* comboCon) {
+JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_personaje,map<string, int>* mapa_comandos,ComboController* comboCon,Pelea* una_pelea) {
 	personaje = un_personaje;
+	pelea = una_pelea;
 	if (personaje)
 		combosPosibles = personaje->getCombos();
 	comboController = NULL;
 	comboController = comboCon;
 	evento = e;
 	pausa = false;
+	returnMenu = false;
 	comandos = mapa_comandos;
 	_Init(id_joystick);
 	_verificarMapaComandos();
@@ -22,6 +24,10 @@ JoystickControl::JoystickControl(SDL_Event* e,int id_joystick,Personaje* un_pers
 
 bool JoystickControl::pause(){
 	return pausa;
+}
+
+bool JoystickControl::goToMenu(){
+	return returnMenu;
 }
 
 void JoystickControl::_verificarMapaComandos(){
@@ -44,7 +50,6 @@ void JoystickControl::_verificarMapaComandos(){
 		mapita->operator[](PINA_ALTA) = JOY_CUADRADO;
 		mapita->operator[](PATADA_ALTA) = JOY_TRIANGULO;
 		mapita->operator[](CUBRIRSE)= JOY_R1;
-		mapita->operator[](LANZAR_ARMA) = JOY_L1;
 		comandos = mapita;
 	}
 }
@@ -122,7 +127,16 @@ void JoystickControl::JoyPressed(){
 	//Boton
 	else if (evento->type == SDL_JOYBUTTONDOWN){
 		int boton = evento->jbutton.button;
-		if (boton == comandos->operator[](PINA_BAJA) ){
+		if (boton == comandos->operator[](RESET)){
+			if (pelea->modoDeJuego() == MODO_ENTRENAMIENTO)
+				pelea->reset();
+				return;
+		}
+		else if (boton == comandos->operator[](MENU)){
+			returnMenu = true;
+			return;
+		}
+		else if (boton == comandos->operator[](PINA_BAJA) ){
 			personaje->pinaBaja();
 			if (comboController)
 				comboController->sePresiono(PINABAJA);
@@ -144,9 +158,6 @@ void JoystickControl::JoyPressed(){
 			personaje->patadaAlta();
 			if (comboController)
 				comboController->sePresiono(PATADAALTA);
-		}
-		else if ( boton == comandos->operator [](LANZAR_ARMA)){
-			//personaje->poder1();
 		}
 		else if ( boton == comandos->operator [](CUBRIRSE)){
 			if (comboController)
@@ -196,7 +207,7 @@ void JoystickControl::JoyState(){
 
 JoystickControl::~JoystickControl() {
 	personaje = NULL;
-	//if (comboController) delete comboController;
+	pelea = NULL;
 	if (joystick != NULL && SDL_JoystickGetAttached(joystick)){
 		SDL_JoystickClose( joystick );
 		joystick = NULL;

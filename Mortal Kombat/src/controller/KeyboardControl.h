@@ -32,10 +32,9 @@ private:
 	std::vector<Combo*> combosPosibles;
 
 public:
-	KeyboardControl(SDL_Event* e, Personaje* un_personaje,bool como_jugador,ComboController* comboCon);
+	KeyboardControl(SDL_Event* e, Personaje* un_personaje,bool como_jugador,ComboController* comboCon,Pelea* una_pelea);
 	virtual ~KeyboardControl();
 	void KeyPressed();
-	void setPelea(Pelea* una_pelea);
 	void KeyState();
 	int getSleep();
 	bool pause();

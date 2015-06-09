@@ -305,6 +305,10 @@ Personaje* Pelea::getPersonajeUno(){
 	return m_personajeUno;
 }
 
+int Pelea::modoDeJuego(){
+	return ModoDeJuego;
+}
+
 Personaje* Pelea::getPersonajeDos(){
 	return m_personajeDos;
 }

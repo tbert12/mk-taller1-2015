@@ -43,7 +43,11 @@ bool Controller::Quit(){
 
 bool Controller::goToMenu(){
 	if (ModoDeJuego != MODO_ENTRENAMIENTO) return false;
-	return Teclado->goToMenu();
+	if (Teclado)
+		if (Teclado->goToMenu()) return true;
+	if (Joystick_1)
+		if (Joystick_1->goToMenu()) return true;
+	return false;
 }
 
 bool Controller::PollEvent(){
@@ -68,12 +72,12 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 		log("Hay mas de dos joystick conectados, se setean al jugador 1 y 2 .Ademas se crea el teclado para el personaje 1",LOG_DEBUG);
 		if (p_uno != NULL){
 			comboController = new ComboController(tiempoMax,tolerancia,p_uno->getCombos());
-			Joystick_1 = new JoystickControl(&evento,0,p_uno,mapa_comandos1,comboController);
-			Teclado = new KeyboardControl(&evento,p_uno,false, NULL);
-			if (ModoDeJuego == MODO_ENTRENAMIENTO) Teclado->setPelea(pelea);
+			Joystick_1 = new JoystickControl(&evento,0,p_uno,mapa_comandos1,comboController,pelea);
+			Teclado = new KeyboardControl(&evento,p_uno,false, NULL,pelea);
 		}
 		if(p_dos != NULL && ModoDeJuego != MODO_JUGADOR_VS_PC){
-			Joystick_2 = new JoystickControl(&evento,1,p_dos,mapa_comandos2,NULL);
+			ComboController* comboCon= new ComboController(tiempoMax,tolerancia,p_dos->getCombos());
+			Joystick_2 = new JoystickControl(&evento,1,p_dos,mapa_comandos2,comboCon,pelea);
 		}
 	}
 	//hay solo un joy entonces es para el jugador uno, el 2 con teclado
@@ -81,10 +85,10 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 		log("Hay solo un joystick, se le setea al jugador 1, y el teclado al jugador 2",LOG_WARNING);
 		if (p_uno != NULL)
 			comboController = new ComboController(tiempoMax,tolerancia,p_uno->getCombos());
-			Joystick_1 = new JoystickControl(&evento,0,p_uno,mapa_comandos1,comboController);
+			Joystick_1 = new JoystickControl(&evento,0,p_uno,mapa_comandos1,comboController,pelea);
 		if(p_dos != NULL){
-			Teclado = new KeyboardControl(&evento,p_dos,true,NULL);
-			if (ModoDeJuego == MODO_ENTRENAMIENTO) Teclado->setPelea(pelea);
+			ComboController* comboCon= new ComboController(tiempoMax,tolerancia,p_dos->getCombos());
+			Teclado = new KeyboardControl(&evento,p_dos,true,comboCon,pelea);
 		}
 	}
 	//no hay joystick conectados, solo teclado
@@ -92,8 +96,7 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 		log("No hay joystick conectado, se setea el teclado al jugador 1",LOG_DEBUG);
 		if(p_uno != NULL){
 			comboController = new ComboController(tiempoMax,tolerancia,p_uno->getCombos());
-			Teclado = new KeyboardControl(&evento,p_uno,true,comboController);
-			if (ModoDeJuego == MODO_ENTRENAMIENTO) Teclado->setPelea(pelea);
+			Teclado = new KeyboardControl(&evento,p_uno,true,comboController,pelea);
 		}
 	}
 }
