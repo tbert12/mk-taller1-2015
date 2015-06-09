@@ -870,6 +870,9 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 			return false;
 		}
 	}
+	if (_estaCubriendose) _estaCubriendose = false;
+	if (_estaAtacando) _estaAtacando = false;
+
 	bool golpeFuerte = false;
 
 	std::map<int, int> reaccionesAGolpes;
