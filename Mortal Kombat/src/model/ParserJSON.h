@@ -7,7 +7,7 @@
 #include "Escenario.h"
 #include "CapaPrincipal.h"
 #include "../view/LSound.h"
-
+#include "../view/TextoPelea.h"
 #include "personajes/LiuKang.h"
 #include "personajes/SubZero.h"
 
@@ -46,6 +46,9 @@ public:
 	 Personaje* cambiarColorPersonaje(Personaje* personaje);
 	 Json::Value obtenerRootDeArchivo(string ruta_archivo);
 
+	 TextoPelea* cargarTextoFight();
+	 TextoPelea* cargarTextoFinishHim();
+	 TextoPelea* cargarTextoFatality();
 };
 
 #endif /* SRC_MODEL_PARSER_H_ */

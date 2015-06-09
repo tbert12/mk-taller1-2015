@@ -18,7 +18,6 @@
 #include "../view/Ventana.h"
 #include "../view/BarraEnergia.h"
 #include "../view/TiempoPartida.h"
-#include "../view/FightText.h"
 #include <vector>
 #include <algorithm>
 #include <unistd.h>

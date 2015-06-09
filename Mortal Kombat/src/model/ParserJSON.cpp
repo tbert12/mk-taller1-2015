@@ -1,5 +1,17 @@
 #include "ParserJSON.h"
 
+#define RUTA_ARCHIVO_JSON_FIGHT "data/img/textosPelea/fight/sprites.json"
+#define RUTA_CARPETA_SPRITE_FIGHT "data/img/textosPelea/fight/"
+#define RUTA_CARPETA_SONIDO_FIGHT "data/img/textosPelea/fight/"
+
+#define RUTA_ARCHIVO_JSON_FATALITY "data/img/textosPelea/fatality/sprites.json"
+#define RUTA_CARPETA_SPRITE_FATALITY "data/img/textosPelea/fatality/"
+#define RUTA_CARPETA_SONIDO_FATALITY "data/img/textosPelea/fatality/"
+
+#define RUTA_ARCHIVO_JSON_FINISHHIM "data/img/textosPelea/finishHim/sprites.json"
+#define RUTA_CARPETA_SPRITE_FINISHHIM "data/img/textosPelea/finishHim/"
+#define RUTA_CARPETA_SONIDO_FINISHHIM "data/img/textosPelea/finishHim/"
+
 using namespace std;
 
 ParserJSON::ParserJSON(string ruta_archivo) {
@@ -1549,3 +1561,32 @@ Json::Value ParserJSON::obtenerRootDeArchivo(string ruta_archivo) {
 	return root;
 }
 
+TextoPelea* ParserJSON::cargarTextoFight() {
+	Json::Value root = obtenerRootDeArchivo(string(RUTA_ARCHIVO_JSON_FIGHT));
+	float ratio_x_ventana = m_ventana->obtenerRatioX();
+	float ratio_y_ventana = m_ventana->obtenerRatioY();
+
+	Sprite* spriteFight = cargarSprite(root, string(RUTA_CARPETA_SPRITE_FIGHT), string(RUTA_CARPETA_SONIDO_FIGHT), "fight", "fight.png", m_ventana, ratio_x_ventana, ratio_y_ventana);
+	TextoPelea* textoFight = new TextoPelea(spriteFight);
+	return textoFight;
+}
+
+TextoPelea* ParserJSON::cargarTextoFinishHim() {
+	Json::Value root = obtenerRootDeArchivo(string(RUTA_ARCHIVO_JSON_FINISHHIM));
+	float ratio_x_ventana = m_ventana->obtenerRatioX();
+	float ratio_y_ventana = m_ventana->obtenerRatioY();
+
+	Sprite* spriteFinishHim = cargarSprite(root, string(RUTA_CARPETA_SPRITE_FINISHHIM), string(RUTA_CARPETA_SONIDO_FINISHHIM), "finishHim", "finishHim.png", m_ventana, ratio_x_ventana, ratio_y_ventana);
+	TextoPelea* textoFinishHim = new TextoPelea(spriteFinishHim);
+	return textoFinishHim;
+}
+
+TextoPelea* ParserJSON::cargarTextoFatality() {
+	Json::Value root = obtenerRootDeArchivo(string(RUTA_ARCHIVO_JSON_FATALITY));
+	float ratio_x_ventana = m_ventana->obtenerRatioX();
+	float ratio_y_ventana = m_ventana->obtenerRatioY();
+
+	Sprite* spriteFatality = cargarSprite(root, string(RUTA_CARPETA_SPRITE_FATALITY), string(RUTA_CARPETA_SONIDO_FATALITY), "fatality", "fatality.png", m_ventana, ratio_x_ventana, ratio_y_ventana);
+	TextoPelea* textoFatality = new TextoPelea(spriteFatality);
+	return textoFatality;
+}
