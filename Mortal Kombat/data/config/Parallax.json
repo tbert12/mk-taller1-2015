@@ -100,7 +100,8 @@
 			"pina alta": 3,
 			"patada alta": 0,
 			"cubrirse": 4,
-			"lanzar arma": 5
+			"menu": 8,
+			"reset": 5
 		},
 		"luchador2": {
 			"pina baja": 2,
@@ -108,7 +109,8 @@
 			"pina alta": 3,
 			"patada alta": 0,
 			"cubrirse": 4,
-			"lanzar arma": 5
+			"menu": 8,
+			"reset": 5
 		}
 	}
 }

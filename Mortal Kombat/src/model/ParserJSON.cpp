@@ -694,9 +694,13 @@ void ParserJSON::cargarMapaComandos(Json::Value root) {
 	int comando_cubrirse1 = cargarComando(root["comandos"]["luchador1"], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
 	int comando_cubrirse2 = cargarComando(root["comandos"]["luchador2"], "cubrirse", COMANDO_CUBRIRSE_DEFAULT);
 
-	log("Se cargara la configuracion del comando de lanzar arma arrojable.", LOG_DEBUG);
-	int comando_lanzar_arma1 = cargarComando(root["comandos"]["luchador1"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
-	int comando_lanzar_arma2 = cargarComando(root["comandos"]["luchador2"], "lanzar arma", COMANDO_LANZAR_ARMA_DEFAULT);
+	log("Se cargara la configuracion del comando de volver al menu inicial.", LOG_DEBUG);
+	int comando_menu1 = cargarComando(root["comandos"]["luchador1"], "menu", COMANDO_MENU_DEFAULT);
+	int comando_menu2 = cargarComando(root["comandos"]["luchador2"], "menu", COMANDO_MENU_DEFAULT);
+
+	log("Se cargara la configuracion del comando de reset en modo practica.", LOG_DEBUG);
+	int comando_reset1 = cargarComando(root["comandos"]["luchador1"], "reset", COMANDO_RESET_DEFAULT);
+	int comando_reset2 = cargarComando(root["comandos"]["luchador2"], "reset", COMANDO_RESET_DEFAULT);
 
 
 	std::map<std::string, int>* mapita1 = new std::map<std::string,int>;
@@ -705,7 +709,8 @@ void ParserJSON::cargarMapaComandos(Json::Value root) {
 	mapita1->operator[](string("pina alta")) = comando_pina_alta1;
 	mapita1->operator[](string("patada alta")) = comando_patada_alta1;
 	mapita1->operator[](string("cubrirse"))= comando_cubrirse1;
-	mapita1->operator[](string("lanzar arma")) = comando_lanzar_arma1;
+	mapita1->operator[](string("menu")) = comando_menu1;
+	mapita1->operator[](string("reset")) = comando_reset1;
 
 	comandos_luchador1 = mapita1;
 	log( "Se cargo correctamente el mapa de comandos y botones del primer controlador.", LOG_DEBUG );
@@ -716,7 +721,8 @@ void ParserJSON::cargarMapaComandos(Json::Value root) {
 	mapita2->operator[](string("pina alta")) = comando_pina_alta2;
 	mapita2->operator[](string("patada alta")) = comando_patada_alta2;
 	mapita2->operator[](string("cubrirse"))= comando_cubrirse2;
-	mapita2->operator[](string("lanzar arma")) = comando_lanzar_arma2;
+	mapita2->operator[](string("menu")) = comando_menu2;
+	mapita1->operator[](string("reset")) = comando_reset2;
 
 	comandos_luchador2 = mapita2;
 	log( "Se cargo correctamente el mapa de comandos y botones del segundo controlador.", LOG_DEBUG );

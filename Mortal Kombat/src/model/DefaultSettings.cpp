@@ -449,14 +449,16 @@ void mapaComandosDefault(map<string, int>* comandos1, map<string, int>* comandos
 	comandos1->operator[](string("pina alta")) = COMANDO_PINA_ALTA_DEFAULT;
 	comandos1->operator[](string("patada alta")) = COMANDO_PATADA_ALTA_DEFAULT;
 	comandos1->operator[](string("cubrirse"))= COMANDO_CUBRIRSE_DEFAULT;
-	comandos1->operator[](string("lanzar arma")) = COMANDO_LANZAR_ARMA_DEFAULT;
+	comandos1->operator[](string("menu")) = COMANDO_MENU_DEFAULT;
+	comandos1->operator[](string("reset")) = COMANDO_RESET_DEFAULT;
 
 	comandos2->operator[](string("pina baja")) = COMANDO_PINA_BAJA_DEFAULT;
 	comandos2->operator[](string("patada baja")) = COMANDO_PATADA_BAJA_DEFAULT;
 	comandos2->operator[](string("pina alta")) = COMANDO_PINA_ALTA_DEFAULT;
 	comandos2->operator[](string("patada alta")) = COMANDO_PATADA_ALTA_DEFAULT;
 	comandos2->operator[](string("cubrirse"))= COMANDO_CUBRIRSE_DEFAULT;
-	comandos2->operator[](string("lanzar arma")) = COMANDO_LANZAR_ARMA_DEFAULT;
+	comandos2->operator[](string("menu")) = COMANDO_MENU_DEFAULT;
+	comandos2->operator[](string("reset")) = COMANDO_RESET_DEFAULT;
 
 }
 
