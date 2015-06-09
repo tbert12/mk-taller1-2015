@@ -18,10 +18,13 @@ Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_
 	tiempoRound = un_tiempo;
 	NumeroRound = 1;
 	ciclos_round_terminado = CICLOS_FINAL_ROUND;
+	ciclos_finish_him = CICLOS_FINISH_HIM;
 	GanadorRound = {0,0,0};
 	comenzo_round = false;
 	round_finalizado = false;
 	partida_finalizada = false;
+	pelea_terminada = false;
+	finish_him = false;
 	tiempo = new Tiempo(tiempoRound);
 	_crearEstado();
 }
@@ -54,7 +57,7 @@ void Pelea::_renderEstado(){
 }
 
 bool Pelea::peleaFinalizada(){
-	return partida_finalizada && ciclos_round_terminado <= 0;
+	return pelea_terminada;
 }
 
 bool Pelea::roundFinalizado(){
@@ -73,26 +76,15 @@ void Pelea::render(){
 		tiempo->actualizar();
 		//verifico si finalizo el round
 		_roundFinalizado();
-
-
-		if (round_finalizado){
-			if (ciclos_round_terminado > 0){
-				ciclos_round_terminado--;
-			}
-			else{
-				_partidaFinalizada();
-				ciclos_round_terminado = CICLOS_FINAL_ROUND;
-				if(!partida_finalizada)
-					_resetRound();
-			}
-		}
+		if (round_finalizado)
+			_terminarRound();
 	}
 
 	// Se mueve el jugador CPU.
 	if (cpu != NULL && ModoDeJuego == MODO_JUGADOR_VS_PC)
 		cpu->realizarMovimiento();
 
-	//actualizo los estados
+	//actualizo los estados70
 	escenario->Update();
 
 	//aca una vez actualizado to do chequeo las colisiones y demas.
@@ -103,10 +95,29 @@ void Pelea::render(){
 
 	_renderEstado();
 
-	if(round_finalizado && ciclos_round_terminado > 0){
-		if (!partida_finalizada)
+
+	if (partida_finalizada){
+		if (ciclos_finish_him >= 0){
+			//finiiiisshhhhhhhiimmm;
+			_mostrarGanadorPelea();
+			ciclos_finish_him--;
+		}
+		else{
+			ciclos_finish_him = CICLOS_FINAL_ROUND;
+			pelea_terminada = true;
+		}
+	}
+	else if(round_finalizado){
+		if (ciclos_round_terminado >= 0){
 			_mostarGanadorRound();
-		else _mostrarGanadorPelea();
+			ciclos_round_terminado--;
+		}
+		else{
+			if (!_partidaFinalizo()){
+				_avanzarRound();
+				_resetRound();
+			}
+		}
 	}
 }
 
@@ -124,12 +135,14 @@ void Pelea::_verificarColisiones(){
 		case COLISION_PERSONAJE_PERSONAJE_SIN_FLIP:
 			//personaje ataca a personaje_flipeado
 			accion = personaje->getAccionDeAtaque();
+			personaje->terminarAtaque();
 			if(personaje_flipeado->recibirGolpe(accion))
 				ventana->vibrar();
 			break;
 		case COLISION_PERSONAJE_PERSONAJE_CON_FLIP:
 			//personaje_flipeado ataca a personaje
 			accion = personaje_flipeado->getAccionDeAtaque();
+			personaje_flipeado->terminarAtaque();
 			if(personaje->recibirGolpe(accion))
 				ventana->vibrar();
 			break;
@@ -199,7 +212,12 @@ void Pelea::_roundFinalizado(){
 		}
 	}
 }
-void Pelea::_partidaFinalizada(){
+
+void Pelea::_avanzarRound(){
+	NumeroRound++;
+}
+
+bool Pelea::_partidaFinalizo(){
 	if (NumeroRound == 2){
 		//si ya un personaje gano los dos rounds
 		if ((GanadorRound[0]  == 1 and GanadorRound[1]  == 1 ) || (GanadorRound[0]  == 2 and GanadorRound[1]  == 2 )){
@@ -209,9 +227,7 @@ void Pelea::_partidaFinalizada(){
 			}else{
 				ganador = m_personajeDos;
 			}
-		}
-		else{
-			NumeroRound++;
+			return true;
 		}
 	}else if (NumeroRound >= 3){
 		partida_finalizada = true;
@@ -230,9 +246,32 @@ void Pelea::_partidaFinalizada(){
 				ganador = m_personajeDos;
 			}
 		}
+		return true;
+	}
+	return false;
+}
+
+void Pelea::_terminarRound(){
+	Personaje* ganador_ultimo_round;
+	Personaje* perdedor_ultimo_round;
+
+	if (GanadorRound[NumeroRound - 1] == 1){
+		ganador_ultimo_round = m_personajeUno;
+		perdedor_ultimo_round = m_personajeDos;
+	}
+	else if (GanadorRound[NumeroRound - 1] == 2){
+		ganador_ultimo_round = m_personajeDos;
+		perdedor_ultimo_round = m_personajeUno;
+	}
+	else return;
+
+
+	if (_partidaFinalizo()){
+		perdedor_ultimo_round->finishHim();
 	}
 	else{
-		NumeroRound++;
+		ganador_ultimo_round->victoria();
+		perdedor_ultimo_round->morir();
 	}
 }
 
@@ -253,22 +292,24 @@ void Pelea::_mostrarGanadorPelea(){
 	if (ganador != NULL){
 		nombre = ganador->getNombre();
 	}
-	string texto = "Ganador Combate: " + nombre;
+	string texto = "FINISH HIM";// + nombre;
 	ventana->mostrarTexto(texto);
 
 }
 
 void Pelea::_resetRound(){
-	//reseteo todos las capas y personajes
 	escenario->reset();
 	tiempo->reset();
-
+	ciclos_round_terminado = CICLOS_FINAL_ROUND;
 	round_finalizado = false;
 	comenzo_round = false;
 }
 
 void Pelea::reset(){
 	_resetRound();
+	finish_him = false;
+	partida_finalizada = false;
+	pelea_terminada = false;
 }
 
 Personaje* Pelea::getPersonajeUno(){
