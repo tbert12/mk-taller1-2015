@@ -1519,3 +1519,33 @@ Personaje* ParserJSON::cambiarColorPersonaje(Personaje* el_personaje) {
 	return personaje;
 }
 
+Json::Value ParserJSON::obtenerRootDeArchivo(string ruta_archivo) {
+	Json::Value root;
+	Json::Reader reader;
+
+	// Abrir archivo.
+	ifstream archivo;
+	archivo.open(ruta_archivo.c_str());
+
+	// Si no se pudo abrir archivo, se devuelve NULL.
+	if ( ! archivo.is_open() ) {
+		log( "No se pudo abrir el archivo JSON. Se arroja una excepcion.", LOG_ERROR );
+		throw exception();
+	}
+	log ( "Se abrio el archivo JSON.", LOG_DEBUG );
+
+	// Si no se pudo parsear archivo, se devuelve NULL.
+	bool exito = reader.parse( archivo, root, false );
+	if ( ! exito ) {
+	    log( "No se pudo interpretar el JSON. Se arroja una excepcion. " + reader.getFormattedErrorMessages(), LOG_ERROR );
+	    throw exception();
+	} else
+		log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
+
+	// Cerrar archivo.
+	archivo.close();
+	log ( "Se cerro el archivo JSON.", LOG_DEBUG );
+
+	return root;
+}
+

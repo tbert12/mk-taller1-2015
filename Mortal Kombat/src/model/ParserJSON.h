@@ -44,6 +44,7 @@ public:
 	 vector<float> cargarColorAlternativo(Json::Value personaje);
 	 vector<Combo*> cargarCombos(Json::Value root);
 	 Personaje* cambiarColorPersonaje(Personaje* personaje);
+	 Json::Value obtenerRootDeArchivo(string ruta_archivo);
 
 };
 
