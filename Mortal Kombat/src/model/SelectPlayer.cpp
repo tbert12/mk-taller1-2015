@@ -70,7 +70,7 @@ void SelectPlayer::render(){
 		text_Box_1->setText(personajes[Player1]->getNombre());
 	if (!textBoxPlayer2)
 		text_Box_2->setText(personajes[Player2]->getNombre());
-	menuPlayers->render(Player1,Player2,text_Box_1,text_Box_2);
+	menuPlayers->render(Player1,Player2,player1Select,player2Select,text_Box_1,text_Box_2);
 	if (player1Select and player2Select){
 		ciclosDelay--;
 	}

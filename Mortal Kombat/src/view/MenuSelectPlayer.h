@@ -31,7 +31,7 @@ typedef struct Opcion_Personaje {
 class MenuSelectPlayer {
 public:
 	MenuSelectPlayer(Ventana* ventana,std::vector<Personaje*> personajes, int modo_de_juego);
-	void render(int opcion_actual1, int opcion_actual2,TextBox* textbox1,TextBox* textbox2);
+	void render(int opcion_actual1, int opcion_actual2,bool select1,bool select2,TextBox* textbox1,TextBox* textbox2);
 	std::vector<Opcion_Personaje*> getOpciones();
 	SDL_Rect getRectName1();
 	SDL_Rect getRectName2();
@@ -43,6 +43,8 @@ private:
 	float ratio_y;
 	std::vector<Opcion_Personaje*> opciones;
 	std::vector<Personaje*> personajes;
+	bool vibrate1;
+	bool vibrate2;
 	SDL_Rect* imagen;
 	SDL_Rect* rect_1;
 	SDL_Rect* rect_2;
@@ -62,7 +64,7 @@ private:
 	void _renderImagen();
 	void _renderFaces();
 	void _renderFace(Opcion_Personaje* opcion);
-	void _renderSeleccion(int opcion_actual1,int opcion_actual2);
+	void _renderSeleccion(int opcion_actual1,int opcion_actual2,bool select1,bool select2);
 	void _renderTexto(int opcion_actual);
 	void _renderText(string text, SDL_Color color, SDL_Rect rect);
 };

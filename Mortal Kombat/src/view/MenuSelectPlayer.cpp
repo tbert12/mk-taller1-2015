@@ -17,6 +17,8 @@ MenuSelectPlayer::MenuSelectPlayer(Ventana* una_ventana,std::vector<Personaje*> 
 	textura_imagen = NULL;
 	textura_1 = NULL;
 	textura_2 = NULL;
+	vibrate1 = false;
+	vibrate2 = false;
 
 	textura_1 = _loadImage(rect_1,RUTA_RECT_1);
 	if (ModoDeJuego == MODO_JUGADOR_VS_JUGADOR)
@@ -139,12 +141,12 @@ SDL_Texture* MenuSelectPlayer::_loadImage(SDL_Rect* rect, string ruta){
 	log("Se cargo correctamente la textura de la imagen del menu inicial",LOG_DEBUG);
 }
 
-void MenuSelectPlayer::render(int opcion_actual1,int opcion_actual2,TextBox* textbox1,TextBox* textbox2){
+void MenuSelectPlayer::render(int opcion_actual1,int opcion_actual2,bool selectOne,bool selectTwo,TextBox* textbox1,TextBox* textbox2){
 	ventana->clear();
 
 	_renderImagen();
 	_renderFaces();
-	_renderSeleccion(opcion_actual1,opcion_actual2);
+	_renderSeleccion(opcion_actual1,opcion_actual2,selectOne,selectTwo);
 	textbox1->render();
 	textbox2->render();
 
@@ -157,9 +159,22 @@ void MenuSelectPlayer::_renderImagen(){
 	SDL_RenderCopy( ventana->getRenderer(), textura_imagen, NULL, NULL);
 }
 
-void MenuSelectPlayer::_renderSeleccion(int opcion_actual1,int opcion_actual2){
-	SDL_RenderCopy( ventana->getRenderer(), textura_2, NULL, &opciones[opcion_actual2]->posicion);
-	SDL_RenderCopy( ventana->getRenderer(), textura_1, NULL, &opciones[opcion_actual1]->posicion);
+void MenuSelectPlayer::_renderSeleccion(int opcion_actual1,int opcion_actual2,bool select1,bool select2){
+
+	if (select2){
+		vibrate2 = !vibrate2;
+		if (!vibrate2)
+			SDL_RenderCopy( ventana->getRenderer(), textura_2, NULL, &opciones[opcion_actual2]->posicion);
+	}else
+		SDL_RenderCopy( ventana->getRenderer(), textura_2, NULL, &opciones[opcion_actual2]->posicion);
+
+	if (select1){
+		vibrate1 = !vibrate1;
+		if (!vibrate1){
+			SDL_RenderCopy( ventana->getRenderer(), textura_1, NULL, &opciones[opcion_actual1]->posicion);
+		}
+	}else
+		SDL_RenderCopy( ventana->getRenderer(), textura_1, NULL, &opciones[opcion_actual1]->posicion);
 
 	if (opciones[opcion_actual1]->personaje != NULL){
 		opciones[opcion_actual1]->personaje->setFlip(false);
