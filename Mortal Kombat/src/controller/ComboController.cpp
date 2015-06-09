@@ -83,6 +83,7 @@ int ComboController::checkCombos(){
 	}
 	if (encontrado > -1 ){
 		_keys="";
+		keyTime.clear();
 	}
 	return encontrado;
 }
