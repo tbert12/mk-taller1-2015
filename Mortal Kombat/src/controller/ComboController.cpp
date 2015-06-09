@@ -42,48 +42,57 @@ int ComboController::distanciaLevenshtein(string s1,int len_s, string s2, int le
 				);
 }
 
-bool findRecursive(string s1,char c1,int pos1, char c2, int pos2){
+bool findRecursiveChar(string s1,char c1,int pos1, char c2, int pos2){
 	string sub = s1.substr(pos1);
 	int newPosC2 = sub.find(c2);
 	return newPosC2 > -1;
+}
+
+bool findStringRecursive(string stringBase, string stringToFind, int maxErrors){
+
+	int errores = 0;
+	unsigned int encuentros = 1;
+	for(std::string::size_type i = 0; i < stringBase.size(); ++i) {
+		if(stringToFind[encuentros] == stringBase[i]){
+			encuentros++;
+		}else{
+			errores++;
+		}
+		if(errores>maxErrors){
+			int nextPosInicial = stringBase.find(stringToFind[0]);
+			if(nextPosInicial<0 or nextPosInicial >= (stringBase.size() - stringToFind.size())){
+				return false;
+			}
+			return findStringRecursive(stringBase.substr(nextPosInicial+1),stringToFind,maxErrors);
+		}
+		if(encuentros == stringToFind.size()){
+			return true;
+		}
+	}
+	return false;
 }
 
 int ComboController::checkCombos(){
 	if(_keys.compare("") == 0){
 		return -1;
 	}
-	unsigned int errores = 0;
-	unsigned int encuentros = 0;
 	int encontrado = -1;
 	bool encontre = false;
 
 	string botonesDelCombo;
+	fprintf(stderr,"keys %s \n",_keys.c_str());
 	for(unsigned int i=0; i < _combosPosibles.size();i++){
-		errores=0;
 		botonesDelCombo = _combosPosibles[i]->m_botones;
-
-		if(_keys[0] != botonesDelCombo[0])
+		int posicionDelBoton = _keys.find(botonesDelCombo[0]);
+		if(posicionDelBoton < 0)
 			continue;
-		encuentros = 1;
-		for(std::string::size_type i = 0; i < _keys.size(); ++i) {
-		    if(botonesDelCombo[encuentros] == _keys[i]){
-		    	encuentros++;
-		    }else{
-		    	errores++;
-		    }
-		    if(errores>maxErrors){
-		    	break;
-		    }
-		    if(encuentros == botonesDelCombo.size()){
-		    	encontre = true;
-		    	break;
-			}
-		}
+		encontre = findStringRecursive(_keys,botonesDelCombo,maxErrors);
 		if(encontre){
 			encontrado = i;
 			break;
 		}
 	}
+	fprintf(stderr,"encontrado %i \n",encontrado);
 	if (encontrado > -1 ){
 		_keysCombo = _keys;
 		_keys="";
@@ -139,7 +148,7 @@ vector<bool> ComboController::checkPosibleCombo(){
 							hayPosibilidad=false;
 							break;
 						}
-						if(not(findRecursive(_keys,botonesDelCombo[j+1], valorFind[j], botonesDelCombo[j], valorFind[j+1]))){
+						if(not(findRecursiveChar(_keys,botonesDelCombo[j+1], valorFind[j], botonesDelCombo[j], valorFind[j+1]))){
 							hayPosibilidad=false;
 							break;
 						}
