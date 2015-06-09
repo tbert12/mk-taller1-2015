@@ -9,15 +9,17 @@
 #define SRC_MODEL_SELECTPLAYER_H_
 #include "Personaje.h"
 #include "Pelea.h"
+#include "SoundMenu.h"
 #include "../view/MenuSelectPlayer.h"
 #include "../view/Ventana.h"
 #include "../view/TextBox.h"
 
 enum Players {PLAYER_ONE, PLAYER_TWO};
+#define CICLOS_EN_VICTORIA 20
 
 class SelectPlayer {
 public:
-	SelectPlayer(Ventana* una_ventana,int modo_de_juego,std::vector<Personaje*> personajes);
+	SelectPlayer(Ventana* una_ventana,int modo_de_juego,std::vector<Personaje*> personajes,SoundMenu* un_sound);
 	void izquierda(int jugador);
 	void derecha(int jugador);
 	void arriba(int jugador);
@@ -41,6 +43,7 @@ private:
 	MenuSelectPlayer* menuPlayers;
 	std::vector<Personaje*> personajes;
 	std::vector<Opcion_Personaje*> opciones;
+	SoundMenu* sound;
 	int ModoDeJuego;
 	int Player1;
 	int Player2;

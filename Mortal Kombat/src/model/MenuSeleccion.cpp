@@ -7,8 +7,9 @@
 
 #include "MenuSeleccion.h"
 
-MenuSeleccion::MenuSeleccion(Ventana* la_ventana) {
+MenuSeleccion::MenuSeleccion(Ventana* la_ventana,SoundMenu* un_sound) {
 	ventana = la_ventana;
+	sound = un_sound;
 	selected = false;
 	menu = new Menu(ventana);
 	opciones = menu->getOpciones();
@@ -30,6 +31,7 @@ void MenuSeleccion::select(){
 		return;
 	}
 	selected = true;
+	sound->play(SELECT);
 }
 
 int MenuSeleccion::modoDeJuego(){
@@ -45,8 +47,10 @@ bool MenuSeleccion::mousePosition(int x, int y){
 		SDL_Rect rect = opciones[i]->posicion;
 		if (x >= rect.x and x <= (rect.x + rect.w) ){
 			if (y >= rect.y and y <= (rect.y + rect.h) ){
-				ModoDeJuego = i;
-				return true;
+				if (ModoDeJuego != (int)i){
+					ModoDeJuego = i;
+					sound->play(MOVE);
+				}return true;
 			}
 		}
 	}
@@ -65,12 +69,14 @@ void MenuSeleccion::izquierda(){
 	if (ModoDeJuego == 0)
 		ModoDeJuego = MAX_OPCIONES;
 	else ModoDeJuego--;
+	sound->play(MOVE);
 }
 
 void MenuSeleccion::derecha(){
 	if (ModoDeJuego == MAX_OPCIONES)
 		ModoDeJuego = 0;
 	else ModoDeJuego++;
+	sound->play(MOVE);
 }
 
 MenuSeleccion::~MenuSeleccion() {
