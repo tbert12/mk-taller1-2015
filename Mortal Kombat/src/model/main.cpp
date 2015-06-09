@@ -11,6 +11,7 @@
 #include <unistd.h> //usleep
 #include <vector>
 #include "logging.h"
+#include "SoundMenu.h"
 #include "DefaultSettings.h"
 #include "Mundo.h"
 #include "ParserJSON.h"
@@ -60,12 +61,22 @@ int main( int argc, char* args[] )
 
 	while(!mundo->Quit()){
 
-		MenuSeleccion* menu = new MenuSeleccion(mundo->getVentana());
-		if (menu == NULL)
+		SoundMenu* sonido = new SoundMenu();
+
+		MenuSeleccion* menu = new MenuSeleccion(mundo->getVentana(),sonido);
+		if (menu == NULL){
+			delete sonido;
 			return 1;
+		}
 		ControlModo* controlModo = new ControlModo(menu);
-		if (controlModo == NULL)
+		if (controlModo == NULL){
+			delete sonido;
+			delete menu;
 			return 1;
+		}
+
+		//MUSICA DE FONDO
+		sonido->play(FONDO);
 
 		//While Seleccion de modo
 		while (!controlModo->Quit() && !menu->modeSelected()){
@@ -76,6 +87,7 @@ int main( int argc, char* args[] )
 		}
 
 		if (controlModo->Quit()){
+			delete sonido;
 			delete menu;
 			delete controlModo;
 			delete mundo;
@@ -87,7 +99,7 @@ int main( int argc, char* args[] )
 		delete menu;
 		delete controlModo;
 
-		SelectPlayer* selectPlayer = new SelectPlayer(mundo->getVentana(),modoDeJuego,mundo->getPersonajes());
+		SelectPlayer* selectPlayer = new SelectPlayer(mundo->getVentana(),modoDeJuego,mundo->getPersonajes(),sonido);
 		ControlSelectPlayer* controlSelect = new ControlSelectPlayer(selectPlayer,(modoDeJuego == MODO_JUGADOR_VS_JUGADOR));
 
 		while(!controlSelect->Quit() && !selectPlayer->playersSelected() ){
@@ -99,6 +111,7 @@ int main( int argc, char* args[] )
 		}
 
 		if (controlSelect->Quit()){
+			delete sonido;
 			delete controlSelect;
 			delete selectPlayer;
 			delete menu;
@@ -124,6 +137,9 @@ int main( int argc, char* args[] )
 		//seteo modo de juego
 		mundo->setPersonajesDeJuego(personaje_uno,personaje_dos);
 		mundo->setModoDeJuego(modoDeJuego);
+
+		sonido->stop(FONDO);
+		delete sonido;
 
 		//While Juego
 		while( !mundo->Fin() and !mundo->Quit()){
