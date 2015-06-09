@@ -11,6 +11,8 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 	frameActual = 0;
 	SpriteSheetTexture = ventana->crearTextura();
 
+	reproducioSonido = false;
+
 	//recorre los frame en sentido contrario
 	reverse = false;
 	//m_pong hace efecto espejo, llega al valor de m_pong vuelve hasta el inicial y comienza de nuevo;
@@ -167,9 +169,10 @@ void Sprite::playSound() {
 	/* El sonido se reproduce solo cuando se esta reproduciendo el sprite sin reverse
 	 * Esto evita que se reproduzca dos veces cuando hace pong
 	 */
-	if ( sonido and frameActual == frameSound and !reverse) {
+	if ( sonido and !reproducioSonido) {
 			sonido->play();
-		}
+			reproducioSonido = true;
+	}
 }
 
 bool Sprite::ultimoFrame(){
@@ -236,6 +239,7 @@ void Sprite::hardReset(){
 	doloop = false;
 	frezeeCount = 0;
 	frezee = false;
+	reproducioSonido = false;
 	if (m_fullpong) m_pong = m_fullpong;
 
 	Reset();

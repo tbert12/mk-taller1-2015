@@ -100,7 +100,9 @@ protected:
 	bool _estaCubriendose;
 	bool _estaAgachado;
 	bool _recibioGolpe;
+
 	bool _estaMuerto;
+	bool _gano;
 
 	std::vector<Combo*> mCombos;
 

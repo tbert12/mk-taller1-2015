@@ -26,6 +26,8 @@ class Sprite {
 		int frameActual;
 		int cantidadFrames;
 
+		bool reproducioSonido;
+
 		bool reverse;
 		bool doloop;
 		int frameLoop;
