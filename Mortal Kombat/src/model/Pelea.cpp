@@ -84,6 +84,11 @@ void Pelea::render(){
 		if (round_finalizado)
 			_terminarRound();
 	}
+	else{
+		//partida_finalizada = true;
+		//ciclos_finish_him = CICLOS_FINISH_HIM;
+		//m_personajeDos->finishHim();
+	}
 
 	// Se mueve el jugador CPU.
 	if (cpu != NULL && ModoDeJuego == MODO_JUGADOR_VS_PC)
@@ -93,7 +98,8 @@ void Pelea::render(){
 	escenario->Update();
 
 	//aca una vez actualizado to do chequeo las colisiones y demas.
-	_verificarColisiones();
+	if (!inFinishHim() and !round_finalizado)
+		_verificarColisiones();
 
 	//renderizo las capas
 	escenario->render();
