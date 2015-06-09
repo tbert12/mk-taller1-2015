@@ -23,6 +23,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 	m_yPiso = 0;
 
 	m_velocidadActual = 0;
+	m_proximaVelocidad = 0;
 
 	m_AltoMundo = 0;
 	m_AnchoMundo = 0;
@@ -472,9 +473,9 @@ void Personaje::AvanzarSprite(){
 	//Los If son muy parecidos, pero hay que tenerlos separados para entender el codigo
 	if (spriteActual->ultimoFrame() or (!_estaSaltando and !_recibioGolpe) ){
 		//Termina de atacar o agacharse o saltando = 0 (justo en el momento que cae)
-		if (	   (_estaAtacando and !_estaAgachado)
-				or (!_estaAgachado and !_estaCubriendose and !_estaAtacando and !_recibioGolpe and _estaSaltando < 0)
-				or !_estaSaltando ){
+		if ( (_estaAtacando and !_estaAgachado and !_estaCubriendose) or !_estaSaltando or (_estaAgachado and !_estaAtacando and !_estaCubriendose) ){
+			if (m_proximaVelocidad) m_velocidadActual = m_proximaVelocidad;
+			else m_velocidadActual = 0;
 
 			if (!m_velocidadActual){
 				_cambiarSprite(SPRITE_INICIAL);
@@ -493,6 +494,7 @@ void Personaje::AvanzarSprite(){
 			if (!m_velocidad)
 				_cambiarSprite(SPRITE_INICIAL);
 			else
+				if (m_proximaVelocidad) m_velocidadActual = m_proximaVelocidad;
 				_Caminar( ( m_velocidadActual > 0 ) );
 		} else {
 			_cambiarSprite(SPRITE_AGACHAR);
@@ -504,7 +506,13 @@ void Personaje::AvanzarSprite(){
 	if (_estaAtacando and spriteActual->ultimoFrame()){
 		//Termina de accionar un Ataque (Agachado o parado)
 		if ( !_estaAgachado ) {
-			_cambiarSprite(SPRITE_INICIAL);
+			if (m_proximaVelocidad) m_velocidadActual = m_proximaVelocidad;
+			if (!m_velocidadActual){
+				_cambiarSprite(SPRITE_INICIAL);
+			} else {
+				setFlip(nextFlip);
+				_Caminar( (m_velocidadActual > 0) );
+			}
 		} else {
 			_cambiarSprite(SPRITE_AGACHAR);
 			spriteActual->doLoop(true);
@@ -589,41 +597,59 @@ void Personaje::Inicial(){
 
 void Personaje::Frenar(){
 	if (_gano or _estaMuerto) return;
-	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe) return;
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando or _recibioGolpe){
+		m_proximaVelocidad = 0;
+		return;
+	}
 	m_velocidadActual = 0;
+	m_proximaVelocidad = 0;
 	Inicial();
 }
 
+
+float _factorVelocidad(bool flip,bool derecha){
+	float factor = 1;
+	if (derecha){
+		if (flip)
+			factor = 0.8;
+
+	} else {
+		factor = -0.8;
+		if (flip)
+			factor = -1;
+	}
+	return factor;
+}
+
 void Personaje::CaminarDerecha(){
-	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) {
+		float factor = _factorVelocidad(m_fliped,true);
+		m_proximaVelocidad = m_velocidad*factor;
+		return;
+	}
 	_Caminar(true);
 }
 
 void Personaje::CaminarIzquierda(){
-	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) return;
+	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _estaAtacando) {
+		float factor = _factorVelocidad(m_fliped,false);
+		m_proximaVelocidad = m_velocidad*factor;
+		return;
+	}
 	_Caminar(false);
 }
 
 void Personaje::_Caminar(bool derecha){
 	if (_gano or _estaMuerto) return;
-	float factor = 1;
-	if (derecha){
-		if (m_fliped)
-			factor = 0.8;
-
-	} else {
-		factor = -0.8;
-		if (m_fliped)
-			factor = -1;
-	}
-	m_velocidadActual = m_velocidad*factor;
+	float factor = _factorVelocidad(m_fliped,derecha);
+	m_velocidadActual = m_velocidad * factor;
+	m_proximaVelocidad = m_velocidadActual;
 	_cambiarSprite(SPRITE_CAMINAR);
 }
 
 void Personaje::Saltar(){
 	if (_gano or _estaMuerto) return;
 	if (_estaSaltando > 0 or _estaAgachado or _estaCubriendose or _recibioGolpe or _estaAtacando) return;
-
 	maxAlturaDeSalto = 1.20 * getAlto();
 
 	if (m_velocidadActual > 0){
@@ -710,7 +736,7 @@ void Personaje::Levantarse(){
 	}
 	spriteActual->doLoop(false);
 	spriteActual->doReverse(true);
-	_estaAgachado = false;
+	//_estaAgachado = false;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

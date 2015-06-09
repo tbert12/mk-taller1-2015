@@ -73,6 +73,7 @@ protected:
 	void _cambiarSprite(int accion);
 	float m_velocidad;
 	float m_velocidadActual;
+	float m_proximaVelocidad;
 	bool m_fliped;
 	bool _estaAtacando;
 
