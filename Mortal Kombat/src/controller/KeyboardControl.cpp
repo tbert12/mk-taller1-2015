@@ -147,6 +147,9 @@ void KeyboardControl::KeyState(){
 		comboController->Update();
 
 	//Teclas que deben estar apretadas
+	if (keystate[SDL_SCANCODE_UP])
+			personaje->Saltar();
+
 	if ((!keystate[SDL_SCANCODE_RIGHT] && (personaje->getSentidoDeMovimiento() > 0))|| (!keystate[SDL_SCANCODE_LEFT] && (personaje->getSentidoDeMovimiento() < 0)) )
 		personaje->Frenar();
 
