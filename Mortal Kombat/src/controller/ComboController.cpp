@@ -11,6 +11,7 @@ ComboController::ComboController (int tiempoMaximo,int cantidadMaximaErrores, ve
 	maxTime = tiempoMaximo * 1000;
 	maxErrors = cantidadMaximaErrores;
 	startingTime = SDL_GetTicks();
+	ultimoFueCombo = false;
 
 	currentTime = startingTime;
 	_combosPosibles = combosPosibles;
@@ -19,6 +20,8 @@ ComboController::ComboController (int tiempoMaximo,int cantidadMaximaErrores, ve
 }
 
 string ComboController::get_stream_teclas(){
+	if (ultimoFueCombo)
+		return _keysCombo;
 	return _keys;
 }
 
@@ -82,9 +85,12 @@ int ComboController::checkCombos(){
 		}
 	}
 	if (encontrado > -1 ){
+		_keysCombo = _keys;
 		_keys="";
 		keyTime.clear();
+		ultimoFueCombo = true;
 	}
+	else ultimoFueCombo = false;
 	return encontrado;
 }
 
@@ -179,45 +185,7 @@ void ComboController::sePresiono(int key){
 }
 
 bool ComboController::combosInString(){
-	if(_keys.compare("") == 0){
-			return false;
-	}
-	unsigned int errores = 0;
-	unsigned int encuentros = 0;
-	int encontrado = -1;
-	bool encontre = false;
-
-	string botonesDelCombo;
-	for(unsigned int i=0; i < _combosPosibles.size();i++){
-		errores=0;
-		botonesDelCombo = _combosPosibles[i]->m_botones;
-
-		if(_keys[0] != botonesDelCombo[0])
-			continue;
-		encuentros = 1;
-		for(std::string::size_type i = 0; i < _keys.size(); ++i) {
-			if(botonesDelCombo[encuentros] == _keys[i]){
-				encuentros++;
-			}else{
-				errores++;
-			}
-			if(errores>maxErrors){
-				break;
-			}
-			if(encuentros == botonesDelCombo.size()){
-				encontre = true;
-				break;
-			}
-		}
-		if(encontre){
-			encontrado = i;
-			break;
-		}
-	}
-	if (encontrado > -1 ){
-		return true;
-	}
-	return false;
+	return ultimoFueCombo;
 }
 
 ComboController::~ComboController() {

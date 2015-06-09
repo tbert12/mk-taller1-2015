@@ -78,16 +78,25 @@ void JoystickControl::JoyPressed(){
 			//Left of dead zone
 			if( evento->jaxis.value < -JOYSTICK_DEAD_ZONE ){
 				personaje->CaminarIzquierda();
-				if (comboController)
-					comboController->sePresiono(IZQUIERDA);
+				if (comboController){
+					int accion;
+					if (!personaje->getFlipState())
+						accion = IZQUIERDA;
+					else accion = DERECHA;
+					comboController->sePresiono(accion);
+				}
 			}
 			//Right of dead zone
 			else if( evento->jaxis.value > JOYSTICK_DEAD_ZONE ){
 				personaje->CaminarDerecha();
-				if (comboController)
-					comboController->sePresiono(DERECHA);
-			}
-			else{
+				if (comboController){
+					int accion;
+					if (!personaje->getFlipState())
+						accion = DERECHA;
+					else accion = IZQUIERDA;
+					comboController->sePresiono(accion);
+				}
+			}else{
 				//NO SE
 			}
 		}

@@ -44,10 +44,12 @@ private:
 	std::vector<Combo*> _combosPosibles;
 
 	string _keys;
+	string _keysCombo;
 
 	unsigned int startingTime = 0;
 	unsigned int currentTime;
 	std::vector<int> keyTime;
+	bool ultimoFueCombo;
 
 	unsigned int maxTime;
 	unsigned int maxErrors;
