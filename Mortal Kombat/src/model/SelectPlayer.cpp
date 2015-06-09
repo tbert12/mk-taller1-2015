@@ -7,10 +7,10 @@
 
 #include "SelectPlayer.h"
 
-SelectPlayer::SelectPlayer(Ventana* una_ventana,int modo_de_juego,std::vector<Personaje*> los_personajes) {
+SelectPlayer::SelectPlayer(Ventana* una_ventana,int modo_de_juego,std::vector<Personaje*> los_personajes,SoundMenu* un_sound) {
 	ModoDeJuego = modo_de_juego;
+	sound = un_sound;
 	personajes = los_personajes;
-	//_verificarPersonajes();
 	Player1 = rand() % MAX_PLAYER + 1;
 	Player2 = rand() % MAX_PLAYER + 1;
 	while (Player1 == Player2)
@@ -25,7 +25,7 @@ SelectPlayer::SelectPlayer(Ventana* una_ventana,int modo_de_juego,std::vector<Pe
 	text_Box_1 = new TextBox(NameJug1,una_ventana);
 	text_Box_2 = new TextBox(NameJug2,una_ventana);
 	opciones = menuPlayers->getOpciones();
-	ciclosDelay = 20;
+	ciclosDelay = CICLOS_EN_VICTORIA;
 }
 
 bool SelectPlayer::playersSelected(){
@@ -71,7 +71,7 @@ void SelectPlayer::render(){
 	if (!textBoxPlayer2)
 		text_Box_2->setText(personajes[Player2]->getNombre());
 	menuPlayers->render(Player1,Player2,player1Select,player2Select,text_Box_1,text_Box_2);
-	if (player1Select and player2Select){
+	if (player1Select and player2Select and !textBoxPlayer1 and !textBoxPlayer2){
 		ciclosDelay--;
 	}
 }
@@ -89,6 +89,7 @@ void SelectPlayer::izquierda(int jugador){
 		if (Player2 < 0)
 			Player2 = MAX_PLAYER;
 	}
+	sound->play(MOVE);
 }
 void SelectPlayer::derecha(int jugador){
 	if (jugador == PLAYER_ONE){
@@ -103,6 +104,7 @@ void SelectPlayer::derecha(int jugador){
 		if (Player2 > MAX_PLAYER)
 			Player2 = 0;
 	}
+	sound->play(MOVE);
 }
 void SelectPlayer::arriba(int jugador){
 	if (jugador == PLAYER_ONE){
@@ -117,6 +119,7 @@ void SelectPlayer::arriba(int jugador){
 		if (Player2 < 0)
 			Player2 = MAX_PLAYER + Player2;
 	}
+	sound->play(MOVE);
 }
 void SelectPlayer::abajo(int jugador){
 	if (jugador == PLAYER_ONE){
@@ -131,19 +134,25 @@ void SelectPlayer::abajo(int jugador){
 		if (Player2 > MAX_PLAYER)
 			Player2 = Player2 - MAX_PLAYER;
 	}
+	sound->play(MOVE);
 }
 void SelectPlayer::select(int jugador){
 	if (jugador == PLAYER_ONE){
 		player1Select = true;
 		textBoxPlayer1 = true;
+		ciclosDelay = CICLOS_EN_VICTORIA;
 		text_Box_1->focus(true);
 		opciones[Player1]->personaje->victoria();
+		sound->play(SELECT);
 	}
 	else if (jugador == PLAYER_TWO){
 		player2Select = true;
 		textBoxPlayer2 = true;
+		ciclosDelay = CICLOS_EN_VICTORIA;
 		text_Box_2->focus(true);
+		//ACA if player1selected return
 		opciones[Player2]->personaje->victoria();
+		sound->play(SELECT);
 	}
 }
 
@@ -156,10 +165,18 @@ bool SelectPlayer::mousePosition(int x, int y, int jugador){
 		SDL_Rect rect = opciones[i]->posicion;
 		if (x >= rect.x and x <= (rect.x + rect.w) ){
 			if (y >= rect.y and y <= (rect.y + rect.h) ){
-				if (jugador == PLAYER_ONE)
-					Player1 = i;
-				else if (jugador == PLAYER_TWO)
-					Player2 = i;
+				if (jugador == PLAYER_ONE){
+					if(Player1 != (int)i){
+						Player1 = i;
+						sound->play(MOVE);
+					}
+				}
+				else if (jugador == PLAYER_TWO){
+					if (Player2 != (int)i){
+						Player2 = i;
+						sound->play(MOVE);
+					}
+				}
 				return true;
 			}
 		}
@@ -170,12 +187,14 @@ bool SelectPlayer::mousePosition(int x, int y, int jugador){
 bool SelectPlayer::mouseinTextBox(int x, int y){
 	if (x >= NameJug1.x and x <= (NameJug1.x + NameJug1.w) ){
 		if (y >= NameJug1.y and y <= (NameJug1.y + NameJug1.h) ){
+			sound->play(MOVE);
 			return true;
 		}
 	}
 
 	if (x >= NameJug2.x and x <= (NameJug2.x + NameJug2.w) ){
 		if (y >= NameJug2.y and y <= (NameJug2.y + NameJug2.h) ){
+			sound->play(MOVE);
 			return true;
 		}
 	}
@@ -213,12 +232,14 @@ bool SelectPlayer::textBoxEnter(int jugador){
 		text_Box_1->focus(false);
 		textBoxPlayer1 = false;
 		return true;
+		sound->play(SELECT);
 	}
 	if (textBoxPlayer2 and jugador == PLAYER_TWO){
 		personajes[Player2]->setNombre(text_Box_2->getText());
 		text_Box_2->focus(false);
 		textBoxPlayer2 = false;
 		return true;
+		sound->play(SELECT);
 	}
 	return false;
 }
@@ -230,6 +251,7 @@ bool SelectPlayer::textBoxButtonMouse(int x,int y){
 				personajes[Player1]->setNombre(text_Box_1->getText());
 				text_Box_1->focus(false);
 				textBoxPlayer1 = false;
+				sound->play(SELECT);
 				return true;
 			}
 		}
@@ -240,6 +262,7 @@ bool SelectPlayer::textBoxButtonMouse(int x,int y){
 				personajes[Player2]->setNombre(text_Box_2->getText());
 				text_Box_2->focus(false);
 				textBoxPlayer2 = false;
+				sound->play(SELECT);
 				return true;
 			}
 		}

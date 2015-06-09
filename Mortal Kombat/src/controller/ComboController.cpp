@@ -60,7 +60,7 @@ bool findStringRecursive(string stringBase, string stringToFind, int maxErrors){
 		}
 		if(errores>maxErrors){
 			int nextPosInicial = stringBase.find(stringToFind[0]);
-			if(nextPosInicial<0 or nextPosInicial >= (stringBase.size() - stringToFind.size())){
+			if(nextPosInicial<0 or nextPosInicial >= (int)(stringBase.size() - stringToFind.size())){
 				return false;
 			}
 			return findStringRecursive(stringBase.substr(nextPosInicial+1),stringToFind,maxErrors);
@@ -80,7 +80,6 @@ int ComboController::checkCombos(){
 	bool encontre = false;
 
 	string botonesDelCombo;
-	fprintf(stderr,"keys %s \n",_keys.c_str());
 	for(unsigned int i=0; i < _combosPosibles.size();i++){
 		botonesDelCombo = _combosPosibles[i]->m_botones;
 		int posicionDelBoton = _keys.find(botonesDelCombo[0]);
@@ -92,9 +91,8 @@ int ComboController::checkCombos(){
 			break;
 		}
 	}
-	fprintf(stderr,"encontrado %i \n",encontrado);
 	if (encontrado > -1 ){
-		_keysCombo = _keys;
+		_keysCombo =_combosPosibles[encontrado]->m_botones;
 		_keys="";
 		keyTime.clear();
 		ultimoFueCombo = true;
@@ -157,9 +155,7 @@ vector<bool> ComboController::checkPosibleCombo(){
 			}
 		}
 		combosPosibles[i]= hayPosibilidad;
-		fprintf(stderr,"hay posibilidad %i  \n",hayPosibilidad);
 	}
-	//fprintf(stderr,"hay posibilidad %i  \n",hayPosibilidadDeCombo);
 	return combosPosibles;
 }
 
