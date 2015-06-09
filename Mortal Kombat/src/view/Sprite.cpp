@@ -156,7 +156,6 @@ void Sprite::setLoop(int num_frame) {
 
 void Sprite::doLoop(bool loop){
 	if (doloop == loop) return;
-	printf("seteo loop a %s\n",loop ? "T" : "F");
 	doloop = loop;
 }
 
