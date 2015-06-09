@@ -175,16 +175,10 @@ void Pelea::_roundFinalizado(){
 		round_finalizado = true;
 		if(m_personajeUno->getVida() > m_personajeDos->getVida()){
 			//gana personaje uno
-			log("Round finalizado, GANADOR: " + m_personajeUno->getNombre(),LOG_DEBUG);
-			m_personajeUno->victoria();
-			m_personajeDos->morir();
 			GanadorRound[NumeroRound -1]  = 1;
 		}
 		else if (m_personajeUno->getVida() < m_personajeDos->getVida()){
 			//gana personaje dos
-			log("Round finalizado, GANADOR: " + m_personajeDos->getNombre(),LOG_DEBUG);
-			m_personajeDos->victoria();
-			m_personajeUno->morir();
 			GanadorRound[NumeroRound -1]  = 2;
 		}
 		else{
@@ -198,16 +192,10 @@ void Pelea::_roundFinalizado(){
 		//verifico si hay ganador por agotarse vida
 		if(m_personajeUno->getVida() <= 0){
 			round_finalizado = true;
-			log("Round finalizado, GANADOR: " + m_personajeDos->getNombre(),LOG_DEBUG);
-			m_personajeDos->victoria();
-			m_personajeUno->morir();
 			GanadorRound[NumeroRound -1]  = 2;
 		}
 		else if (m_personajeDos->getVida() <= 0){
 			round_finalizado = true;
-			log("Round finalizado, GANADOR: " + m_personajeUno->getNombre(),LOG_DEBUG);
-			m_personajeUno->victoria();
-			m_personajeDos->morir();
 			GanadorRound[NumeroRound -1]  = 1;
 		}
 	}
@@ -265,13 +253,14 @@ void Pelea::_terminarRound(){
 	}
 	else return;
 
-
 	if (_partidaFinalizo()){
 		perdedor_ultimo_round->finishHim();
+		log("Pelea finalidaza, GANADOR: " + ganador_ultimo_round->getNombre(),LOG_DEBUG);
 	}
 	else{
 		ganador_ultimo_round->victoria();
 		perdedor_ultimo_round->morir();
+		log("Round finalizado, GANADOR: " + ganador_ultimo_round->getNombre(),LOG_DEBUG);
 	}
 }
 
