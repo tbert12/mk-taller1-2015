@@ -11,6 +11,7 @@
 #include "Capa.h"
 #include "Personaje.h"
 #include <SDL2/SDL.h>
+#include <limits>
 
 //Constants
 const int COLISION_NO_COLISION = 				-1;
