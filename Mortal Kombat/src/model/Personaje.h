@@ -100,7 +100,9 @@ protected:
 	bool _estaCubriendose;
 	bool _estaAgachado;
 	bool _recibioGolpe;
+
 	bool _estaMuerto;
+	bool _gano;
 
 	std::vector<Combo*> mCombos;
 
@@ -112,6 +114,9 @@ protected:
 	std::vector<ObjetoArrojable*> poderes;
 
 	void _UpdatePoder();
+	virtual bool _updatePropio();
+
+	virtual int _getaccionPropia();
 
 	void _Caminar(bool derecha);
 
@@ -214,6 +219,8 @@ public:
 	void cubrirse();
 	void dejarDeCubrirse();
 	void lanzarObjeto();
+
+	virtual void terminarAtaque();
 
 	void toma1();  /* Toma clasica que lo lanza para tras */
 	void poder1(); /* Relacionado a lanzar un objeto */

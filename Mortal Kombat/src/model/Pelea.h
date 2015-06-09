@@ -25,6 +25,7 @@
 #include "logging.h"
 
 #define CICLOS_FINAL_ROUND 70
+#define CICLOS_FINISH_HIM 150
 #define MODO_JUGADOR_VS_JUGADOR 0
 #define MODO_JUGADOR_VS_PC 1
 #define MODO_ENTRENAMIENTO 2
@@ -39,9 +40,12 @@ private:
 	int tiempoRound;
 	int NumeroRound;
 	int ciclos_round_terminado;
+	int ciclos_finish_him;
 	std::vector<int> GanadorRound;
 	bool round_finalizado;
 	bool partida_finalizada;
+	bool pelea_terminada;
+	bool finish_him;
 	bool comenzo_round;
 	Tiempo* tiempo;
 	Ventana* ventana;
@@ -57,10 +61,12 @@ private:
 	void _renderEstado();
 	void _verificarColisiones();
 	void _roundFinalizado();
-	void _partidaFinalizada();
+	bool _partidaFinalizo();
+	void _avanzarRound();
 	void _resetRound();
 	void _mostarGanadorRound();
 	void _mostrarGanadorPelea();
+	void _terminarRound();
 
 public:
 	Pelea(Ventana* la_ventana,Escenario* el_escenario,int un_tiempo, int modo_de_juego);

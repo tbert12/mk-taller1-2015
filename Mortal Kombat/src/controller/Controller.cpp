@@ -120,7 +120,7 @@ void Controller::Pressed(){
 		_JoystickAdded();
 	}
 	else if (pelea->roundFinalizado() || pelea->peleaFinalizada()){
-		return;
+		//return;
 	}
 	//evento de joystick
 	else if(evento.type == SDL_JOYAXISMOTION || evento.type == SDL_JOYBUTTONDOWN){
