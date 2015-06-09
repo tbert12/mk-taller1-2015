@@ -75,8 +75,10 @@ public:
 	void render();
 	bool peleaFinalizada();
 	bool roundFinalizado();
+	bool inFinishHim();
 	Personaje* getPersonajeUno();
 	Personaje* getPersonajeDos();
+	Personaje* getContrincante(Personaje* un_personaje);
 	void reset();
 	int modoDeJuego();
 	int getModoDeJuego();

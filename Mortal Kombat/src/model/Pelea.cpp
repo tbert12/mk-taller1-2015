@@ -65,6 +65,10 @@ bool Pelea::roundFinalizado(){
 	return round_finalizado;
 }
 
+bool Pelea::inFinishHim(){
+	return partida_finalizada and ciclos_finish_him > 0;
+}
+
 void Pelea::render(){
 
 	if(!comenzo_round){
@@ -316,6 +320,12 @@ Personaje* Pelea::getPersonajeDos(){
 
 int Pelea::getModoDeJuego(){
 	return ModoDeJuego;
+}
+
+Personaje* Pelea::getContrincante(Personaje* un_personaje){
+	if (un_personaje == m_personajeUno)
+		return m_personajeDos;
+	else return m_personajeUno;
 }
 
 Pelea::~Pelea() {

@@ -37,6 +37,13 @@ void KeyboardControl::KeyPressed(){
 	if (evento->key.repeat) {
 		return;
 	}
+
+	if (pelea->inFinishHim()){
+		if (evento->key.keysym.sym == SDLK_c){
+			personaje->fatality1(pelea->getContrincante(personaje));
+		}
+	}
+
 	switch( evento->key.keysym.sym ){
 			case  SDLK_UP:
 				if(!como_jugador) return;
