@@ -24,8 +24,16 @@ int SubZero::_getaccionPropia(){
 }
 
 bool SubZero::_updatePropio(){
-	if (!_estaHaciendoPoder) return false;
-	if (!_estaHaciendoFatality) return false;
+	if (!_estaHaciendoPoder and !_estaHaciendoFatality) return false;
+	if (_estaHaciendoPoder)
+		_updatePoder2();
+	else if (_estaHaciendoFatality)
+		_updateFatality1();
+	spriteActual->Advance();
+	return true;
+}
+
+void SubZero::_updatePoder2(){
 	if ( spriteActual->ultimoFrame() and _estaHaciendoPoder){
 		m_velocidadActual = 0;
 		_cambiarSprite(SPRITE_INICIAL);
@@ -33,8 +41,12 @@ bool SubZero::_updatePropio(){
 		_estaAtacando = false;
 		_estaSaltando = false;
 	}
-	spriteActual->Advance();
-	return true;
+}
+
+void SubZero::_updateFatality1(){
+	if (spriteActual->inLoop()){
+		spriteActual->retrocederFrames(3);
+	}
 }
 
 void SubZero::poder2(){
@@ -53,7 +65,9 @@ void SubZero::poder2(){
 
 void SubZero::fatality1(Personaje* personajeQueRecibe){
 	_cambiarSprite(SPRITE_FATALITY_1);
+	spriteActual->doLoop(true);
 	_estaHaciendoFatality = true;
+	//personajeQueRecibe->morir();
 
 }
 

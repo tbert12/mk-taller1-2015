@@ -20,6 +20,9 @@ private:
 	bool _updatePropio();
 	int _getaccionPropia();
 
+	bool _estaHaciendoFatality;
+	Personaje* personajeQueRecibe;
+
 public:
 	LiuKang(string nombre_personaje,vector<Sprite*> Sprites,vector<ObjetoArrojable*> arrojables ,float velocidad, bool fliped=false);
 	virtual ~LiuKang();

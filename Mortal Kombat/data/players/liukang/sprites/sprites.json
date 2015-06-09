@@ -1350,14 +1350,16 @@
 				"y":0,
 				"Alto":102
 ,
-				"Ancho":52
+				"Ancho":52,
+				"freeze": 2
 			},
 			{
 				"x":0,
 				"y":0,
 				"Alto":197
 ,
-				"Ancho":106
+				"Ancho":106,
+				"loop" : true
 			}
 		]
 	},

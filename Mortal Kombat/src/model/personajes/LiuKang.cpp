@@ -12,6 +12,8 @@ namespace std {
 LiuKang::LiuKang(string nombre_personaje,vector<Sprite*> Sprites,vector<ObjetoArrojable*> arrojables ,float velocidad, bool fliped)
 :Personaje(nombre_personaje,Sprites,arrojables,velocidad,fliped){
 	_estaHaciendoPoder = false;
+	_estaHaciendoFatality = false;
+	personajeQueRecibe = NULL;
 	_resetDuracion();
 }
 
@@ -22,13 +24,27 @@ int LiuKang::_getaccionPropia(){
 
 bool LiuKang::_updatePropio(){
 	//Retorna true si lo que esta haciendo NO es un poder propio
-	if ( !_estaHaciendoPoder ) return false;
+	if ( !_estaHaciendoPoder and !_estaHaciendoFatality ) return false;
 	if ( spriteActual->ultimoFrame() ){
 		if (duracionPoder){
 			duracionPoder--;
 		} else {
 			terminarPoder2();
 			_resetDuracion();
+		}
+	} else if (_estaHaciendoFatality){
+		bool proxUltimo = spriteActual->inFrezee();
+		if (proxUltimo){
+			m_yActual = -2*getAlto();
+			m_xActual = personajeQueRecibe->getX();
+		}
+		if (m_yActual < m_yPiso){
+			float diferencial = m_yActual + 30;
+			if (diferencial > m_yPiso) diferencial = m_yPiso;
+			m_yActual = diferencial;
+		}
+		if (m_yActual > /*personajeQueRecibe->getAlto() + algo */ 0 ){
+			personajeQueRecibe->morir();
 		}
 	}
 	spriteActual->Advance();
@@ -62,9 +78,12 @@ void LiuKang::poder2(){
 	_estaHaciendoPoder = true;
 }
 
-void LiuKang::fatality1(Personaje* personajeQueRecibe){
+void LiuKang::fatality1(Personaje* elqueRecibe){
 	_cambiarSprite(SPRITE_FATALITY_1);
 	spriteActual->doLoop(true);
+	spriteActual->freezeSprite();
+	personajeQueRecibe = elqueRecibe;
+	_estaHaciendoFatality = true;
 
 }
 

@@ -17,7 +17,11 @@ private:
 
 	bool _estaHaciendoPoder;
 	bool _estaHaciendoFatality;
+
 	bool _updatePropio();
+	void _updatePoder2();
+	void _updateFatality1();
+
 	int _getaccionPropia();
 
 public:

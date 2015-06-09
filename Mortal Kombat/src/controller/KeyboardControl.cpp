@@ -111,14 +111,6 @@ void KeyboardControl::KeyPressed(){
 				if (comboController)
 					comboController->sePresiono(CUBRIR);
 				break;
-			case SDLK_c:
-				if(!como_jugador) return;
-				personaje->poder2();
-				break;
-			case SDLK_x:
-				if(!como_jugador) return;
-				personaje->toma1();
-				break;
 			case SDLK_p:
 				pausa = !pausa;
 				break;
