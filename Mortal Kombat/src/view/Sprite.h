@@ -60,6 +60,7 @@ class Sprite {
 		void doFullPong();
 		void doLoop(bool loop);
 		void doReverse(bool Reverse);
+		void retrocederFrames(int frames);
 		void setSoundIn(int index_frame);
 		void playSound();
 

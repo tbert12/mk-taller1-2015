@@ -138,7 +138,7 @@ void Sprite::Reset(){
 
 void Sprite::render(float x, float y, bool fliped){
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
-	//printf("Frame: %i | Total: %i\n",frameActual,cantidadFrames);
+	printf("Frame: %i | Total: %i | Loop:%s\n",frameActual,cantidadFrames,doloop ? "T" : "F");
 	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h_log, fliped);
 	playSound();
 }
@@ -150,11 +150,20 @@ void Sprite::setLoop(int num_frame) {
 
 void Sprite::doLoop(bool loop){
 	if (doloop == loop) return;
+	printf("seteo loop a %s\n",loop ? "T" : "F");
 	doloop = loop;
 }
 
 bool Sprite::inLoop(){
 	return (doloop and frameActual==frameLoop) ;
+}
+
+void Sprite::retrocederFrames(int frames){
+	int retrocedido = frameActual - frames;
+	if (retrocedido < 0)
+		retrocedido = 0;
+	else
+		frameActual = retrocedido;
 }
 
 void Sprite::doReverse(bool Reverse){
