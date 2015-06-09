@@ -52,6 +52,7 @@ bool findStringRecursive(string stringBase, string stringToFind, int maxErrors){
 
 	int errores = 0;
 	unsigned int encuentros = 1;
+	//fprintf(stderr,"%s stringBase\n", stringBase.c_str());
 	for(std::string::size_type i = 0; i < stringBase.size(); ++i) {
 		if(stringToFind[encuentros] == stringBase[i]){
 			encuentros++;
@@ -59,13 +60,14 @@ bool findStringRecursive(string stringBase, string stringToFind, int maxErrors){
 			errores++;
 		}
 		if(errores>maxErrors){
-			int nextPosInicial = stringBase.find(stringToFind[0]);
+			int nextPosInicial = stringBase.substr(1).find(stringToFind[0]);
 			if(nextPosInicial<0 or nextPosInicial >= (int)(stringBase.size() - stringToFind.size())){
 				return false;
 			}
 			return findStringRecursive(stringBase.substr(nextPosInicial+1),stringToFind,maxErrors);
 		}
 		if(encuentros == stringToFind.size()){
+
 			return true;
 		}
 	}

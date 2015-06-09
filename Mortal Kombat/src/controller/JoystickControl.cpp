@@ -146,7 +146,7 @@ void JoystickControl::JoyPressed(){
 				comboController->sePresiono(PATADAALTA);
 		}
 		else if ( boton == comandos->operator [](LANZAR_ARMA)){
-			personaje->poder1();
+			//personaje->poder1();
 		}
 		else if ( boton == comandos->operator [](CUBRIRSE)){
 			if (comboController)
@@ -156,10 +156,15 @@ void JoystickControl::JoyPressed(){
 			pausa = !pausa;
 		}
 	}
-	if (comboController){
-		Combo* combo = combosPosibles[0];
-		if (comboController->checkCombo(combo))
+
+	if(comboController){
+		int combo_a_realizar =  comboController->checkCombos();
+		if (combo_a_realizar < 0) return;
+		switch (combo_a_realizar){
+			case 0:
 				personaje->poder1();
+				break;
+		}
 	}
 }
 void JoystickControl::JoyState(){

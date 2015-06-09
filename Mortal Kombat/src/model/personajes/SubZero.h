@@ -13,9 +13,18 @@
 namespace std {
 
 class SubZero : public Personaje{
+private:
+
+	bool _estaHaciendoPoder;
+	bool _estaHaciendoFatality;
+	bool _updatePropio();
+	int _getaccionPropia();
+
 public:
 	SubZero(string nombre_personaje,vector<Sprite*> Sprites,vector<ObjetoArrojable*> arrojables ,float velocidad, bool fliped=false);
 	virtual ~SubZero();
+
+	void terminarAtaque();
 
 	void poder2();
 	void fatality1(Personaje* personajeQueRecibe);
