@@ -15,10 +15,10 @@
 
 namespace std {
 
-LMusic::LMusic(string ruta) {
+LMusic::LMusic(string ruta,int un_chanel) {
 	reproduciendose = false;
 	pausada = false;
-	channel = -1;
+	channel = un_chanel;
 	gMusic = Mix_LoadMUS( ruta.c_str() );
 	if( gMusic == NULL )
 	{
@@ -27,16 +27,15 @@ LMusic::LMusic(string ruta) {
 
 }
 
-void LMusic::play(int schannel = -1){
+void LMusic::play(int loops){
 	//Si cuando la repoducir le mandas un channel tenes que controlarla por ese channel
 	//Si le das Play sin atributos controlas el stream por completo
 	if( gMusic == NULL ) return;
 	if (reproduciendose) return;
 	//Referido al Stream en completo
-	if( !Mix_Playing(schannel) ){
-		Mix_PlayMusic( gMusic, schannel );
+	if( !Mix_Playing(channel) ){
+		Mix_PlayMusic( gMusic, channel );
 	}
-	if (schannel != -1) channel = schannel;
 	reproduciendose = true;
 
 }

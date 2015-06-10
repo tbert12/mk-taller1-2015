@@ -13,6 +13,9 @@ TextosPelea::TextosPelea() {
 	spriteFatality = NULL;
 	spriteFight = NULL;
 	spriteFinishHim = NULL;
+	Fatality = false;
+	FinishHim = false;
+	Fight = false;
 }
 
 void TextosPelea::setTextoFight(Sprite* spriteTextoFight) {
@@ -32,11 +35,19 @@ void TextosPelea::renderFight() {
 	spriteFight->renderSpecialText();
 	if (!spriteFight->ultimoFrame())
 		spriteFight->Advance();
+	else{
+		if(!Fight) Fight = true;
+	}
 }
 
-void TextosPelea::resetFight() {
+bool TextosPelea::fight(){
+	return Fight;
+}
+
+void TextosPelea::reset() {
 	if (!spriteFight)return;
 	spriteFight->hardReset();
+	Fight = false;
 }
 
 void TextosPelea::renderFinishHim() {
