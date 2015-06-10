@@ -81,6 +81,11 @@ void KeyboardControl::KeyPressed(){
 					pelea->reset();
 				return;
 				break;
+			case SDLK_F5:
+				if (pelea->modoDeJuego() == MODO_ENTRENAMIENTO)
+					pelea->setFinishHim();
+				return;
+				break;
 			case SDLK_a:
 				if(!como_jugador) return;
 				personaje->pinaBaja();

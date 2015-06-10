@@ -80,6 +80,7 @@ public:
 	bool roundFinalizado();
 	bool inFinishHim();
 	void setFatality();
+	void setFinishHim();
 	Personaje* getPersonajeUno();
 	Personaje* getPersonajeDos();
 	Personaje* getContrincante(Personaje* un_personaje);

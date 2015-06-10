@@ -59,6 +59,7 @@ void Pelea::_renderEstado(){
 }
 
 bool Pelea::peleaFinalizada(){
+	if (ModoDeJuego == MODO_ENTRENAMIENTO) return false;
 	return pelea_terminada;
 }
 
@@ -84,11 +85,6 @@ void Pelea::render(){
 		_roundFinalizado();
 		if (round_finalizado)
 			_terminarRound();
-	}
-	else{
-		//partida_finalizada = true;
-		//ciclos_finish_him = CICLOS_FINISH_HIM;
-		//m_personajeDos->finishHim();
 	}
 
 	// Se mueve el jugador CPU.
@@ -315,6 +311,13 @@ void Pelea::reset(){
 void Pelea::setFatality(){
 	//if (!fatality) fatality = true;
 	ciclos_finish_him = CICLOS_FATALITY;
+}
+
+void Pelea::setFinishHim(){
+	if (ModoDeJuego != MODO_ENTRENAMIENTO) return;
+	partida_finalizada = true;
+	ciclos_finish_him = CICLOS_FINISH_HIM;
+	m_personajeDos->finishHim();
 }
 
 Personaje* Pelea::getPersonajeUno(){
