@@ -19,6 +19,7 @@ private:
 	void _resetDuracion();
 	bool _updatePropio();
 	int _getaccionPropia();
+	void _resetPropio();
 
 	bool _estaHaciendoFatality;
 	Personaje* personajeQueRecibe;

@@ -13,6 +13,7 @@ SubZero::SubZero(string nombre_personaje,vector<Sprite*> Sprites,vector<ObjetoAr
 :Personaje(nombre_personaje,Sprites,arrojables,velocidad,fliped){
 	_estaHaciendoPoder = false;
 	_estaHaciendoFatality = false;
+	_pararDeRetrocederFatality1 = false;
 }
 
 int SubZero::_getaccionPropia(){
@@ -45,7 +46,11 @@ void SubZero::_updatePoder2(){
 
 void SubZero::_updateFatality1(){
 	if (spriteActual->inLoop()){
+		_pararDeRetrocederFatality1 = true;
 		spriteActual->retrocederFrames(3);
+	}
+	if (!_pararDeRetrocederFatality1){
+		m_yActual = m_yActual - 3;
 	}
 }
 
@@ -67,11 +72,17 @@ void SubZero::fatality1(Personaje* personajeQueRecibe){
 	_cambiarSprite(SPRITE_FATALITY_1);
 	spriteActual->doLoop(true);
 	_estaHaciendoFatality = true;
-	//personajeQueRecibe->morir();
+	personajeQueRecibe->morir();
 
 }
 
 void SubZero::terminarAtaque(){}
+
+void SubZero::_resetPropio(){
+	_estaHaciendoPoder = false;
+	_estaHaciendoFatality = false;
+	_pararDeRetrocederFatality1 = false;
+}
 
 SubZero::~SubZero() {
 	// Llama automaticante al destructor de Personaje

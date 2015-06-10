@@ -36,14 +36,16 @@ bool LiuKang::_updatePropio(){
 		bool proxUltimo = spriteActual->inFrezee();
 		if (proxUltimo){
 			m_yActual = -2*getAlto();
-			m_xActual = personajeQueRecibe->getX();
+			m_xActual = personajeQueRecibe->getX() - personajeQueRecibe->getAncho();
+			if ( personajeQueRecibe->getFlipState() ) m_xActual = 2*personajeQueRecibe->getAncho();
 		}
 		if (m_yActual < m_yPiso){
 			float diferencial = m_yActual + 30;
 			if (diferencial > m_yPiso) diferencial = m_yPiso;
 			m_yActual = diferencial;
 		}
-		if (m_yActual > /*personajeQueRecibe->getAlto() + algo */ 0 ){
+		float altura = personajeQueRecibe->getAlto();
+		if (spriteActual->inLoop() and m_yActual > altura + 40 and m_yActual < altura + 100  ){
 			personajeQueRecibe->morir();
 		}
 	}
@@ -94,6 +96,13 @@ void LiuKang::terminarAtaque(){
 		if (m_fliped) m_velocidadActual = m_velocidad;
 		Saltar();
 	}
+}
+
+void LiuKang::_resetPropio(){
+	_estaHaciendoPoder = false;
+	_estaHaciendoFatality = false;
+	personajeQueRecibe = NULL;
+	_resetDuracion();
 }
 
 LiuKang::~LiuKang() {

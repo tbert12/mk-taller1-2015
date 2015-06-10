@@ -55,6 +55,9 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 void Personaje::reset(){
 	vida = 100;
 	spriteActual = sprites[SPRITE_INICIAL];
+	for (size_t i = 0; i < sprites.size() ; i++){
+		sprites[i]->hardReset();
+	}
 	m_xActual = 0;
 	m_yActual = 0;
 	m_yPiso = 0;
@@ -69,8 +72,10 @@ void Personaje::reset(){
 	_recibioGolpe = false;
 	_estaMuerto = false;
 	_gano = false;
+	_resetPropio();
 }
 
+void Personaje::_resetPropio(){}
 //-------------------------------------------------------------------------------------------------------------------------
 //Manejo de attributos logicos
 
@@ -272,6 +277,7 @@ void Personaje::_UpdatePoder(){
 	if(poderes.size() <= 0) return;
 	else{
 		for(int j= 0;j< (int)poderes.size();j++){
+			if (!poderes[j]->getVida()) return;
 			poderes[j]->update();
 			if(poderes[j]->getPosX() < 0 || poderes[j]->getPosX() > m_AnchoMundo)
 				poderes[j]->destruir();
@@ -469,7 +475,6 @@ bool Personaje::_updatePropio(){return false;}
 
 void Personaje::AvanzarSprite(){
 	if ( _updatePropio() ) return;
-
 	//Los If son muy parecidos, pero hay que tenerlos separados para entender el codigo
 	if (spriteActual->ultimoFrame() or (!_estaSaltando and !_recibioGolpe) ){
 		//Termina de atacar o agacharse o saltando = 0 (justo en el momento que cae)
@@ -1043,6 +1048,7 @@ void Personaje::fatality1(Personaje* otroPersonaje){}
 //+++++++++++++++++++++DEAD o FINISH HIM+++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Personaje::finishHim(){
+	if (_estaMuerto) return;
 	_cambiarSprite(SPRITE_FINISH);
 	_estaMuerto = true;
 	m_velocidadActual = 0;
