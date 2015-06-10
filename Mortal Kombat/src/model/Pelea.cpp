@@ -97,7 +97,7 @@ void Pelea::render(){
 	escenario->Update();
 
 	//aca una vez actualizado to do chequeo las colisiones y demas.
-	if (!round_finalizado)
+	if (!round_finalizado or partida_finalizada)
 		_verificarColisiones();
 
 	//renderizo las capas
@@ -105,7 +105,7 @@ void Pelea::render(){
 
 	_renderEstado();
 
-	_renderTextos();
+	//_renderTextos();
 
 	if (partida_finalizada){
 		if (ciclos_finish_him >= 0){
@@ -116,6 +116,7 @@ void Pelea::render(){
 		else{
 			ciclos_finish_him = CICLOS_FINAL_ROUND;
 			ciclos_render_texto = CICLOS_TEXTOS;
+			pelea_terminada = true;
 		}
 	}
 	else if(round_finalizado){
