@@ -10,6 +10,7 @@
 
 #include <string>
 
+enum Combos { PODER1, PODER2, FATALITY1 };
 
 namespace std {
 
