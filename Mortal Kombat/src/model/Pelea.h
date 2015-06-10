@@ -27,6 +27,7 @@
 
 #define CICLOS_FINAL_ROUND 70
 #define CICLOS_FINISH_HIM 150
+#define CICLOS_FATALITY 180
 #define MODO_JUGADOR_VS_JUGADOR 0
 #define MODO_JUGADOR_VS_PC 1
 #define MODO_ENTRENAMIENTO 2
@@ -48,6 +49,7 @@ private:
 	bool partida_finalizada;
 	bool pelea_terminada;
 	bool finish_him;
+	bool fatality;
 	bool comenzo_round;
 	Tiempo* tiempo;
 	Ventana* ventana;
@@ -77,6 +79,7 @@ public:
 	bool peleaFinalizada();
 	bool roundFinalizado();
 	bool inFinishHim();
+	void setFatality();
 	Personaje* getPersonajeUno();
 	Personaje* getPersonajeDos();
 	Personaje* getContrincante(Personaje* un_personaje);

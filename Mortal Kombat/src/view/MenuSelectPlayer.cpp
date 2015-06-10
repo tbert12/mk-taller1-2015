@@ -179,15 +179,18 @@ void MenuSelectPlayer::_renderSeleccion(int opcion_actual1,int opcion_actual2,bo
 		SDL_RenderCopy( ventana->getRenderer(), textura_1, NULL, &opciones[opcion_actual1]->posicion);
 
 	if (opciones[opcion_actual1]->personaje != NULL){
-		opciones[opcion_actual1]->personaje->setFlip(false);
-		opciones[opcion_actual1]->personaje->setPosition(80*ratio_x/ventana->obtenerRatioX() - opciones[opcion_actual1]->personaje->getAncho()/2,420*ratio_y/ventana->obtenerRatioY());
+		if (!select1){
+			opciones[opcion_actual1]->personaje->setFlip(false);
+			opciones[opcion_actual1]->personaje->setPosition(80*ratio_x/ventana->obtenerRatioX() - opciones[opcion_actual1]->personaje->getAncho()/2,420*ratio_y/ventana->obtenerRatioY());
+		}
 		opciones[opcion_actual1]->personaje->renderizar(0,0);
 	}
 
 	if (opciones[opcion_actual2]->personaje != NULL){
-		opciones[opcion_actual2]->personaje->setFlip(false);
-		opciones[opcion_actual2]->personaje->setPosition(560*ratio_x/ventana->obtenerRatioX() - opciones[opcion_actual1]->personaje->getAncho()/2 ,420*ratio_y/ventana->obtenerRatioY());
-		opciones[opcion_actual2]->personaje->setFlip(true);
+		if (!select2){
+			opciones[opcion_actual2]->personaje->setFlip(true);
+			opciones[opcion_actual2]->personaje->setPosition(560*ratio_x/ventana->obtenerRatioX() + opciones[opcion_actual2]->personaje->getAncho()/2 ,420*ratio_y/ventana->obtenerRatioY());
+		}
 		opciones[opcion_actual2]->personaje->renderizar(0,0);
 	}
 }

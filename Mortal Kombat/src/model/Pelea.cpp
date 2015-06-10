@@ -22,6 +22,7 @@ Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_
 	ciclos_finish_him = CICLOS_FINISH_HIM;
 	GanadorRound = {0,0,0};
 	comenzo_round = false;
+	fatality = false;
 	round_finalizado = false;
 	partida_finalizada = false;
 	pelea_terminada = false;
@@ -98,7 +99,7 @@ void Pelea::render(){
 	escenario->Update();
 
 	//aca una vez actualizado to do chequeo las colisiones y demas.
-	//if (!round_finalizado)
+	if (!round_finalizado)
 		_verificarColisiones();
 
 	//renderizo las capas
@@ -308,6 +309,12 @@ void Pelea::reset(){
 	finish_him = false;
 	partida_finalizada = false;
 	pelea_terminada = false;
+	fatality = false;
+}
+
+void Pelea::setFatality(){
+	//if (!fatality) fatality = true;
+	ciclos_finish_him = CICLOS_FATALITY;
 }
 
 Personaje* Pelea::getPersonajeUno(){
