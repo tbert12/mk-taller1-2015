@@ -147,6 +147,35 @@ void ControlSelectPlayer::Pressed(){
 			}
 		}
 	}
+	else if (evento.type == SDL_JOYHATMOTION){
+
+		switch (evento.jhat.value){
+			case SDL_HAT_UP :
+				if (evento.jaxis.which == SDL_JoystickInstanceID(joystick1))
+					menuPlayers->arriba(menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
+				else if (evento.jaxis.which == SDL_JoystickInstanceID(joystick2))
+					menuPlayers->arriba(PLAYER_TWO);
+				break;
+			case SDL_HAT_DOWN:
+				if (evento.jaxis.which == SDL_JoystickInstanceID(joystick1))
+					menuPlayers->abajo(menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
+				else if (evento.jaxis.which == SDL_JoystickInstanceID(joystick2))
+					menuPlayers->abajo(PLAYER_TWO);
+				break;
+			case SDL_HAT_LEFT:
+				if (evento.jaxis.which == SDL_JoystickInstanceID(joystick1))
+					menuPlayers->izquierda(menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
+				else if (evento.jaxis.which == SDL_JoystickInstanceID(joystick2))
+					menuPlayers->izquierda(PLAYER_TWO);
+				break;
+			case SDL_HAT_RIGHT:
+				if (evento.jaxis.which == SDL_JoystickInstanceID(joystick1))
+					menuPlayers->derecha(menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
+				else if (evento.jaxis.which == SDL_JoystickInstanceID(joystick2))
+					menuPlayers->derecha(PLAYER_TWO);
+				break;
+		}
+	}
 	//Boton
 	else if (evento.type == SDL_JOYBUTTONDOWN){
 		//con cualquier boton se selecciona
