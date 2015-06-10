@@ -64,8 +64,8 @@
 			}
 		]
 	},
-	"ataque especial 2":{
-		"nombre":"ataque especial 2.png",
+	"poder1":{
+		"nombre":"poder1.png",
 		"frames":[
 			{
 				"x":404,
@@ -107,7 +107,7 @@
 			}
 		]
 	},
-	"bloqueo agachado":{
+	"cubririseAgachado":{
 		"nombre":"bloqueo agachado.png",
 		"frames":[
 			{
@@ -131,7 +131,7 @@
 			}
 		]
 	},
-	"bloqueo parado":{
+	"cubrirse":{
 		"nombre":"bloqueo parado.png",
 		"frames":[
 			{
@@ -155,7 +155,7 @@
 			}
 		]
 	},
-	"caerse y levantarse":{
+	"caeYSeLevanta":{
 		"nombre":"caerse y levantarse.png",
 		"frames":[
 			{
@@ -239,7 +239,7 @@
 			}
 		]
 	},
-	"caerse y morir":{
+	"muere":{
 		"nombre":"caerse y morir.png",
 		"frames":[
 			{
@@ -430,7 +430,7 @@
 			}
 		]
 	},
-	"es tomado":{
+	"esTomado":{
 		"nombre":"es tomado.png",
 		"frames":[
 			{
@@ -510,7 +510,7 @@
 			}
 		]
 	},
-	"mareado":{
+	"finish":{
 		"nombre":"mareado.png",
 		"frames":[
 			{
@@ -581,7 +581,55 @@
 			}
 		]
 	},
-	"patada":{
+	"patadaBaja":{
+		"nombre":"patada.png",
+		"frames":[
+			{
+				"x":313,
+				"y":147,
+				"Alto":147,
+				"Ancho":90
+			},
+			{
+				"x":107,
+				"y":131,
+				"Alto":144,
+				"Ancho":103
+			},
+			{
+				"x":211,
+				"y":131,
+				"Alto":150,
+				"Ancho":101
+			},
+			{
+				"x":0,
+				"y":127,
+				"Alto":150,
+				"Ancho":106
+			},
+			{
+				"x":319,
+				"y":0,
+				"Alto":146,
+				"Ancho":118
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":126,
+				"Ancho":162
+			},
+			{
+				"x":163,
+				"y":0,
+				"Alto":130,
+				"Ancho":155,
+				"pong": true
+			}
+		]
+	},
+	"patadaAlta":{
 		"nombre":"patada.png",
 		"frames":[
 			{
@@ -1106,7 +1154,7 @@
 			}
 		]
 	},
-	"poder1":{
+	"tira poder (todavia no se usa)":{
 		"nombre":"tira poder.png",
 		"frames":[
 			{

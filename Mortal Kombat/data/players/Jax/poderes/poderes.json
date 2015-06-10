@@ -1,5 +1,6 @@
 {
-	"poderes": [
+
+	"NO SE USA TODAVIA": [
 		{
 		"objetoArrojable": {
 			"nombre":"poder1.png",
@@ -89,7 +90,11 @@
 		"danio": 10,
 		"ancho": 10,
 		"alto": 20
-		},
+		}
+	],
+
+
+	"poderes": [
 		
 		{
 		"objetoArrojable": {
