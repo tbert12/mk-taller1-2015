@@ -61,7 +61,8 @@
 			"poderes": "data/players/liukang/poderes/",
 			"sonidos": "data/players/liukang/sound/",
 			"combos": [
-				"1335"
+				"224",
+				"1337"
 			],
 			"fatalities": [
 				"22117"
@@ -83,7 +84,7 @@
 			"sonidos": "data/players/subzero/sound/",
 			"combos": [
 				"125",
-				"12"
+				"44154"
 			],
 			"fatalities": [
 				"11124"
