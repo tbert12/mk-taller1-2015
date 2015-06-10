@@ -1000,7 +1000,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	DanioPorGolpe[SPRITE_COMBO_PINA_BAJA] = 	QUITAR_VIDA_GOLPE_ALTO;
 	DanioPorGolpe[SPRITE_COMBO_PINA_ALTA] = 	QUITAR_VIDA_GOLPE_ALTO;
 
-
+	if (!reaccionesAGolpes.find(CodigoGolpe)->second) return false;
 	if (_estaSaltando > 0){
 		if (CodigoGolpe != SPRITE_GANCHO) CodigoGolpe = SPRITE_PATADA_SALTANDO;
 	}
@@ -1010,6 +1010,8 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	spriteActual->freezeSprite();
 
 	float velocidadDeRetroceso = m_velocidad;
+	bool sangrar = false;
+	float alturaDesangre = 1;
 
 	if (reaccionesAGolpes[CodigoGolpe] == SPRITE_RECIBE_GANCHO){
 		velocidadDeRetroceso = 2.5 * m_velocidad;
@@ -1023,9 +1025,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 		_estaSaltando = 1;
 		spriteActual->doLoop(true);
 		spriteActual->freezeSprite();
-	}
-
-	if (reaccionesAGolpes[CodigoGolpe] == SPRITE_ES_TOMADO){
+	} else if (reaccionesAGolpes[CodigoGolpe] == SPRITE_ES_TOMADO){
 		velocidadDeRetroceso = -3*m_velocidad;
 		maxAlturaDeSalto = 0.3 * getAlto() + (m_yPiso - m_yActual);
 		tiempoDeSalto = 1;
@@ -1036,15 +1036,18 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 
 	if ( (DanioPorGolpe[CodigoGolpe] >= MIN_GOLPE_FUERTE and CodigoGolpe != SPRITE_PATADA_CIRCULAR) or CodigoGolpe == SPRITE_TOMA_1 ){
 		golpeFuerte = true;
+		sangrar = true;
 		if (CodigoGolpe == SPRITE_TOMA_1) golpeFuerte = false;
 		m_velocidadActual = -velocidadDeRetroceso;
 		if (m_fliped)
 			m_velocidadActual = velocidadDeRetroceso;
 	}
+	if (_estaAgachado) sangrar = true;
 
 	_recibioGolpe = true;
-	if (mObjetos.size())
-		mObjetos[SANGRE_MUCHA]->lanzar(m_xActual,m_yActual - getAlto()*0.8,!m_fliped,false,1);
+	if (mObjetos.size() and sangrar)
+		mObjetos[SANGRE_MUCHA]->lanzar(m_xActual,m_yActual - getAlto()*alturaDesangre,!m_fliped,false,1);
+
 	return golpeFuerte;
 }
 
@@ -1082,7 +1085,7 @@ void Personaje::fatality1(Personaje* otroPersonaje){}
 void Personaje::_recibirFatality2(){
 	_cambiarSprite(SPRITE_FATALITY_GANCHO);
 	spriteActual->doLoop(true);
-	mObjetos[CABEZA]->lanzar(m_xActual,m_yActual - getAlto(),m_fliped,true);
+	mObjetos[CABEZA]->lanzar(m_xActual,m_yActual - getAlto(),!m_fliped,true);
 	mObjetos[SANGRE_MUCHA]->lanzar(m_xActual,m_yActual - getAlto(),!m_fliped,false);
 }
 
