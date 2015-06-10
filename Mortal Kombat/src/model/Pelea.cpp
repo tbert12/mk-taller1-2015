@@ -15,6 +15,7 @@ Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_
 	m_personajeUno = capaPrincipal->getPersonajSinFlip();
 	m_personajeDos = capaPrincipal->getPersonajConFlip();
 	ganador = NULL;
+	cpu = NULL;
 	perdedor = NULL;
 	ventana = la_ventana;
 	tiempoRound = un_tiempo;

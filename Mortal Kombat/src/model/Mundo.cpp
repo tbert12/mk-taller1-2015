@@ -13,6 +13,7 @@ Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map
 	tiempoMax = un_tiempoMax;
 	mapa_comandos1 = mapaComan1;
 	mapa_comandos2 = mapaComan2;
+	escenario_anterior = 0;
 	escenario_actual = NULL;
 	Personaje_uno = NULL;
 	Personaje_dos = NULL;
@@ -35,7 +36,8 @@ void Mundo::start(){
 	if (p_dos == NULL)
 		p_dos = personajes[1];
 
-	if (escenarios[0]){
+
+	if (escenarios.size()){
 		escenario_actual = escenarios[rand() % escenarios.size()];
 		escenario_actual->addPersonajes(p_uno,p_dos);
 		pelea = new Pelea(ventana,escenario_actual,tiempo_round,ModoDeJuego,textosPelea);

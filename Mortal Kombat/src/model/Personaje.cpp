@@ -18,6 +18,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 	poderes = arrojables;
 
 
+	m_xAnterior = 0;
 	m_xActual = 0;
 	m_yActual = 0;
 	m_yPiso = 0;
@@ -148,6 +149,7 @@ void Personaje::setObjetos(std::vector<ObjetoDroppable*> objetosRecibidos){
 }
 
 void Personaje::setPosition(float x, float y){
+	m_xAnterior = m_xActual;
 	m_xActual = x;
 	if(y < 0)
 		m_yActual = m_yPiso;
@@ -160,6 +162,7 @@ void Personaje::setPosition(float x, float y){
 }
 
 void Personaje::setPositionX(float x){
+	m_xAnterior = m_xActual;
 	m_xActual = x;
 }
 
@@ -253,10 +256,16 @@ void Personaje::Update(float posDeOtroJugador,bool forzado){
 		if ( !_estaAgachado and !_estaCubriendose){
 			if (_estaAtacando){
 				if (_estaSaltando > 0){
-					if(m_mover) m_xActual = renderX;
+					if(m_mover){
+						m_xAnterior = m_xActual;
+						m_xActual = renderX;
+					}
 				}
 			} else {
-				if(m_mover /*and !estaElotroJugador*/) m_xActual = renderX;
+				if(m_mover /*and !estaElotroJugador*/){
+					m_xAnterior = m_xActual;
+					m_xActual = renderX;
+				}
 			}
 		}
 	}
@@ -337,6 +346,8 @@ int Personaje::getAccionDeAtaque(){
 int Personaje::getSentidoDeMovimiento(){
 	if (m_velocidadActual > 0) return 1;
 	else if (m_velocidadActual < 0) return -1;
+	if(m_xActual-m_xAnterior > 0 ) return 1;
+	else if(m_xActual-m_xAnterior < 0 ) return -1;
 	return 0;
 }
 
@@ -923,7 +934,7 @@ void Personaje::_patadaAltaAgachado() {
 //+++++++++++RECIBE-GOLPES+++++++++++++++++++++++++++++++++++++++++++
 
 bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
-	printf("RECIBE GOLPE\n");
+	//printf("RECIBE GOLPE\n");
 	if (getAccionDeAtaque() == SPRITE_FINISH) {
 		_estaMuerto = false;
 		morir();
@@ -1220,6 +1231,9 @@ Personaje::~Personaje() {
 	}
 	for (size_t i=0; i < mCombos.size(); i++){
 		delete mCombos[i];
+	}
+	for (size_t i=0; i < mObjetos.size(); i++){
+			delete mObjetos[i];
 	}
 	delete m_rectanguloAtaque;
 	delete m_rectanguloDefensa;

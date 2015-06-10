@@ -133,9 +133,6 @@ int CapaPrincipal::CheckearColisiones(){
 	this->_ChequearSiSePisan();
 
 	int toReturn = this->_CheckearColisiones(personaje,personajeFlippeado);
-	if(toReturn>-1)
-		fprintf(stderr,"toReturn %i\n",toReturn);
-
 	_LateUpdate();
 
 	return toReturn;
@@ -335,8 +332,6 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 	rectAtaqueAnterior1 = rectAtaque1;
 	if (rectAtaqueAnterior2) delete rectAtaqueAnterior2;
 	rectAtaqueAnterior2 = rectAtaque2;
-	if(rectAtaque1 or rectAtaque2)
-		fprintf(stderr,"lega hasta aca\n");
 	return COLISION_NO_COLISION;
 }
 

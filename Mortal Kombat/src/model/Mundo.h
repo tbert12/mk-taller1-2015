@@ -29,6 +29,7 @@ private:
 	map<string, int>* mapa_comandos2;
 	int ModoDeJuego;
 	int tiempoMax,tolerancia;
+	int escenario_anterior;
 	std::vector<Personaje*> personajes;
 	std::vector<Escenario*> escenarios;
 	Escenario* escenario_actual;
