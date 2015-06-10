@@ -20,7 +20,7 @@
 		},
 		
 		{
-		objetoDroppable: {
+		"objetoDroppable": {
 			"nombre":"sangre0.png",
 			"frames":[
 				{
