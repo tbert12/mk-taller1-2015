@@ -170,11 +170,23 @@ void JoystickControl::JoyPressed(){
 
 	if(comboController){
 		int combo_a_realizar =  comboController->checkCombos();
-		if (combo_a_realizar < 0) return;
-		switch (combo_a_realizar){
-			case 0:
-				personaje->poder1();
-				break;
+		if (combo_a_realizar >= 0){
+			switch (combo_a_realizar){
+				case PODER1:
+					personaje->poder1();
+					break;
+				case PODER2:
+					personaje->poder2();
+					break;
+			}
+		}
+		if (pelea->inFinishHim()){
+			int fatality_a_realizar =  comboController->checkFatalities();
+			switch (fatality_a_realizar){
+				case FATALITY1:
+					personaje->fatality1(pelea->getContrincante(personaje));
+					break;
+			}
 		}
 	}
 }
