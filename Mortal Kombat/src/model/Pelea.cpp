@@ -30,8 +30,8 @@ Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_
 	pelea_terminada = false;
 	finish_him = false;
 	tiempo = new Tiempo(tiempoRound);
-	musicFight = new LMusic(MUSICA_FIGHT);
-	musicFondo = new LMusic(MUSICA_PELEA);
+	musicFight = new LMusic(MUSICA_FIGHT,1);
+	musicFondo = new LMusic(MUSICA_PELEA,2);
 	_crearEstado();
 }
 
@@ -52,7 +52,11 @@ void Pelea::start(){
 	if (ModoDeJuego == MODO_JUGADOR_VS_PC)
 		cpu = new JugadorCPU(m_personajeDos, m_personajeUno);
 	comenzo_round = true;
-	//if(musicFight) musicFight->play();
+	/*
+	if(musicFight) {
+		if (!musicFight->estaReproduciendose())
+			musicFight->play();
+	}*/
 }
 
 void Pelea::_renderEstado(){

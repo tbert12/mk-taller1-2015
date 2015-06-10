@@ -28,7 +28,7 @@ public:
 	LMusic(string ruta,int un_channel = -1);
 	virtual ~LMusic();
 
-	void play(int channel = 0);
+	void play(int loop = 0);
 	void pause();
 	void stop();
 

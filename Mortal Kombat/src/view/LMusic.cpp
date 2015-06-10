@@ -34,7 +34,7 @@ void LMusic::play(int loops){
 	if (reproduciendose) return;
 	//Referido al Stream en completo
 	if( !Mix_Playing(channel) ){
-		Mix_PlayMusic( gMusic, channel );
+		Mix_PlayMusic( gMusic, loops );
 	}
 	reproduciendose = true;
 
