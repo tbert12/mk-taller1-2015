@@ -1,4 +1,136 @@
 {
+
+	"parado": {
+		"nombre": "parado.png",
+		"frames": [
+			{
+				"x": 0,
+				"y": 0,
+				"Alto": 136,
+				"Ancho": 81
+			},
+			{
+				"x": 82,
+				"y": 0,
+				"Alto": 136,
+				"Ancho": 81
+			},
+			{
+				"x": 164,
+				"y": 0,
+				"Alto": 136,
+				"Ancho": 81
+			},
+			{
+				"x": 328,
+				"y": 0,
+				"Alto": 136,
+				"Ancho": 81
+			},
+			{
+				"x": 410,
+				"y": 0,
+				"Alto": 136,
+				"Ancho": 81
+			},
+			{
+				"x": 0,
+				"y": 137,
+				"Alto": 136,
+				"Ancho": 81
+			},
+			{
+				"x": 82,
+				"y": 137,
+				"Alto": 136,
+				"Ancho": 81
+			}
+		]
+	},
+	
+	"caeEnZ":{
+		"nombre":"caeEnZ.png",
+		"frames":[
+			{
+				"x":93,
+				"y":0,
+				"Alto":142,
+				"Ancho":82
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":135,
+				"Ancho":92
+			},
+			{
+				"x":82,
+				"y":143,
+				"Alto":105,
+				"Ancho":74
+			},
+			{
+				"x":252,
+				"y":0,
+				"Alto":82,
+				"Ancho":63
+			},
+			{
+				"x":316,
+				"y":0,
+				"Alto":66,
+				"Ancho":62
+			},
+			{
+				"x":0,
+				"y":136,
+				"Alto":53,
+				"Ancho":81
+			},
+			{
+				"x":0,
+				"y":190,
+				"Alto":60,
+				"Ancho":54
+			},
+			{
+				"x":431,
+				"y":0,
+				"Alto":87,
+				"Ancho":40
+			},
+			{
+				"x":379,
+				"y":0,
+				"Alto":104,
+				"Ancho":51
+			},
+			{
+				"x":316,
+				"y":67,
+				"Alto":67,
+				"Ancho":48
+			},
+			{
+				"x":176,
+				"y":116,
+				"Alto":89,
+				"Ancho":72
+			},
+			{
+				"x":252,
+				"y":83,
+				"Alto":95,
+				"Ancho":57
+			},
+			{
+				"x":176,
+				"y":0,
+				"Alto":115,
+				"Ancho":75
+			}
+		]
+	},
 		
 	"fatalityGancho":{
 		"nombre":"recibeFatalityGancho.png",
