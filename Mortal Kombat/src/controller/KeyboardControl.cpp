@@ -81,6 +81,11 @@ void KeyboardControl::KeyPressed(){
 					pelea->reset();
 				return;
 				break;
+			case SDLK_F5:
+				if (pelea->modoDeJuego() == MODO_ENTRENAMIENTO)
+					pelea->setFinishHim();
+				return;
+				break;
 			case SDLK_a:
 				if(!como_jugador) return;
 				personaje->pinaBaja();
@@ -140,6 +145,7 @@ void KeyboardControl::KeyPressed(){
 			switch (fatality_a_realizar){
 				case FATALITY1:
 					personaje->fatality1(pelea->getContrincante(personaje));
+					pelea->setFatality();
 					break;
 			}
 		}

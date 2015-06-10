@@ -185,6 +185,7 @@ void JoystickControl::JoyPressed(){
 			switch (fatality_a_realizar){
 				case FATALITY1:
 					personaje->fatality1(pelea->getContrincante(personaje));
+					pelea->setFatality();
 					break;
 			}
 		}
