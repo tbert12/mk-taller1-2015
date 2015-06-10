@@ -7,10 +7,18 @@
 
 #include "JugadorCPU.h"
 
+enum Personajes_id { LIUKANG, SUBZERO };
 
 JugadorCPU::JugadorCPU(Personaje* personaje_cpu, Personaje* personaje_1) {
 	m_personaje_1 = personaje_1;
 	m_personaje_cpu = personaje_cpu;
+
+	string nombre_personaje_cpu = m_personaje_cpu->getNombre();
+	if (! nombre_personaje_cpu.string::compare(string("Liu Kang")) )
+		m_id_personaje = LIUKANG;
+	else if (! nombre_personaje_cpu.string::compare(string("Sub-Zero")) )
+		m_id_personaje = SUBZERO;
+
 }
 
 
@@ -208,9 +216,15 @@ bool JugadorCPU::hayQueLanzarPoder() {
 			} else {
 				return true;
 			}
-		} else if ( (dist > DISTANCIA_PATADA && dist < DISTANCIA_PATADA * 2)
-	&& m_personaje_1->estaAtacando() ) {
-			return true;
+		} else if ( (dist > DISTANCIA_PATADA && dist < DISTANCIA_PATADA * 2) ) {
+			if (m_personaje_1->estaAtacando()) {
+				return true;
+			} else if (reaccion(probabilidad)) {
+				return true;
+			}
+		} else {
+			if (reaccion(probabilidad))
+				return true;
 		}
 	}
 	return false;
@@ -475,7 +489,24 @@ void JugadorCPU::realizarMovimiento() {
 	if (hayQueLanzarPoder()) {
 		if (!m_personaje_cpu->estaSaltando()) {
 			m_personaje_cpu->Frenar();
-			m_personaje_cpu->poder1();
+			// Cada personaje tiene poderes distintos.
+			float dist = fabs(m_personaje_1->getX() - m_personaje_cpu->getX());
+			switch (m_id_personaje) {
+				case LIUKANG:
+					if (dist < DISTANCIA_PATADA * 2 || reaccion(50))
+						m_personaje_cpu->poder1();
+					else
+						m_personaje_cpu->poder2();
+					break;
+				case SUBZERO:
+					if (dist <= DISTANCIA_PATADA)
+						m_personaje_cpu->poder2();
+					else
+						m_personaje_cpu->poder1();
+					break;
+				default:
+					m_personaje_cpu->poder1();
+			}
 			m_ciclos_delay = 20;
 		}
 	} else if (hayQueHacerToma()) {
