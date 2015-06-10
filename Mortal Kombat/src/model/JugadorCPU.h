@@ -10,9 +10,9 @@
 
 #include "Personaje.h"
 
-const int DISTANCIA_PINA = 125;
-const int DISTANCIA_PATADA = 150;
-const int DISTANCIA_TOMA = 120;
+const int DISTANCIA_PINA = 120;
+const int DISTANCIA_PATADA = 130;
+const int DISTANCIA_TOMA = 110;
 
 class JugadorCPU {
 public:

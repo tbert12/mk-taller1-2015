@@ -17,7 +17,7 @@
 #include "../controller/ComboController.h"
 #include "../controller/Combo.h"
 #include "../view/BotonesPantalla.h"
-#include "../view/TextoPelea.h"
+#include "../view/TextosPelea.h"
 #include <vector>
 #include <algorithm>
 #include <unistd.h>
@@ -34,7 +34,7 @@ private:
 	Escenario* escenario_actual;
 	Pelea* pelea;
 	Ventana* ventana;
-	TextoPelea* textoPelea;
+	TextosPelea* textosPelea;
 	Personaje* Personaje_uno;
 	Personaje* Personaje_dos;
 	bool empezar;
@@ -54,7 +54,7 @@ public:
 	void addEscenarios(vector<Escenario*> nuevos_escenarios);
 	Ventana* getVentana();
 	void setModoDeJuego(int modo);
-	void setTextoPelea(TextoPelea* un_text);
+	void setTextosPelea(TextosPelea* un_text);
 	void setPersonajesDeJuego(Personaje* p_uno, Personaje* p_dos);
 	void render();
 	bool Quit();
