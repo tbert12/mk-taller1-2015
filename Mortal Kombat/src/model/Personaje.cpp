@@ -1043,7 +1043,8 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	}
 
 	_recibioGolpe = true;
-	mObjetos[SANGRE_MUCHA]->lanzar(m_xActual,m_yActual - getAlto()*0.8,!m_fliped,false,1);
+	if (mObjetos.size())
+		mObjetos[SANGRE_MUCHA]->lanzar(m_xActual,m_yActual - getAlto()*0.8,!m_fliped,false,1);
 	return golpeFuerte;
 }
 
