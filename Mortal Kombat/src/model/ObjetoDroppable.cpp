@@ -17,8 +17,8 @@ ObjetoDroppable::ObjetoDroppable(Sprite* un_sprites,float y_piso,bool loopeable)
 	m_yActual = 0;
 	m_xInicial = 0;
 	m_yInicial = 0;
-	m_velocidad_x = VELOCIDAD_DEFAULT;
-	m_velocidad_y = VELOCIDAD_DEFAULT;
+	m_velocidad_x = VELOCIDAD_OBJETO_DEFAULT;
+	m_velocidad_y = VELOCIDAD_OBJETO_DEFAULT;
 	sprite = un_sprites;
 	flip = false;
 }
@@ -87,8 +87,8 @@ void ObjetoDroppable::_terminar(){
 	m_yActual = 0;
 	m_xInicial = 0;
 	m_yInicial = 0;
-	m_velocidad_x = VELOCIDAD_DEFAULT;
-	m_velocidad_y = VELOCIDAD_DEFAULT;
+	m_velocidad_x = VELOCIDAD_OBJETO_DEFAULT;
+	m_velocidad_y = VELOCIDAD_OBJETO_DEFAULT;
 	flip = false;
 }
 

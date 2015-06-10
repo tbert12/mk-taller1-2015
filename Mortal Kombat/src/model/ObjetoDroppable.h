@@ -10,7 +10,7 @@
 
 #include <string>
 #include "../view/Sprite.h"
-#define VELOCIDAD_DEFAULT 5
+#define VELOCIDAD_OBJETO_DEFAULT 5
 #define G 10
 #define ciclos_por_segundo 40
 

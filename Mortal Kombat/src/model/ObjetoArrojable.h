@@ -47,6 +47,8 @@ public:
 	Rect_Logico* nextRectAtaque();
 	void update();
 	virtual ~ObjetoArrojable();
+
+	void hardDestroy();
 };
 
 #endif /* SRC_MODEL_OBJETOARROJABLE_H_ */

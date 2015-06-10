@@ -132,6 +132,10 @@ bool ObjetoArrojable::getVida(){
 	return false;
 }
 
+void ObjetoArrojable::hardDestroy(){
+	_terminar();
+}
+
 
 ObjetoArrojable* ObjetoArrojable::copy(){
 	ObjetoArrojable* objetoCopy = new ObjetoArrojable(nombre,m_velocidad_x,sprite,danio);
