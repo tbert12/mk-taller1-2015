@@ -1734,7 +1734,8 @@
 				"y":0,
 				"Alto":29
 ,
-				"Ancho":136
+				"Ancho":136,
+				"loop":true
 			}
 		]
 	}

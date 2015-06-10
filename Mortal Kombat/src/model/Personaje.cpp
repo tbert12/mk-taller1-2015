@@ -75,6 +75,7 @@ void Personaje::reset(){
 	_estaAtacando = false;
 	_recibioGolpe = false;
 	_estaMuerto = false;
+	_estaHaciendoFatality2 = false;
 	_gano = false;
 	_resetPropio();
 }
@@ -149,6 +150,10 @@ void Personaje::setPosition(float x, float y){
 		m_yActual = m_yPiso;
 	else
 		m_yActual = m_yPiso = y;
+
+	for (size_t i = 0; i < mObjetos.size();i++){
+			mObjetos[i]->y_piso(m_yPiso);
+	}
 }
 
 void Personaje::setPositionX(float x){
@@ -371,6 +376,11 @@ void Personaje::renderizar(float x_dist_ventana,float posOtherPlayer){
 			poderes[j]->renderizar(x_dist_ventana);
 		}
 	}
+	for (size_t i = 0; i<mObjetos.size();i++){
+		if (mObjetos[i]->getVida()){
+			mObjetos[i]->renderizar(x_dist_ventana);
+		}
+	}
 
 	//* Para test de colisiones *//
 	//spriteActual->RENDERCOLISIONTEST(x_dist_ventana, m_yActual ,m_fliped , rectanguloAtaque() , rectanguloDefensa());
@@ -470,7 +480,7 @@ Rect_Logico* Personaje::rectanguloDefensa(){
 //Manejo de Sprites
 
 bool Personaje::_updatePropio(){
-	return _estaHaciendoFatality2;
+	return false;
 }
 
 void Personaje::AvanzarSprite(){
@@ -1059,23 +1069,56 @@ void Personaje::poder1(){
 void Personaje::poder2(){}
 void Personaje::fatality1(Personaje* otroPersonaje){}
 
+void Personaje::_recibirFatality2(){
+	_cambiarSprite(SPRITE_FATALITY_GANCHO);
+	spriteActual->doLoop(true);
+	mObjetos[CABEZA]->lanzar(m_xActual,m_yActual - getAlto(),m_fliped);
+	//mObjetos[SANGRE]->lanzar(m_xActual,getAlto(),m_fliped);
+}
+
 void Personaje::_updateFatality2(){
 	//Caminar hasta donde esta el otro Personaje
 	//Reproducir Gancho hacer que el otro Personaje arranque la cabeza
+	float xAllegar = personajeQueLaRecibe->getX() - 1.5*sprites[SPRITE_INICIAL]->getAncho();
+	if (getX() < xAllegar){
+		_cambiarSprite(SPRITE_CAMINAR);
+		m_xActual += m_velocidad;
+		return;
+	} else if (m_xActual != xAllegar and getAccionDeAtaque() != SPRITE_AGACHAR){
+		m_xActual = xAllegar;
+		_cambiarSprite(SPRITE_AGACHAR);
+		spriteActual->doLoop(true);
+	}
+	//YA se agacho!
+	if (spriteActual->inLoop() or getAccionDeAtaque() == SPRITE_GANCHO){
+		_cambiarSprite(SPRITE_GANCHO);
+		spriteActual->freezeSprite();
+	}
+
+	//Interaccion con el otro Personaje
+	if (getAccionDeAtaque() == SPRITE_GANCHO and spriteActual->proxFrameUltimo()){
+		personajeQueLaRecibe->_recibirFatality2();
+	}
+
 }
 
 void Personaje::fatality2(Personaje* otroPersonaje){
-	//SetearPersonajeQueLaRecibe
+	if (_estaHaciendoFatality2) return;
+	if (_gano) return;
+	_gano = true;
+	personajeQueLaRecibe = otroPersonaje;
 	_estaHaciendoFatality2 = true;
 
 }
 
 //es fatality3 (Combo3)
 void Personaje::babality(Personaje* otroPersonaje){
-	if (otroPersonaje)
+	if (_gano) return;
+	if (otroPersonaje != NULL)
 		otroPersonaje->babality(NULL);
-	//_cambiarSprite(SPRITE_BEBE);
+	_cambiarSprite(SPRITE_BEBE);
 	spriteActual->freezeSprite();
+	_gano = true;
 }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

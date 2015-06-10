@@ -25,11 +25,13 @@ int SubZero::_getaccionPropia(){
 }
 
 bool SubZero::_updatePropio(){
-	if (!_estaHaciendoPoder and !_estaHaciendoFatality) return false;
+	if (!_estaHaciendoPoder and !_estaHaciendoFatality and !_estaHaciendoFatality2) return false;
 	if (_estaHaciendoPoder)
 		_updatePoder2();
 	else if (_estaHaciendoFatality)
 		_updateFatality1();
+	else if (_estaHaciendoFatality2)
+		_updateFatality2();
 	spriteActual->Advance();
 	return true;
 }
@@ -69,9 +71,13 @@ void SubZero::poder2(){
 }
 
 void SubZero::fatality1(Personaje* personajeQueRecibe){
+	if (_gano) return;
 	_cambiarSprite(SPRITE_FATALITY_1);
 	spriteActual->doLoop(true);
 	_estaHaciendoFatality = true;
+	m_yActual = m_yPiso;
+	m_velocidadActual = 0;
+	_gano = true;
 	personajeQueRecibe->morir();
 
 }
