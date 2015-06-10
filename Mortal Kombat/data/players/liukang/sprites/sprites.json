@@ -1,13 +1,15 @@
 {
 	"agachadoPatadaAlta":{
 		"nombre":"agachadoPatadaAlta.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":91,
 				"Alto":67
 ,
-				"Ancho":57
+				"Ancho":57,
+				"playSound": true
 			},
 			{
 				"x":91,
@@ -28,13 +30,15 @@
 	},
 	"agachadoPatadaBaja":{
 		"nombre":"agachadoPatadaBaja.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":162,
 				"y":0,
 				"Alto":79
 ,
-				"Ancho":57
+				"Ancho":57,
+				"playSound": true
 			},
 			{
 				"x":94,
@@ -82,13 +86,15 @@
 	},
 	"caeEnZ":{
 		"nombre":"caeEnZ.png",
+		"sonido": "caeEnZ.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":48,
 				"Alto":131
 ,
-				"Ancho":74
+				"Ancho":74,
+				"playSound": true
 			},
 			{
 				"x":150,
@@ -178,6 +184,7 @@
 	},
 	"caeYSeLevanta":{
 		"nombre":"caeYSeLevanta.png",
+		"sonido": "caeYSeLevanta.wav",
 		"frames":[
 			{
 				"x":241,
@@ -213,7 +220,8 @@
 				"y":66,
 				"Alto":71
 ,
-				"Ancho":93
+				"Ancho":93,
+				"playSound": true
 			},
 			{
 				"x":97,
@@ -493,13 +501,15 @@
 	},
 	"gancho":{
 		"nombre":"gancho.png",
+		"sonido": "gancho.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":121,
 				"Alto":84
 ,
-				"Ancho":61
+				"Ancho":61,
+				"playSound": true
 			},
 			{
 				"x":62,
@@ -700,13 +710,15 @@
 	},
 	"patadaAlta":{
 		"nombre":"patadaAlta.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":302,
 				"y":0,
 				"Alto":123
 ,
-				"Ancho":60
+				"Ancho":60,
+				"playSound": true
 			},
 			{
 				"x":241,
@@ -755,13 +767,15 @@
 	},
 	"patadaBaja":{
 		"nombre":"patadaBaja.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":211,
 				"y":0,
 				"Alto":123
 ,
-				"Ancho":60
+				"Ancho":60,
+				"playSound": true
 			},
 			{
 				"x":150,
@@ -803,13 +817,15 @@
 	},
 	"patadaConGiro":{
 		"nombre":"patadaConGiro.png",
+		"sonido": "patadaCircular.wav",
 		"frames":[
 			{
 				"x":208,
 				"y":71,
 				"Alto":107
 ,
-				"Ancho":43
+				"Ancho":43,
+				"playSound": true
 			},
 			{
 				"x":150,
@@ -864,13 +880,15 @@
 	},
 	"patadaEnSalto":{
 		"nombre":"patadaEnSalto.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":198,
 				"y":0,
 				"Alto":84
 ,
-				"Ancho":45
+				"Ancho":45,
+				"playSound": true
 			},
 			{
 				"x":109,
@@ -891,13 +909,15 @@
 	},
 	"pinaAgachado":{
 		"nombre":"pinaAgachado.png",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":157,
 				"y":0,
 				"Alto":77
 ,
-				"Ancho":54
+				"Ancho":54,
+				"playSound": true
 			},
 			{
 				"x":91,
@@ -918,13 +938,15 @@
 	},
 	"pinaAlta":{
 		"nombre":"pinaAlta.png",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":146,
 				"y":128,
 				"Alto":125
 ,
-				"Ancho":55
+				"Ancho":55,
+				"playSound": true
 			},
 			{
 				"x":76,
@@ -974,13 +996,15 @@
 	},
 	"pinaEnSalto":{
 		"nombre":"pinaEnSalto.png",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":103,
 				"Alto":103
 ,
-				"Ancho":55
+				"Ancho":55,
+				"playSound": true
 			},
 			{
 				"x":147,
@@ -1001,13 +1025,15 @@
 	},
 	"recibeGolpeAgachado":{
 		"nombre":"recibeGolpeAgachado.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":130,
 				"y":0,
 				"Alto":84
 ,
-				"Ancho":58
+				"Ancho":58,
+				"playSound": true
 			},
 			{
 				"x":70,
@@ -1028,13 +1054,15 @@
 	},
 	"recibeGolpeAlto":{
 		"nombre":"recibeGolpeAlto.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":71,
 				"y":0,
 				"Alto":129
 ,
-				"Ancho":63
+				"Ancho":63,
+				"playSound": true
 			},
 			{
 				"x":0,
@@ -1056,13 +1084,15 @@
 	},
 	"recibeGolpeBajo":{
 		"nombre":"recibeGolpeBajo.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":138,
 				"y":0,
 				"Alto":123
 ,
-				"Ancho":59
+				"Ancho":59,
+				"playSound": true
 			},
 			{
 				"x":70,
@@ -1139,13 +1169,15 @@
 	},
 	"saltar":{
 		"nombre":"saltar.png",
+		"sonido": "salto.wav",
 		"frames":[
 			{
 				"x":76,
 				"y":0,
 				"Alto":141
 ,
-				"Ancho":73
+				"Ancho":73,
+				"playSound": true
 			},
 			{
 				"x":0,
@@ -1166,13 +1198,15 @@
 	},
 	"saltardiagonal":{
 		"nombre":"saltardiagonal.png",
+		"sonido": "salto.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":105,
 				"Alto":147
 ,
-				"Ancho":44
+				"Ancho":44,
+				"playSound": true
 			},
 			{
 				"x":60,
@@ -1227,13 +1261,15 @@
 	},
 	"comboPinaBaja":{
 		"nombre":"pinaBaja.png",
+		"sonido": "comboPina.wav",
 		"frames":[
 			{
 				"x":84,
 				"y":122,
 				"Alto":123
 ,
-				"Ancho":76
+				"Ancho":76,
+				"playSound": true
 			},
 			{
 				"x":238,
@@ -1261,13 +1297,15 @@
 	},
 	"comboPinaAlta":{
 		"nombre":"pinaAlta.png",
+		"sonido": "comboPina.wav",
 		"frames":[
 			{
 				"x":146,
 				"y":128,
 				"Alto":125
 ,
-				"Ancho":55
+				"Ancho":55,
+				"playSound": true
 			},
 			{
 				"x":76,
@@ -1601,13 +1639,15 @@
 	},
 	"poder2":{
 		"nombre":"poder2.png",
+		"sonido": "bicicleta.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":0,
 				"Alto":66
 ,
-				"Ancho":108
+				"Ancho":108,
+				"playSound": true
 			},
 			{
 				"x":0,

@@ -1778,7 +1778,7 @@ Mundo* ParserJSON::cargarMundo() {
 
 	// Cargo los textos de la pelea.
 	//cargarTextosPelea(nuevo_mundo);
-	log("Los textos de pelea se cargaron correctamente.", LOG_DEBUG);
+	//log("Los textos de pelea se cargaron correctamente.", LOG_DEBUG);
 
 	return nuevo_mundo;
 }
