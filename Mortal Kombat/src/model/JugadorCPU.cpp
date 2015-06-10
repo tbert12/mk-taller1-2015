@@ -302,13 +302,13 @@ bool JugadorCPU::hayQueRetroceder() {
 	int probabilidad;
 	switch (m_agresividad) {
 		case 0:
-			probabilidad = 10;
+			probabilidad = 15;
 			break;
 		case 1:
-			probabilidad = 5;
+			probabilidad = 10;
 			break;
 		case 2:
-			probabilidad = 0;
+			probabilidad = 5;
 			break;
 		default:
 			probabilidad = 0;
@@ -426,6 +426,7 @@ void JugadorCPU::realizarMovimiento() {
 			}
 		} else if (hayQueCubrirse()) {
 			m_personaje_cpu->cubrirse();
+			m_ciclos_delay = 5;
 		} else {
 			m_personaje_cpu->Levantarse();
 		}

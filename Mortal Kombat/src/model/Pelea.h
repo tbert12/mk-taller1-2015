@@ -18,10 +18,11 @@
 #include "../view/Ventana.h"
 #include "../view/BarraEnergia.h"
 #include "../view/TiempoPartida.h"
-#include "../view/TextoPelea.h"
 #include <vector>
 #include <algorithm>
 #include <unistd.h>
+
+#include "../view/TextosPelea.h"
 #include "logging.h"
 
 #define CICLOS_FINAL_ROUND 70
@@ -42,7 +43,7 @@ private:
 	int ciclos_round_terminado;
 	int ciclos_finish_him;
 	std::vector<int> GanadorRound;
-	TextoPelea* textoPelea;
+	TextosPelea* textosPelea;
 	bool round_finalizado;
 	bool partida_finalizada;
 	bool pelea_terminada;
@@ -70,7 +71,7 @@ private:
 	void _terminarRound();
 
 public:
-	Pelea(Ventana* la_ventana,Escenario* el_escenario,int un_tiempo, int modo_de_juego,TextoPelea* texto_pelea);
+	Pelea(Ventana* la_ventana,Escenario* el_escenario,int un_tiempo, int modo_de_juego,TextosPelea* textos_pelea);
 	void start();
 	void render();
 	bool peleaFinalizada();

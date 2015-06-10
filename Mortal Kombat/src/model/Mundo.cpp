@@ -17,7 +17,7 @@ Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map
 	Personaje_uno = NULL;
 	Personaje_dos = NULL;
 	pelea = NULL;
-	textoPelea = NULL;
+	textosPelea = NULL;
 	tiempo_round = tiempo;
 	empezar = false;
 	partida_finalizada = false;
@@ -39,7 +39,7 @@ void Mundo::start(){
 	if (escenarios[0]){
 		escenario_actual = escenarios[0];
 		escenario_actual->addPersonajes(p_uno,p_dos);
-		pelea = new Pelea(ventana,escenario_actual,tiempo_round,ModoDeJuego,textoPelea);
+		pelea = new Pelea(ventana,escenario_actual,tiempo_round,ModoDeJuego,textosPelea);
 		//Creo el Controlador
 		control = new Controller(pelea,mapa_comandos1, mapa_comandos2,tiempoMax,tolerancia);
 		if (ModoDeJuego == MODO_ENTRENAMIENTO){
@@ -48,8 +48,8 @@ void Mundo::start(){
 	}
 }
 
-void Mundo::setTextoPelea(TextoPelea* un_text){
-	textoPelea = un_text;
+void Mundo::setTextosPelea(TextosPelea* un_text){
+	textosPelea = un_text;
 }
 
 void Mundo::addPersonaje(Personaje* un_personaje){
@@ -190,7 +190,7 @@ Mundo::~Mundo() {
 
 	if (control) delete control;
 
-	if (textoPelea) delete textoPelea;
+	if (textosPelea) delete textosPelea;
 
 	if(ventana) delete ventana; //Siempre eliminarlo Ultimo (Hace SDL_Quit)
 }
