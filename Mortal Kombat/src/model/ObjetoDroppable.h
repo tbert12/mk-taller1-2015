@@ -20,7 +20,8 @@ class ObjetoDroppable {
 public:
 	ObjetoDroppable(string nombre, float velocidad, Sprite* un_sprites,bool loopeable);
 	void y_piso(float y_piso);
-	void lanzar(float pos_x,float pos_y,bool flipeo);
+	void lanzar(float pos_x,float pos_y,bool flipeo, bool rebotar, int cantidad=1);
+	void reset();
 	void renderizar(float x_dist_ventana);
 	bool getVida();
 	virtual ~ObjetoDroppable();
@@ -29,7 +30,9 @@ private:
 	string nombre;
 	bool vida;
 	bool loop;
+	bool mRebotar;
 	int tiempo;
+	int mCantidad;
 	float velocidad;
 	float m_yPiso;
 	float m_xActual;

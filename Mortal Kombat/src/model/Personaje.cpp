@@ -62,6 +62,9 @@ void Personaje::reset(){
 	for (size_t i = 0; i < poderes.size() ; i++){
 		poderes[i]->destruir();
 	}
+	for (size_t i = 0; i < mObjetos.size() ; i++){
+		mObjetos[i]->reset();
+	}
 	m_xActual = 0;
 	m_yActual = 0;
 	m_yPiso = 0;
@@ -913,6 +916,11 @@ void Personaje::_patadaAltaAgachado() {
 //+++++++++++RECIBE-GOLPES+++++++++++++++++++++++++++++++++++++++++++
 
 bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
+	if (getAccionDeAtaque() == SPRITE_FINISH) {
+		_estaMuerto = false;
+		morir();
+		return false;
+	}
 	//El Codigo de golpe esta seteados en todos el mismo
 	/*
 		--->SPRITE_RECIBE_GANCHO<--- (-10 de Vida)
@@ -1035,6 +1043,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 	}
 
 	_recibioGolpe = true;
+	mObjetos[SANGRE_MUCHA]->lanzar(m_xActual,m_yActual - getAlto()*0.8,!m_fliped,false,1);
 	return golpeFuerte;
 }
 
@@ -1072,17 +1081,24 @@ void Personaje::fatality1(Personaje* otroPersonaje){}
 void Personaje::_recibirFatality2(){
 	_cambiarSprite(SPRITE_FATALITY_GANCHO);
 	spriteActual->doLoop(true);
-	mObjetos[CABEZA]->lanzar(m_xActual,m_yActual - getAlto(),m_fliped);
-	//mObjetos[SANGRE]->lanzar(m_xActual,getAlto(),m_fliped);
+	mObjetos[CABEZA]->lanzar(m_xActual,m_yActual - getAlto(),m_fliped,true);
+	mObjetos[SANGRE_MUCHA]->lanzar(m_xActual,m_yActual - getAlto(),!m_fliped,false);
 }
 
 void Personaje::_updateFatality2(){
 	//Caminar hasta donde esta el otro Personaje
 	//Reproducir Gancho hacer que el otro Personaje arranque la cabeza
 	float xAllegar = personajeQueLaRecibe->getX() - 1.5*sprites[SPRITE_INICIAL]->getAncho();
-	if (getX() < xAllegar){
+	bool llego = getX() < xAllegar;
+	float velocidad = 2*m_velocidad;
+	if (m_fliped){
+		 xAllegar = personajeQueLaRecibe->getX() + 1.5*sprites[SPRITE_INICIAL]->getAncho();
+		 llego = getX() > xAllegar;
+		 velocidad = -2*m_velocidad;
+	}
+	if (llego){
 		_cambiarSprite(SPRITE_CAMINAR);
-		m_xActual += m_velocidad;
+		m_xActual += velocidad;
 		return;
 	} else if (m_xActual != xAllegar and getAccionDeAtaque() != SPRITE_AGACHAR){
 		m_xActual = xAllegar;
