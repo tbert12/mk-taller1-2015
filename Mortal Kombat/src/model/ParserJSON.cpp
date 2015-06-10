@@ -1119,6 +1119,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 						// Creo objetos droppables.
 						vector<ObjetoDroppable*> droppables = cargarDroppables(personaje_carpeta_droppables, personaje_carpeta_sonidos, ventana);
 
+
 						// Crear personaje.
 						Personaje* personaje;
 						if (!personaje_nombre.string::compare(string("Liu Kang")))
@@ -1131,6 +1132,9 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 
 						personaje->setCombos(combos);
 						log("Se le asignaron los combos correspondientes.", LOG_DEBUG);
+
+						personaje->setObjetos(droppables);
+						log("Se le asignaron los objetos droppables correspondientes al personaje.", LOG_DEBUG);
 
 						personaje->setPathLogo(personaje_foto);
 						log("Se le asigno al personaje su foto de perfil.", LOG_DEBUG);
