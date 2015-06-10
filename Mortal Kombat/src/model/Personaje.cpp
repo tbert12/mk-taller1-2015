@@ -1034,7 +1034,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 		spriteActual->freezeSprite();
 	}
 
-	if ( (DanioPorGolpe[CodigoGolpe] >= MIN_GOLPE_FUERTE and CodigoGolpe != SPRITE_PATADA_CIRCULAR) or CodigoGolpe == SPRITE_TOMA_1 ){
+	if ( (DanioPorGolpe[CodigoGolpe] >= MIN_GOLPE_FUERTE and CodigoGolpe != SPRITE_PATADA_CIRCULAR) or CodigoGolpe == SPRITE_TOMA_1 or CodigoGolpe == GOLPE_DE_PODER){
 		golpeFuerte = true;
 		sangrar = true;
 		if (CodigoGolpe == SPRITE_TOMA_1) golpeFuerte = false;
