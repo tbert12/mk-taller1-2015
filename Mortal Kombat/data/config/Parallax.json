@@ -78,6 +78,29 @@
 			"velocidad": 5
 		},
 		{
+			"nombre": "Liu Kang",
+			"foto": "data/players/jax/face.png",
+			"sprites": "data/players/jax/sprites/",
+			"poderes": "data/players/jax/poderes/",
+			"droppables": "data/players/jax/droppables/",
+			"sonidos": "data/players/jax/sound/",
+			"combos": [
+				"224",
+				"1337"
+			],
+			"fatalities": [
+				"22117"
+			],
+			"color-alternativo": {
+				"h-inicial": -30,
+				"h-final": 20,
+				"desplazamiento": 240
+			},
+			"ancho": 65,
+			"alto": 150,
+			"velocidad": 5
+		},
+		{
 			"nombre": "Sub-Zero",
 			"foto": "data/players/subzero/face.png",
 			"sprites": "data/players/subzero/sprites/",
