@@ -78,12 +78,12 @@
 			"velocidad": 5
 		},
 		{
-			"nombre": "Liu Kang",
-			"foto": "data/players/jax/face.png",
-			"sprites": "data/players/jax/sprites/",
-			"poderes": "data/players/jax/poderes/",
-			"droppables": "data/players/jax/droppables/",
-			"sonidos": "data/players/jax/sound/",
+			"nombre": "Jax",
+			"foto": "data/players/Jax/face.png",
+			"sprites": "data/players/Jax/sprites/",
+			"poderes": "data/players/Jax/poderes/",
+			"droppables": "data/players/Jax/droppables/",
+			"sonidos": "data/players/Jax/sound/",
 			"combos": [
 				"224",
 				"1337"
