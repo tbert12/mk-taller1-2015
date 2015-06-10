@@ -29,9 +29,9 @@ public:
 
 	ComboController(int tiempoMaximo,int cantidadMaximaErrores, std::vector<Combo*> combosPosibles);
 
+	int _checkCombos(bool fatalities);
 	int checkCombos();
-	bool checkCombo(Combo* combo);
-	vector<bool> checkPosibleCombo();
+	int checkFatalities();
 
 	void sePresiono(int key);
 	void Update();

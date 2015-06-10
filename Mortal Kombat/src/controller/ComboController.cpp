@@ -74,7 +74,7 @@ bool findStringRecursive(string stringBase, string stringToFind, int maxErrors){
 	return false;
 }
 
-int ComboController::checkCombos(){
+int ComboController::checkFatalities(){
 	if(_keys.compare("") == 0){
 		return -1;
 	}
@@ -103,62 +103,65 @@ int ComboController::checkCombos(){
 	return encontrado;
 }
 
-bool ComboController::checkCombo(Combo* combo){
-
-	string botonesDelCombo = combo->m_botones;
-	vector<int> valorFind(botonesDelCombo.length());
-	for(unsigned int j = 0; j < botonesDelCombo.size(); j++){
-		char item = botonesDelCombo[j];
-		valorFind[j]=_keys.find(item);
+int ComboController::checkCombos(){
+	return _checkCombos(false);
+	/*if(_keys.compare("") == 0){
+		return -1;
 	}
-
-	return distanciaLevenshtein(botonesDelCombo,botonesDelCombo.length(),_keys,_keys.length());
-}
-
-
-
-vector<bool> ComboController::checkPosibleCombo(){
-
-	if(_keys.compare("") == 0){
-		vector<bool> combosPosibles(_combosPosibles.size());
-		for(unsigned int i=0; i < _combosPosibles.size();i++){
-			combosPosibles[i] = false;
-		}
-		return combosPosibles;
-	}
+	int encontrado = -1;
+	bool encontre = false;
 
 	string botonesDelCombo;
-
-	vector<bool> combosPosibles(_combosPosibles.size());
 	for(unsigned int i=0; i < _combosPosibles.size();i++){
 		botonesDelCombo = _combosPosibles[i]->m_botones;
-		vector<int> valorFind(botonesDelCombo.length());
-		for(unsigned int j = 0; j < botonesDelCombo.size(); j++){
-			char item = botonesDelCombo[j];
-			valorFind[j]=_keys.find(item);
+		int posicionDelBoton = _keys.find(botonesDelCombo[0]);
+		if(posicionDelBoton < 0)
+			continue;
+		encontre = findStringRecursive(_keys,botonesDelCombo,maxErrors);
+		if(encontre){
+			encontrado = i;
+			break;
 		}
-		bool hayPosibilidad = true;
-		if(valorFind[0] < 0){
-			hayPosibilidad=false;
-		}else{
-			for(unsigned int j = 0; j < valorFind.size() -1; j++){
-				if(j > 0){
-					if( (valorFind[j] <0 and valorFind[j+1] >0) or valorFind[j-1] < 0  or (valorFind[j] > valorFind[j+1] and not((valorFind[j] < 0 and valorFind[j+1] < 0) or ((valorFind[j] > valorFind[j+1]) and valorFind[j+1] == -1))) ){
-						if(not(valorFind[j] > valorFind[j+1])){
-							hayPosibilidad=false;
-							break;
-						}
-						if(not(findRecursiveChar(_keys,botonesDelCombo[j+1], valorFind[j], botonesDelCombo[j], valorFind[j+1]))){
-							hayPosibilidad=false;
-							break;
-						}
-					}
-				}
-			}
-		}
-		combosPosibles[i]= hayPosibilidad;
 	}
-	return combosPosibles;
+	if (encontrado > -1 ){
+		_keysCombo =_combosPosibles[encontrado]->m_botones;
+		_keys="";
+		keyTime.clear();
+		ultimoFueCombo = true;
+	}
+	else ultimoFueCombo = false;
+	return encontrado;*/
+}
+
+int ComboController::_checkCombos(bool fatalities){
+	if(_keys.compare("") == 0){
+		return -1;
+	}
+	int encontrado = -1;
+	bool encontre = false;
+
+	string botonesDelCombo;
+	for(unsigned int i=0; i < _combosPosibles.size();i++){
+		if(_combosPosibles[i]->getFatality() != fatalities)
+			continue;
+		botonesDelCombo = _combosPosibles[i]->m_botones;
+		int posicionDelBoton = _keys.find(botonesDelCombo[0]);
+		if(posicionDelBoton < 0)
+			continue;
+		encontre = findStringRecursive(_keys,botonesDelCombo,maxErrors);
+		if(encontre){
+			encontrado = i;
+			break;
+		}
+	}
+	if (encontrado > -1 ){
+		_keysCombo =_combosPosibles[encontrado]->m_botones;
+		_keys="";
+		keyTime.clear();
+		ultimoFueCombo = true;
+	}
+	else ultimoFueCombo = false;
+	return encontrado;
 }
 
 void ComboController::Update(){

@@ -15,12 +15,17 @@ namespace std {
 
 class Combo {
 
+private:
+	bool _esFatality;
+
 public:
 
-	Combo(string botones);
+	Combo(string botones, bool fatality);
 	virtual ~Combo();
 
 	string m_botones;
+
+	bool getFatality();
 };
 
 } /* namespace std */
