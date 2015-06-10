@@ -78,6 +78,29 @@
 			"velocidad": 5
 		},
 		{
+			"nombre": "Jax",
+			"foto": "data/players/Jax/face.png",
+			"sprites": "data/players/Jax/sprites/",
+			"poderes": "data/players/Jax/poderes/",
+			"droppables": "data/players/Jax/droppables/",
+			"sonidos": "data/players/Jax/sound/",
+			"combos": [
+				"224",
+				"1337"
+			],
+			"fatalities": [
+				"22117"
+			],
+			"color-alternativo": {
+				"h-inicial": -30,
+				"h-final": 20,
+				"desplazamiento": 240
+			},
+			"ancho": 65,
+			"alto": 150,
+			"velocidad": 5
+		},
+		{
 			"nombre": "Sub-Zero",
 			"foto": "data/players/subzero/face.png",
 			"sprites": "data/players/subzero/sprites/",

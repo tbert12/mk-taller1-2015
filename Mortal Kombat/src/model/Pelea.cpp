@@ -15,6 +15,7 @@ Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_
 	m_personajeUno = capaPrincipal->getPersonajSinFlip();
 	m_personajeDos = capaPrincipal->getPersonajConFlip();
 	ganador = NULL;
+	perdedor = NULL;
 	ventana = la_ventana;
 	tiempoRound = un_tiempo;
 	NumeroRound = 1;
@@ -105,12 +106,11 @@ void Pelea::render(){
 
 	_renderEstado();
 
-	//_renderTextos();
+	_renderTextos();
 
 	if (partida_finalizada){
 		if (ciclos_finish_him >= 0){
-			//finiiiisshhhhhhhiimmm;
-			_mostrarGanadorPelea();
+			_mostrarFinishHim();
 			ciclos_finish_him--;
 		}
 		else{
@@ -229,8 +229,10 @@ bool Pelea::_partidaFinalizo(){
 			finish_him = true;
 			if (GanadorRound[0]  == 1){
 				ganador = m_personajeUno;
+				perdedor = m_personajeDos;
 			}else{
 				ganador = m_personajeDos;
+				perdedor = m_personajeUno;
 			}
 			return true;
 		}
@@ -240,16 +242,20 @@ bool Pelea::_partidaFinalizo(){
 		//si hay 3 round el que gano el ultimo es el ganador
 		if (GanadorRound[NumeroRound - 1] == 1){
 			ganador = m_personajeUno;
+			perdedor = m_personajeDos;
 		}
 		else if (GanadorRound[NumeroRound - 1] == 2){
 			ganador = m_personajeDos;
+			perdedor = m_personajeUno;
 		}
 		else{ //empate gana el que gano el primer round?
 			if (GanadorRound[0] == 1){
 			ganador = m_personajeUno;
+			perdedor = m_personajeDos;
 			}
 			else if (GanadorRound[0] == 2){
 				ganador = m_personajeDos;
+				perdedor = m_personajeUno;
 			}
 		}
 		return true;
@@ -297,9 +303,13 @@ void Pelea::_mostrarGanadorPelea(){
 	if (ganador != NULL){
 		nombre = ganador->getNombre();
 	}
-	string texto = "FINISH HIM";// + nombre;
+	string texto = "Ganador :" + nombre;
 	ventana->mostrarTexto(texto);
 
+}
+
+void Pelea::_mostrarFinishHim(){
+	ventana->mostrarTexto("FINISH HIM");
 }
 
 void Pelea::_resetRound(){
@@ -318,6 +328,8 @@ void Pelea::reset(){
 	pelea_terminada = false;
 	fatality = false;
 	ciclos_finish_him = CICLOS_FINISH_HIM;
+	ganador = NULL;
+	perdedor = NULL;
 }
 
 void Pelea::setFatality(){
@@ -356,6 +368,11 @@ Personaje* Pelea::getContrincante(Personaje* un_personaje){
 }
 
 void Pelea::_renderTextos(){
+
+	if(pelea_terminada and perdedor and !finish_him){
+		_mostarGanadorRound();
+	}
+
 	if (ciclos_render_texto <=0 or !textosPelea) return;
 	if (finish_him){
 		textosPelea->renderFinishHim();
