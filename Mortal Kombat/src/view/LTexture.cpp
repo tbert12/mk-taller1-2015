@@ -283,8 +283,8 @@ void LTexture::renderFondo( Rect_Logico* clip)
 }
 
 void LTexture::renderSpecialText(Rect_Objeto* rect){
-	int x = 0;//w_ventana/2 - rect->w/2;
-	int y = 0;//h_ventana/2 - rect->h/2;
+	int x = w_ventana/2 - rect->w_log/2;
+	int y = h_ventana/2 - rect->h_log/2;
 
 	SDL_Rect camera = { x,y, (int)(rect->w_log*ratio_x_ventana +0.5), (int)(rect->h_log*ratio_y_ventana +0.5)};
 	SDL_Rect clip = {rect->x,rect->y,rect->h,rect->w};

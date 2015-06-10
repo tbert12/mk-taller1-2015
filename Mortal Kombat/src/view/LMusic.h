@@ -25,10 +25,10 @@ private:
 	int channel;
 
 public:
-	LMusic(string ruta);
+	LMusic(string ruta,int un_channel = -1);
 	virtual ~LMusic();
 
-	void play(int channel);
+	void play(int channel = 0);
 	void pause();
 	void stop();
 

@@ -18,6 +18,7 @@
 #include "../view/Ventana.h"
 #include "../view/BarraEnergia.h"
 #include "../view/TiempoPartida.h"
+#include "../view/LMusic.h"
 #include <vector>
 #include <algorithm>
 #include <unistd.h>
@@ -33,6 +34,9 @@
 #define MODO_JUGADOR_VS_PC 1
 #define MODO_ENTRENAMIENTO 2
 
+#define MUSICA_PELEA "data/sound/pelea/fondo.mp3"
+#define MUSICA_FIGHT "data/sound/pelea/fight.mp3"
+
 class Pelea {
 
 private:
@@ -40,6 +44,8 @@ private:
 	Personaje* m_personajeDos;
 	Personaje* ganador;
 	Personaje* perdedor;
+	LMusic* musicFondo;
+	LMusic* musicFight;
 	int ModoDeJuego;
 	int tiempoRound;
 	int NumeroRound;

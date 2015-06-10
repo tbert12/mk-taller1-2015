@@ -16,14 +16,18 @@ private:
 	Sprite* spriteFight = NULL;
 	Sprite* spriteFinishHim = NULL;
 	Sprite* spriteFatality = NULL;
+	bool Fight;
+	bool FinishHim;
+	bool Fatality;
 public:
 	TextosPelea();
+	void reset();
 
 	void renderFight();
 	void renderFinishHim();
 	void renderFatality();
 
-	void resetFight();
+	bool fight();
 
 	void setTextoFight(Sprite* spriteTextoFight);
 	void setTextoFinishHim(Sprite* spriteTextoFinishHim);

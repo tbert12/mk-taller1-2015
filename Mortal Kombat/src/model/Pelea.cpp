@@ -30,6 +30,8 @@ Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_
 	pelea_terminada = false;
 	finish_him = false;
 	tiempo = new Tiempo(tiempoRound);
+	musicFight = new LMusic(MUSICA_FIGHT);
+	musicFondo = new LMusic(MUSICA_PELEA);
 	_crearEstado();
 }
 
@@ -50,6 +52,7 @@ void Pelea::start(){
 	if (ModoDeJuego == MODO_JUGADOR_VS_PC)
 		cpu = new JugadorCPU(m_personajeDos, m_personajeUno);
 	comenzo_round = true;
+	//if(musicFight) musicFight->play();
 }
 
 void Pelea::_renderEstado(){
@@ -76,6 +79,10 @@ bool Pelea::inFinishHim(){
 }
 
 void Pelea::render(){
+	if(musicFondo){
+		if (!musicFondo->estaReproduciendose())
+			musicFondo->play(-1);
+	}
 
 	if(!comenzo_round){
 		start();
@@ -106,7 +113,7 @@ void Pelea::render(){
 
 	_renderEstado();
 
-	_renderTextos();
+	//_renderTextos();
 
 	if (partida_finalizada){
 		if (ciclos_finish_him >= 0){
@@ -144,6 +151,18 @@ void Pelea::_verificarColisiones(){
 
 	/*COLISION CAPA PRINCIPAL*/
 	switch (resultado){
+		case COLISION_PERSONAJE_OBJETO_SIN_FLIP:
+			//objeto de personaje choco a personaje_flipeado
+			if(personaje_flipeado->recibirGolpe(GOLPE_DE_PODER,personaje->getPoderActivo()->getDanio()))
+				ventana->vibrar();
+			personaje->getPoderActivo()->destruir();
+			break;
+		case COLISION_PERSONAJE_OBJETO_CON_FLIP:
+			//objeto de personaje_flipeado choco a personaje
+			if(personaje->recibirGolpe(GOLPE_DE_PODER,personaje_flipeado->getPoderActivo()->getDanio()))
+				ventana->vibrar();
+			personaje_flipeado->getPoderActivo()->destruir();
+			break;
 		case COLISION_PERSONAJE_PERSONAJE_SIN_FLIP:
 			//personaje ataca a personaje_flipeado
 			accion = personaje->getAccionDeAtaque();
@@ -157,18 +176,6 @@ void Pelea::_verificarColisiones(){
 			personaje_flipeado->terminarAtaque();
 			if(personaje->recibirGolpe(accion))
 				ventana->vibrar();
-			break;
-		case COLISION_PERSONAJE_OBJETO_SIN_FLIP:
-			//objeto de personaje choco a personaje_flipeado
-			if(personaje_flipeado->recibirGolpe(GOLPE_DE_PODER,personaje->getPoderActivo()->getDanio()))
-				ventana->vibrar();
-			personaje->getPoderActivo()->destruir();
-			break;
-		case COLISION_PERSONAJE_OBJETO_CON_FLIP:
-			//objeto de personaje_flipeado choco a personaje
-			if(personaje->recibirGolpe(GOLPE_DE_PODER,personaje_flipeado->getPoderActivo()->getDanio()))
-				ventana->vibrar();
-			personaje_flipeado->getPoderActivo()->destruir();
 			break;
 		case COLISION_OBJETO_OBJETO:
 			//chocan los dos objetos
@@ -328,6 +335,7 @@ void Pelea::reset(){
 	pelea_terminada = false;
 	fatality = false;
 	ciclos_finish_him = CICLOS_FINISH_HIM;
+	if (textosPelea) textosPelea->reset();
 	ganador = NULL;
 	perdedor = NULL;
 }
@@ -368,21 +376,19 @@ Personaje* Pelea::getContrincante(Personaje* un_personaje){
 }
 
 void Pelea::_renderTextos(){
-
+	if (MODO_ENTRENAMIENTO == ModoDeJuego) return;
 	if(pelea_terminada and perdedor and !finish_him){
 		_mostarGanadorRound();
 	}
 
-	if (ciclos_render_texto <=0 or !textosPelea) return;
+	if (!textosPelea) return;
 	if (finish_him){
 		textosPelea->renderFinishHim();
 		ciclos_render_texto--;
 	}
 	if (!round_finalizado){
-		if (ciclos_render_texto == CICLOS_TEXTOS)
-			textosPelea->resetFight();
-		textosPelea->renderFight();
-		ciclos_render_texto--;
+		if (!textosPelea->fight())
+			textosPelea->renderFight();
 	}
 	if (fatality){
 		textosPelea->renderFatality();
@@ -400,6 +406,8 @@ Pelea::~Pelea() {
 	if(BarraPersonajeDos) delete BarraPersonajeDos;
 	if(tiempo_pantalla) delete tiempo_pantalla;
 	if (cpu) delete cpu;
+	if (musicFight) delete musicFight;
+	if(musicFondo) delete musicFondo;
 	textosPelea = NULL;
 }
 
