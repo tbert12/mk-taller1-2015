@@ -18,6 +18,23 @@
 	
 	"escenarios": [ 
 		{
+			"nombre": "Subway",
+			"ancho": 1000,
+			"alto": 334.3,
+			"y-piso": 320,
+			"z-index_personajes": 2,
+			"capas": [
+				{
+					"imagen_fondo": "data/img/background/Subway/TheSubway_0.png",
+					"ancho": 583
+				},
+				{
+					"imagen_fondo": "data/img/background/Subway/TheSubway_1.png",
+					"ancho": 1000
+				}
+			] 
+		},
+		{
 			"nombre": "Parallax",
 			"ancho": 1000,
 			"alto": 334.3,

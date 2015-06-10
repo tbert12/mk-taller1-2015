@@ -1293,6 +1293,103 @@ Escenario* ParserJSON::cargarEscenario(string nombre_escenario, Json::Value root
 								log( "El z-index de los personajes indicado no es valido y no pudo ser convertido a un numero entero. Se colocan por defecto delante de todas las capas.", LOG_ERROR );
 							}
 						}
+
+
+						// Creo el escenario
+						escenario = new Escenario(escenario_nombre);
+						log( "Se creo un escenario vacio", LOG_DEBUG );
+
+						// Obtener las capas del escenario. La primera capa es el fondo del escenario.
+						// Se setea por defecto el ancho en caso de error.
+						// Si la imagen no existe, se usa una por defecto.
+						string background;
+						float capa_ancho, capa_alto;
+						int capa_z_index;
+						bool capas_ok = true;
+						int j=0;
+						if ( ! root["escenarios"][i].isMember("capas") || ! root["escenarios"][i]["capas"].isArray() ) {
+							log( "No se encontraron parametros en un vector para la creacion de las capas. Se crean capas y se asignan valores por defecto.", LOG_ERROR );
+							CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,CAPA_0_BACKGROUND_DEFAULT,ventana);
+							escenario->addCapa(capa_0);
+							CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,CAPA_1_BACKGROUND_DEFAULT,ventana);
+							escenario->addCapa(capa_1);
+							CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,CAPA_2_BACKGROUND_DEFAULT,ventana);
+							escenario->addCapa(capa_2);
+							personajes_z_index = PERSONAJES_Z_INDEX_DEFAULT;
+							capas_ok = false;
+						} else {
+							const Json::Value capas = root["escenarios"][i]["capas"];
+							for ( ; j < (int)capas.size(); j++ ) {
+								if ( ! capas[j].isMember("imagen_fondo") ) {
+									background = BACKGROUND_DEFAULT;
+									log( "No se especifico la imagen de fondo de la capa. Se asigna una imagen por defecto.", LOG_ERROR );
+								} else {
+									try {
+										background = capas[j].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
+
+										struct stat sb;
+										if ( stat(background.c_str(), &sb) != 0 ) {
+											log( "La ruta a la imagen de la capa no existe. Se carga la ruta por defecto.", LOG_ERROR );
+											background = BACKGROUND_DEFAULT;
+										} else log( "Se cargo el nombre de la imagen de la capa.", LOG_DEBUG );
+									} catch ( exception &e ) {
+										background = BACKGROUND_DEFAULT;
+										log( "La ruta del archivo de la imagen de la capa no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+									}
+								}
+								if ( ! capas[j].isMember("ancho") ) {
+									capa_ancho = VENTANA_ANCHO_DEFAULT;
+									log( "No se especifico el ancho logico de la capa. Se setea en 600 por defecto.", LOG_WARNING );
+								} else {
+									try {
+										capa_ancho = capas[j].get( "ancho", VENTANA_ANCHO_DEFAULT ).asFloat();
+										if ( capa_ancho < 0 ) {
+											capa_ancho = VENTANA_ANCHO_DEFAULT;
+											// Informar al usuario el cambio de ancho.
+											log( "El ancho de la capa no puede ser negativo. Se setea automaticamente en 600.", LOG_WARNING );
+										}
+										else log( "Se cargo correctamente el ancho logico de la capa.", LOG_DEBUG );
+									} catch ( exception &e ) {
+										capa_ancho = VENTANA_ANCHO_DEFAULT;
+										log( "El ancho de la capa es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
+									}
+								}
+
+								capa_z_index = j;
+
+								// Setear alto logico de la capa de acuerdo al alto del escenario.
+								capa_alto = escenario_alto;
+								log ( "Se fijo el alto logico de la capa.", LOG_DEBUG );
+
+								// Creo capas de fondo.
+								CapaFondo* capa_fondo;
+								try {
+									capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, background, ventana );
+									log( "Se creo correctamente la capa.", LOG_DEBUG );
+								} catch ( CargarImagenException &e ) {
+									delete capa_fondo;
+									capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, BACKGROUND_DEFAULT, ventana );
+									log( "No se pudo cargar la imagen de la capa. Se carga imagen por defecto. " + string(e.what()), LOG_ERROR );
+								}
+
+								// Agrego capa al escenario.
+								escenario->addCapa(capa_fondo);
+								log( "Se agrego la capa al mundo.", LOG_DEBUG );
+							}
+						}
+
+						// Crear capa principal, donde estan los personajes y se desarrolla la accion.
+						// Validaciones para el z-index de los personajes.
+						if ( capas_ok && (! z_index_ok) ) personajes_z_index = i+1;
+						CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personajes_z_index, escenario_ancho, ventana_ancho,y_piso);
+						log( "Se creo correctamente la capa principal.", LOG_DEBUG );
+
+						// Agrego capa principal al escenario.
+						escenario->addCapaPrincipal( capa_principal, personajes_z_index );
+						log( "Se agrego la capa principal al escenario.", LOG_DEBUG );
+
+
+
 					} else
 						log("No se encontro el escenario con el nombre indicado.", LOG_WARNING);
 				} catch (exception &e) {
@@ -1301,97 +1398,6 @@ Escenario* ParserJSON::cargarEscenario(string nombre_escenario, Json::Value root
 				}
 			}
 
-			// Creo el escenario
-			escenario = new Escenario(escenario_nombre);
-			log( "Se creo un escenario vacio", LOG_DEBUG );
-
-			// Obtener las capas del escenario. La primera capa es el fondo del escenario.
-			// Se setea por defecto el ancho en caso de error.
-			// Si la imagen no existe, se usa una por defecto.
-			string background;
-			float capa_ancho, capa_alto;
-			int capa_z_index;
-			bool capas_ok = true;
-			int j=0;
-			if ( ! root["escenarios"][i].isMember("capas") || ! root["escenarios"][i]["capas"].isArray() ) {
-				log( "No se encontraron parametros en un vector para la creacion de las capas. Se crean capas y se asignan valores por defecto.", LOG_ERROR );
-				CapaFondo* capa_0 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_0_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT,ESCENARIO_ANCHO_DEFAULT,CAPA_0_BACKGROUND_DEFAULT,ventana);
-				escenario->addCapa(capa_0);
-				CapaFondo* capa_1 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_1_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+1,ESCENARIO_ANCHO_DEFAULT,CAPA_1_BACKGROUND_DEFAULT,ventana);
-				escenario->addCapa(capa_1);
-				CapaFondo* capa_2 = new CapaFondo(ESCENARIO_ALTO_DEFAULT,CAPA_2_ANCHO_DEFAULT,CAPA_Z_INDEX_DEFAULT+2,ESCENARIO_ANCHO_DEFAULT,CAPA_2_BACKGROUND_DEFAULT,ventana);
-				escenario->addCapa(capa_2);
-				capas_ok = false;
-			} else {
-				const Json::Value capas = root["escenarios"][i]["capas"];
-				for ( ; j < (int)capas.size(); j++ ) {
-					if ( ! capas[j].isMember("imagen_fondo") ) {
-						background = BACKGROUND_DEFAULT;
-						log( "No se especifico la imagen de fondo de la capa. Se asigna una imagen por defecto.", LOG_ERROR );
-					} else {
-						try {
-							background = capas[j].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
-
-							struct stat sb;
-							if ( stat(background.c_str(), &sb) != 0 ) {
-								log( "La ruta a la imagen de la capa no existe. Se carga la ruta por defecto.", LOG_ERROR );
-								background = BACKGROUND_DEFAULT;
-							} else log( "Se cargo el nombre de la imagen de la capa.", LOG_DEBUG );
-						} catch ( exception &e ) {
-							background = BACKGROUND_DEFAULT;
-							log( "La ruta del archivo de la imagen de la capa no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
-						}
-					}
-					if ( ! capas[j].isMember("ancho") ) {
-						capa_ancho = VENTANA_ANCHO_DEFAULT;
-						log( "No se especifico el ancho logico de la capa. Se setea en 600 por defecto.", LOG_WARNING );
-					} else {
-						try {
-							capa_ancho = capas[j].get( "ancho", VENTANA_ANCHO_DEFAULT ).asFloat();
-							if ( capa_ancho < 0 ) {
-								capa_ancho = VENTANA_ANCHO_DEFAULT;
-								// Informar al usuario el cambio de ancho.
-								log( "El ancho de la capa no puede ser negativo. Se setea automaticamente en 600.", LOG_WARNING );
-							}
-							else log( "Se cargo correctamente el ancho logico de la capa.", LOG_DEBUG );
-						} catch ( exception &e ) {
-							capa_ancho = VENTANA_ANCHO_DEFAULT;
-							log( "El ancho de la capa es invalido y no puede ser convertido a un numero. Se setea por defecto.", LOG_ERROR );
-						}
-					}
-
-					capa_z_index = j;
-
-					// Setear alto logico de la capa de acuerdo al alto del escenario.
-					capa_alto = escenario_alto;
-					log ( "Se fijo el alto logico de la capa.", LOG_DEBUG );
-
-					// Creo capas de fondo.
-					CapaFondo* capa_fondo;
-					try {
-						capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, background, ventana );
-						log( "Se creo correctamente la capa.", LOG_DEBUG );
-					} catch ( CargarImagenException &e ) {
-						delete capa_fondo;
-						capa_fondo = new CapaFondo( capa_alto, capa_ancho, capa_z_index, escenario_ancho, BACKGROUND_DEFAULT, ventana );
-						log( "No se pudo cargar la imagen de la capa. Se carga imagen por defecto. " + string(e.what()), LOG_ERROR );
-					}
-
-					// Agrego capa al escenario.
-					escenario->addCapa(capa_fondo);
-					log( "Se agrego la capa al mundo.", LOG_DEBUG );
-				}
-			}
-
-			// Crear capa principal, donde estan los personajes y se desarrolla la accion.
-			// Validaciones para el z-index de los personajes.
-			if ( capas_ok && (! z_index_ok) ) personajes_z_index = i+1;
-			CapaPrincipal* capa_principal = new CapaPrincipal( escenario_alto, escenario_ancho, personajes_z_index, escenario_ancho, ventana_ancho,y_piso);
-			log( "Se creo correctamente la capa principal.", LOG_DEBUG );
-
-			// Agrego capa principal al escenario.
-			escenario->addCapaPrincipal( capa_principal, personajes_z_index );
-			log( "Se agrego la capa principal al escenario.", LOG_DEBUG );
 		}
 	}
 	return escenario;
