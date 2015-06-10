@@ -98,7 +98,7 @@ void Pelea::render(){
 	escenario->Update();
 
 	//aca una vez actualizado to do chequeo las colisiones y demas.
-	if (!round_finalizado)
+	//if (!round_finalizado)
 		_verificarColisiones();
 
 	//renderizo las capas
