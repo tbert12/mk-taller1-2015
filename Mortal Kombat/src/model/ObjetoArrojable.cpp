@@ -98,7 +98,9 @@ void ObjetoArrojable::_terminar(){
 }
 
 void ObjetoArrojable::destruir(){
-	m_destruir = true;
+	if (!vida) return;
+	if (!m_destruir)
+		m_destruir = true;
 	_avanzarSprite();
 	_avanzarSprite();
 }
@@ -129,6 +131,16 @@ bool ObjetoArrojable::getVida(){
 		return true;
 	}
 	return false;
+}
+
+void ObjetoArrojable::hardDestroy(){
+	_terminar();
+}
+
+
+ObjetoArrojable* ObjetoArrojable::copy(){
+	ObjetoArrojable* objetoCopy = new ObjetoArrojable(nombre,m_velocidad_x,sprite,danio);
+	return objetoCopy;
 }
 
 ObjetoArrojable::~ObjetoArrojable() {

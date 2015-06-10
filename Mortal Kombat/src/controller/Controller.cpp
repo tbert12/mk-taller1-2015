@@ -17,9 +17,9 @@ Controller::Controller(Pelea* una_pelea,map<string, int>* mapa_comandos1,map<str
 	Joystick_1 = NULL;
 	Joystick_2 = NULL;
 	Teclado = NULL;
+	comboController = NULL;
 	SDL_JoystickEventState(SDL_ENABLE);
 	_Init(mapa_comandos1,mapa_comandos2,tiempoMax,tolerancia);
-
 }
 bool Controller::pausa(){
 	if (Teclado != NULL){
@@ -41,6 +41,15 @@ bool Controller::Quit(){
 	return quit;
 }
 
+bool Controller::goToMenu(){
+	if (ModoDeJuego != MODO_ENTRENAMIENTO) return false;
+	if (Teclado)
+		if (Teclado->goToMenu()) return true;
+	if (Joystick_1)
+		if (Joystick_1->goToMenu()) return true;
+	return false;
+}
+
 bool Controller::PollEvent(){
 	SDL_JoystickUpdate();
 	return (SDL_PollEvent( &evento ) != 0);
@@ -58,18 +67,17 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 			p_dos = NULL;
 	}
 
-
 	//Si hay dos joystick los uso;
 	if (cant_joy >= 2){
 		log("Hay mas de dos joystick conectados, se setean al jugador 1 y 2 .Ademas se crea el teclado para el personaje 1",LOG_DEBUG);
 		if (p_uno != NULL){
 			comboController = new ComboController(tiempoMax,tolerancia,p_uno->getCombos());
-			Joystick_1 = new JoystickControl(&evento,0,p_uno,mapa_comandos1,comboController);
-			Teclado = new KeyboardControl(&evento,p_uno,false, NULL);
-			if (ModoDeJuego == MODO_ENTRENAMIENTO) Teclado->setPelea(pelea);
+			Joystick_1 = new JoystickControl(&evento,0,p_uno,mapa_comandos1,comboController,pelea);
+			Teclado = new KeyboardControl(&evento,p_uno,false, NULL,pelea);
 		}
 		if(p_dos != NULL && ModoDeJuego != MODO_JUGADOR_VS_PC){
-			Joystick_2 = new JoystickControl(&evento,1,p_dos,mapa_comandos2,NULL);
+			ComboController* comboCon= new ComboController(tiempoMax,tolerancia,p_dos->getCombos());
+			Joystick_2 = new JoystickControl(&evento,1,p_dos,mapa_comandos2,comboCon,pelea);
 		}
 	}
 	//hay solo un joy entonces es para el jugador uno, el 2 con teclado
@@ -77,10 +85,10 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 		log("Hay solo un joystick, se le setea al jugador 1, y el teclado al jugador 2",LOG_WARNING);
 		if (p_uno != NULL)
 			comboController = new ComboController(tiempoMax,tolerancia,p_uno->getCombos());
-			Joystick_1 = new JoystickControl(&evento,0,p_uno,mapa_comandos1,comboController);
+			Joystick_1 = new JoystickControl(&evento,0,p_uno,mapa_comandos1,comboController,pelea);
 		if(p_dos != NULL){
-			Teclado = new KeyboardControl(&evento,p_dos,true,NULL);
-			if (ModoDeJuego == MODO_ENTRENAMIENTO) Teclado->setPelea(pelea);
+			ComboController* comboCon= new ComboController(tiempoMax,tolerancia,p_dos->getCombos());
+			Teclado = new KeyboardControl(&evento,p_dos,true,comboCon,pelea);
 		}
 	}
 	//no hay joystick conectados, solo teclado
@@ -88,8 +96,7 @@ void Controller::_Init(map<string, int>* mapa_comandos1,map<string, int>* mapa_c
 		log("No hay joystick conectado, se setea el teclado al jugador 1",LOG_DEBUG);
 		if(p_uno != NULL){
 			comboController = new ComboController(tiempoMax,tolerancia,p_uno->getCombos());
-			Teclado = new KeyboardControl(&evento,p_uno,true,comboController);
-			if (ModoDeJuego == MODO_ENTRENAMIENTO) Teclado->setPelea(pelea);
+			Teclado = new KeyboardControl(&evento,p_uno,true,comboController,pelea);
 		}
 	}
 }
@@ -115,9 +122,6 @@ void Controller::Pressed(){
 	else if (evento.type == SDL_JOYDEVICEADDED){
 		_JoystickAdded();
 	}
-	else if (pelea->roundFinalizado() || pelea->peleaFinalizada()){
-		return;
-	}
 	//evento de joystick
 	else if(evento.type == SDL_JOYAXISMOTION || evento.type == SDL_JOYBUTTONDOWN){
 		//evento en el joystick 1
@@ -134,7 +138,6 @@ void Controller::Pressed(){
 	//evento es del teclado
 	else if(evento.type == SDL_KEYDOWN){
 		if (Teclado != NULL){
-
 			Teclado->KeyPressed();
 		}
 	}
@@ -160,11 +163,15 @@ int Controller::getSleep(){
 }
 
 string Controller::get_stream_teclas(){
+	if (comboController == NULL)
+			return "";
 	return comboController->get_stream_teclas();
 }
 
 bool Controller::checkCombo(){
-	return (comboController->checkCombos() > 0 ) ;
+	if (comboController == NULL)
+		return false;
+	return (comboController->combosInString()) ;
 }
 
 Controller::~Controller() {
@@ -182,8 +189,6 @@ Controller::~Controller() {
 		delete Joystick_2;
 		Joystick_2 = NULL;
 	}
-	if (comboController)
-		delete comboController;
 }
 
 

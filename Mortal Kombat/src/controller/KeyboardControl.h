@@ -25,18 +25,20 @@ private:
 	SDL_Event* evento;
 	Pelea* pelea;
 	bool pausa;
+	bool returnMenu;
 	ComboController* comboController;
 	bool como_jugador;
 	int sleep;
+	std::vector<Combo*> combosPosibles;
 
 public:
-	KeyboardControl(SDL_Event* e, Personaje* un_personaje,bool como_jugador,ComboController* comboCon);
+	KeyboardControl(SDL_Event* e, Personaje* un_personaje,bool como_jugador,ComboController* comboCon,Pelea* una_pelea);
 	virtual ~KeyboardControl();
 	void KeyPressed();
-	void setPelea(Pelea* una_pelea);
 	void KeyState();
 	int getSleep();
 	bool pause();
+	bool goToMenu();
 };
 
 #endif /* SRC_CONTROLLER_KEYBOARDCONTROL_H_ */

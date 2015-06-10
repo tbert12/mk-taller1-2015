@@ -19,7 +19,8 @@ class LSound {
 
 	public:
 		LSound(std::string ruta);
-		void play();
+		void play( int loop = 0);
+		void stop();
 		virtual ~LSound();
 };
 

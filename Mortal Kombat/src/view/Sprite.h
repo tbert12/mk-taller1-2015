@@ -26,6 +26,8 @@ class Sprite {
 		int frameActual;
 		int cantidadFrames;
 
+		bool reproducioSonido;
+
 		bool reverse;
 		bool doloop;
 		int frameLoop;
@@ -58,6 +60,7 @@ class Sprite {
 		void doFullPong();
 		void doLoop(bool loop);
 		void doReverse(bool Reverse);
+		void retrocederFrames(int frames);
 		void setSoundIn(int index_frame);
 		void playSound();
 
@@ -67,6 +70,7 @@ class Sprite {
 		bool primerFrame();
 		bool inLoop();
 		bool loop();
+		bool inReverse();
 
 		float getAncho();
 		float getAlto();
@@ -74,6 +78,7 @@ class Sprite {
 		void vibrar();
 		void setRender(SDL_Renderer* Renderer);
 		void render(float x,float y, bool fliped);
+		void renderSpecialText();
 
 		//PARA TESTEO
 		LTexture* RectanguloTest1;

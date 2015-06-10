@@ -9,9 +9,14 @@
 
 namespace std {
 
-Combo::Combo(string botones) {
+Combo::Combo(string botones, bool esFatality) {
 	// TODO Auto-generated constructor stub
 	m_botones = botones;
+	_esFatality = esFatality;
+}
+
+bool Combo::getFatality(){
+	return _esFatality;
 }
 
 Combo::~Combo() {

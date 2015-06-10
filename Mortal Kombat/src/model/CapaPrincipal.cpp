@@ -21,8 +21,8 @@ CapaPrincipal::CapaPrincipal(float alto, float ancho, int zIndex, float anchoDeF
 	m_velocidad_derecha = 0;
 	m_velocidad_izquierda = 0;
 	m_PersonajeQueScrollea = 0;
-	rectAtaqueAnterior2 = new Rect_Logico;
-	rectAtaqueAnterior1 = new Rect_Logico;
+	rectAtaqueAnterior2 = NULL;
+	rectAtaqueAnterior1 = NULL;
 	m_personajeConFlip = NULL;
 	m_personajeSinFlip = NULL;
 	_scroll = 0;
@@ -41,7 +41,7 @@ void CapaPrincipal::addPersonajes(Personaje* uno,Personaje* dos){
 		m_PersonajeDos = dos;
 		m_PersonajeDos->setDimensionesMundo(rect->h,rect->w);
 		m_PersonajeDos->setPosition(pos_inicial_personajeDos,pos_inicial_piso);
-		m_PersonajeUno->setFlip(true);
+		m_PersonajeDos->setFlip(true);
 		m_personajeConFlip = dos;
 		m_velocidad_izquierda = m_PersonajeUno->getVelocidadIzquierda();
 	}
@@ -91,6 +91,8 @@ void CapaPrincipal::reset(){
 	m_PersonajeQueScrollea = 0;
 	if(rectAtaqueAnterior2)	delete rectAtaqueAnterior2;
 	if(rectAtaqueAnterior1)	delete rectAtaqueAnterior1;
+	rectAtaqueAnterior2 = NULL;
+	rectAtaqueAnterior1 = NULL;
 	m_personajeConFlip = m_PersonajeDos;
 	m_personajeSinFlip = m_PersonajeUno;
 	_scroll = 0;
@@ -227,13 +229,24 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 	Rect_Logico* rectDefensa2 = personajeFlippeado->rectanguloDefensa();
 
 	if (rectAtaque1 != NULL ){
+		//fprintf(stderr,"Entra\n");
 
 		if(!rectAtaqueAnterior1){
-			memcpy((void*)rectAtaqueAnterior1,(void*)rectDefensa1,sizeof(Rect_Logico*));
+			delete rectAtaqueAnterior1;
+			rectAtaqueAnterior1 = new Rect_Logico();
+			rectAtaqueAnterior1->h= rectDefensa1->h;
+			rectAtaqueAnterior1->y= rectDefensa1->y;
+			rectAtaqueAnterior1->w= 0;
+			rectAtaqueAnterior1->x= -std::numeric_limits<float>::infinity();
 		}
+
+		//fprintf(stderr,"rectAtaqueX  %i, x+w %i\n",rectAtaqueAnterior1->x, rectAtaqueAnterior1->x+rectAtaqueAnterior1->w);
+		//fprintf(stderr,"rectAtaqueAntesX  %i, x+w %i\n",rectAtaqueAnterior1->x, rectAtaqueAnterior1->x+rectAtaqueAnterior1->w);
 
 		bool antesColisionaX = floatIsBetween(rectDefensa2->x ,rectAtaqueAnterior1->x,rectAtaqueAnterior1->w);
 		bool ahoraColisionaX = floatIsBetween(rectDefensa2->x ,rectAtaque1->x,rectAtaque1->w);
+		//fprintf(stderr,"colisina antesX %i\n",ahoraColisionaX);
+		//fprintf(stderr,"colisina X %i\n",antesColisionaX);
 		bool antesColisionaY = floatIsBetween(rectDefensa2->y, rectAtaqueAnterior1->y-rectAtaqueAnterior1->h, rectAtaqueAnterior1->h) or floatIsBetween(rectAtaqueAnterior1->y, rectDefensa2->y-rectDefensa2->h, rectDefensa2->h);
 		bool ahoraColisionaY = floatIsBetween(rectDefensa2->y, rectAtaque1->y-rectAtaque1->h , rectAtaque1->h) or floatIsBetween(rectAtaque1->y, rectDefensa2->y-rectDefensa2->h , rectDefensa2->h);
 
@@ -247,7 +260,12 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 
 	}else if (rectAtaque2 != NULL ){
 		if(!rectAtaqueAnterior2){
-			memcpy((void*)rectAtaqueAnterior2,(void*)rectDefensa2,sizeof(Rect_Logico*));
+			delete rectAtaqueAnterior2;
+			rectAtaqueAnterior2 = new Rect_Logico();
+			rectAtaqueAnterior2->h= rectDefensa2->h;
+			rectAtaqueAnterior2->y= rectDefensa2->y;
+			rectAtaqueAnterior2->w= 0;
+			rectAtaqueAnterior2->x= std::numeric_limits<float>::infinity();
 		}
 
 		bool antesColisionaX = floatIsBetween(rectDefensa1->x + rectDefensa1->w, rectAtaqueAnterior2->x, rectAtaqueAnterior2->w);
@@ -264,12 +282,10 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 		}
 	}
 
-	if (rectAtaque1){
-		memcpy((void*)rectAtaqueAnterior1,(void*)rectAtaque1,sizeof(Rect_Logico*));
-	}
-	if (rectAtaque2){
-		memcpy((void*)rectAtaqueAnterior2,(void*)rectAtaque2,sizeof(Rect_Logico*));
-	}
+	if (rectAtaqueAnterior1) delete rectAtaqueAnterior1;
+	rectAtaqueAnterior1 = rectAtaque1;
+	if (rectAtaqueAnterior2) delete rectAtaqueAnterior2;
+	rectAtaqueAnterior2 = rectAtaque2;
 
 	ObjetoArrojable* objetoSinFlip = personaje->getPoderActivo();
 	ObjetoArrojable* objetoConFlip = personajeFlippeado->getPoderActivo();

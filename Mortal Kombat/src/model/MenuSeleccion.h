@@ -7,24 +7,24 @@
 
 #ifndef SRC_MODEL_MENUSELECCION_H_
 #define SRC_MODEL_MENUSELECCION_H_
-#include "Personaje.h"
 #include "Pelea.h"
 #include "../view/Ventana.h"
 #include "../view/Menu.h"
+#include "SoundMenu.h"
 #include <SDL2/SDL.h>
 
 class MenuSeleccion {
 private:
 	Ventana* ventana;
 	Menu* menu;
-	std::vector<Opcion> opciones;
-	std::vector<Personaje*> personajes;
+	std::vector<Opcion*> opciones;
 	int ModoDeJuego;
+	SoundMenu* sound;
 	int cantComandos;
 	bool selected;
 	void _crearOpciones();
 public:
-	MenuSeleccion(Ventana* la_ventana,std::vector<Personaje*> los_personajes);
+	MenuSeleccion(Ventana* la_ventana, SoundMenu* un_sound);
 	void izquierda();
 	void derecha();
 	void arriba();

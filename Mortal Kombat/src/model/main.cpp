@@ -11,6 +11,7 @@
 #include <unistd.h> //usleep
 #include <vector>
 #include "logging.h"
+#include "SoundMenu.h"
 #include "DefaultSettings.h"
 #include "Mundo.h"
 #include "ParserJSON.h"
@@ -24,22 +25,18 @@
 
 //Variables
 Mundo* mundo;
-//int ModoDeJuego = 0; // 0 P1 vs P2
-
+ParserJSON* parser;
 
 string ruta_archivo_configuracion = "data/config/Parallax.json";
 
 Mundo* cargarDatos(){
-	Mundo* unMundo;
-	ParserJSON* parser;
+	Mundo* unMundo = NULL;
 	try {
 			parser = new ParserJSON( ruta_archivo_configuracion );
 			unMundo = parser->cargarMundo();
 			log( "Se creo correctamente el Mundo de la partida.", LOG_DEBUG );
-			delete parser;
 		} catch ( std::exception &e ) {
 			log( "No se pudo crear el Mundo. Se aborta la ejecucion del programa. " + string(e.what()), LOG_ERROR );
-			delete parser;
 			if (unMundo)
 				delete unMundo;
 			return NULL;
@@ -47,20 +44,30 @@ Mundo* cargarDatos(){
 	return unMundo;
 }
 
-bool _recargarMundo(){
+void _cambiarPersonajes(){
 
-	log ( "Refresh. Se recarga el mundo a partir del mismo archivo de configuracion JSON.", LOG_WARNING );
-	delete mundo;
-	log ( "Refresh: se libero la memoria de lo cargado anteriormente", LOG_WARNING );
+	std::vector<Personaje*> personajes = mundo->getPersonajes();
+	Personaje* p_nuevo = NULL;
+	Personaje* p_uno = mundo->getPersonajeUno();
+	Personaje* p_dos = mundo->getPersonajeDos();
 
-
-	mundo = cargarDatos();
-	if (mundo == NULL){
-		log ( "No se pudo cargar el mundo luego del refresh, se cierra el programa", LOG_ERROR );
-		return false;
+	for (unsigned int i = 0; i < personajes.size();i++){
+		if (personajes[i]->getNombreDeCarga() != p_dos->getNombreDeCarga())
+			p_nuevo = personajes[i];
 	}
-	log( "Se creo correctamente el Mundo de la partida, luego del refresh", LOG_DEBUG );
-	return true;
+
+	if (p_nuevo == NULL){
+		p_nuevo = personajes[rand() % personajes.size()];
+		while (p_dos == p_nuevo)
+			p_nuevo = personajes[rand() % personajes.size()];
+	}
+	else p_dos = p_nuevo;
+
+	if (p_dos->getNombreDeCarga() == p_uno->getNombreDeCarga()){
+		p_dos = parser->cambiarColorPersonaje(p_dos);
+	}
+
+	mundo->setPersonajesDeJuego(p_uno,p_dos);
 }
 
 int main( int argc, char* args[] )
@@ -78,80 +85,121 @@ int main( int argc, char* args[] )
 		return 1;
 	}
 
+	while(!mundo->Quit()){
 
-	MenuSeleccion* menu = new MenuSeleccion(mundo->getVentana(),mundo->getPersonajes());
-	if (menu == NULL)
-		return 1;
-	ControlModo* controlModo = new ControlModo(menu);
-	if (controlModo == NULL)
-		return 1;
+		SoundMenu* sonido = new SoundMenu();
 
-	//While Seleccion de modo
-	while (!controlModo->Quit() && !menu->modeSelected()){
-		while( controlModo->PollEvent() ){
-			controlModo->Pressed();
+		MenuSeleccion* menu = new MenuSeleccion(mundo->getVentana(),sonido);
+		if (menu == NULL){
+			delete sonido;
+			return 1;
 		}
-		menu->render();
-	}
-
-	if (controlModo->Quit()){
-		delete menu;
-		delete controlModo;
-		delete mundo;
-		return 0;
-	}
-
-	SelectPlayer* selectPlayer = new SelectPlayer(mundo->getVentana(),menu->modoDeJuego(),mundo->getPersonajes());
-	ControlSelectPlayer* controlSelect = new ControlSelectPlayer(selectPlayer,(menu->modoDeJuego() == MODO_JUGADOR_VS_JUGADOR));
-
-	while(!controlSelect->Quit() && !selectPlayer->playersSelected() ){
-		while( controlSelect->PollEvent() ){
-			controlSelect->Pressed();
+		ControlModo* controlModo = new ControlModo(menu);
+		if (controlModo == NULL){
+			delete sonido;
+			delete menu;
+			return 1;
 		}
 
-		selectPlayer->render();
-	}
+		//MUSICA DE FONDO
+		sonido->play(FONDO);
 
-	if (controlSelect->Quit()){
-		delete controlSelect;
-		delete selectPlayer;
-		delete menu;
-		delete controlModo;
-		delete mundo;
-		return 0;
-	}
-	if (selectPlayer->playersSelected()){
-		//player 1
-		//player 2
-		delete selectPlayer;
-		//delete controlSelect;
-	}
-
-	//seteo modo de juego
-	mundo->setModoDeJuego(menu->modoDeJuego());
-
-
-	//While Juego
-	while( !mundo->Quit()){
-
-		//si no esta en pausa
-		if (!mundo->Pausa()){
-			if(mundo->partida_finalizada){
-				if(!_recargarMundo()) return 1;
+		//While Seleccion de modo
+		while (!controlModo->Quit() && !menu->modeSelected()){
+			while( controlModo->PollEvent() ){
+				controlModo->Pressed();
 			}
-			try{
+			menu->render();
+		}
+
+		if (controlModo->Quit()){
+			delete sonido;
+			delete menu;
+			delete controlModo;
+			delete mundo;
+			delete parser;
+			return 0;
+		}
+
+		int modoDeJuego = menu->modoDeJuego();
+		delete menu;
+		delete controlModo;
+
+		SelectPlayer* selectPlayer = new SelectPlayer(mundo->getVentana(),modoDeJuego,mundo->getPersonajes(),sonido);
+		ControlSelectPlayer* controlSelect = new ControlSelectPlayer(selectPlayer,(modoDeJuego == MODO_JUGADOR_VS_JUGADOR));
+
+		while(!controlSelect->Quit() && !selectPlayer->playersSelected() ){
+			while( controlSelect->PollEvent() ){
+				controlSelect->Pressed();
+			}
+
+			selectPlayer->render();
+		}
+
+		if (controlSelect->Quit()){
+			delete sonido;
+			delete controlSelect;
+			delete selectPlayer;
+			delete menu;
+			delete controlModo;
+			delete mundo;
+			delete parser;
+			return 0;
+		}
+		Personaje* personaje_uno;
+		Personaje* personaje_dos;
+
+		if (selectPlayer->playersSelected()){
+			personaje_uno = selectPlayer->getPersonajeUno();
+			personaje_dos = selectPlayer->getPersonajeDos();
+			delete controlSelect;
+			delete selectPlayer;
+		}
+
+		if (personaje_uno->getNombreDeCarga() == personaje_dos->getNombreDeCarga() ){
+			personaje_dos = parser->cambiarColorPersonaje(personaje_dos);
+		}
+
+		//seteo modo de juego
+		mundo->setPersonajesDeJuego(personaje_uno,personaje_dos);
+		mundo->setModoDeJuego(modoDeJuego);
+
+		sonido->stop(FONDO);
+		delete sonido;
+
+		//While Juego
+		if (modoDeJuego == MODO_JUGADOR_VS_PC){
+			//3 peleas
+			for (int i = 0; i < 3 ;i++){
+				while( !mundo->Fin() and !mundo->Quit()){
+					//si no esta en pausa
+					mundo->render();
+
+					usleep(mundo->getSleep());
+					//usleep(50000);
+				}
+				if (mundo->Fin()){
+					if (mundo->ganoCPU()) break;
+					_cambiarPersonajes();
+					mundo->reset();
+				}
+			}
+		}
+		else{
+			while( !mundo->Fin() and !mundo->Quit()){
+
+				//si no esta en pausa
 				mundo->render();
-			} catch ( std::runtime_error &e ) {
-				if(!_recargarMundo()) return 1;
+
+				usleep(mundo->getSleep());
+				//usleep(50000);
 			}
 		}
-
-		usleep(mundo->getSleep());
-		//usleep(50000);
+		if (mundo->Fin()){
+			mundo->reset();
+		}
 	}
-
-	delete controlModo;
-	delete menu;
+	delete parser;
 	delete mundo;
 	log("Se cierra el programa y se libera la memoria correspondiente al Mundo",LOG_DEBUG);
 

@@ -1,30 +1,12 @@
 {
 
-	"personaje sin cargar":	{
-			"nombre": "Sub-Zero",
-			"sprites": "data/players/subzero/sprites/",
-			"poderes": "data/players/subzero/poderes/",
-			"sonidos": "data/players/subzero/sound/",
-			"color-alternativo": {
-				"h-inicial": 180,
-				"h-final": 200,
-				"desplazamiento": 50
-			},
-			"ancho": 65,
-			"alto": 150,
-			"velocidad": 5
-	},
-
-
-
-
 	"loglvl": 1,
 	
 	"tiempo": 99,
 	
-	"tiempo_max_combos": 3,
+	"tiempo_max_combos": 2,
 	
-	"tolerancia_combos": 2,
+	"tolerancia_combos": 1,
 
 	"ventana": {
 		"ancho-px": 640,
@@ -74,11 +56,17 @@
 	"personajes": [
 		{
 			"nombre": "Liu Kang",
+			"foto": "data/players/liukang/face.png",
 			"sprites": "data/players/liukang/sprites/",
 			"poderes": "data/players/liukang/poderes/",
+			"droppables": "data/players/subzero/droppables/",
 			"sonidos": "data/players/liukang/sound/",
 			"combos": [
-				"1335"
+				"224",
+				"1337"
+			],
+			"fatalities": [
+				"22117"
 			],
 			"color-alternativo": {
 				"h-inicial": -30,
@@ -90,17 +78,23 @@
 			"velocidad": 5
 		},
 		{
-			"nombre": "Liu Kang 2",
-			"sprites": "data/players/liukang/sprites/",
-			"poderes": "data/players/liukang/poderes/",
-			"sonidos": "data/players/liukang/sound/",
+			"nombre": "Sub-Zero",
+			"foto": "data/players/subzero/face.png",
+			"sprites": "data/players/subzero/sprites/",
+			"poderes": "data/players/subzero/poderes/",
+			"droppables": "data/players/subzero/droppables/",
+			"sonidos": "data/players/subzero/sound/",
 			"combos": [
-				"1335"
+				"125",
+				"44154"
+			],
+			"fatalities": [
+				"11124"
 			],
 			"color-alternativo": {
-				"h-inicial": -30,
-				"h-final": 20,
-				"desplazamiento": 240
+				"h-inicial": 180,
+				"h-final": 200,
+				"desplazamiento": 50
 			},
 			"ancho": 65,
 			"alto": 150,
@@ -116,7 +110,8 @@
 			"pina alta": 3,
 			"patada alta": 0,
 			"cubrirse": 4,
-			"lanzar arma": 5
+			"menu": 8,
+			"reset": 5
 		},
 		"luchador2": {
 			"pina baja": 2,
@@ -124,7 +119,8 @@
 			"pina alta": 3,
 			"patada alta": 0,
 			"cubrirse": 4,
-			"lanzar arma": 5
+			"menu": 8,
+			"reset": 5
 		}
 	}
 }

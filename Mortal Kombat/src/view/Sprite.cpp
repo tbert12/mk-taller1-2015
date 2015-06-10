@@ -11,6 +11,8 @@ Sprite::Sprite(std::string ruta,std::vector<Frame*> frames,Ventana* ventana,floa
 	frameActual = 0;
 	SpriteSheetTexture = ventana->crearTextura();
 
+	reproducioSonido = false;
+
 	//recorre los frame en sentido contrario
 	reverse = false;
 	//m_pong hace efecto espejo, llega al valor de m_pong vuelve hasta el inicial y comienza de nuevo;
@@ -136,8 +138,14 @@ void Sprite::Reset(){
 
 void Sprite::render(float x, float y, bool fliped){
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
-	//printf("Frame: %i | Total: %i\n",frameActual,cantidadFrames);
+	//printf("Frame: %i | Total: %i | Loop:%s\n",frameActual,cantidadFrames,doloop ? "T" : "F");
 	SpriteSheetTexture->renderObjeto(currentClip,x ,y - currentClip->h_log, fliped);
+	playSound();
+}
+
+void Sprite::renderSpecialText(){
+	Rect_Objeto* currentClip = &spriteFrames[frameActual];
+	SpriteSheetTexture->renderSpecialText(currentClip);
 	playSound();
 }
 
@@ -155,6 +163,14 @@ bool Sprite::inLoop(){
 	return (doloop and frameActual==frameLoop) ;
 }
 
+void Sprite::retrocederFrames(int frames){
+	int retrocedido = frameActual - frames;
+	if (retrocedido < 0)
+		retrocedido = 0;
+	else
+		frameActual = retrocedido;
+}
+
 void Sprite::doReverse(bool Reverse){
 	reverse = Reverse;
 }
@@ -167,9 +183,12 @@ void Sprite::playSound() {
 	/* El sonido se reproduce solo cuando se esta reproduciendo el sprite sin reverse
 	 * Esto evita que se reproduzca dos veces cuando hace pong
 	 */
-	if ( sonido and frameActual == frameSound and !reverse) {
+	if ( sonido and !reproducioSonido) {
+		if (frameActual == frameSound) {
 			sonido->play();
+			reproducioSonido = true;
 		}
+	}
 }
 
 bool Sprite::ultimoFrame(){
@@ -219,6 +238,10 @@ void Sprite::setFrezeeFrame(int frame,int time){
 	frezeeFrame = frame;
 }
 
+bool Sprite::inReverse(){
+	return reverse;
+}
+
 void Sprite::freezeSprite(){
 	frezee = true;
 }
@@ -232,6 +255,7 @@ void Sprite::hardReset(){
 	doloop = false;
 	frezeeCount = 0;
 	frezee = false;
+	reproducioSonido = false;
 	if (m_fullpong) m_pong = m_fullpong;
 
 	Reset();

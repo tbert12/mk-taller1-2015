@@ -29,24 +29,27 @@ public:
 
 	ComboController(int tiempoMaximo,int cantidadMaximaErrores, std::vector<Combo*> combosPosibles);
 
+	int _checkCombos(bool fatalities);
 	int checkCombos();
-	bool checkCombo(Combo* combo);
-	vector<bool> checkPosibleCombo();
+	int checkFatalities();
 
 	void sePresiono(int key);
 	void Update();
 
 	string get_stream_teclas();
+	bool combosInString();
 	virtual ~ComboController();
 private:
 
 	std::vector<Combo*> _combosPosibles;
 
 	string _keys;
+	string _keysCombo;
 
 	unsigned int startingTime = 0;
 	unsigned int currentTime;
 	std::vector<int> keyTime;
+	bool ultimoFueCombo;
 
 	unsigned int maxTime;
 	unsigned int maxErrors;

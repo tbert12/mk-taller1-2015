@@ -11,17 +11,22 @@ ControlSelectPlayer::ControlSelectPlayer(SelectPlayer* select, bool dos_jugadore
 	menuPlayers = select;
 	keystate = SDL_GetKeyboardState(NULL);
 	quit = false;
-	if(SDL_NumJoysticks() >= 2 and dos_jugadores){
+	textBoxOpen = false;
+	joystick1 = NULL;
+	joystick2 = NULL;
+	if(SDL_NumJoysticks() > 1){
 		joystick1 = SDL_JoystickOpen(0);
 		if( joystick1 == NULL )
 			log(string("No se puede leer el joystick! SDL Error:" + string(SDL_GetError())),LOG_ERROR);
 		else
 			log("Joystick cargado correctamente",LOG_DEBUG);
-		joystick2 = SDL_JoystickOpen(1);
-		if( joystick2 == NULL )
-			log(string("No se puede leer el joystick! SDL Error:" + string(SDL_GetError())),LOG_ERROR);
-		else
-			log("Joystick cargado correctamente",LOG_DEBUG);
+		if (dos_jugadores){
+			joystick2 = SDL_JoystickOpen(1);
+			if( joystick2 == NULL )
+				log(string("No se puede leer el joystick! SDL Error:" + string(SDL_GetError())),LOG_ERROR);
+			else
+				log("Joystick cargado correctamente",LOG_DEBUG);
+		}
 	}
 	else if(SDL_NumJoysticks() == 1){
 		joystick1 = SDL_JoystickOpen(0);
@@ -29,7 +34,6 @@ ControlSelectPlayer::ControlSelectPlayer(SelectPlayer* select, bool dos_jugadore
 			log(string("No se puede leer el joystick! SDL Error:" + string(SDL_GetError())),LOG_ERROR);
 		else
 			log("Joystick cargado correctamente",LOG_DEBUG);
-		joystick2 = NULL;
 	}
 }
 
@@ -38,8 +42,13 @@ void ControlSelectPlayer::Pressed(){
 		quit = true;
 		return;
 	}
+	//textBox
+	else if (textBoxOpen){
+		_textBoxPressed();
+	}
 	//teclado
 	else if (evento.type == SDL_KEYDOWN){
+
 		int player = menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE;
 		if (SDL_NumJoysticks() < 2 and SDL_NumJoysticks() != 0) player = PLAYER_TWO;
 		switch( evento.key.keysym.sym ){
@@ -57,18 +66,23 @@ void ControlSelectPlayer::Pressed(){
 				break;
 			case SDLK_a:
 				menuPlayers->select(player);
+				openTextBox();
 				break;
 			case SDLK_s:
 				menuPlayers->select(player);
+				openTextBox();
 				break;
 			case SDLK_RETURN:
 				menuPlayers->select(player);
+				openTextBox();
 				break;
 			case SDLK_SPACE:
 				menuPlayers->select(player);
+				openTextBox();
 				break;
 			case SDLK_d:
 				menuPlayers->select(player);
+				openTextBox();
 				break;
 		}
 	}
@@ -79,12 +93,14 @@ void ControlSelectPlayer::Pressed(){
 		switch( evento.type ){
 			case SDL_MOUSEMOTION:
 				//Get mouse position
-				menuPlayers->mousePosition(x,y);
+				menuPlayers->mousePosition(x,y,menuPlayers->changeMouseController()? PLAYER_TWO:PLAYER_ONE);
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				if (menuPlayers->mousePosition(x,y) and evento.button.button == SDL_BUTTON_LEFT )
-					menuPlayers->select(menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
+				if (menuPlayers->mousePosition(x,y,menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE) and evento.button.button == SDL_BUTTON_LEFT ){
+					menuPlayers->select(menuPlayers->changeMouseController()? PLAYER_TWO:PLAYER_ONE);
+					openTextBox();
+				}
 				break;
 		}
 	}
@@ -134,10 +150,14 @@ void ControlSelectPlayer::Pressed(){
 	//Boton
 	else if (evento.type == SDL_JOYBUTTONDOWN){
 		//con cualquier boton se selecciona
-		if (evento.jaxis.which == SDL_JoystickInstanceID(joystick1))
+		if (evento.jaxis.which == SDL_JoystickInstanceID(joystick1)){
 			menuPlayers->select(menuPlayers->changeController()? PLAYER_TWO:PLAYER_ONE);
-		else if (evento.jaxis.which == SDL_JoystickInstanceID(joystick2))
+			openTextBox();
+		}
+		else if (evento.jaxis.which == SDL_JoystickInstanceID(joystick2)){
 			menuPlayers->select(PLAYER_TWO);
+			openTextBox();
+		}
 	}
 }
 
@@ -148,6 +168,72 @@ bool ControlSelectPlayer::Quit(){
 bool ControlSelectPlayer::PollEvent(){
 	SDL_JoystickUpdate();
 	return (SDL_PollEvent( &evento ) != 0);
+}
+
+void ControlSelectPlayer::openTextBox(){
+	SDL_StartTextInput();
+	textBoxOpen = true;
+}
+
+void ControlSelectPlayer::closeTextBox(){
+	SDL_StopTextInput();
+	textBoxOpen = false;
+}
+
+void ControlSelectPlayer::_textBoxPressed(){
+	TextBox* textBox = menuPlayers->getTextBox();
+	string inputText = textBox->getText();
+
+	if( evento.type == SDL_KEYDOWN ){
+		//Handle backspace
+		if( evento.key.keysym.sym == SDLK_BACKSPACE && inputText.length() > 0 )
+		{
+			//lop off character
+			textBox->borrarUltimoChar();
+		}
+		//Quit
+		else if(evento.key.keysym.sym == SDLK_RETURN){
+			if(menuPlayers->textBoxEnter(menuPlayers->changeControllerTextBox()? PLAYER_TWO:PLAYER_ONE))
+				closeTextBox();
+		}
+		//Handle copy
+		else if( evento.key.keysym.sym == SDLK_c && (SDL_GetModState() & KMOD_CTRL) )
+		{
+			SDL_SetClipboardText( inputText.c_str() );
+		}
+
+
+		//Handle paste
+		else if( evento.key.keysym.sym == SDLK_v && (SDL_GetModState() & KMOD_CTRL) )
+		{
+			/* inputText += SDL_GetClipboardText();*/
+			textBox->appendString( SDL_GetClipboardText() );
+		}
+	}
+	else if (evento.type == SDL_JOYBUTTONDOWN ){
+		if(menuPlayers->textBoxEnter((evento.jaxis.which == SDL_JoystickInstanceID(joystick1))? PLAYER_ONE:PLAYER_TWO))
+			closeTextBox();
+	}
+	//mouse
+	else if (evento.type == SDL_MOUSEBUTTONDOWN){
+		int x, y;
+		SDL_GetMouseState( &x, &y );
+		if (menuPlayers->mouseinTextBox(x,y)){
+			if(menuPlayers->textBoxButtonMouse(x,y))
+				closeTextBox();
+		}
+	}
+	else if( evento.type == SDL_TEXTINPUT )
+	{
+		//No se detecta copy and paste
+		char firstChar = evento.text.text[ 0 ];
+		bool hayCopyPaste = ( firstChar == 'c' or firstChar == 'C' ) and ( firstChar == 'v' or firstChar == 'V' ) and (SDL_GetModState() & KMOD_CTRL);
+		bool espaciosSinNada = (inputText == "" and firstChar == ' ');
+		if( !(hayCopyPaste or espaciosSinNada) ){
+				//Append character
+				textBox->appendString( evento.text.text );
+		}
+	}
 }
 
 ControlSelectPlayer::~ControlSelectPlayer() {

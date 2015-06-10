@@ -14,7 +14,7 @@
 #include "../model/logging.h"
 #include "Ventana.h"
 
-#define PATH_FONT "data/font/fuente.ttf"
+#define PATH_FONT "data/font/mortalkombat1.ttf"
 #define SIZE_FONT 28
 
 namespace std {
@@ -32,6 +32,8 @@ private:
 
 	/* Posicion */
 	SDL_Rect mDimension;
+	bool titilar;
+	bool estadoTitilar;
 
 	int mWidth;
 	int mHeight;
@@ -44,12 +46,13 @@ private:
 
 
 public:
-	TextBox(int x,int y,int h,int w, Ventana* ventana);
+	TextBox(SDL_Rect rect, Ventana* ventana);
 	void focus(bool enfocar);
 	void render();
 	void borrarUltimoChar();
 	void appendString( char* frase);
 	string getText();
+	void setText(string text);
 	virtual ~TextBox();
 
 };

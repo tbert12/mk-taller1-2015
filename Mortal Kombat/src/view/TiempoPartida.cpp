@@ -36,9 +36,9 @@ bool TiempoPartida::loadFromRenderedText( std::string textureText){
 	else{
 
 		//Create texture from surface pixels
-	SDL_Renderer* renderVentana= m_ventana->getRenderer();
-	if (renderVentana==NULL)
-		return false;
+		SDL_Renderer* renderVentana= m_ventana->getRenderer();
+		if (renderVentana==NULL)
+			return false;
         m_textura = SDL_CreateTextureFromSurface( renderVentana, textSurface );
 		if( m_textura == NULL ){
 			log("No se puede crear la textura del tiempo",LOG_ERROR);

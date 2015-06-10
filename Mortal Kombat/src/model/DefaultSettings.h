@@ -34,8 +34,10 @@ const float CAPA_1_ANCHO_DEFAULT = 226.6;
 const float CAPA_2_ANCHO_DEFAULT = 600.0;
 const int CAPA_Z_INDEX_DEFAULT = 0;
 const int PERSONAJES_Z_INDEX_DEFAULT = 3;
+const char* const PERSONAJE_FOTO_DEFAULT = "data/players/default/face.png";
 const char* const PERSONAJE_CARPETA_SPRITES_DEFAULT = "data/players/default/sprites/";
 const char* const PERSONAJE_CARPETA_ARROJABLES_DEFAULT = "data/players/default/poderes/";
+const char* const PERSONAJE_CARPETA_DROPPABLES_DEFAULT = "data/players/default/droppables/";
 const char* const PERSONAJE_CARPETA_SONIDOS_DEFAULT = "data/players/default/sound/";
 const char* const PERSONAJE_NOMBRE_DEFAULT = "Jugador";
 const bool PERSONAJE_FLIPPED_DEFAULT = false;
@@ -84,11 +86,22 @@ const char* const SPRITESHEET_PODER_1_DEFAULT = "poder1.png";
 const char* const SPRITESHEET_PODER_2_DEFAULT = "poder2.png";
 const char* const SPRITESHEET_FINISH_DEFAULT = "finish.png";
 const char* const SPRITESHEET_FATALITY_1_DEFAULT = "fatality1.png";
+const char* const SPRITESHEET_TOMADO_DEFAULT = "esTomado.png";
+const char* const SPRITESHEET_BEBE_DEFAULT = "bebe.png";
+const char* const SPRITESHEET_FATALITY_GANCHO_DEFAULT = "fatalityGancho.png";
 
 const char* const SPRITESHEET_OBJETO_ARROJABLE_DEFAULT = "objetoArrojable.png";
 const char* const ARROJABLE_NOMBRE_DEFAULT = "Poder";
 const float ARROJABLE_VELOCIDAD_DEFAULT = 10;
 const int ARROJABLE_DANIO_DEFAULT = 10;
+
+const char* const SPRITESHEET_OBJETO_DROPPABLE_DEFAULT = "objetoDroppable.png";
+const char* const DROPPABLE_NOMBRE_DEFAULT = "Droppable";
+const float DROPPABLE_VELOCIDAD_DEFAULT = 10;
+const float DROPPABLE_ANCHO_DEFAULT = 50.0;
+const float DROPPABLE_ALTO_DEFAULT = 20.0;
+const float DROPPABLE_ANCHO_PX_DEFAULT = 28.0;
+const float DROPPABLE_ALTO_PX_DEFAULT = 25.0;
 
 const float PERSONAJE_POS_RESPECTO_CAM = 0.75;
 
@@ -96,14 +109,17 @@ const int COMANDO_PINA_BAJA_DEFAULT = 2;
 const int COMANDO_PATADA_BAJA_DEFAULT = 1;
 const int COMANDO_PINA_ALTA_DEFAULT = 3;
 const int COMANDO_PATADA_ALTA_DEFAULT = 0;
-const int COMANDO_CUBRIRSE_DEFAULT = 6;
-const int COMANDO_LANZAR_ARMA_DEFAULT = 4;
+const int COMANDO_CUBRIRSE_DEFAULT = 4;
+const int COMANDO_MENU_DEFAULT = 8;
+const int COMANDO_RESET_DEFAULT = 5;
 
 const int COLOR_H_INICIAL_DEFAULT = 0;
 const int COLOR_H_FINAL_DEFAULT = 360;
 const int COLOR_DESPLAZAMIENTO_DEFAULT = 0;
 
 const char* const IMAGEN_CARGANDO_JUEGO = "data/img/background/inicio.png";
+
+const int CANTIDAD_PERSONAJES_DEFAULT = 12;
 
 
 const float PERSONAJE_VELOCIDAD_DEFAULT = 5.0;

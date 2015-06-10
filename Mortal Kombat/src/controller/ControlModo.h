@@ -20,6 +20,7 @@ private:
 	SDL_Event evento;
 	bool quit;
 	SDL_Joystick* joystick;
+	SDL_Joystick* joystick2;
 
 public:
 	ControlModo(MenuSeleccion* un_menu);

@@ -10,8 +10,8 @@
 
 #include "Personaje.h"
 
-const int DISTANCIA_PINA = 125;
-const int DISTANCIA_PATADA = 150;
+const int DISTANCIA_PINA = 120;
+const int DISTANCIA_PATADA = 130;
 const int DISTANCIA_TOMA = 120;
 
 class JugadorCPU {
@@ -24,6 +24,7 @@ public:
 private:
 	Personaje* m_personaje_1;
 	Personaje* m_personaje_cpu;
+	int m_id_personaje;
 	int m_agresividad = 1;
 	int m_ciclos_delay = 0;
 
@@ -33,7 +34,6 @@ private:
 
 	bool noHayQueHacerNada();
 
-	bool hayQueAtacar();
 	bool hayQueCubrirse();
 	bool hayQueSaltar();
 	bool hayQueAgacharse();
@@ -46,6 +46,8 @@ private:
 	bool hayQuePegarAbajo();
 	bool hayQueLanzarPoder();
 	bool hayQueHacerToma();
+
+	bool hayQueHacerFatality();
 
 };
 

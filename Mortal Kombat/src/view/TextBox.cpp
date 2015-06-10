@@ -10,12 +10,14 @@
 
 namespace std {
 
-TextBox::TextBox(int x,int y,int h,int w, Ventana* ventana) {
+TextBox::TextBox(SDL_Rect rect, Ventana* ventana) {
 	/* x,y,w,h correspondientes a la poscion y tamaño del cuadro de texto */
 	mVentana = ventana;
-	mDimension = {x,y,w,h};
+	mDimension = rect;
 	mTexto = " ";
-	textColor = {0,0,0,255};
+	textColor = {255,255,0,255};
+	titilar = false;
+	estadoTitilar = false;
 	borderColor = {0,255,0,255};
 	dcolor = 0; /* diferencial color */
 	_loadFont();
@@ -27,16 +29,22 @@ void TextBox::_loadFont(){
 	if( gFont == NULL ){
 		log( "Error al inicializar Fuente de TextBox: %s" + string( TTF_GetError() ), LOG_ERROR );
 	} else {
+		TTF_SetFontStyle(gFont,TTF_STYLE_ITALIC);
 		log("Font del Textbox Cargada correctamente",LOG_DEBUG);
 	}
 }
 void TextBox::focus(bool enfocar){
-	if (enfocar)
-		dcolor += 50; //Altena el color del borde para saber que esta enfocado
-	else {
+	if (enfocar){
+		dcolor += 70; //Altena el color del borde para saber que esta enfocado
+	}else {
 		borderColor = {255,0,0,255};
 		dcolor = 0;
 	}
+	titilar = enfocar;
+}
+
+void TextBox::setText(string text){
+	mTexto = text;
 }
 
 
@@ -48,7 +56,7 @@ void TextBox::_renderText(int x, int y, SDL_Rect* clip){
 	if( clip != NULL )
 	{
 		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
+		renderQuad.h = mDimension.h;
 	}
 
 	//Render to screen
@@ -56,6 +64,13 @@ void TextBox::_renderText(int x, int y, SDL_Rect* clip){
 }
 
 void TextBox::render(){
+
+	if (titilar){
+		estadoTitilar = !estadoTitilar;
+		if (!estadoTitilar)
+			return;
+	}
+
 	//Generar Textura con texto
 	if( mTexto != "" ){
 		_loadFromRenderedText( mTexto.c_str());
@@ -64,26 +79,39 @@ void TextBox::render(){
 	}
 
 	//Borde Con Focus
-	int variacion = borderColor.b + dcolor;
+	/*
+	int variacion = borderColor.g + dcolor;
 	if (variacion > 255 or variacion < 0) {
-		variacion = borderColor.b;
+		variacion = borderColor.g;
 		dcolor = -dcolor;
 	}
-	borderColor.b = (Uint8)variacion;
-	SDL_SetRenderDrawColor(mVentana->getRenderer(), borderColor.r, borderColor.g, borderColor.b, borderColor.a);
-	SDL_RenderDrawRect(mVentana->getRenderer(), &mDimension);
+	borderColor.g = (Uint8)variacion;
+	//SDL_SetRenderDrawColor(mVentana->getRenderer(), borderColor.r, borderColor.g, borderColor.b, borderColor.a);
+
+	//SDL_SetRenderDrawColor(mVentana->getRenderer(), borderColor.r, borderColor.g, borderColor.b, 255);
+	//SDL_RenderDrawRect(mVentana->getRenderer(), &mDimension);
+	*/
 
 	int ancho = mDimension.w;
-	int x = mWidth - mDimension.x;
+	int x = mWidth - mDimension.w;
 	if ( x < 0){
 		x = 0;
 		ancho = mWidth;
 	}
-	SDL_Rect CorteDeString = { x , 0 , ancho, mDimension.h };
-	_renderText( mDimension.x, mDimension.y + mHeight*0.5, &CorteDeString);
+	SDL_Rect CorteDeString = { x , 0 , ancho, mHeight };
+	_renderText( mDimension.x, mDimension.y, &CorteDeString);
 }
 
 void TextBox::_loadFromRenderedText( string textureText){
+
+	/*
+	int variacion = textColor.g + dcolor;
+	if (variacion > 255 or variacion < 0) {
+		variacion = textColor.g;
+		dcolor = -dcolor;
+	}
+	textColor.g = (Uint8)variacion;
+	*/
 	//Render text surface
 	SDL_Surface* textSurface = TTF_RenderText_Solid( gFont, textureText.c_str(), textColor );
 	if( textSurface != NULL )

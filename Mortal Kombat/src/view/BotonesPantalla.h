@@ -8,7 +8,7 @@
 #ifndef SRC_VIEW_BOTONESPANTALLA_H_
 #define SRC_VIEW_BOTONESPANTALLA_H_
 
-#define RUTA_TTF "data/font/fuente.ttf"
+#define RUTA_BOTONES "data/font/mortalkombat1.ttf"
 #include "Ventana.h"
 #include <string>
 #include <vector>
@@ -23,7 +23,7 @@ private:
 	TTF_Font* font;
 	SDL_Color Color;
 	SDL_Color ColorRED;
-	bool _loadFromRenderedText( std::string textureText,bool red);
+	bool _loadFromRenderedText( std::string textureText,SDL_Color color);
 	string _limpiarPorAccion(string botones);
 public:
 	BotonesPantalla(Ventana* una_ventana);

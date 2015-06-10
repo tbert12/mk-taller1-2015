@@ -12,21 +12,31 @@
 
 using namespace std;
 
-KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador,ComboController* comboCon) {
+KeyboardControl::KeyboardControl(SDL_Event* e,Personaje* un_personaje,bool comoJugador,ComboController* comboCon,Pelea* una_pelea) {
 	personaje = un_personaje;
 	comboController = comboCon;
+	if (personaje)
+		combosPosibles = personaje->getCombos();
 	evento = e;
 	como_jugador = comoJugador;
 	pausa = false;
+	returnMenu = false;
 	keystate = SDL_GetKeyboardState(NULL);
 	sleep = 50000;
-	pelea = NULL;
+	pelea = una_pelea;
 }
 bool KeyboardControl::pause(){
 	return pausa;
 }
 
+bool KeyboardControl::goToMenu(){
+	return returnMenu;
+}
+
 void KeyboardControl::KeyPressed(){
+	if (evento->key.repeat) {
+		return;
+	}
 	switch( evento->key.keysym.sym ){
 			case  SDLK_UP:
 				if(!como_jugador) return;
@@ -43,21 +53,38 @@ void KeyboardControl::KeyPressed(){
 			case SDLK_LEFT:
 				if(!como_jugador) return;
 				personaje->CaminarIzquierda();
-				if (comboController)
-					comboController->sePresiono(IZQUIERDA);
+				if (comboController){
+					int accion;
+					if (!personaje->getFlipState())
+						accion = IZQUIERDA;
+					else accion = DERECHA;
+					comboController->sePresiono(accion);
+				}
 				break;
 			case SDLK_RIGHT:
 				if(!como_jugador) return;
 				personaje->CaminarDerecha();
-				if (comboController)
-					comboController->sePresiono(DERECHA);
+				if (comboController){
+					int accion;
+					if (!personaje->getFlipState())
+						accion = DERECHA;
+					else accion = IZQUIERDA;
+					comboController->sePresiono(accion);
+				}
 				break;
 			case SDLK_m:
-				throw std::runtime_error( "Hay que recargar el archivo JSON." );
+				returnMenu = true;
+				return;
 				break;
 			case SDLK_r:
-				if (pelea)
+				if (pelea->modoDeJuego() == MODO_ENTRENAMIENTO)
 					pelea->reset();
+				return;
+				break;
+			case SDLK_F5:
+				if (pelea->modoDeJuego() == MODO_ENTRENAMIENTO)
+					pelea->setFinishHim();
+				return;
 				break;
 			case SDLK_a:
 				if(!como_jugador) return;
@@ -89,18 +116,6 @@ void KeyboardControl::KeyPressed(){
 				if (comboController)
 					comboController->sePresiono(CUBRIR);
 				break;
-			case SDLK_c:
-				if(!como_jugador) return;
-				personaje->poder2();
-				break;
-			case SDLK_z:
-				if(!como_jugador) return;
-				personaje->poder1();
-				break;
-			case SDLK_x:
-				if(!como_jugador) return;
-				personaje->toma1();
-				break;
 			case SDLK_p:
 				pausa = !pausa;
 				break;
@@ -112,8 +127,44 @@ void KeyboardControl::KeyPressed(){
 				if (sleep < 0) sleep = 0;
 				break;
 		}
-	if(comboController->checkCombos() > 0){
-		//combo a jugador
+
+	if(comboController){
+		if (pelea->inFinishHim()){
+			if(evento->key.keysym.sym == SDLK_x){
+				personaje->fatality1(pelea->getContrincante(personaje));
+				pelea->setFatality();
+				return;
+			}
+			if(evento->key.keysym.sym == SDLK_c){
+				personaje->babality(pelea->getContrincante(personaje));
+				pelea->setFatality();
+				return;
+			}
+			if(evento->key.keysym.sym == SDLK_v){
+				personaje->fatality2(pelea->getContrincante(personaje));
+				pelea->setFatality();
+				return;
+			}
+			int fatality_a_realizar =  comboController->checkFatalities();
+			switch (fatality_a_realizar){
+				case FATALITY1:
+					personaje->fatality1(pelea->getContrincante(personaje));
+					pelea->setFatality();
+					return;
+			}
+		}
+
+		int combo_a_realizar =  comboController->checkCombos();
+		if (combo_a_realizar >= 0){
+			switch (combo_a_realizar){
+				case PODER1:
+					personaje->poder1();
+					break;
+				case PODER2:
+					personaje->poder2();
+					break;
+			}
+		}
 	}
 }
 
@@ -130,6 +181,9 @@ void KeyboardControl::KeyState(){
 		comboController->Update();
 
 	//Teclas que deben estar apretadas
+	if (keystate[SDL_SCANCODE_UP])
+			personaje->Saltar();
+
 	if ((!keystate[SDL_SCANCODE_RIGHT] && (personaje->getSentidoDeMovimiento() > 0))|| (!keystate[SDL_SCANCODE_LEFT] && (personaje->getSentidoDeMovimiento() < 0)) )
 		personaje->Frenar();
 
@@ -138,10 +192,6 @@ void KeyboardControl::KeyState(){
 
 	if(!keystate[SDL_SCANCODE_D])
 		personaje->dejarDeCubrirse();
-}
-
-void KeyboardControl::setPelea(Pelea* una_pelea){
-	pelea = una_pelea;
 }
 
 KeyboardControl::~KeyboardControl() {

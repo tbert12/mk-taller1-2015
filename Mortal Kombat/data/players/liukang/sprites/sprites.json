@@ -1,13 +1,15 @@
 {
 	"agachadoPatadaAlta":{
 		"nombre":"agachadoPatadaAlta.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":91,
 				"Alto":67
 ,
-				"Ancho":57
+				"Ancho":57,
+				"playSound": true
 			},
 			{
 				"x":91,
@@ -28,13 +30,15 @@
 	},
 	"agachadoPatadaBaja":{
 		"nombre":"agachadoPatadaBaja.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":162,
 				"y":0,
 				"Alto":79
 ,
-				"Ancho":57
+				"Ancho":57,
+				"playSound": true
 			},
 			{
 				"x":94,
@@ -82,6 +86,7 @@
 	},
 	"caeEnZ":{
 		"nombre":"caeEnZ.png",
+		"sonido": "caeEnZ.wav",
 		"frames":[
 			{
 				"x":0,
@@ -116,7 +121,8 @@
 				"y":45,
 				"Alto":68
 ,
-				"Ancho":56
+				"Ancho":56,
+				"playSound": true
 			},
 			{
 				"x":221,
@@ -130,7 +136,8 @@
 				"y":0,
 				"Alto":47
 ,
-				"Ancho":77
+				"Ancho":77,
+				"freeze": 10
 			},
 			{
 				"x":150,
@@ -178,13 +185,15 @@
 	},
 	"caeYSeLevanta":{
 		"nombre":"caeYSeLevanta.png",
+		"sonido": "recibeGolpeFuerte.wav",
 		"frames":[
 			{
 				"x":241,
 				"y":181,
 				"Alto":126
 ,
-				"Ancho":58
+				"Ancho":58,
+				"playSound": true
 			},
 			{
 				"x":222,
@@ -493,13 +502,15 @@
 	},
 	"gancho":{
 		"nombre":"gancho.png",
+		"sonido": "gancho.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":121,
 				"Alto":84
 ,
-				"Ancho":61
+				"Ancho":61,
+				"playSound": true
 			},
 			{
 				"x":62,
@@ -700,13 +711,15 @@
 	},
 	"patadaAlta":{
 		"nombre":"patadaAlta.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":302,
 				"y":0,
 				"Alto":123
 ,
-				"Ancho":60
+				"Ancho":60,
+				"playSound": true
 			},
 			{
 				"x":241,
@@ -755,13 +768,15 @@
 	},
 	"patadaBaja":{
 		"nombre":"patadaBaja.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":211,
 				"y":0,
 				"Alto":123
 ,
-				"Ancho":60
+				"Ancho":60,
+				"playSound": true
 			},
 			{
 				"x":150,
@@ -803,13 +818,15 @@
 	},
 	"patadaConGiro":{
 		"nombre":"patadaConGiro.png",
+		"sonido": "patadaCircular.wav",
 		"frames":[
 			{
 				"x":208,
 				"y":71,
 				"Alto":107
 ,
-				"Ancho":43
+				"Ancho":43,
+				"playSound": true
 			},
 			{
 				"x":150,
@@ -864,13 +881,15 @@
 	},
 	"patadaEnSalto":{
 		"nombre":"patadaEnSalto.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":198,
 				"y":0,
 				"Alto":84
 ,
-				"Ancho":45
+				"Ancho":45,
+				"playSound": true
 			},
 			{
 				"x":109,
@@ -891,13 +910,15 @@
 	},
 	"pinaAgachado":{
 		"nombre":"pinaAgachado.png",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":157,
 				"y":0,
 				"Alto":77
 ,
-				"Ancho":54
+				"Ancho":54,
+				"playSound": true
 			},
 			{
 				"x":91,
@@ -918,13 +939,15 @@
 	},
 	"pinaAlta":{
 		"nombre":"pinaAlta.png",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":146,
 				"y":128,
 				"Alto":125
 ,
-				"Ancho":55
+				"Ancho":55,
+				"playSound": true
 			},
 			{
 				"x":76,
@@ -974,13 +997,15 @@
 	},
 	"pinaEnSalto":{
 		"nombre":"pinaEnSalto.png",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":103,
 				"Alto":103
 ,
-				"Ancho":55
+				"Ancho":55,
+				"playSound": true
 			},
 			{
 				"x":147,
@@ -1001,13 +1026,15 @@
 	},
 	"recibeGolpeAgachado":{
 		"nombre":"recibeGolpeAgachado.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":130,
 				"y":0,
 				"Alto":84
 ,
-				"Ancho":58
+				"Ancho":58,
+				"playSound": true
 			},
 			{
 				"x":70,
@@ -1028,13 +1055,15 @@
 	},
 	"recibeGolpeAlto":{
 		"nombre":"recibeGolpeAlto.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":71,
 				"y":0,
 				"Alto":129
 ,
-				"Ancho":63
+				"Ancho":63,
+				"playSound": true
 			},
 			{
 				"x":0,
@@ -1056,13 +1085,15 @@
 	},
 	"recibeGolpeBajo":{
 		"nombre":"recibeGolpeBajo.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":138,
 				"y":0,
 				"Alto":123
 ,
-				"Ancho":59
+				"Ancho":59,
+				"playSound": true
 			},
 			{
 				"x":70,
@@ -1139,13 +1170,15 @@
 	},
 	"saltar":{
 		"nombre":"saltar.png",
+		"sonido": "salto.wav",
 		"frames":[
 			{
 				"x":76,
 				"y":0,
 				"Alto":141
 ,
-				"Ancho":73
+				"Ancho":73,
+				"playSound": true
 			},
 			{
 				"x":0,
@@ -1166,13 +1199,15 @@
 	},
 	"saltardiagonal":{
 		"nombre":"saltardiagonal.png",
+		"sonido": "salto.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":105,
 				"Alto":147
 ,
-				"Ancho":44
+				"Ancho":44,
+				"playSound": true
 			},
 			{
 				"x":60,
@@ -1227,13 +1262,15 @@
 	},
 	"comboPinaBaja":{
 		"nombre":"pinaBaja.png",
+		"sonido": "comboPina.wav",
 		"frames":[
 			{
 				"x":84,
 				"y":122,
 				"Alto":123
 ,
-				"Ancho":76
+				"Ancho":76,
+				"playSound": true
 			},
 			{
 				"x":238,
@@ -1261,13 +1298,15 @@
 	},
 	"comboPinaAlta":{
 		"nombre":"pinaAlta.png",
+		"sonido": "comboPina.wav",
 		"frames":[
 			{
 				"x":146,
 				"y":128,
 				"Alto":125
 ,
-				"Ancho":55
+				"Ancho":55,
+				"playSound": true
 			},
 			{
 				"x":76,
@@ -1350,14 +1389,16 @@
 				"y":0,
 				"Alto":102
 ,
-				"Ancho":52
+				"Ancho":52,
+				"freeze": 2
 			},
 			{
 				"x":0,
 				"y":0,
 				"Alto":197
 ,
-				"Ancho":106
+				"Ancho":106,
+				"loop" : true
 			}
 		]
 	},
@@ -1426,6 +1467,90 @@
 				"Alto":132
 ,
 				"Ancho":65
+			}
+		]
+	},
+	"esTomado":{
+		"nombre":"esTomado.png",
+		"frames":[
+			{
+				"x":224,
+				"y":122,
+				"Alto":123
+,
+				"Ancho":49
+			},
+			{
+				"x":0,
+				"y":168,
+				"Alto":85
+,
+				"Ancho":72
+			},
+			{
+				"x":126,
+				"y":0,
+				"Alto":62
+,
+				"Ancho":93,
+				"freeze":5
+			},
+			{
+				"x":83,
+				"y":158,
+				"Alto":82
+,
+				"Ancho":66
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":49
+,
+				"Ancho":125,
+				"loop": true
+			},
+			{
+				"x":0,
+				"y":50,
+				"Alto":48
+,
+				"Ancho":114
+			},
+			{
+				"x":83,
+				"y":99,
+				"Alto":58
+,
+				"Ancho":70
+			},
+			{
+				"x":0,
+				"y":99,
+				"Alto":68
+,
+				"Ancho":82
+			},
+			{
+				"x":150,
+				"y":163,
+				"Alto":75
+,
+				"Ancho":51
+			},
+			{
+				"x":154,
+				"y":63,
+				"Alto":99
+,
+				"Ancho":69
+			},
+			{
+				"x":224,
+				"y":0,
+				"Alto":121
+,
+				"Ancho":68
 			}
 		]
 	},
@@ -1501,8 +1626,8 @@
 				"Alto":79
 ,
 				"Ancho":73,
-				"freeze" : 5,
-				"pong":true
+				"pong":true,
+				"freeze" : 3
 			},
 			{
 				"x":87,
@@ -1515,13 +1640,15 @@
 	},
 	"poder2":{
 		"nombre":"poder2.png",
+		"sonido": "bicicleta.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":0,
 				"Alto":66
 ,
-				"Ancho":108
+				"Ancho":108,
+				"playSound": true
 			},
 			{
 				"x":0,
@@ -1550,6 +1677,65 @@
 				"Alto":67
 ,
 				"Ancho":105
+			}
+		]
+	},
+	"bebe": {
+		"nombre":"bebe.png",
+		"frames":[
+			{
+				"x":0,
+				"y":0,
+				"Alto":51,
+				"Ancho":32
+			}
+		]
+	},
+	"fatalityGancho":{
+		"nombre":"fatalityGancho.png",
+		"frames":[
+			{
+				"x":86,
+				"y":82,
+				"Alto":116
+,
+				"Ancho":70
+			},
+			{
+				"x":157,
+				"y":82,
+				"Alto":131
+,
+				"Ancho":53
+			},
+			{
+				"x":0,
+				"y":76,
+				"Alto":114
+,
+				"Ancho":85
+			},
+			{
+				"x":137,
+				"y":0,
+				"Alto":81
+,
+				"Ancho":113
+			},
+			{
+				"x":0,
+				"y":30,
+				"Alto":45
+,
+				"Ancho":121
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":29
+,
+				"Ancho":136,
+				"loop":true
 			}
 		]
 	}

@@ -16,6 +16,7 @@
 #include "LTexture.h"
 #include <stdio.h>
 
+#define MAX_OPCIONES 3 - 1
 #define RUTA_IMG "data/img/etc/mode.png"
 #define RUTA_FONT "data/font/mortalkombat4.ttf"
 
@@ -31,14 +32,14 @@ class Menu {
 public:
 	Menu(Ventana* una_ventana);
 	void render(int opcion_actual);
-	std::vector<Opcion> getOpciones();
+	std::vector<Opcion*> getOpciones();
 	void mostrarError(string error);
 	virtual ~Menu();
 private:
 	float ratio_x;
 	float ratio_y;
 	int hayError;
-	std::vector<Opcion> opciones;
+	std::vector<Opcion*> opciones;
 	Ventana* ventana;
 	SDL_Rect* imagen;
 	SDL_Texture* textura;
