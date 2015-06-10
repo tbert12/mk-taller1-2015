@@ -27,8 +27,10 @@ MenuSelectPlayer::MenuSelectPlayer(Ventana* una_ventana,std::vector<Personaje*> 
 		textura_2 = _loadImage(rect_2,RUTA_RECT_CPU);
 	textura_imagen = _loadImage(imagen,RUTA_FONDO);
 
-	ratio_x = ventana->getAnchoPx()/imagen->w;
-	ratio_y = ventana->getAltoPx()/imagen->h;
+	ratio_x = (ventana->getAnchoPx()*1.0f)/(imagen->w*1.0f);
+	ratio_y = (ventana->getAltoPx()*1.0f)/(imagen->h*1.0f);
+	//ratio_x = ventana->obtenerRatioX();
+	//ratio_y = ventana->obtenerRatioY();
 
 	_crearOpciones();
 }
@@ -178,13 +180,14 @@ void MenuSelectPlayer::_renderSeleccion(int opcion_actual1,int opcion_actual2,bo
 
 	if (opciones[opcion_actual1]->personaje != NULL){
 		opciones[opcion_actual1]->personaje->setFlip(false);
-		opciones[opcion_actual1]->personaje->setPosition(20*ratio_x,300*ratio_y);
+		opciones[opcion_actual1]->personaje->setPosition(80*ratio_x/ventana->obtenerRatioX() - opciones[opcion_actual1]->personaje->getAncho()/2,420*ratio_y/ventana->obtenerRatioY());
 		opciones[opcion_actual1]->personaje->renderizar(0,0);
 	}
 
 	if (opciones[opcion_actual2]->personaje != NULL){
+		opciones[opcion_actual2]->personaje->setFlip(false);
+		opciones[opcion_actual2]->personaje->setPosition(560*ratio_x/ventana->obtenerRatioX() - opciones[opcion_actual1]->personaje->getAncho()/2 ,420*ratio_y/ventana->obtenerRatioY());
 		opciones[opcion_actual2]->personaje->setFlip(true);
-		opciones[opcion_actual2]->personaje->setPosition(372*ratio_x,300*ratio_y);
 		opciones[opcion_actual2]->personaje->renderizar(0,0);
 	}
 }
