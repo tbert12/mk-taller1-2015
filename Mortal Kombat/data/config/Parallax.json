@@ -92,8 +92,8 @@
 				"22117"
 			],
 			"color-alternativo": {
-				"h-inicial": -30,
-				"h-final": 20,
+				"h-inicial": 270,
+				"h-final": 330,
 				"desplazamiento": 240
 			},
 			"ancho": 65,

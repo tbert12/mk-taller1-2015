@@ -1126,6 +1126,8 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 							personaje = new LiuKang(personaje_nombre, sprites, arrojables, personaje_velocidad);
 						else if (!personaje_nombre.string::compare(string("Sub-Zero")))
 							personaje = new SubZero(personaje_nombre, sprites, arrojables, personaje_velocidad);
+						else if (!personaje_nombre.string::compare(string("Jax")))
+							personaje = new Jax(personaje_nombre, sprites, arrojables, personaje_velocidad);
 						else
 							personaje = new Personaje(personaje_nombre, sprites, arrojables, personaje_velocidad);
 						log( "Se creo correctamente el personaje.", LOG_DEBUG );

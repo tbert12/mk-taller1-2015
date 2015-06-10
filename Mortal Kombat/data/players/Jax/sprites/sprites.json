@@ -145,6 +145,7 @@
 	
 	"caeEnZ":{
 		"nombre":"caeEnZ.png",
+		"sonido": "caeEnZ.wav",
 		"frames":[
 			{
 				"x":93,
@@ -168,7 +169,8 @@
 				"x":252,
 				"y":0,
 				"Alto":82,
-				"Ancho":63
+				"Ancho":63,
+				"playSound": true
 			},
 			{
 				"x":316,
@@ -180,7 +182,8 @@
 				"x":0,
 				"y":136,
 				"Alto":53,
-				"Ancho":81
+				"Ancho":81,
+				"freeze": 10
 			},
 			{
 				"x":0,
@@ -284,12 +287,14 @@
 	},
 	"bebe":{
 		"nombre":"bebe.png",
+		"sonido": "bebe.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":0,
 				"Alto":48,
-				"Ancho":31
+				"Ancho":31,
+				"playSound": true
 			}
 		]
 	},
@@ -360,12 +365,14 @@
 	},
 	"poder1":{
 		"nombre":"poder1.png",
+		"sonido": "gancho.wav",
 		"frames":[
 			{
 				"x":404,
 				"y":0,
 				"Alto":129,
-				"Ancho":64
+				"Ancho":64,
+				"playSound": true
 			},
 			{
 				"x":318,
@@ -451,12 +458,14 @@
 	},
 	"caeYSeLevanta":{
 		"nombre":"caerse y levantarse.png",
+		"sonido": "recibeGolpeFuerte.wav",
 		"frames":[
 			{
 				"x":218,
 				"y":195,
 				"Alto":124,
-				"Ancho":77
+				"Ancho":77,
+				"playSound": true
 			},
 			{
 				"x":0,
@@ -480,8 +489,7 @@
 				"x":147,
 				"y":117,
 				"Alto":77,
-				"Ancho":118,
-				"freeze": 10
+				"Ancho":118
 			},
 			{
 				"x":147,
@@ -769,12 +777,14 @@
 	},
 	"gancho":{
 		"nombre":"gancho.png",
+		"sonido": "gancho.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":129,
 				"Alto":106,
-				"Ancho":102
+				"Ancho":102,
+				"playSound": true
 			},
 			{
 				"x":259,
@@ -877,7 +887,7 @@
 	},
 	"patadaBaja":{
 		"nombre":"patada.png",
-		"sonido": "patadaBaja.wav",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":313,
@@ -926,7 +936,7 @@
 	},
 	"patadaAlta":{
 		"nombre":"patada.png",
-		"sonido": "patadaAlta.wav",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":313,
@@ -975,7 +985,7 @@
 	},
 	"agachadoPatadaAlta":{
 		"nombre":"patada agachado.png",
-		"sonido": "patadaAlta.wav",
+		"sonido": "patada.wav",
 		"frames":[
 
 			{
@@ -1007,7 +1017,7 @@
 	},
 	"agachadoPatadaBaja":{
 		"nombre":"patada agachado.png",
-		"sonido": "patadaBaja.wav",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":344,
@@ -1110,6 +1120,7 @@
 	},
 	"patadaEnSalto":{
 		"nombre":"patada salto.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":220,
@@ -1134,7 +1145,7 @@
 	},
 	"pinaAgachado":{
 		"nombre":"piña agachado.png",
-		"sonido": "pinaBaja.wav",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":0,
@@ -1159,7 +1170,7 @@
 	},
 	"pinaAlta":{
 		"nombre":"piña alta.png",
-		"sonido": "pinaAlta.wav",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":0,
@@ -1184,7 +1195,7 @@
 	},
 	"pinaBaja":{
 		"nombre":"piña parado.png",
-		"sonido": "pinaBaja.wav",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":86,
@@ -1209,7 +1220,7 @@
 	},
 	"pinaEnSalto":{
 		"nombre":"piña saltando.png",
-		"sonido": "pinaAlta.wav",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":156,
@@ -1234,6 +1245,7 @@
 	},
 	"recibeGolpeAgachado":{
 		"nombre":"recibir golpe agachado.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":0,
@@ -1258,6 +1270,7 @@
 	},
 	"recibeGolpeFuerte":{
 		"nombre":"recibir golpe fuerte.png",
+		"sonido": "recibeGolpeFuerte.wav",
 		"frames":[
 			{
 				"x":373,
@@ -1305,6 +1318,7 @@
 	},
 	"recibeGolpeAlto":{
 		"nombre":"recibir golpe parado.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":176,
@@ -1329,6 +1343,7 @@
 	},
 	"recibeGolpeBajo":{
 		"nombre":"recibir golpe parado.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":176,
@@ -1353,6 +1368,7 @@
 	},
 	"saltar":{
 		"nombre":"saltar.png",
+		"sonido": "salto.wav",
 		"frames":[
 			{
 				"x":94,
@@ -1377,6 +1393,7 @@
 	},
 	"saltardiagonal":{
 		"nombre":"saltar en diagonal.png",
+		"sonido": "salto.wav",
 		"frames":[
 			{
 				"x":0,
@@ -1601,7 +1618,7 @@
 	},
 	"comboPinaAlta":{
 		"nombre":"piña alta.png",
-		"sonido": "comboPinaAlta.wav",
+		"sonido": "comboPina.wav",
 		"frames":[
 			{
 				"x":0,
@@ -1649,7 +1666,7 @@
 	},
 	"comboPinaBaja":{
 		"nombre":"piña parado.png",
-		"sonido": "comboPinaBaja.wav",
+		"sonido": "comboPina.wav",
 		"frames":[
 			{
 				"x":86,

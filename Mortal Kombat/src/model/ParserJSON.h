@@ -10,6 +10,7 @@
 #include "../view/TextosPelea.h"
 #include "personajes/LiuKang.h"
 #include "personajes/SubZero.h"
+#include "personajes/Jax.h"
 
 
 using namespace std;
