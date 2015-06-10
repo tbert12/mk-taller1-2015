@@ -92,6 +92,14 @@ const char* const ARROJABLE_NOMBRE_DEFAULT = "Poder";
 const float ARROJABLE_VELOCIDAD_DEFAULT = 10;
 const int ARROJABLE_DANIO_DEFAULT = 10;
 
+const char* const SPRITESHEET_OBJETO_DROPPABLE_DEFAULT = "objetoDroppable.png";
+const char* const DROPPABLE_NOMBRE_DEFAULT = "Droppable";
+const float DROPPABLE_VELOCIDAD_DEFAULT = 10;
+const float DROPPABLE_ANCHO_DEFAULT = 50.0;
+const float DROPPABLE_ALTO_DEFAULT = 20.0;
+const float DROPPABLE_ANCHO_PX_DEFAULT = 28.0;
+const float DROPPABLE_ALTO_PX_DEFAULT = 25.0;
+
 const float PERSONAJE_POS_RESPECTO_CAM = 0.75;
 
 const int COMANDO_PINA_BAJA_DEFAULT = 2;

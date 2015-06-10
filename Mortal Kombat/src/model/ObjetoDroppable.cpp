@@ -7,12 +7,14 @@
 
 #include "ObjetoDroppable.h"
 
-ObjetoDroppable::ObjetoDroppable(Sprite* un_sprites,float y_piso,bool loopeable) {
+ObjetoDroppable::ObjetoDroppable(string un_nombre, float una_velocidad, Sprite* un_sprites,bool loopeable) {
+	nombre = un_nombre;
+	velocidad = una_velocidad;
 	vida = false;
 	tiempo = 0;
 	contadorPorWhile = 0;
 	loop = loopeable;
-	m_yPiso = y_piso;
+	m_yPiso = 0;
 	m_xActual = 0;
 	m_yActual = 0;
 	m_xInicial = 0;
@@ -21,6 +23,10 @@ ObjetoDroppable::ObjetoDroppable(Sprite* un_sprites,float y_piso,bool loopeable)
 	m_velocidad_y = VELOCIDAD_OBJETO_DEFAULT;
 	sprite = un_sprites;
 	flip = false;
+}
+
+void ObjetoDroppable::y_piso(float y_piso) {
+	m_yPiso = y_piso;
 }
 
 void ObjetoDroppable::lanzar(float pos_x,float pos_y,bool flipeo){

@@ -130,6 +130,58 @@ float ParserJSON::getRatioYArrojable( Json::Value root_arrojables, float arrojab
 	return ratio_y_arrojable;
 }
 
+float ParserJSON::getRatioXDroppable( Json::Value root_droppables, float droppable_ancho ) {
+	if ( ! root_droppables.isMember("objetoDroppable") ) {
+		log( "No se encontro la etiqueta para la creacion del objeto droppables del personaje. Se setea el ratio_x del droppable del personaje por defecto.", LOG_ERROR );
+		return DROPPABLE_ANCHO_PX_DEFAULT / droppable_ancho;
+	}
+	if ( ! root_droppables["objetoDroppable"].isMember("frames") || ! root_droppables["objetoDroppable"]["frames"].isArray() ) {
+		log( "No se encontraron especificaciones en un vector para la creacion del sprite del objeto droppable del personaje. Se setea el ratio_x del droppable por defecto.", LOG_ERROR );
+		return DROPPABLE_ANCHO_PX_DEFAULT / droppable_ancho;
+	}
+	int ancho_px;
+	try {
+		ancho_px = root_droppables["objetoDroppable"]["frames"][0].get( "Ancho", -100 ).asInt();
+		if ( ancho_px < 0 ) {
+			log( "No se especifico el ancho en pixeles del objeto droppable o es negativo. No se puede calcular el ratio_x del droppable. Se setea por defecto.", LOG_ERROR );
+			return DROPPABLE_ANCHO_PX_DEFAULT / droppable_ancho;
+		}
+	} catch ( exception &e ) {
+		log( "El ancho en pixeles indicado del objeto droppable no puede ser convertido a numero. Se setea el ratio_x del droppable por defecto.", LOG_ERROR );
+		return DROPPABLE_ANCHO_PX_DEFAULT / droppable_ancho;
+	}
+
+	float ratio_x_droppable = ancho_px / droppable_ancho;
+	log( "Se calculo el ratio_x del objeto droppable del personaje.", LOG_DEBUG );
+	return ratio_x_droppable;
+}
+
+float ParserJSON::getRatioYDroppable( Json::Value root_droppables, float droppable_alto ) {
+	if ( ! root_droppables.isMember("objetoDroppable") ) {
+		log( "No se encontro la etiqueta para la creacion del objeto droppables del personaje. Se setea el ratio_y del droppable del personaje por defecto.", LOG_ERROR );
+		return DROPPABLE_ALTO_PX_DEFAULT / droppable_alto;
+	}
+	if ( ! root_droppables["objetoDroppable"].isMember("frames") || ! root_droppables["objetoDroppable"]["frames"].isArray() ) {
+		log( "No se encontraron especificaciones en un vector para la creacion del sprite del objeto droppable del personaje. Se setea el ratio_y del droppable por defecto.", LOG_ERROR );
+		return DROPPABLE_ALTO_PX_DEFAULT / droppable_alto;
+	}
+	int alto_px;
+	try {
+		alto_px = root_droppables["objetoDroppable"]["frames"][0].get( "Alto", -100 ).asInt();
+		if ( alto_px < 0 ) {
+			log( "No se especifico el alto en pixeles del objeto droppable o es negativo. No se puede calcular el ratio_y del droppable. Se setea por defecto.", LOG_ERROR );
+			return DROPPABLE_ALTO_PX_DEFAULT / droppable_alto;
+		}
+	} catch ( exception &e ) {
+		log( "El alto en pixeles indicado del objeto droppable no puede ser convertido a numero. Se setea el ratio_y del droppable por defecto.", LOG_ERROR );
+		return DROPPABLE_ALTO_PX_DEFAULT / droppable_alto;
+	}
+
+	float ratio_y_droppable = alto_px / droppable_alto;
+	log( "Se calculo el ratio_y del objeto droppable del personaje.", LOG_DEBUG );
+	return ratio_y_droppable;
+}
+
 // Devuelve el puntero al mapa de comandos.
 map<string, int>* ParserJSON::getComandos1() {
 	return comandos_luchador1;
@@ -429,117 +481,105 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, strin
 }
 
 
-vector<ObjetoArrojable*> ParserJSON::cargarDroppables(string ruta_carpeta, string ruta_sonidos, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
+vector<ObjetoDroppable*> ParserJSON::cargarDroppables(string ruta_carpeta, string ruta_sonidos, Ventana* ventana) {
+
+	vector<ObjetoDroppable*> objetosDroppables;
 
 	Json::Value root;
 	Json::Reader reader;
 
 	// Abrir archivo.
-	ifstream archivoArrojable;
-	string ruta_archivo_json = ruta_carpeta + "poderes.json";
-	archivoArrojable.open(ruta_archivo_json.c_str());
+	ifstream archivoDroppables;
+	string ruta_archivo_json = ruta_carpeta + "droppables.json";
+	archivoDroppables.open(ruta_archivo_json.c_str());
 
-	if ( ! archivoArrojable.is_open() ) {
+	if ( ! archivoDroppables.is_open() ) {
 		// Informar al usuario la falla y la resolucion tomada.
-		log( "No se pudo abrir el archivo del objeto arrojable JSON, se genera el objeto por defecto.", LOG_ERROR );
-		return generarArrojableDefault(ventana);
+		log( "No se pudo abrir el archivo JSON de los droppables, se genera el objeto por defecto.", LOG_ERROR );
+		return objetosDroppables;
 	}
-	log ( "Se abrio el archivo JSON del objeto arrojable.", LOG_DEBUG );
+	log ( "Se abrio el archivo JSON de los objetos droppables.", LOG_DEBUG );
 
-	bool exito = reader.parse( archivoArrojable, root, false );
+	bool exito = reader.parse( archivoDroppables, root, false );
 	if ( ! exito ) {
 	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
-	    log( "No se pudo interpretar el JSON, se genera el objeto arrojable por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
-	    return generarArrojableDefault(ventana);
+	    log( "No se pudo interpretar el JSON." + reader.getFormattedErrorMessages(), LOG_ERROR );
+	    return objetosDroppables;
 	} else log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
 
 	// Cerrar archivo.
-	archivoArrojable.close();
-	log ( "Se cerro el archivo JSON del objeto arrojable.", LOG_DEBUG );
+	archivoDroppables.close();
+	log ( "Se cerro el archivo JSON de los objetos droppable.", LOG_DEBUG );
 
-	vector<ObjetoArrojable*> objetosArrojables;
-	if ( ! root.isMember("poderes") || ! root["poderes"].isArray() ) {
-		log( "No se encuentran especificaciones para los poderes. Se setean los objetos por defecto. ", LOG_ERROR );
-		return generarArrojableDefault(ventana);
+	if ( ! root.isMember("droppables") || ! root["droppables"].isArray() ) {
+		log( "No se encuentran especificaciones para los droppables.", LOG_ERROR );
+		return objetosDroppables;
 	}
-	Json::Value arrojables = root["poderes"];
-	for ( int i=0; i < (int)arrojables.size(); i++ ) {
+	Json::Value droppables = root["droppables"];
+	for ( int i=0; i < (int)droppables.size(); i++ ) {
 
-		string arrojable_nombre;
-		float arrojable_velocidad, arrojable_ancho, arrojable_alto;
-		int arrojable_danio;
-		if ( ! arrojables[i].isMember("nombre") ) {
-			arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
-			log( "No se especifico el nombre del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		string droppable_nombre;
+		float droppable_velocidad, droppable_ancho, droppable_alto;
+		if ( ! droppables[i].isMember("nombre") ) {
+			droppable_nombre = DROPPABLE_NOMBRE_DEFAULT;
+			log( "No se especifico el nombre del objeto droppable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojable_nombre = arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
-				log( "Se cargo correctamente el nombre del objeto arrojable.", LOG_DEBUG );
+				droppable_nombre = droppables[i].get("nombre", DROPPABLE_NOMBRE_DEFAULT).asString();
+				log( "Se cargo correctamente el nombre del objeto droppable.", LOG_DEBUG );
 			} catch ( exception &e ) {
-				arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
-				log( "El nombre indicado para el objeto arrojable no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+				droppable_nombre = DROPPABLE_NOMBRE_DEFAULT;
+				log( "El nombre indicado para el objeto droppable no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( ! arrojables[i].isMember("velocidad") ) {
-			arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
-			log( "No se especifico la velocidad del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		if ( ! droppables[i].isMember("velocidad") ) {
+			droppable_velocidad = DROPPABLE_VELOCIDAD_DEFAULT;
+			log( "No se especifico la velocidad del objeto droppable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojable_velocidad = arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
-				log( "Se cargo correctamente la velocidad del objeto arrojable.", LOG_DEBUG );
+				droppable_velocidad = droppables[i].get("velocidad", DROPPABLE_VELOCIDAD_DEFAULT).asFloat();
+				log( "Se cargo correctamente la velocidad del objeto droppable.", LOG_DEBUG );
 			} catch ( exception &e ) {
-				arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
-				log( "La velocidad indicada para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+				droppable_velocidad = DROPPABLE_VELOCIDAD_DEFAULT;
+				log( "La velocidad indicada para el objeto droppable no es un numero valido. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( ! arrojables[i].isMember("danio") ) {
-			arrojable_danio = ARROJABLE_DANIO_DEFAULT;
-			log( "No se especifico el danio del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		if ( ! droppables[i].isMember("ancho") ) {
+			droppable_ancho = DROPPABLE_ANCHO_DEFAULT;
+			log( "No se especifico el ancho logico del objeto droppable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojable_danio = arrojables[i].get("danio", ARROJABLE_DANIO_DEFAULT).asInt();
-				log( "Se cargo correctamente el danio del objeto arrojable.", LOG_DEBUG );
+				droppable_ancho = droppables[i].get("ancho", DROPPABLE_ANCHO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el ancho logico del objeto droppable.", LOG_DEBUG );
 			} catch ( exception &e ) {
-				arrojable_danio = ARROJABLE_DANIO_DEFAULT;
-				log( "El danio indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+				droppable_ancho = DROPPABLE_ANCHO_DEFAULT;
+				log( "El ancho logico indicado para el objeto droppable no es un numero valido. Se setea por defecto.", LOG_ERROR );
 			}
 		}
-		if ( ! arrojables[i].isMember("ancho") ) {
-			arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
-			log( "No se especifico el ancho logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		if ( ! droppables[i].isMember("alto") ) {
+			droppable_alto = DROPPABLE_ALTO_DEFAULT;
+			log( "No se especifico el alto logico del objeto droppable. Se setea por defecto.", LOG_WARNING );
 		} else {
 			try {
-				arrojable_ancho = arrojables[i].get("ancho", ARROJABLE_ANCHO_DEFAULT).asFloat();
-				log( "Se cargo correctamente el ancho logico del objeto arrojable.", LOG_DEBUG );
+				droppable_alto = droppables[i].get("alto", DROPPABLE_ALTO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el alto logico del objeto droppable.", LOG_DEBUG );
 			} catch ( exception &e ) {
-				arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
-				log( "El ancho logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
-			}
-		}
-		if ( ! arrojables[i].isMember("alto") ) {
-			arrojable_alto = ARROJABLE_ALTO_DEFAULT;
-			log( "No se especifico el alto logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
-		} else {
-			try {
-				arrojable_alto = arrojables[i].get("alto", ARROJABLE_ALTO_DEFAULT).asFloat();
-				log( "Se cargo correctamente el alto logico del objeto arrojable.", LOG_DEBUG );
-			} catch ( exception &e ) {
-				arrojable_alto = ARROJABLE_ALTO_DEFAULT;
-				log( "El alto logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+				droppable_alto = DROPPABLE_ALTO_DEFAULT;
+				log( "El alto logico indicado para el objeto droppable no es un numero valido. Se setea por defecto.", LOG_ERROR );
 			}
 		}
 
 		// Calculo los ratios del arrojable.
-		float ratio_x_arrojable = getRatioXArrojable(arrojables[i], arrojable_ancho);
-		float ratio_y_arrojable = getRatioYArrojable(arrojables[i], arrojable_alto);
+		float ratio_x_droppable = getRatioXDroppable(droppables[i], droppable_ancho);
+		float ratio_y_droppable = getRatioYDroppable(droppables[i], droppable_alto);
 
-		log( "Se cargara el sprite para el objeto arrojable del personaje", LOG_DEBUG );
-		Sprite* sprite_objeto_arrojable =  cargarSprite( arrojables[i], ruta_carpeta, ruta_sonidos, "objetoArrojable", SPRITESHEET_OBJETO_ARROJABLE_DEFAULT, ventana, ratio_x_arrojable, ratio_y_arrojable );
+		log( "Se cargara el sprite para el objeto droppable del personaje", LOG_DEBUG );
+		Sprite* sprite_objeto_droppable =  cargarSprite( droppables[i], ruta_carpeta, ruta_sonidos, "objetoDroppable", SPRITESHEET_OBJETO_DROPPABLE_DEFAULT, ventana, ratio_x_droppable, ratio_y_droppable );
 
-		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable, arrojable_danio);
-		objetosArrojables.push_back(arrojable);
+		ObjetoDroppable* droppable = new ObjetoDroppable(droppable_nombre, droppable_velocidad, sprite_objeto_droppable, false);
+		objetosDroppables.push_back(droppable);
 	}
-	return objetosArrojables;
+	return objetosDroppables;
 }
 
 vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, string ruta_sonidos, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
@@ -1051,6 +1091,9 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 						// Creo objetos arrojables (poderes).
 						vector<ObjetoArrojable*> arrojables = cargarArrojables(personaje_carpeta_arrojables, personaje_carpeta_sonidos, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
 
+						// Creo objetos droppables.
+						//vector<ObjetoDroppable*> droppables = cargarDroppables(personaje_carpeta_droppables, personaje_carpeta_sonidos, ventana)
+
 						// Crear personaje.
 						Personaje* personaje;
 						if (!personaje_nombre.string::compare(string("Liu Kang")))
@@ -1367,6 +1410,90 @@ vector<Escenario*> ParserJSON::cargarEscenarios(Json::Value root, Ventana* venta
 
 }
 
+Json::Value ParserJSON::obtenerRootDeArchivo(string ruta_archivo) {
+	Json::Value root;
+	Json::Reader reader;
+
+	// Abrir archivo.
+	ifstream archivo;
+	archivo.open(ruta_archivo.c_str());
+
+	// Si no se pudo abrir archivo, se devuelve NULL.
+	if ( ! archivo.is_open() ) {
+		log( "No se pudo abrir el archivo JSON. Se arroja una excepcion.", LOG_ERROR );
+		throw exception();
+	}
+	log ( "Se abrio el archivo JSON.", LOG_DEBUG );
+
+	// Si no se pudo parsear archivo, se devuelve NULL.
+	bool exito = reader.parse( archivo, root, false );
+	if ( ! exito ) {
+	    log( "No se pudo interpretar el JSON. Se arroja una excepcion. " + reader.getFormattedErrorMessages(), LOG_ERROR );
+	    throw exception();
+	} else
+		log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
+
+	// Cerrar archivo.
+	archivo.close();
+	log ( "Se cerro el archivo JSON.", LOG_DEBUG );
+
+	return root;
+}
+
+void ParserJSON::cargarTextosPelea(Mundo* mundo) {
+	TextosPelea* textosPelea = new TextosPelea();
+
+	Json::Value root = obtenerRootDeArchivo(string(RUTA_ARCHIVO_JSON_FIGHT));
+	float ratio_x_ventana = m_ventana->obtenerRatioX();
+	float ratio_y_ventana = m_ventana->obtenerRatioY();
+
+	Sprite* spriteFight = cargarSprite(root, string(RUTA_CARPETA_SPRITE_FIGHT), string(RUTA_CARPETA_SONIDO_FIGHT), "fight", "fight.png", m_ventana, ratio_x_ventana, ratio_y_ventana);
+	Sprite* spriteFinishHim = cargarSprite(root, string(RUTA_CARPETA_SPRITE_FINISHHIM), string(RUTA_CARPETA_SONIDO_FINISHHIM), "finishHim", "finishHim.png", m_ventana, ratio_x_ventana, ratio_y_ventana);
+	Sprite* spriteFatality = cargarSprite(root, string(RUTA_CARPETA_SPRITE_FATALITY), string(RUTA_CARPETA_SONIDO_FATALITY), "fatality", "fatality.png", m_ventana, ratio_x_ventana, ratio_y_ventana);
+
+	textosPelea->setTextoFight(spriteFight);
+	textosPelea->setTextoFinishHim(spriteFinishHim);
+	textosPelea->setTextoFatality(spriteFatality);
+
+	mundo->setTextosPelea(textosPelea);
+}
+
+Personaje* ParserJSON::cambiarColorPersonaje(Personaje* el_personaje) {
+	string nombre_personaje = el_personaje->getNombreDeCarga();
+	string nombre_personaje_cambiado = el_personaje->getNombre();
+	Json::Value root;
+	Json::Reader reader;
+
+	// Abrir archivo.
+	ifstream archivoConfig;
+	archivoConfig.open(m_ruta_archivo.c_str());
+
+	// Si no se pudo abrir archivo, se devuelve NULL.
+	if ( ! archivoConfig.is_open() ) {
+		log( "No se pudo abrir el archivo de configuracion JSON para cargar el personaje con el cambio de color. No se cambia el color del personaje.", LOG_ERROR );
+		return NULL;
+	}
+	log ( "Se abrio el archivo JSON de configuracion para efectuar el cambio de color del personaje.", LOG_DEBUG );
+
+	// Si no se pudo parsear archivo, se devuelve NULL.
+	bool exito = reader.parse( archivoConfig, root, false );
+	if ( ! exito ) {
+	    log( "No se pudo interpretar el JSON. No se cambia el color del personaje." + reader.getFormattedErrorMessages(), LOG_ERROR );
+	    return NULL;
+	} else
+		log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
+
+	// Cerrar archivo.
+	archivoConfig.close();
+	log ( "Se cerro el archivo JSON de configuracion.", LOG_DEBUG );
+
+	// Cargo el personaje con el cambio de color seteado en true.
+	Personaje* personaje = cargarPersonaje(nombre_personaje, root, m_ventana, true);
+	personaje->setNombre(nombre_personaje_cambiado);
+	return personaje;
+}
+
+
 
 Mundo* ParserJSON::cargarMundo() {
 
@@ -1620,88 +1747,10 @@ Mundo* ParserJSON::cargarMundo() {
 	nuevo_mundo->addPersonajes(personajes);
 	log( "Se agregaron los personajes al nuevo mundo de la partida.", LOG_DEBUG );
 
+	// Cargo los textos de la pelea.
+	//cargarTextosPelea(nuevo_mundo);
+	log("Los textos de pelea se cargaron correctamente.", LOG_DEBUG);
+
 	return nuevo_mundo;
 }
 
-Personaje* ParserJSON::cambiarColorPersonaje(Personaje* el_personaje) {
-	string nombre_personaje = el_personaje->getNombreDeCarga();
-	string nombre_personaje_cambiado = el_personaje->getNombre();
-	Json::Value root;
-	Json::Reader reader;
-
-	// Abrir archivo.
-	ifstream archivoConfig;
-	archivoConfig.open(m_ruta_archivo.c_str());
-
-	// Si no se pudo abrir archivo, se devuelve NULL.
-	if ( ! archivoConfig.is_open() ) {
-		log( "No se pudo abrir el archivo de configuracion JSON para cargar el personaje con el cambio de color. No se cambia el color del personaje.", LOG_ERROR );
-		return NULL;
-	}
-	log ( "Se abrio el archivo JSON de configuracion para efectuar el cambio de color del personaje.", LOG_DEBUG );
-
-	// Si no se pudo parsear archivo, se devuelve NULL.
-	bool exito = reader.parse( archivoConfig, root, false );
-	if ( ! exito ) {
-	    log( "No se pudo interpretar el JSON. No se cambia el color del personaje." + reader.getFormattedErrorMessages(), LOG_ERROR );
-	    return NULL;
-	} else
-		log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
-
-	// Cerrar archivo.
-	archivoConfig.close();
-	log ( "Se cerro el archivo JSON de configuracion.", LOG_DEBUG );
-
-	// Cargo el personaje con el cambio de color seteado en true.
-	Personaje* personaje = cargarPersonaje(nombre_personaje, root, m_ventana, true);
-	personaje->setNombre(nombre_personaje_cambiado);
-	return personaje;
-}
-
-Json::Value ParserJSON::obtenerRootDeArchivo(string ruta_archivo) {
-	Json::Value root;
-	Json::Reader reader;
-
-	// Abrir archivo.
-	ifstream archivo;
-	archivo.open(ruta_archivo.c_str());
-
-	// Si no se pudo abrir archivo, se devuelve NULL.
-	if ( ! archivo.is_open() ) {
-		log( "No se pudo abrir el archivo JSON. Se arroja una excepcion.", LOG_ERROR );
-		throw exception();
-	}
-	log ( "Se abrio el archivo JSON.", LOG_DEBUG );
-
-	// Si no se pudo parsear archivo, se devuelve NULL.
-	bool exito = reader.parse( archivo, root, false );
-	if ( ! exito ) {
-	    log( "No se pudo interpretar el JSON. Se arroja una excepcion. " + reader.getFormattedErrorMessages(), LOG_ERROR );
-	    throw exception();
-	} else
-		log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
-
-	// Cerrar archivo.
-	archivo.close();
-	log ( "Se cerro el archivo JSON.", LOG_DEBUG );
-
-	return root;
-}
-
-TextosPelea* ParserJSON::cargarTextosPelea() {
-	TextosPelea* textosPelea = new TextosPelea();
-
-	Json::Value root = obtenerRootDeArchivo(string(RUTA_ARCHIVO_JSON_FIGHT));
-	float ratio_x_ventana = m_ventana->obtenerRatioX();
-	float ratio_y_ventana = m_ventana->obtenerRatioY();
-
-	Sprite* spriteFight = cargarSprite(root, string(RUTA_CARPETA_SPRITE_FIGHT), string(RUTA_CARPETA_SONIDO_FIGHT), "fight", "fight.png", m_ventana, ratio_x_ventana, ratio_y_ventana);
-	Sprite* spriteFinishHim = cargarSprite(root, string(RUTA_CARPETA_SPRITE_FINISHHIM), string(RUTA_CARPETA_SONIDO_FINISHHIM), "finishHim", "finishHim.png", m_ventana, ratio_x_ventana, ratio_y_ventana);
-	Sprite* spriteFatality = cargarSprite(root, string(RUTA_CARPETA_SPRITE_FATALITY), string(RUTA_CARPETA_SONIDO_FATALITY), "fatality", "fatality.png", m_ventana, ratio_x_ventana, ratio_y_ventana);
-
-	textosPelea->setTextoFight(spriteFight);
-	textosPelea->setTextoFinishHim(spriteFinishHim);
-	textosPelea->setTextoFatality(spriteFatality);
-
-	return textosPelea;
-}
