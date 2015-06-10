@@ -82,7 +82,8 @@
 			"poderes": "data/players/subzero/poderes/",
 			"sonidos": "data/players/subzero/sound/",
 			"combos": [
-				"1335"
+				"125",
+				"12"
 			],
 			"fatalities": [
 				"11124"
