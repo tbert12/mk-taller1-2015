@@ -429,6 +429,119 @@ vector<ObjetoArrojable*> ParserJSON::cargarArrojables(string ruta_carpeta, strin
 }
 
 
+vector<ObjetoArrojable*> ParserJSON::cargarDroppables(string ruta_carpeta, string ruta_sonidos, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
+
+	Json::Value root;
+	Json::Reader reader;
+
+	// Abrir archivo.
+	ifstream archivoArrojable;
+	string ruta_archivo_json = ruta_carpeta + "poderes.json";
+	archivoArrojable.open(ruta_archivo_json.c_str());
+
+	if ( ! archivoArrojable.is_open() ) {
+		// Informar al usuario la falla y la resolucion tomada.
+		log( "No se pudo abrir el archivo del objeto arrojable JSON, se genera el objeto por defecto.", LOG_ERROR );
+		return generarArrojableDefault(ventana);
+	}
+	log ( "Se abrio el archivo JSON del objeto arrojable.", LOG_DEBUG );
+
+	bool exito = reader.parse( archivoArrojable, root, false );
+	if ( ! exito ) {
+	    // Reportar al usuario la falla y su ubicacion en el archivo JSON.
+	    log( "No se pudo interpretar el JSON, se genera el objeto arrojable por defecto." + reader.getFormattedErrorMessages(), LOG_ERROR );
+	    return generarArrojableDefault(ventana);
+	} else log( "El archivo JSON es valido y fue interpretado correctamente.", LOG_DEBUG );
+
+	// Cerrar archivo.
+	archivoArrojable.close();
+	log ( "Se cerro el archivo JSON del objeto arrojable.", LOG_DEBUG );
+
+	vector<ObjetoArrojable*> objetosArrojables;
+	if ( ! root.isMember("poderes") || ! root["poderes"].isArray() ) {
+		log( "No se encuentran especificaciones para los poderes. Se setean los objetos por defecto. ", LOG_ERROR );
+		return generarArrojableDefault(ventana);
+	}
+	Json::Value arrojables = root["poderes"];
+	for ( int i=0; i < (int)arrojables.size(); i++ ) {
+
+		string arrojable_nombre;
+		float arrojable_velocidad, arrojable_ancho, arrojable_alto;
+		int arrojable_danio;
+		if ( ! arrojables[i].isMember("nombre") ) {
+			arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
+			log( "No se especifico el nombre del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_nombre = arrojables[i].get("nombre", ARROJABLE_NOMBRE_DEFAULT).asString();
+				log( "Se cargo correctamente el nombre del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_nombre = ARROJABLE_NOMBRE_DEFAULT;
+				log( "El nombre indicado para el objeto arrojable no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("velocidad") ) {
+			arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
+			log( "No se especifico la velocidad del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_velocidad = arrojables[i].get("velocidad", ARROJABLE_VELOCIDAD_DEFAULT).asFloat();
+				log( "Se cargo correctamente la velocidad del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_velocidad = ARROJABLE_VELOCIDAD_DEFAULT;
+				log( "La velocidad indicada para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("danio") ) {
+			arrojable_danio = ARROJABLE_DANIO_DEFAULT;
+			log( "No se especifico el danio del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_danio = arrojables[i].get("danio", ARROJABLE_DANIO_DEFAULT).asInt();
+				log( "Se cargo correctamente el danio del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_danio = ARROJABLE_DANIO_DEFAULT;
+				log( "El danio indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("ancho") ) {
+			arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
+			log( "No se especifico el ancho logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_ancho = arrojables[i].get("ancho", ARROJABLE_ANCHO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el ancho logico del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_ancho = ARROJABLE_ANCHO_DEFAULT;
+				log( "El ancho logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+		if ( ! arrojables[i].isMember("alto") ) {
+			arrojable_alto = ARROJABLE_ALTO_DEFAULT;
+			log( "No se especifico el alto logico del objeto arrojable. Se setea por defecto.", LOG_WARNING );
+		} else {
+			try {
+				arrojable_alto = arrojables[i].get("alto", ARROJABLE_ALTO_DEFAULT).asFloat();
+				log( "Se cargo correctamente el alto logico del objeto arrojable.", LOG_DEBUG );
+			} catch ( exception &e ) {
+				arrojable_alto = ARROJABLE_ALTO_DEFAULT;
+				log( "El alto logico indicado para el objeto arrojable no es un numero valido. Se setea por defecto.", LOG_ERROR );
+			}
+		}
+
+		// Calculo los ratios del arrojable.
+		float ratio_x_arrojable = getRatioXArrojable(arrojables[i], arrojable_ancho);
+		float ratio_y_arrojable = getRatioYArrojable(arrojables[i], arrojable_alto);
+
+		log( "Se cargara el sprite para el objeto arrojable del personaje", LOG_DEBUG );
+		Sprite* sprite_objeto_arrojable =  cargarSprite( arrojables[i], ruta_carpeta, ruta_sonidos, "objetoArrojable", SPRITESHEET_OBJETO_ARROJABLE_DEFAULT, ventana, ratio_x_arrojable, ratio_y_arrojable );
+
+		ObjetoArrojable* arrojable = new ObjetoArrojable(arrojable_nombre, arrojable_velocidad, sprite_objeto_arrojable, arrojable_danio);
+		objetosArrojables.push_back(arrojable);
+	}
+	return objetosArrojables;
+}
+
 vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, string ruta_sonidos, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento) {
 
 	vector<Sprite*> sprites;

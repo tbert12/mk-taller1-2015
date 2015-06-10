@@ -45,6 +45,7 @@ public:
 	 vector<Combo*> cargarCombos(Json::Value root, bool fatality = false);
 	 Personaje* cambiarColorPersonaje(Personaje* personaje);
 	 Json::Value obtenerRootDeArchivo(string ruta_archivo);
+	 vector<ObjetoArrojable*> cargarDroppables(string ruta_carpeta, string ruta_sonidos, Ventana* ventana, float personaje_ancho, float personaje_alto, bool cambiar_color, float h_inicial, float h_final, float desplazamiento);
 
 	 TextosPelea* cargarTextosPelea();
 };

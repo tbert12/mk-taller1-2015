@@ -4,9 +4,9 @@
 	
 	"tiempo": 99,
 	
-	"tiempo_max_combos": 3,
+	"tiempo_max_combos": 2,
 	
-	"tolerancia_combos": 2,
+	"tolerancia_combos": 1,
 
 	"ventana": {
 		"ancho-px": 640,
@@ -59,13 +59,13 @@
 			"foto": "data/players/liukang/face.png",
 			"sprites": "data/players/liukang/sprites/",
 			"poderes": "data/players/liukang/poderes/",
+			"droppables": "data/players/subzero/droppables/",
 			"sonidos": "data/players/liukang/sound/",
 			"combos": [
 				"224",
 				"1337"
 			],
 			"fatalities": [
-				"22",
 				"22117"
 			],
 			"color-alternativo": {
@@ -82,6 +82,7 @@
 			"foto": "data/players/subzero/face.png",
 			"sprites": "data/players/subzero/sprites/",
 			"poderes": "data/players/subzero/poderes/",
+			"droppables": "data/players/subzero/droppables/",
 			"sonidos": "data/players/subzero/sound/",
 			"combos": [
 				"125",

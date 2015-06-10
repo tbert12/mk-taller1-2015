@@ -103,6 +103,8 @@ protected:
 	bool _estaAgachado;
 	bool _recibioGolpe;
 
+	int m_cant_pinas = 0;
+
 	bool _estaMuerto;
 	bool _gano;
 
