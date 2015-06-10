@@ -20,7 +20,7 @@ ObjetoDroppable::ObjetoDroppable(string un_nombre, float una_velocidad, Sprite* 
 	m_xInicial = 0;
 	m_yInicial = 0;
 	m_velocidad_x = VELOCIDAD_OBJETO_DEFAULT;
-	m_velocidad_y = VELOCIDAD_OBJETO_DEFAULT;
+	m_velocidad_y = -VELOCIDAD_OBJETO_DEFAULT*4;
 	sprite = un_sprites;
 	flip = false;
 }
@@ -46,11 +46,15 @@ void ObjetoDroppable::lanzar(float pos_x,float pos_y,bool flipeo){
 	}
 }
 
+void ObjetoDroppable::renderizar(float pos_ventana){
+	_render(pos_ventana);
+}
+
 void ObjetoDroppable::_render(float pos_ventana){
 	if (!vida) return;
 	_Update();
 	sprite->render(m_xActual - pos_ventana,m_yActual,flip);
-	_avanzarSprite();
+	//_avanzarSprite();
 }
 
 bool ObjetoDroppable::getVida(){
@@ -59,9 +63,9 @@ bool ObjetoDroppable::getVida(){
 
 void ObjetoDroppable::_avanzarSprite(){
 	sprite->Advance();
-	if(sprite->ultimoFrame()){
-		_terminar();
-	}
+	//if(sprite->ultimoFrame()){
+	//	_terminar();
+	//}
 }
 
 void ObjetoDroppable::_Update(){
@@ -73,13 +77,27 @@ void ObjetoDroppable::_Update(){
 	else{
 		m_xActual += m_velocidad_x;
 	}
-	m_yActual = m_yInicial + m_velocidad_y*tiempo + 0.5*G*tiempo*tiempo;
-	if (m_yActual > m_yPiso) m_yActual = m_yPiso;
+	float hipo = sqrt(m_velocidad_y*m_velocidad_y + m_velocidad_x*m_velocidad_x);
+	float sentita = m_velocidad_y/hipo;
+	m_yActual = m_yInicial - m_velocidad_y*sentita*tiempo + 0.5*G*tiempo*tiempo;
+	if (m_yActual > m_yPiso){
+		m_yActual = m_yPiso;
+		m_yInicial = m_yActual;
+		tiempo = 0;
+		m_velocidad_y = m_velocidad_y + 2;
+
+		if (m_velocidad_y > 0)
+			m_velocidad_y = 0;
+
+		m_velocidad_x = m_velocidad_x - 1;
+		if (m_velocidad_x < 0)
+			m_velocidad_x = 0;
+	}
 }
 
 void ObjetoDroppable::_verificarTiempo(){
 	contadorPorWhile++;
-	if (contadorPorWhile >= ciclos_por_segundo){
+	if (contadorPorWhile >= 1){
 		tiempo++;
 		contadorPorWhile = 0;
 	}

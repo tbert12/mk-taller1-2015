@@ -12,9 +12,9 @@
 #include "../view/Sprite.h"
 #define VELOCIDAD_OBJETO_DEFAULT 5
 #define G 10
-#define ciclos_por_segundo 40
+#define ciclos_por_segundo 10
 
-enum {SANGRE, CABEZA};
+enum {CABEZA,SANGRE_MUCHA,SANGRE_GOTA,SANGRE_CHICA};
 
 class ObjetoDroppable {
 public:

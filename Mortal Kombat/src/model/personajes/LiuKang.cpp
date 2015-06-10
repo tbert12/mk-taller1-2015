@@ -24,20 +24,20 @@ int LiuKang::_getaccionPropia(){
 
 bool LiuKang::_updatePropio(){
 	//Retorna true si lo que esta haciendo NO es un poder propio
-	if ( !_estaHaciendoPoder and !_estaHaciendoFatality ) return false;
+	if ( !_estaHaciendoPoder and !_estaHaciendoFatality and !_estaHaciendoFatality2) return false;
 	if ( spriteActual->ultimoFrame() ){
 		if (duracionPoder){
 			duracionPoder--;
 		} else {
 			terminarPoder2();
-			_resetDuracion();
 		}
 	} else if (_estaHaciendoFatality){
 		bool proxUltimo = spriteActual->inFrezee();
 		if (proxUltimo){
 			m_yActual = -2*getAlto();
-			m_xActual = personajeQueRecibe->getX() - personajeQueRecibe->getAncho();
-			if ( personajeQueRecibe->getFlipState() ) m_xActual = 2*personajeQueRecibe->getAncho();
+			float x_delOtro = personajeQueRecibe->getX() + personajeQueRecibe->getAncho();
+			if ( personajeQueRecibe->getFlipState() ) x_delOtro = personajeQueRecibe->getX() - personajeQueRecibe->getAncho();
+			m_xActual = x_delOtro;
 		}
 		if (m_yActual < m_yPiso){
 			float diferencial = m_yActual + 30;
@@ -48,6 +48,9 @@ bool LiuKang::_updatePropio(){
 		if (spriteActual->inLoop() and m_yActual > altura + 40 and m_yActual < altura + 100  ){
 			personajeQueRecibe->morir();
 		}
+
+	} else if (_estaHaciendoFatality2){
+		_updateFatality2();
 	}
 	spriteActual->Advance();
 	return true;
@@ -55,12 +58,13 @@ bool LiuKang::_updatePropio(){
 }
 
 void LiuKang::_resetDuracion(){
-	duracionPoder = 5;
+	duracionPoder = 2;
 }
 
 void LiuKang::terminarPoder2(){
 	spriteActual = sprites[SPRITE_INICIAL];
 	m_yActual = m_yPiso;
+	_resetDuracion();
 	m_velocidadActual = 0;
 	_estaHaciendoPoder = false;
 	_estaAtacando = false;
@@ -69,7 +73,7 @@ void LiuKang::terminarPoder2(){
 
 void LiuKang::poder2(){
 	_cambiarSprite(SPRITE_PODER_2);
-	m_yActual = m_yPiso - getAlto();
+	m_yActual = m_yPiso - getAlto() - 10;
 	float velocidad = 3 * m_velocidad;
 	if (m_fliped){
 		velocidad = - velocidad;
@@ -81,11 +85,14 @@ void LiuKang::poder2(){
 }
 
 void LiuKang::fatality1(Personaje* elqueRecibe){
+	if (_gano) return;
+	_gano = true;
 	_cambiarSprite(SPRITE_FATALITY_1);
 	spriteActual->doLoop(true);
 	spriteActual->freezeSprite();
 	personajeQueRecibe = elqueRecibe;
 	_estaHaciendoFatality = true;
+	m_velocidadActual = 0;
 
 }
 

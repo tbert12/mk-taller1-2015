@@ -158,6 +158,7 @@ protected:
 	//Fatality universal del gancho
 	bool _estaHaciendoFatality2;
 	void _updateFatality2();
+	void _recibirFatality2();
 	void _arrancarCabeza();
 	Personaje* personajeQueLaRecibe;
 

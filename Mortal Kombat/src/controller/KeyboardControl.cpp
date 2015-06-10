@@ -135,6 +135,16 @@ void KeyboardControl::KeyPressed(){
 				pelea->setFatality();
 				return;
 			}
+			if(evento->key.keysym.sym == SDLK_c){
+				personaje->babality(pelea->getContrincante(personaje));
+				pelea->setFatality();
+				return;
+			}
+			if(evento->key.keysym.sym == SDLK_v){
+				personaje->fatality2(pelea->getContrincante(personaje));
+				pelea->setFatality();
+				return;
+			}
 			int fatality_a_realizar =  comboController->checkFatalities();
 			switch (fatality_a_realizar){
 				case FATALITY1:
