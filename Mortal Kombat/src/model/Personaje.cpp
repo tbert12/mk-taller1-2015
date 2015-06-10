@@ -1090,6 +1090,7 @@ void Personaje::finishHim(){
 	}
 
 	_cambiarSprite(SPRITE_FINISH);
+	m_proximaVelocidad = 0;
 	_estaMuerto = true;
 	m_velocidadActual = 0;
 }
@@ -1101,6 +1102,7 @@ void Personaje::morir(){
 			poderes[i]->hardDestroy();
 	}
 	m_velocidadActual = 0;
+	m_proximaVelocidad = 0;
 	_estaMuerto = true;
 	spriteActual->doLoop(true);
 }
@@ -1116,6 +1118,7 @@ void Personaje::victoria() {
 			poderes[i]->hardDestroy();
 	}
 	m_velocidadActual = 0;
+	m_proximaVelocidad = 0;
 	_gano = true;
 	spriteActual->doLoop(true);
 	spriteActual->freezeSprite();
