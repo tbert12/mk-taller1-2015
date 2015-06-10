@@ -15,9 +15,9 @@ namespace std {
 class Jax : public Personaje{
 private:
 	bool _estaHaciendoPoder;
-	void _resetDuracion();
 	bool _updatePropio();
 	int _getaccionPropia();
+	void _resetPropio();
 
 	bool _estaHaciendoFatality;
 	Personaje* personajeQueRecibe;

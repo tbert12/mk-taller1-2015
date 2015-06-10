@@ -40,7 +40,6 @@ bool Jax::_updatePropio(){
 void Jax::terminarPoder2(){
 	spriteActual = sprites[SPRITE_INICIAL];
 	m_yActual = m_yPiso;
-	_resetDuracion();
 	m_velocidadActual = 0;
 	_estaHaciendoPoder = false;
 	_estaAtacando = false;
@@ -85,7 +84,6 @@ void Jax::_resetPropio(){
 	_estaHaciendoPoder = false;
 	_estaHaciendoFatality = false;
 	personajeQueRecibe = NULL;
-	_resetDuracion();
 }
 Jax::~Jax() {
 	// TODO Auto-generated destructor stub
