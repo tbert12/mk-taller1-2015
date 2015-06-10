@@ -401,6 +401,9 @@ bool JugadorCPU::hayQueAgacharse() {
 	return false;
 }
 
+bool JugadorCPU::hayQueHacerFatality() {
+	return (m_personaje_1->getAccionDeAtaque() == SPRITE_FINISH);
+}
 
 void JugadorCPU::realizarMovimiento() {
 
@@ -454,7 +457,7 @@ void JugadorCPU::realizarMovimiento() {
 	evaluarAgresividad();
 
 	// Hacer fatality siempre que se pueda.
-	if (m_personaje_1->getAccionDeAtaque() == SPRITE_FINISH) {
+	if (hayQueHacerFatality()) {
 		m_personaje_cpu->Frenar();
 		switch (m_id_personaje) {
 			case LIUKANG:

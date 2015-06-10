@@ -47,6 +47,8 @@ private:
 	bool hayQueLanzarPoder();
 	bool hayQueHacerToma();
 
+	bool hayQueHacerFatality();
+
 };
 
 #endif /* SRC_MODEL_JUGADORCPU_H_ */
