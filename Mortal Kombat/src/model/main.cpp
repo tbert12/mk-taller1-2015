@@ -44,6 +44,32 @@ Mundo* cargarDatos(){
 	return unMundo;
 }
 
+void _cambiarPersonajes(){
+
+	std::vector<Personaje*> personajes = mundo->getPersonajes();
+	Personaje* p_nuevo = NULL;
+	Personaje* p_uno = mundo->getPersonajeUno();
+	Personaje* p_dos = mundo->getPersonajeDos();
+
+	for (unsigned int i = 0; i < personajes.size();i++){
+		if (personajes[i]->getNombreDeCarga() != p_dos->getNombreDeCarga())
+			p_nuevo = personajes[i];
+	}
+
+	if (p_nuevo == NULL){
+		p_nuevo = personajes[rand() % personajes.size()];
+		while (p_dos == p_nuevo)
+			p_nuevo = personajes[rand() % personajes.size()];
+	}
+	else p_dos = p_nuevo;
+
+	if (p_dos->getNombreDeCarga() == p_uno->getNombreDeCarga()){
+		p_dos = parser->cambiarColorPersonaje(p_dos);
+	}
+
+	mundo->setPersonajesDeJuego(p_uno,p_dos);
+}
+
 int main( int argc, char* args[] )
 {
 	// Marco inicio de un nuevo run en el .log
@@ -142,13 +168,32 @@ int main( int argc, char* args[] )
 		delete sonido;
 
 		//While Juego
-		while( !mundo->Fin() and !mundo->Quit()){
+		if (modoDeJuego == MODO_JUGADOR_VS_PC){
+			//3 peleas
+			for (int i = 0; i < 3 ;i++){
+				while( !mundo->Fin() and !mundo->Quit()){
+					//si no esta en pausa
+					mundo->render();
 
-			//si no esta en pausa
-			mundo->render();
+					usleep(mundo->getSleep());
+					//usleep(50000);
+				}
+				if (mundo->Fin()){
+					if (mundo->ganoCPU()) break;
+					_cambiarPersonajes();
+					mundo->reset();
+				}
+			}
+		}
+		else{
+			while( !mundo->Fin() and !mundo->Quit()){
 
-			usleep(mundo->getSleep());
-			//usleep(50000);
+				//si no esta en pausa
+				mundo->render();
+
+				usleep(mundo->getSleep());
+				//usleep(50000);
+			}
 		}
 		if (mundo->Fin()){
 			mundo->reset();

@@ -17,7 +17,6 @@ Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map
 	Personaje_uno = NULL;
 	Personaje_dos = NULL;
 	pelea = NULL;
-	cantidad_de_peleas = 1;
 	textosPelea = NULL;
 	tiempo_round = tiempo;
 	empezar = false;
@@ -86,19 +85,8 @@ bool Mundo::Quit(){
 bool Mundo::Fin(){
 	if (!empezar)
 		return false;
-	if (ModoDeJuego == MODO_JUGADOR_VS_PC){
-
-		if (pelea->ganoCpu()) return true;
-
-		if(cantidad_de_peleas >= CANT_PELEAS_JVCPU){
-			if(pelea)
-				return pelea->peleaFinalizada();
-		}
-	}
-	else{
-		if(pelea)
-			return pelea->peleaFinalizada() || control->goToMenu();
-	}
+	if(pelea)
+		return pelea->peleaFinalizada() || control->goToMenu();
 	return false;
 }
 
@@ -146,8 +134,6 @@ void Mundo::render(){
 	}
 
 	ventana->Refresh();
-
-	_verificarCambioDePelea();
 }
 
 void Mundo::_mostrar_ganador(string nombre){
@@ -178,39 +164,23 @@ void Mundo::reset(){
 	}
 	empezar = false;
 	ModoDeJuego = MODO_JUGADOR_VS_PC;
-	cantidad_de_peleas = 1;
 
 }
 
-void Mundo::_verificarCambioDePelea(){
-	if (ModoDeJuego != MODO_JUGADOR_VS_PC or !pelea)return;
-	if (!pelea->peleaFinalizada()) return;
-	if (pelea->ganoCpu()) return;
-
-	//finalizo pelea
-	cantidad_de_peleas++;
-	delete pelea;
-	if (control){
-		delete control;
-		control = NULL;
-	}
-	empezar = false;
-	Personaje* p_nuevo = NULL;
-
-	for (unsigned int i = 0; i < personajes.size();i++){
-		if (personajes[i]->getNombreDeCarga() != Personaje_dos->getNombreDeCarga())
-			p_nuevo = personajes[i];
-	}
-
-	if (p_nuevo == NULL){
-		p_nuevo = personajes[rand() % personajes.size()];
-		while (Personaje_dos == p_nuevo)
-			p_nuevo = personajes[rand() % personajes.size()];
-		Personaje_dos = p_nuevo;
-	}
-	else Personaje_dos = p_nuevo;
+Personaje* Mundo::getPersonajeUno(){
+	if (pelea) return pelea->getPersonajeUno();
+	else return NULL;
 }
 
+Personaje* Mundo::getPersonajeDos(){
+	if (pelea) return pelea->getPersonajeDos();
+	else return NULL;
+}
+
+bool Mundo::ganoCPU(){
+	if (pelea) return pelea->ganoCpu();
+	return false;
+}
 Mundo::~Mundo() {
 
 	for (unsigned int i = 0 ; i < escenarios.size() ; i++){
