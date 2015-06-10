@@ -925,7 +925,9 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 						// Cargo las fatalities del personaje.
 						vector<Combo*> fatalities = cargarCombos(root["personajes"][k], true);
 						// Inserto las fatalities en el vector de combos.
-						combos.insert(combos.end(), fatalities.begin(), fatalities.end());
+						for (int g = 0; g < (int) fatalities.size(); g++) {
+							combos.push_back(fatalities[g]);
+						}
 
 						// Cargo los parametros para el cambio de color del personaje.
 						vector<float> colorAlternativo = cargarColorAlternativo(root["personajes"][k]);

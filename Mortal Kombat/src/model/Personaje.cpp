@@ -58,6 +58,9 @@ void Personaje::reset(){
 	for (size_t i = 0; i < sprites.size() ; i++){
 		sprites[i]->hardReset();
 	}
+	for (size_t i = 0; i < poderes.size() ; i++){
+		poderes[i]->destruir();
+	}
 	m_xActual = 0;
 	m_yActual = 0;
 	m_yPiso = 0;
@@ -1048,14 +1051,23 @@ void Personaje::fatality1(Personaje* otroPersonaje){}
 //+++++++++++++++++++++DEAD o FINISH HIM+++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Personaje::finishHim(){
+	if (_recibioGolpe or _estaSaltando > 0 or _estaAtacando) return;
 	if (_estaMuerto) return;
+	for (size_t i = 0;i < poderes.size();i++){
+		poderes[i]->hardDestroy();
+	}
+
 	_cambiarSprite(SPRITE_FINISH);
 	_estaMuerto = true;
 	m_velocidadActual = 0;
 }
 
 void Personaje::morir(){
+	if (_recibioGolpe or _estaSaltando > 0 or _estaAtacando) return;
 	_cambiarSprite(SPRITE_MUERE);
+	for (size_t i = 0;i < poderes.size();i++){
+			poderes[i]->hardDestroy();
+	}
 	m_velocidadActual = 0;
 	_estaMuerto = true;
 	spriteActual->doLoop(true);
@@ -1066,7 +1078,11 @@ void Personaje::morir(){
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void Personaje::victoria() {
+	if (_recibioGolpe or _estaSaltando > 0 or _estaAtacando) return;
 	_cambiarSprite(SPRITE_GANA);
+	for (size_t i = 0;i < poderes.size();i++){
+			poderes[i]->hardDestroy();
+	}
 	m_velocidadActual = 0;
 	_gano = true;
 	spriteActual->doLoop(true);

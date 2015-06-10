@@ -14,6 +14,7 @@
 #include <map>
 #include "../view/Sprite.h"
 #include "ObjetoArrojable.h"
+#include "ObjetoDroppable.h"
 #include "../controller/Combo.h"
 
 
@@ -113,6 +114,7 @@ protected:
 	Sprite* spriteActual;
 	std::vector<Sprite*> sprites;
 	std::vector<ObjetoArrojable*> poderes;
+	std::vector<ObjetoDroppable> mObjetos;
 
 	void _UpdatePoder();
 	virtual bool _updatePropio();

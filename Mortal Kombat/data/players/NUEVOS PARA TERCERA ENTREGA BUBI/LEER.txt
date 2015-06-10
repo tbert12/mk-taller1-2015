@@ -1,0 +1,10 @@
+esta todo junto
+
+Son sprites
+ -ftalityGancho
+ -bebe
+
+Son ObjetosDropreables
+ -Cabeza
+ -Sangre (todas)
+

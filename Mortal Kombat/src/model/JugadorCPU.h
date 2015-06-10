@@ -24,6 +24,7 @@ public:
 private:
 	Personaje* m_personaje_1;
 	Personaje* m_personaje_cpu;
+	int m_id_personaje;
 	int m_agresividad = 1;
 	int m_ciclos_delay = 0;
 
