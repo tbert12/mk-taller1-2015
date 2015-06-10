@@ -51,7 +51,7 @@ bool findRecursiveChar(string s1,char c1,int pos1, char c2, int pos2){
 bool findStringRecursive(string stringBase, string stringToFind, int maxErrors){
 
 	int errores = 0;
-	unsigned int encuentros = 1;
+	unsigned int encuentros = 0;
 	//fprintf(stderr,"%s stringBase\n", stringBase.c_str());
 	for(std::string::size_type i = 0; i < stringBase.size(); ++i) {
 		if(stringToFind[encuentros] == stringBase[i]){
