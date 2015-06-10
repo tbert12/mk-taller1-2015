@@ -114,7 +114,7 @@ protected:
 	Sprite* spriteActual;
 	std::vector<Sprite*> sprites;
 	std::vector<ObjetoArrojable*> poderes;
-	std::vector<ObjetoDroppable> mObjetos;
+	std::vector<ObjetoDroppable*> mObjetos;
 
 	void _UpdatePoder();
 	virtual bool _updatePropio();
@@ -151,66 +151,69 @@ protected:
 
 	virtual void _resetPropio();
 
+	//Fatality universal del gancho
+	bool _estaHaciendoFatality2;
+	void _updateFatality2();
+	void _arrancarCabeza();
+	Personaje* personajeQueLaRecibe;
+
+
+
 public:
 	Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, std::vector<ObjetoArrojable*> arrojables,float velocidad, bool fliped = false);
 	virtual ~Personaje();
 	/* Solo para el Menu de Opciones */
 	Personaje* copy();
 
-	std::vector<Sprite*> getSprites();
-	void setNombre(std::string);
-	Sprite* getSpriteActual();
-	void AvanzarSprite();
-	void setScroll(bool scrollear);
-	void setFlip(bool flip);
-	void setPathLogo(std::string ruta);
-	std::string getPathLogo();
-	Rect_Logico* rectanguloAtaque();
-	Rect_Logico* nextRectAtaque();
-	Rect_Logico* rectanguloDefensa();
-
-
-	ObjetoArrojable* getPoderActivo();
-
-	bool enMovimiento();
-
 	void Update(float posOtroJugador,bool forzado = false);
 	void renderizar(float x_dist_ventana,float posOtherPlayer);
 	void reset();
 
+	void AvanzarSprite();
+
+	Rect_Logico* rectanguloAtaque();
+	Rect_Logico* rectanguloDefensa();
+
+	void setNombre(std::string);
+	void setCombos( std::vector<Combo*> );
 	void setPosition(float x, float y);
 	void setPositionX(float x);
 	void setDimensionesMundo(float h, float w);
+	void setScroll(bool scrollear);
+	void setFlip(bool flip);
+	void setPathLogo(std::string ruta);
+	void setObjetos(std::vector<ObjetoDroppable*> objetos);
 
-	int getSentidoDeMovimiento();
+	std::vector<Combo*> getCombos();
+	ObjetoArrojable* getPoderActivo();
+	string getPathLogo();
+	string getNombre();
+	string getNombreDeCarga();
 	float getVelocidadDerecha();
 	float getVelocidadIzquierda();
 	float getVelocidad();
-	int getVida();
-	string getNombre();
-	string getNombreDeCarga();
 	float getAncho();
 	float getAlto();
 	float getX();
 	float getY();
 	bool getFlipState();
-
+	int getVida();
+	int getSentidoDeMovimiento();
 	int getAccionDeAtaque();
 
-	void Inicial();
 	bool estaAgachado();
 	bool estaSaltando();
 	bool estaCubriendose();
 	bool estaAtacando();
 	bool estaMuerto();
+	bool enMovimiento();
 
+	void Inicial();
 	bool recibirGolpe(int CodigoGolpe, int Danio = 0);
 	void QuitarVida(int valor);
 
-	std::vector<Combo*> getCombos();
-	void setCombos( std::vector<Combo*> );
 
-	//acciones
+	//Acciones para controlador
 	void Frenar();
 	void Saltar();
 	void Agachar();
@@ -234,9 +237,12 @@ public:
 	virtual void poder2();
 	virtual void fatality1(Personaje* otroPersonaje);
 
+	/* Fatalityes universales */
+	void fatality2(Personaje* otroPersonaje);
+	void babality(Personaje* otroPersonaje);
+
 	void finishHim();
 	void morir();
-
 	void victoria();
 };
 

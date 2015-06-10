@@ -47,6 +47,7 @@ Personaje::Personaje(std::string nombre_personaje,std::vector<Sprite*> Sprites, 
 	_estaMuerto = false;
 	_gano = false;
 
+	_estaHaciendoFatality2 = false;
 
 	m_rectanguloAtaque = new Rect_Logico;
 	m_rectanguloDefensa = new Rect_Logico;
@@ -129,16 +130,6 @@ void Personaje::lanzarObjeto(){
 
 }
 
-std::vector<Sprite*> Personaje::getSprites(){
-	printf("Si alguna vez ven esto diganle a Tomi\n");
-	return sprites;
-}
-
-Sprite* Personaje::getSpriteActual(){
-	printf("Si alguna vez ven esto diganle a Tomi\n");
-	return spriteActual;
-}
-
 void Personaje::setDimensionesMundo(float h,float w){
 	m_AltoMundo = h;
 	m_AnchoMundo = w;
@@ -146,6 +137,10 @@ void Personaje::setDimensionesMundo(float h,float w){
 
 int Personaje::getVida(){
 	return vida;
+}
+
+void Personaje::setObjetos(std::vector<ObjetoDroppable*> objetosRecibidos){
+	mObjetos = objetosRecibidos;
 }
 
 void Personaje::setPosition(float x, float y){
@@ -474,7 +469,9 @@ Rect_Logico* Personaje::rectanguloDefensa(){
 //-------------------------------------------------------------------------------------------------------------------------
 //Manejo de Sprites
 
-bool Personaje::_updatePropio(){return false;}
+bool Personaje::_updatePropio(){
+	return _estaHaciendoFatality2;
+}
 
 void Personaje::AvanzarSprite(){
 	if ( _updatePropio() ) return;
@@ -1042,9 +1039,29 @@ void Personaje::poder1(){
 }
 
 //+++++++++++++++++++++++++PODER2 y FATALITY++++++++++++++++++++++++
-/* Cada personaje tiene el suyo */
+/* Cada personaje tiene el suyo sumado babality y gancho arranca cabeza */
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Personaje::poder2(){}
 void Personaje::fatality1(Personaje* otroPersonaje){}
+
+void Personaje::_updateFatality2(){
+	//Caminar hasta donde esta el otro Personaje
+	//Reproducir Gancho hacer que el otro Personaje arranque la cabeza
+}
+
+void Personaje::fatality2(Personaje* otroPersonaje){
+	//SetearPersonajeQueLaRecibe
+	_estaHaciendoFatality2 = true;
+
+}
+
+//es fatality3 (Combo3)
+void Personaje::babality(Personaje* otroPersonaje){
+	if (otroPersonaje)
+		otroPersonaje->babality(NULL);
+	//_cambiarSprite(SPRITE_BEBE);
+	spriteActual->freezeSprite();
+}
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
