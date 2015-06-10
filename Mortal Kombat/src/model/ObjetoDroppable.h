@@ -10,9 +10,12 @@
 
 #include <string>
 #include "../view/Sprite.h"
-#define VELOCIDAD_OBJETO_DEFAULT 5
-#define G 10
+#define VELOCIDAD_OBJETO_DEFAULT_X 5
+#define VELOCIDAD_OBJETO_DEFAULT_Y 12
+
+#define GRAVEDAD 10
 #define ciclos_por_segundo 10
+
 
 enum {CABEZA,SANGRE_MUCHA,SANGRE_GOTA,SANGRE_CHICA};
 

@@ -39,6 +39,7 @@ private:
 	Personaje* m_personajeUno;
 	Personaje* m_personajeDos;
 	Personaje* ganador;
+	Personaje* perdedor;
 	int ModoDeJuego;
 	int tiempoRound;
 	int NumeroRound;
@@ -71,6 +72,7 @@ private:
 	void _avanzarRound();
 	void _resetRound();
 	void _mostarGanadorRound();
+	void _mostrarFinishHim();
 	void _mostrarGanadorPelea();
 	void _terminarRound();
 	void _renderTextos();
