@@ -1418,13 +1418,15 @@
 	},
 	"poder2":{
 		"nombre":"poder2.png",
+		"sonido": "comboHacha.wav",
 		"frames":[
 			{
 				"x":256,
 				"y":126,
 				"Alto":122
 ,
-				"Ancho":66
+				"Ancho":66,
+				"playSound": true
 			},
 			{
 				"x":256,
