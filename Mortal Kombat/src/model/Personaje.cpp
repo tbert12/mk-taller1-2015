@@ -551,7 +551,8 @@ void Personaje::AvanzarSprite(){
 			}
 
 		} else {
-			if (m_proximaVelocidad) m_velocidadActual = m_proximaVelocidad;
+			//No importa porque se la setie yo
+			m_velocidadActual = m_proximaVelocidad;
 			if (!m_velocidadActual){
 				if (_estaCubriendose){
 					_cubrirseParado();
@@ -1048,6 +1049,7 @@ bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
 		m_velocidadActual = -velocidadDeRetroceso;
 		if (m_fliped)
 			m_velocidadActual = velocidadDeRetroceso;
+		m_proximaVelocidad = 0;
 	}
 	if (_estaAgachado) sangrar = true;
 
