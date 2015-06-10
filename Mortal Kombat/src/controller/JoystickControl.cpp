@@ -76,7 +76,6 @@ void JoystickControl::_Init(int id){
 }
 
 void JoystickControl::JoyPressed(){
-
 	if(evento->type == SDL_JOYAXISMOTION){
 		//X axis motion
 		if( evento->jaxis.axis == 0 ){
@@ -124,6 +123,43 @@ void JoystickControl::JoyPressed(){
 			}
 		}
 	}
+	/*
+	else if (evento->type == SDL_JOYHATMOTION){
+
+		switch (evento->jhat.value){
+			case SDL_HAT_UP :
+				personaje->Saltar();
+				if (comboController)
+					comboController->sePresiono(ARRIBA);
+				break;
+			case SDL_HAT_DOWN:
+				personaje->Agachar();
+				if (comboController)
+					comboController->sePresiono(ABAJO);
+				break;
+			case SDL_HAT_LEFT:
+				personaje->CaminarIzquierda();
+				if (comboController){
+					int accion;
+					if (!personaje->getFlipState())
+						accion = IZQUIERDA;
+					else accion = DERECHA;
+					comboController->sePresiono(accion);
+				}
+				break;
+			case SDL_HAT_RIGHT:
+				personaje->CaminarDerecha();
+				if (comboController){
+					int accion;
+					if (!personaje->getFlipState())
+						accion = DERECHA;
+					else accion = IZQUIERDA;
+					comboController->sePresiono(accion);
+				}
+				break;
+		}
+	}
+	*/
 	//Boton
 	else if (evento->type == SDL_JOYBUTTONDOWN){
 		int boton = evento->jbutton.button;

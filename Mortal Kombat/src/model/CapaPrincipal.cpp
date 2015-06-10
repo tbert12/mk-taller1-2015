@@ -64,7 +64,7 @@ float CapaPrincipal::getVelocidadScroll(){
 	else{
 		velocidad = m_PersonajeDos->getVelocidad();
 	}
-	return velocidad > 0 ? velocidad : velocidad * -1;
+	return velocidad > 0 ? velocidad : velocidad * -1.0f;
 }
 
 void CapaPrincipal::Update(int scroll,float velocidad){
@@ -236,8 +236,8 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 			rectAtaqueAnterior1 = new Rect_Logico();
 			rectAtaqueAnterior1->h= rectDefensa1->h;
 			rectAtaqueAnterior1->y= rectDefensa1->y;
-			rectAtaqueAnterior1->w= 0;
-			rectAtaqueAnterior1->x= -std::numeric_limits<float>::infinity();
+			rectAtaqueAnterior1->w= rectDefensa1->w;
+			rectAtaqueAnterior1->x= rectDefensa1->x;
 		}
 
 		//fprintf(stderr,"rectAtaqueX  %i, x+w %i\n",rectAtaqueAnterior1->x, rectAtaqueAnterior1->x+rectAtaqueAnterior1->w);
@@ -264,8 +264,8 @@ int CapaPrincipal::_CheckearColisiones(Personaje* personaje, Personaje* personaj
 			rectAtaqueAnterior2 = new Rect_Logico();
 			rectAtaqueAnterior2->h= rectDefensa2->h;
 			rectAtaqueAnterior2->y= rectDefensa2->y;
-			rectAtaqueAnterior2->w= 0;
-			rectAtaqueAnterior2->x= std::numeric_limits<float>::infinity();
+			rectAtaqueAnterior2->w= rectDefensa2->w;
+			rectAtaqueAnterior2->x= rectDefensa2->x;
 		}
 
 		bool antesColisionaX = floatIsBetween(rectDefensa1->x + rectDefensa1->w, rectAtaqueAnterior2->x, rectAtaqueAnterior2->w);
