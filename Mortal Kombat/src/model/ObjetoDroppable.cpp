@@ -69,8 +69,7 @@ bool ObjetoDroppable::getVida(){
 
 void ObjetoDroppable::_avanzarSprite(){
 	sprite->Advance();
-	if(sprite->ultimoFrame()){
-		printf("terminar\n");
+	if(sprite->ultimoFrame() and !mRebotar){
 		_terminar();
 	}
 }
@@ -91,8 +90,6 @@ void ObjetoDroppable::_Update(){
 		m_yActual = m_yPiso;
 		m_yInicial = m_yActual;
 		//m_velocidad_y = m_velocidad_y + 2;
-		_terminar();
-		return;
 		if (mRebotar){
 			if (m_velocidad_y > 0)
 				m_velocidad_y = 0;
@@ -101,8 +98,7 @@ void ObjetoDroppable::_Update(){
 			if (m_velocidad_x < 0) m_velocidad_x = 0;
 			tiempo = 0;
 		} else {
-				m_velocidad_x = 0;
-				m_velocidad_y = 0;
+			_terminar();
 		}
 	}
 }
