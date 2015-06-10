@@ -1638,6 +1638,63 @@
                 "pong": true
             }
 		]
+	},
+	"bebe":{
+		"nombre":"bebe.png",
+		"frames":[
+			{
+				"x":0,
+				"y":0,
+				"Alto":44
+,
+				"Ancho":27
+			}
+		]
+	},
+	"fatalityGancho":{
+		"nombre":"fatalityGancho.png",
+		"frames":[
+			{
+				"x":0,
+				"y":82,
+				"Alto":117,
+				"Ancho":75
+			},
+			{
+				"x":130,
+				"y":0,
+				"Alto":103,
+				"Ancho":96
+			},
+			{
+				"x":76,
+				"y":104,
+				"Alto":127
+,
+				"Ancho":54
+			},
+			{
+				"x":131,
+				"y":104,
+				"Alto":126
+,
+				"Ancho":48
+			},
+			{
+				"x":0,
+				"y":30,
+				"Alto":51
+,
+				"Ancho":121
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":29
+,
+				"Ancho":129
+			}
+		]
 	}
 }
 

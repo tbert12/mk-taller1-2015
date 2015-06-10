@@ -37,6 +37,7 @@ const int PERSONAJES_Z_INDEX_DEFAULT = 3;
 const char* const PERSONAJE_FOTO_DEFAULT = "data/players/default/face.png";
 const char* const PERSONAJE_CARPETA_SPRITES_DEFAULT = "data/players/default/sprites/";
 const char* const PERSONAJE_CARPETA_ARROJABLES_DEFAULT = "data/players/default/poderes/";
+const char* const PERSONAJE_CARPETA_DROPPABLES_DEFAULT = "data/players/default/droppables/";
 const char* const PERSONAJE_CARPETA_SONIDOS_DEFAULT = "data/players/default/sound/";
 const char* const PERSONAJE_NOMBRE_DEFAULT = "Jugador";
 const bool PERSONAJE_FLIPPED_DEFAULT = false;

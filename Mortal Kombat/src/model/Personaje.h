@@ -53,6 +53,8 @@ const int SPRITE_PODER_2 =				30;
 const int SPRITE_FINISH =				31;
 const int SPRITE_FATALITY_1 =			32;
 const int SPRITE_ES_TOMADO =			33;
+const int SPRITE_BEBE =					34;
+const int SPRITE_FATALITY_GANCHO =		35;
 
 const int GOLPE_DE_PODER = 				-1;
 

@@ -943,7 +943,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 
 	Personaje* personaje;
 	float personaje_ancho, personaje_alto, personaje_velocidad;
-	string personaje_carpeta_sprites, personaje_carpeta_arrojables, personaje_carpeta_sonidos, personaje_nombre, personaje_foto;
+	string personaje_carpeta_sprites, personaje_carpeta_arrojables, personaje_carpeta_droppables, personaje_carpeta_sonidos, personaje_nombre, personaje_foto;
 	if ( ! root.isMember("personajes") || ! root["personajes"].isArray() ) {
 		personaje = generarPersonajeDefault(ventana);
 		log( "No se especificaron parametros para la creacion de los personajes en un vector. Se generan el personaje por defecto.", LOG_ERROR );
@@ -1055,6 +1055,23 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 							}
 						}
 
+						if ( ! root["personajes"][k].isMember("droppables") ) {
+							personaje_carpeta_droppables = PERSONAJE_CARPETA_DROPPABLES_DEFAULT;
+							log( "No se especifico la carpeta contenedora de los objetos droppables del personaje. Se utiliza carpeta por defecto.", LOG_ERROR );
+						} else {
+							try {
+								personaje_carpeta_droppables = root["personajes"][k].get( "droppables", PERSONAJE_CARPETA_DROPPABLES_DEFAULT ).asString();
+								struct stat sb;
+								if ( stat(personaje_carpeta_droppables.c_str(), &sb) != 0 ) {
+									log( "La ruta a la carpeta de droppables del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
+									personaje_carpeta_droppables = PERSONAJE_CARPETA_DROPPABLES_DEFAULT;
+								} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los droppables del personaje.", LOG_DEBUG );
+							} catch ( exception &e ) {
+								personaje_carpeta_droppables = PERSONAJE_CARPETA_DROPPABLES_DEFAULT;
+								log( "La ruta a la carpeta contenedora de los droppables del personaje indicada no es una cadena de texto valida. Se setea por defecto.", LOG_ERROR );
+							}
+						}
+
 						if ( ! root["personajes"][k].isMember("sonidos") ) {
 							personaje_carpeta_sonidos = PERSONAJE_CARPETA_SONIDOS_DEFAULT;
 							log( "No se especifico la carpeta contenedora de los sonidos del personaje. Se utiliza carpeta por defecto.", LOG_ERROR );
@@ -1092,7 +1109,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 						vector<ObjetoArrojable*> arrojables = cargarArrojables(personaje_carpeta_arrojables, personaje_carpeta_sonidos, ventana, personaje_ancho, personaje_alto, cambiar_color, colorAlternativo[0], colorAlternativo[1], colorAlternativo[2]);
 
 						// Creo objetos droppables.
-						//vector<ObjetoDroppable*> droppables = cargarDroppables(personaje_carpeta_droppables, personaje_carpeta_sonidos, ventana)
+						vector<ObjetoDroppable*> droppables = cargarDroppables(personaje_carpeta_droppables, personaje_carpeta_sonidos, ventana);
 
 						// Crear personaje.
 						Personaje* personaje;
