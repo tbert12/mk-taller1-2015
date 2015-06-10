@@ -6,7 +6,7 @@
 	
 	"tiempo_max_combos": 2,
 	
-	"tolerancia_combos": 1,
+	"tolerancia_combos": 2,
 
 	"ventana": {
 		"ancho-px": 640,
