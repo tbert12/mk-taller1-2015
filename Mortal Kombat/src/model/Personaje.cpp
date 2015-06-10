@@ -793,23 +793,38 @@ void Personaje::pinaAlta() {
 }
 
 void Personaje::_pina(int sprite, int spritecombo){
-	if (_gano or _estaMuerto) return;
-	if (_estaCubriendose or _recibioGolpe) return;
+	if (_gano or _estaMuerto) {
+		m_cant_pinas = 0;
+		return;
+	}
+	if (_estaCubriendose or _recibioGolpe) {
+		m_cant_pinas = 0;
+		return;
+	}
 	int accionActual = getAccionDeAtaque();
-	if (_estaAtacando and (accionActual != sprite)) return;
+	if (_estaAtacando and (accionActual != sprite)) {
+		m_cant_pinas = 0;
+		return;
+	}
 	if ( _estaAgachado ) {
-		if (sprite == SPRITE_PINA_ALTA) _gancho();
-		else _pinaAgachado();
+		if (sprite == SPRITE_PINA_ALTA)
+			_gancho();
+		else
+			_pinaAgachado();
+		m_cant_pinas = 0;
 		return;
 	}
 	if ( _estaSaltando > 0 ) {
 		_pinaSaltando();
+		m_cant_pinas = 0;
 		return;
 	}
-	if (accionActual == sprite or accionActual == spritecombo){
+	if (accionActual == sprite && m_cant_pinas > 2){
 		_cambiarSprite(spritecombo);
+		m_cant_pinas = 0;
 	} else {
 		_cambiarSprite(sprite);
+		m_cant_pinas++;
 	}
 	_estaAtacando = true;
 
