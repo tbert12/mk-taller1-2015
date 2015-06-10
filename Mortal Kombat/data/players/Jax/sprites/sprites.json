@@ -1,5 +1,100 @@
 {
 
+	"fatality1":{
+		"nombre":"fatality1.png",
+		"sonido": "fatality.wav",
+		"frames":[
+			{
+				"x":0,
+				"y":144,
+				"Alto":127
+,
+				"Ancho":55,
+				"freeze":5
+			},
+			{
+				"x":181,
+				"y":0,
+				"Alto":132
+,
+				"Ancho":58
+			},
+			{
+				"x":240,
+				"y":0,
+				"Alto":132
+,
+				"Ancho":58
+			},
+			{
+				"x":299,
+				"y":0,
+				"Alto":132
+,
+				"Ancho":56
+			},
+			{
+				"x":356,
+				"y":0,
+				"Alto":132
+,
+				"Ancho":56
+			},
+			{
+				"x":121,
+				"y":0,
+				"Alto":132
+,
+				"Ancho":59
+			},
+			{
+				"x":108,
+				"y":142,
+				"Alto":112
+,
+				"Ancho":47
+			},
+			{
+				"x":56,
+				"y":144,
+				"Alto":112
+,
+				"Ancho":51
+			},
+			{
+				"x":413,
+				"y":0,
+				"Alto":128
+,
+				"Ancho":56
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":143
+,
+				"Ancho":60
+			},
+			{
+				"x":61,
+				"y":0,
+				"Alto":141
+,
+				"Ancho":59
+			},
+			{
+				"x":413,
+				"y":129,
+				"Alto":141
+,
+				"Ancho":52,
+				"loop":true
+			}
+		]
+	},
+
+
+
 	"parado": {
 		"nombre": "parado.png",
 		"frames": [
@@ -306,7 +401,7 @@
 			}
 		]
 	},
-	"cubririseAgachado":{
+	"cubrirseAgachado":{
 		"nombre":"bloqueo agachado.png",
 		"frames":[
 			{
