@@ -1,5 +1,5 @@
 {
-	"agacharse":{
+	"agachar":{
 		"nombre":"agacharse.png",
 		"frames":[
 			{
@@ -18,12 +18,13 @@
 				"x":168,
 				"y":0,
 				"Alto":129,
-				"Ancho":83
+				"Ancho":83,
+				"loop": true
 			}
 		]
 	},
-	"ataque especial":{
-		"nombre":"ataque especial.png",
+	"poder2":{
+		"nombre":"poder2.png",
 		"frames":[
 			{
 				"x":314,
@@ -60,66 +61,6 @@
 				"y":0,
 				"Alto":140,
 				"Ancho":79
-			},
-			{
-				"x":184,
-				"y":177,
-				"Alto":20,
-				"Ancho":33
-			},
-			{
-				"x":206,
-				"y":336,
-				"Alto":61,
-				"Ancho":62
-			},
-			{
-				"x":131,
-				"y":203,
-				"Alto":64,
-				"Ancho":93
-			},
-			{
-				"x":0,
-				"y":203,
-				"Alto":28,
-				"Ancho":130
-			},
-			{
-				"x":0,
-				"y":177,
-				"Alto":25,
-				"Ancho":183
-			},
-			{
-				"x":0,
-				"y":144,
-				"Alto":32,
-				"Ancho":184
-			},
-			{
-				"x":0,
-				"y":108,
-				"Alto":35,
-				"Ancho":184
-			},
-			{
-				"x":0,
-				"y":71,
-				"Alto":36,
-				"Ancho":185
-			},
-			{
-				"x":0,
-				"y":35,
-				"Alto":35,
-				"Ancho":189
-			},
-			{
-				"x":0,
-				"y":0,
-				"Alto":34,
-				"Ancho":194
 			}
 		]
 	},
@@ -160,7 +101,9 @@
 				"x":162,
 				"y":120,
 				"Alto":119,
-				"Ancho":150
+				"Ancho":150,
+				"pong": true,
+				"freeze": 10
 			}
 		]
 	},
@@ -183,7 +126,8 @@
 				"x":0,
 				"y":109,
 				"Alto":108,
-				"Ancho":87
+				"Ancho":87,
+				"loop": true
 			}
 		]
 	},
@@ -206,7 +150,8 @@
 				"x":0,
 				"y":0,
 				"Alto":154,
-				"Ancho":88
+				"Ancho":88,
+				"loop": true
 			}
 		]
 	},
@@ -241,7 +186,8 @@
 				"x":147,
 				"y":117,
 				"Alto":77,
-				"Ancho":118
+				"Ancho":118,
+				"freeze": 10
 			},
 			{
 				"x":147,
@@ -342,7 +288,8 @@
 				"x":0,
 				"y":0,
 				"Alto":33,
-				"Ancho":144
+				"Ancho":144,
+				"loop": true
 			}
 		]
 	},
@@ -478,7 +425,8 @@
 				"x":0,
 				"y":0,
 				"Alto":148,
-				"Ancho":124
+				"Ancho":124,
+				"freeze": 5
 			}
 		]
 	},
@@ -495,7 +443,8 @@
 				"x":174,
 				"y":90,
 				"Alto":133,
-				"Ancho":46
+				"Ancho":46,
+				"freeze": 3
 			},
 			{
 				"x":0,
@@ -513,7 +462,8 @@
 				"x":92,
 				"y":90,
 				"Alto":109,
-				"Ancho":81
+				"Ancho":81,
+				"loop": true
 			},
 			{
 				"x":124,
@@ -554,7 +504,9 @@
 				"x":353,
 				"y":0,
 				"Alto":178,
-				"Ancho":87
+				"Ancho":87,
+				"freeze": 5,
+				"pong": true
 			}
 		]
 	},
@@ -672,11 +624,12 @@
 				"x":163,
 				"y":0,
 				"Alto":130,
-				"Ancho":155
+				"Ancho":155,
+				"pong": true
 			}
 		]
 	},
-	"patada agachado":{
+	"agachadoPatadaAlta":{
 		"nombre":"patada agachado.png",
 		"frames":[
 			{
@@ -725,11 +678,66 @@
 				"x":126,
 				"y":0,
 				"Alto":101,
-				"Ancho":116
+				"Ancho":116,
+				"pong": true
 			}
 		]
 	},
-	"patada giratoria":{
+	"agachadoPatadaBaja":{
+		"nombre":"patada agachado.png",
+		"frames":[
+			{
+				"x":344,
+				"y":0,
+				"Alto":84,
+				"Ancho":92
+			},
+			{
+				"x":308,
+				"y":87,
+				"Alto":93,
+				"Ancho":84
+			},
+			{
+				"x":243,
+				"y":0,
+				"Alto":86,
+				"Ancho":100
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":76,
+				"Ancho":125
+			},
+			{
+				"x":108,
+				"y":102,
+				"Alto":89,
+				"Ancho":101
+			},
+			{
+				"x":210,
+				"y":102,
+				"Alto":101,
+				"Ancho":97
+			},
+			{
+				"x":0,
+				"y":77,
+				"Alto":100,
+				"Ancho":107
+			},
+			{
+				"x":126,
+				"y":0,
+				"Alto":101,
+				"Ancho":116,
+				"pong": true
+			}
+		]
+	},
+	"patadaConGiro":{
 		"nombre":"patada giratoria.png",
 		"frames":[
 			{
@@ -776,7 +784,7 @@
 			}
 		]
 	},
-	"patada salto":{
+	"patadaEnSalto":{
 		"nombre":"patada salto.png",
 		"frames":[
 			{
@@ -795,11 +803,12 @@
 				"x":0,
 				"y":0,
 				"Alto":136,
-				"Ancho":111
+				"Ancho":111,
+				"loop": true
 			}
 		]
 	},
-	"piña agachado":{
+	"pinaAgachado":{
 		"nombre":"piña agachado.png",
 		"frames":[
 			{
@@ -818,11 +827,12 @@
 				"x":0,
 				"y":100,
 				"Alto":99,
-				"Ancho":119
+				"Ancho":119,
+				"pong": true
 			}
 		]
 	},
-	"piña alta":{
+	"pinaAlta":{
 		"nombre":"piña alta.png",
 		"frames":[
 			{
@@ -841,35 +851,12 @@
 				"x":0,
 				"y":0,
 				"Alto":142,
-				"Ancho":116
-			},
-			{
-				"x":406,
-				"y":0,
-				"Alto":149,
-				"Ancho":87
-			},
-			{
-				"x":317,
-				"y":0,
-				"Alto":147,
-				"Ancho":88
-			},
-			{
-				"x":117,
-				"y":0,
-				"Alto":148,
-				"Ancho":108
-			},
-			{
-				"x":226,
-				"y":0,
-				"Alto":146,
-				"Ancho":90
+				"Ancho":116,
+				"pong": true
 			}
 		]
 	},
-	"piña parado":{
+	"pinaBaja":{
 		"nombre":"piña parado.png",
 		"frames":[
 			{
@@ -879,44 +866,21 @@
 				"Ancho":83
 			},
 			{
-				"x":325,
-				"y":0,
-				"Alto":138,
-				"Ancho":89
-			},
-			{
-				"x":0,
-				"y":0,
-				"Alto":139,
-				"Ancho":117
-			},
-			{
-				"x":415,
-				"y":0,
-				"Alto":140,
-				"Ancho":86
-			},
-			{
 				"x":0,
 				"y":140,
 				"Alto":139,
 				"Ancho":85
 			},
 			{
-				"x":235,
+				"x":0,
 				"y":0,
-				"Alto":142,
-				"Ancho":89
-			},
-			{
-				"x":118,
-				"y":0,
-				"Alto":141,
-				"Ancho":116
+				"Alto":139,
+				"Ancho":117,
+				"pong": true
 			}
 		]
 	},
-	"piña saltando":{
+	"pinaEnSalto":{
 		"nombre":"piña saltando.png",
 		"frames":[
 			{
@@ -935,94 +899,12 @@
 				"x":0,
 				"y":0,
 				"Alto":116,
-				"Ancho":155
+				"Ancho":155,
+				"loop": true
 			}
 		]
 	},
-	"poder":{
-		"nombre":"poder.png",
-		"frames":[
-			{
-				"x":73,
-				"y":138,
-				"Alto":69,
-				"Ancho":45
-			},
-			{
-				"x":0,
-				"y":191,
-				"Alto":31,
-				"Ancho":68
-			},
-			{
-				"x":0,
-				"y":16,
-				"Alto":15,
-				"Ancho":124
-			},
-			{
-				"x":0,
-				"y":0,
-				"Alto":15,
-				"Ancho":163
-			},
-			{
-				"x":0,
-				"y":32,
-				"Alto":15,
-				"Ancho":88
-			},
-			{
-				"x":0,
-				"y":64,
-				"Alto":15,
-				"Ancho":84
-			},
-			{
-				"x":0,
-				"y":48,
-				"Alto":15,
-				"Ancho":88
-			},
-			{
-				"x":240,
-				"y":98,
-				"Alto":91,
-				"Ancho":64
-			},
-			{
-				"x":240,
-				"y":0,
-				"Alto":97,
-				"Ancho":65
-			},
-			{
-				"x":162,
-				"y":117,
-				"Alto":101,
-				"Ancho":71
-			},
-			{
-				"x":89,
-				"y":32,
-				"Alto":105,
-				"Ancho":72
-			},
-			{
-				"x":0,
-				"y":80,
-				"Alto":110,
-				"Ancho":72
-			},
-			{
-				"x":164,
-				"y":0,
-				"Alto":116,
-				"Ancho":75
-			}
-		]
-	},
-	"recibir golpe agachado":{
+	"recibeGolpeAgachado":{
 		"nombre":"recibir golpe agachado.png",
 		"frames":[
 			{
@@ -1041,11 +923,12 @@
 				"x":83,
 				"y":0,
 				"Alto":113,
-				"Ancho":79
+				"Ancho":79,
+				"pong": true
 			}
 		]
 	},
-	"recibir golpe fuerte":{
+	"recibeGolpeFuerte":{
 		"nombre":"recibir golpe fuerte.png",
 		"frames":[
 			{
@@ -1092,7 +975,7 @@
 			}
 		]
 	},
-	"recibir golpe parado":{
+	"recibeGolpeAlto":{
 		"nombre":"recibir golpe parado.png",
 		"frames":[
 			{
@@ -1111,7 +994,32 @@
 				"x":88,
 				"y":0,
 				"Alto":147,
+				"Ancho":87,
+				"pong": true
+			}
+		]
+	},
+	"recibeGolpeBajo":{
+		"nombre":"recibir golpe parado.png",
+		"frames":[
+			{
+				"x":176,
+				"y":0,
+				"Alto":140,
+				"Ancho":73
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":147,
 				"Ancho":87
+			},
+			{
+				"x":88,
+				"y":0,
+				"Alto":147,
+				"Ancho":87,
+				"pong": true
 			}
 		]
 	},
@@ -1128,7 +1036,8 @@
 				"x":0,
 				"y":0,
 				"Alto":121,
-				"Ancho":93
+				"Ancho":93,
+				"loop": true
 			},
 			{
 				"x":0,
@@ -1138,7 +1047,7 @@
 			}
 		]
 	},
-	"saltar en diagonal":{
+	"saltardiagonal":{
 		"nombre":"saltar en diagonal.png",
 		"frames":[
 			{
@@ -1197,7 +1106,7 @@
 			}
 		]
 	},
-	"tira poder":{
+	"poder1":{
 		"nombre":"tira poder.png",
 		"frames":[
 			{
@@ -1216,7 +1125,8 @@
 				"x":319,
 				"y":0,
 				"Alto":138,
-				"Ancho":67
+				"Ancho":67,
+				"freeze": 5
 			},
 			{
 				"x":246,
@@ -1228,7 +1138,8 @@
 				"x":448,
 				"y":0,
 				"Alto":139,
-				"Ancho":46
+				"Ancho":46,
+				"freeze": 5
 			},
 			{
 				"x":91,
@@ -1240,11 +1151,12 @@
 				"x":0,
 				"y":0,
 				"Alto":143,
-				"Ancho":90
+				"Ancho":90,
+				"pong": true
 			}
 		]
 	},
-	"tirar al enemigo":{
+	"toma1":{
 		"nombre":"tirar al enemigo.png",
 		"frames":[
 			{
@@ -1287,11 +1199,13 @@
 				"x":102,
 				"y":142,
 				"Alto":94,
-				"Ancho":94
+				"Ancho":94,
+				"pong": true,
+				"freeze": 5
 			}
 		]
 	},
-	"victoria":{
+	"gana":{
 		"nombre":"victoria.png",
 		"frames":[
 			{
@@ -1352,30 +1266,102 @@
 				"x":378,
 				"y":168,
 				"Alto":167,
-				"Ancho":125
+				"Ancho":125,
+				"loop": true
 			}
 		]
 	},
-	"patada salto diagonal":{
-		"nombre":"patada salto diagonal.png",
+	"comboPinaAlta":{
+		"nombre":"piña alta.png",
 		"frames":[
 			{
 				"x":0,
-				"y":101,
-				"Alto":89,
-				"Ancho":84
+				"y":143,
+				"Alto":148,
+				"Ancho":80
 			},
 			{
-				"x":137,
-				"y":0,
-				"Alto":96,
-				"Ancho":109
+				"x":81,
+				"y":149,
+				"Alto":143,
+				"Ancho":79
 			},
 			{
 				"x":0,
 				"y":0,
-				"Alto":100,
-				"Ancho":136
+				"Alto":142,
+				"Ancho":116
+			},
+			{
+				"x":406,
+				"y":0,
+				"Alto":149,
+				"Ancho":87
+			},
+			{
+				"x":317,
+				"y":0,
+				"Alto":147,
+				"Ancho":88
+			},
+			{
+				"x":117,
+				"y":0,
+				"Alto":148,
+				"Ancho":108
+			},
+			{
+				"x":226,
+				"y":0,
+				"Alto":146,
+				"Ancho":90
+			}
+		]
+	},
+	"comboPinaBaja":{
+		"nombre":"piña parado.png",
+		"frames":[
+			{
+				"x":86,
+				"y":142,
+				"Alto":138,
+				"Ancho":83
+			},
+			{
+				"x":325,
+				"y":0,
+				"Alto":138,
+				"Ancho":89
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":139,
+				"Ancho":117
+			},
+			{
+				"x":415,
+				"y":0,
+				"Alto":140,
+				"Ancho":86
+			},
+			{
+				"x":0,
+				"y":140,
+				"Alto":139,
+				"Ancho":85
+			},
+			{
+				"x":235,
+				"y":0,
+				"Alto":142,
+				"Ancho":89
+			},
+			{
+				"x":118,
+				"y":0,
+				"Alto":141,
+				"Ancho":116
 			}
 		]
 	}
