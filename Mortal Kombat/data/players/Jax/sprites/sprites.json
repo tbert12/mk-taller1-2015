@@ -359,54 +359,62 @@
 				"x":314,
 				"y":0,
 				"Alto":140,
-				"Ancho":79
+				"Ancho":79,
+				"freeze":5,
+				"pong":true
 			}
 		]
 	},
 	"poder1":{
-		"nombre":"poder1.png",
-		"sonido": "gancho.wav",
+		"nombre":"tira poder.png",
 		"frames":[
 			{
-				"x":404,
+				"x":169,
 				"y":0,
-				"Alto":129,
-				"Ancho":64,
-				"playSound": true
+				"Alto":146,
+				"Ancho":76
 			},
 			{
-				"x":318,
+				"x":387,
 				"y":0,
-				"Alto":129,
-				"Ancho":85
+				"Alto":146,
+				"Ancho":60
+			},
+			{
+				"x":319,
+				"y":0,
+				"Alto":138,
+				"Ancho":67,
+				"freeze": 5
+			},
+			{
+				"x":246,
+				"y":0,
+				"Alto":138,
+				"Ancho":72
+			},
+			{
+				"x":448,
+				"y":0,
+				"Alto":139,
+				"Ancho":46,
+				"freeze": 5,
+				"pong": true
+			},
+			{
+				"x":91,
+				"y":0,
+				"Alto":140,
+				"Ancho":77
 			},
 			{
 				"x":0,
 				"y":0,
-				"Alto":119,
-				"Ancho":161
-			},
-			{
-				"x":0,
-				"y":120,
-				"Alto":119,
-				"Ancho":161
-			},
-			{
-				"x":162,
-				"y":0,
-				"Alto":119,
-				"Ancho":155
-			},
-			{
-				"x":162,
-				"y":120,
-				"Alto":119,
-				"Ancho":150,
-				"pong": true,
-				"freeze": 10
+				"Alto":143,
+				"Ancho":90
 			}
 		]
+		
 	},
 	"cubrirseAgachado":{
 		"nombre":"bloqueo agachado.png",
@@ -1452,52 +1460,47 @@
 		]
 	},
 	"tira poder (todavia no se usa)":{
-		"nombre":"tira poder.png",
+		"nombre":"poder1.png",
+		"sonido": "gancho.wav",
 		"frames":[
 			{
-				"x":169,
+				"x":404,
 				"y":0,
-				"Alto":146,
-				"Ancho":76
+				"Alto":129,
+				"Ancho":64,
+				"playSound": true
 			},
 			{
-				"x":387,
+				"x":318,
 				"y":0,
-				"Alto":146,
-				"Ancho":60
-			},
-			{
-				"x":319,
-				"y":0,
-				"Alto":138,
-				"Ancho":67,
-				"freeze": 5
-			},
-			{
-				"x":246,
-				"y":0,
-				"Alto":138,
-				"Ancho":72
-			},
-			{
-				"x":448,
-				"y":0,
-				"Alto":139,
-				"Ancho":46,
-				"freeze": 5
-			},
-			{
-				"x":91,
-				"y":0,
-				"Alto":140,
-				"Ancho":77
+				"Alto":129,
+				"Ancho":85
 			},
 			{
 				"x":0,
 				"y":0,
-				"Alto":143,
-				"Ancho":90,
-				"pong": true
+				"Alto":119,
+				"Ancho":161
+			},
+			{
+				"x":0,
+				"y":120,
+				"Alto":119,
+				"Ancho":161
+			},
+			{
+				"x":162,
+				"y":0,
+				"Alto":119,
+				"Ancho":155
+			},
+			{
+				"x":162,
+				"y":120,
+				"Alto":119,
+				"Ancho":150,
+				"pong": true,
+				"freeze": 10
 			}
 		]
 	},
