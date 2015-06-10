@@ -87,6 +87,8 @@ const char* const SPRITESHEET_PODER_2_DEFAULT = "poder2.png";
 const char* const SPRITESHEET_FINISH_DEFAULT = "finish.png";
 const char* const SPRITESHEET_FATALITY_1_DEFAULT = "fatality1.png";
 const char* const SPRITESHEET_TOMADO_DEFAULT = "esTomado.png";
+const char* const SPRITESHEET_BEBE_DEFAULT = "bebe.png";
+const char* const SPRITESHEET_FATALITY_GANCHO_DEFAULT = "fatalityGancho.png";
 
 const char* const SPRITESHEET_OBJETO_ARROJABLE_DEFAULT = "objetoArrojable.png";
 const char* const ARROJABLE_NOMBRE_DEFAULT = "Poder";

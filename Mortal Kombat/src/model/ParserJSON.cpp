@@ -756,6 +756,14 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, string ruta_sonid
 	Sprite* sprite_tomado =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "esTomado", SPRITESHEET_TOMADO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
 	sprites.push_back( sprite_tomado );
 
+	log( "Se cargara el sprite para el personaje bebe", LOG_DEBUG );
+	Sprite* sprite_bebe =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "bebe", SPRITESHEET_BEBE_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_bebe);
+
+	log( "Se cargara el sprite para la accion de que se le arranque la cabeza con un gancho al personaje.", LOG_DEBUG );
+	Sprite* sprite_fatality_gancho =  cargarSprite( root, ruta_carpeta, ruta_sonidos, "fatalityGancho", SPRITESHEET_FATALITY_GANCHO_DEFAULT, ventana, ratio_x_personaje, ratio_y_personaje, cambiar_color, h_inicial, h_final, desplazamiento );
+	sprites.push_back( sprite_fatality_gancho );
+
 	log( "Se crearon todos los sprites del personaje.", LOG_DEBUG );
 	return sprites;
 
