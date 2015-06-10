@@ -1085,7 +1085,7 @@ void Personaje::fatality1(Personaje* otroPersonaje){}
 void Personaje::_recibirFatality2(){
 	_cambiarSprite(SPRITE_FATALITY_GANCHO);
 	spriteActual->doLoop(true);
-	mObjetos[CABEZA]->lanzar(m_xActual,m_yActual - getAlto(),!m_fliped,true);
+	mObjetos[CABEZA]->lanzar(m_xActual,m_yActual - getAlto(),m_fliped,true);
 	mObjetos[SANGRE_MUCHA]->lanzar(m_xActual,m_yActual - getAlto(),!m_fliped,false);
 }
 

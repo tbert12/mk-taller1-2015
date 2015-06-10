@@ -77,15 +77,16 @@ void ObjetoDroppable::_avanzarSprite(){
 void ObjetoDroppable::_Update(){
 	if(!vida) return;
 	_verificarTiempo();
+	float mover = m_velocidad_x;
 	if (flip){
-		m_xActual -= m_velocidad_x;
+		mover = - m_velocidad_x;
 	}
-	else{
-		m_xActual += m_velocidad_x;
-	}
-	//float hipo = sqrt(m_velocidad_y*m_velocidad_y + m_velocidad_x*m_velocidad_x);
-	//float sentita = m_velocidad_y/hipo;
-	m_yActual += -m_velocidad_y*tiempo + GRAVEDAD;
+
+	if (!mRebotar) m_xActual += mover;
+
+	float gravity = 1;
+	if (mRebotar) gravity = -tiempo*tiempo*0.5;
+	m_yActual += -m_velocidad_y*tiempo + GRAVEDAD*gravity;
 	if (m_yActual > m_yPiso or m_xActual <= 0){
 		m_yActual = m_yPiso;
 		m_yInicial = m_yActual;
