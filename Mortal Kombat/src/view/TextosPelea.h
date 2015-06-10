@@ -23,6 +23,8 @@ public:
 	void renderFinishHim();
 	void renderFatality();
 
+	void resetFight();
+
 	void setTextoFight(Sprite* spriteTextoFight);
 	void setTextoFinishHim(Sprite* spriteTextoFinishHim);
 	void setTextoFatality(Sprite* spriteTextoFatality);

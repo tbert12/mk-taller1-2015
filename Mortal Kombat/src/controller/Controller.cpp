@@ -123,7 +123,7 @@ void Controller::Pressed(){
 		_JoystickAdded();
 	}
 	//evento de joystick
-	else if(evento.type == SDL_JOYAXISMOTION || evento.type == SDL_JOYBUTTONDOWN){
+	else if(evento.type == SDL_JOYAXISMOTION || evento.type == SDL_JOYBUTTONDOWN || evento.type == SDL_JOYHATMOTION){
 		//evento en el joystick 1
 		if( evento.jaxis.which == 0 ){
 			if(Joystick_1 != NULL)

@@ -1,0 +1,172 @@
+{
+
+	"NO SE USA TODAVIA": [
+		{
+		"objetoArrojable": {
+			"nombre":"poder1.png",
+			"frames":[
+				{
+					"x":73,
+					"y":138,
+					"Alto":69,
+					"Ancho":45
+				},
+				{
+					"x":0,
+					"y":191,
+					"Alto":31,
+					"Ancho":68
+				},
+				{
+					"x":0,
+					"y":16,
+					"Alto":15,
+					"Ancho":124
+				},
+				{
+					"x":0,
+					"y":0,
+					"Alto":15,
+					"Ancho":163
+				},
+				{
+					"x":0,
+					"y":32,
+					"Alto":15,
+					"Ancho":88
+				},
+				{
+					"x":0,
+					"y":64,
+					"Alto":15,
+					"Ancho":84
+				},
+				{
+					"x":0,
+					"y":48,
+					"Alto":15,
+					"Ancho":88
+				},
+				{
+					"x":240,
+					"y":98,
+					"Alto":91,
+					"Ancho":64
+				},
+				{
+					"x":240,
+					"y":0,
+					"Alto":97,
+					"Ancho":65
+				},
+				{
+					"x":162,
+					"y":117,
+					"Alto":101,
+					"Ancho":71
+				},
+				{
+					"x":89,
+					"y":32,
+					"Alto":105,
+					"Ancho":72
+				},
+				{
+					"x":0,
+					"y":80,
+					"Alto":110,
+					"Ancho":72
+				},
+				{
+					"x":164,
+					"y":0,
+					"Alto":116,
+					"Ancho":75
+				}
+			]
+		},
+		"nombre": "Doble bola de fuego",
+		"velocidad": 15,
+		"danio": 10,
+		"ancho": 10,
+		"alto": 20
+		}
+	],
+
+
+	"poderes": [
+		
+		{
+		"objetoArrojable": {
+			"nombre":"poder2.png",
+			"frames":[
+				{
+					"x":184,
+					"y":177,
+					"Alto":20,
+					"Ancho":33
+				},
+				{
+					"x":206,
+					"y":336,
+					"Alto":61,
+					"Ancho":62
+				},
+				{
+					"x":131,
+					"y":203,
+					"Alto":64,
+					"Ancho":93
+				},
+				{
+					"x":0,
+					"y":203,
+					"Alto":28,
+					"Ancho":130
+				},
+				{
+					"x":0,
+					"y":177,
+					"Alto":25,
+					"Ancho":183
+				},
+				{
+					"x":0,
+					"y":144,
+					"Alto":32,
+					"Ancho":184
+				},
+				{
+					"x":0,
+					"y":108,
+					"Alto":35,
+					"Ancho":184
+				},
+				{
+					"x":0,
+					"y":71,
+					"Alto":36,
+					"Ancho":185
+				},
+				{
+					"x":0,
+					"y":35,
+					"Alto":35,
+					"Ancho":189
+				},
+				{
+					"x":0,
+					"y":0,
+					"Alto":34,
+					"Ancho":194
+				}
+			]
+		},
+		"nombre": "Sonic Stomp",
+		"velocidad": 0,
+		"danio": 15,
+		"ancho": 100,
+		"alto": 50
+		}
+	]
+}

@@ -463,8 +463,7 @@
 				"Alto":69
 ,
 				"Ancho":102,
-				"freeze" : 3,
-				"loop": true
+				"freeze" : 10
 			},
 			{
 				"x":0,
@@ -478,8 +477,7 @@
 				"y":0,
 				"Alto":55
 ,
-				"Ancho":113,
-				"loop": true
+				"Ancho":113
 			},
 			{
 				"x":0,
@@ -1418,13 +1416,15 @@
 	},
 	"poder2":{
 		"nombre":"poder2.png",
+		"sonido": "comboHacha.wav",
 		"frames":[
 			{
 				"x":256,
 				"y":126,
 				"Alto":122
 ,
-				"Ancho":66
+				"Ancho":66,
+				"playSound": true
 			},
 			{
 				"x":256,
@@ -1558,7 +1558,8 @@
 				"y":131,
 				"Alto":123
 ,
-				"Ancho":70
+				"Ancho":70,
+				"freeze": 5
 			}
 		]
 	},

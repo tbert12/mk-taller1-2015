@@ -59,7 +59,7 @@
 			"foto": "data/players/liukang/face.png",
 			"sprites": "data/players/liukang/sprites/",
 			"poderes": "data/players/liukang/poderes/",
-			"droppables": "data/players/subzero/droppables/",
+			"droppables": "data/players/liukang/droppables/",
 			"sonidos": "data/players/liukang/sound/",
 			"combos": [
 				"224",

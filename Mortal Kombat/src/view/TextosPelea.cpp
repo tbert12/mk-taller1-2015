@@ -30,7 +30,13 @@ void TextosPelea::setTextoFatality(Sprite* spriteTextoFatality) {
 void TextosPelea::renderFight() {
 	if (!spriteFight)return;
 	spriteFight->renderSpecialText();
-	spriteFight->Advance();
+	if (!spriteFight->ultimoFrame())
+		spriteFight->Advance();
+}
+
+void TextosPelea::resetFight() {
+	if (!spriteFight)return;
+	spriteFight->hardReset();
 }
 
 void TextosPelea::renderFinishHim() {
