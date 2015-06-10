@@ -98,7 +98,7 @@ void Pelea::render(){
 	escenario->Update();
 
 	//aca una vez actualizado to do chequeo las colisiones y demas.
-	if (!inFinishHim() and !round_finalizado)
+	if (!round_finalizado)
 		_verificarColisiones();
 
 	//renderizo las capas
@@ -266,12 +266,10 @@ void Pelea::_terminarRound(){
 
 	if (_partidaFinalizo()){
 		perdedor_ultimo_round->finishHim();
-		log("Pelea finalidaza, GANADOR: " + ganador_ultimo_round->getNombre(),LOG_DEBUG);
 	}
 	else{
 		ganador_ultimo_round->victoria();
 		perdedor_ultimo_round->morir();
-		log("Round finalizado, GANADOR: " + ganador_ultimo_round->getNombre(),LOG_DEBUG);
 	}
 }
 
