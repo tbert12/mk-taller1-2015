@@ -1,0 +1,72 @@
+{
+	
+		APENDEAR ESTOS 2 A SPRITES.JSON
+		NO LO HAGO PARA NO HACER CONFLICTO
+	}
+}
+	"fatalityGancho":{
+		"nombre":"recibeFatalityGancho.png",
+		"frames":[
+			{
+				"x":367,
+				"y":0,
+				"Alto":140,
+				"Ancho":32
+			},
+			{
+				"x":331,
+				"y":0,
+				"Alto":140,
+				"Ancho":35
+			},
+			{
+				"x":285,
+				"y":0,
+				"Alto":140,
+				"Ancho":45
+			},
+			{
+				"x":226,
+				"y":0,
+				"Alto":138,
+				"Ancho":58
+			},
+			{
+				"x":145,
+				"y":0,
+				"Alto":128,
+				"Ancho":80
+			},
+			{
+				"x":0,
+				"y":83,
+				"Alto":102,
+				"Ancho":112
+			},
+			{
+				"x":0,
+				"y":34,
+				"Alto":48,
+				"Ancho":130
+			},
+			{
+				"x":0,
+				"y":0,
+				"Alto":33,
+				"Ancho":144,
+				"loop": true
+			}
+		]
+	},
+	"bebe":{
+		"nombre":"bebe.png",
+		"frames":[
+			{
+				"x":0,
+				"y":0,
+				"Alto":48,
+				"Ancho":31
+			}
+		]
+	}
+}
