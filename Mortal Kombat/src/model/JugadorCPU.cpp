@@ -454,7 +454,20 @@ void JugadorCPU::realizarMovimiento() {
 	evaluarAgresividad();
 
 	// Hacer fatality siempre que se pueda.
+	if (m_personaje_1->getAccionDeAtaque() == SPRITE_FINISH) {
+		m_personaje_cpu->Frenar();
+		switch (m_id_personaje) {
+			case LIUKANG:
+				m_personaje_cpu->fatality1(m_personaje_1);
+				break;
+			case SUBZERO:
+				m_personaje_cpu->fatality1(m_personaje_1);
+				break;
+			default:
+				m_personaje_cpu->fatality1(m_personaje_1);
+		}
 
+	}
 
 	// Posibilidad de no hacer nada.
 	if (noHayQueHacerNada())
