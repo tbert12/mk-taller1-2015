@@ -1236,6 +1236,7 @@
 	},
 	"fatality1":{
 		"nombre":"fatality1.png",
+		"sonido": "fatality.wav",
 		"frames":[
 			{
 				"x":0,
@@ -1685,6 +1686,7 @@
 	},
 	"bebe":{
 		"nombre":"bebe.png",
+		"sonido": "bebe.wav",
 		"frames":[
 			{
 				"x":0,
@@ -1697,6 +1699,7 @@
 	},
 	"fatalityGancho":{
 		"nombre":"fatalityGancho.png",
+		"sonido": "fatality.wav",
 		"frames":[
 			{
 				"x":0,
