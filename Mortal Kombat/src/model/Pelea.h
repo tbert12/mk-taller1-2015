@@ -25,6 +25,7 @@
 #include "../view/TextosPelea.h"
 #include "logging.h"
 
+#define CICLOS_TEXTOS 50
 #define CICLOS_FINAL_ROUND 70
 #define CICLOS_FINISH_HIM 150
 #define CICLOS_FATALITY 180
@@ -43,6 +44,7 @@ private:
 	int NumeroRound;
 	int ciclos_round_terminado;
 	int ciclos_finish_him;
+	int ciclos_render_texto;
 	std::vector<int> GanadorRound;
 	TextosPelea* textosPelea;
 	bool round_finalizado;
@@ -71,6 +73,7 @@ private:
 	void _mostarGanadorRound();
 	void _mostrarGanadorPelea();
 	void _terminarRound();
+	void _renderTextos();
 
 public:
 	Pelea(Ventana* la_ventana,Escenario* el_escenario,int un_tiempo, int modo_de_juego,TextosPelea* textos_pelea);

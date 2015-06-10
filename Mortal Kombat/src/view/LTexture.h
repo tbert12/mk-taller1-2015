@@ -63,7 +63,7 @@ class LTexture
 		void renderObjeto(Rect_Objeto* clip, float x = 0, float y = 0, bool flip = false);
 
 		//renderiza textos especiales
-		void renderSpecialText(Rect_Objeto* rect, int x, int y);
+		void renderSpecialText(Rect_Objeto* rect);
 
 		//Gets image dimensions
 		int getWidth();

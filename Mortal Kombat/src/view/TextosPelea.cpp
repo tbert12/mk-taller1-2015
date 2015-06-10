@@ -10,6 +10,9 @@
 using namespace std;
 
 TextosPelea::TextosPelea() {
+	spriteFatality = NULL;
+	spriteFight = NULL;
+	spriteFinishHim = NULL;
 }
 
 void TextosPelea::setTextoFight(Sprite* spriteTextoFight) {
@@ -25,23 +28,20 @@ void TextosPelea::setTextoFatality(Sprite* spriteTextoFatality) {
 }
 
 void TextosPelea::renderFight() {
-	int x = 0; //pos x de la ventana en pixels
-	int y = 0; //pos y de la ventana en pixels
-	spriteFight->renderSpecialText(x,y);
+	if (!spriteFight)return;
+	spriteFight->renderSpecialText();
 	spriteFight->Advance();
 }
 
 void TextosPelea::renderFinishHim() {
-	int x = 0; //pos x de la ventana en pixels
-	int y = 0; //pos y de la ventana en pixels
-	spriteFinishHim->renderSpecialText(x,y);
+	if (!spriteFinishHim) return;
+	spriteFinishHim->renderSpecialText();
 	spriteFinishHim->Advance();
 }
 
 void TextosPelea::renderFatality() {
-	int x = 0; //pos x de la ventana en pixels
-	int y = 0; //pos y de la ventana en pixels
-	spriteFatality->renderSpecialText(x,y);
+	if (!spriteFatality) return;
+	spriteFatality->renderSpecialText();
 	spriteFatality->Advance();
 }
 

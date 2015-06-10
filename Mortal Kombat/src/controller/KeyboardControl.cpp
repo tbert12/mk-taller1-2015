@@ -129,6 +129,21 @@ void KeyboardControl::KeyPressed(){
 		}
 
 	if(comboController){
+		if (pelea->inFinishHim()){
+			if(evento->key.keysym.sym == SDLK_x){
+				personaje->fatality1(pelea->getContrincante(personaje));
+				pelea->setFatality();
+				return;
+			}
+			int fatality_a_realizar =  comboController->checkFatalities();
+			switch (fatality_a_realizar){
+				case FATALITY1:
+					personaje->fatality1(pelea->getContrincante(personaje));
+					pelea->setFatality();
+					return;
+			}
+		}
+
 		int combo_a_realizar =  comboController->checkCombos();
 		if (combo_a_realizar >= 0){
 			switch (combo_a_realizar){
@@ -137,15 +152,6 @@ void KeyboardControl::KeyPressed(){
 					break;
 				case PODER2:
 					personaje->poder2();
-					break;
-			}
-		}
-		if (pelea->inFinishHim()){
-			int fatality_a_realizar =  comboController->checkFatalities();
-			switch (fatality_a_realizar){
-				case FATALITY1:
-					personaje->fatality1(pelea->getContrincante(personaje));
-					pelea->setFatality();
 					break;
 			}
 		}

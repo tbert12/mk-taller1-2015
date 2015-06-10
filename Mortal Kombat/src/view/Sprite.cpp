@@ -143,9 +143,9 @@ void Sprite::render(float x, float y, bool fliped){
 	playSound();
 }
 
-void Sprite::renderSpecialText(int x, int y){
+void Sprite::renderSpecialText(){
 	Rect_Objeto* currentClip = &spriteFrames[frameActual];
-	SpriteSheetTexture->renderSpecialText(currentClip,x,y);
+	SpriteSheetTexture->renderSpecialText(currentClip);
 	playSound();
 }
 

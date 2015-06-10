@@ -20,6 +20,7 @@ Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_
 	NumeroRound = 1;
 	ciclos_round_terminado = CICLOS_FINAL_ROUND;
 	ciclos_finish_him = CICLOS_FINISH_HIM;
+	ciclos_render_texto = CICLOS_TEXTOS;
 	GanadorRound = {0,0,0};
 	comenzo_round = false;
 	fatality = false;
@@ -47,6 +48,7 @@ void Pelea::start(){
 
 	if (ModoDeJuego == MODO_JUGADOR_VS_PC)
 		cpu = new JugadorCPU(m_personajeDos, m_personajeUno);
+	comenzo_round = true;
 }
 
 void Pelea::_renderEstado(){
@@ -68,6 +70,7 @@ bool Pelea::roundFinalizado(){
 }
 
 bool Pelea::inFinishHim(){
+	if (ModoDeJuego == MODO_ENTRENAMIENTO) return finish_him;
 	return partida_finalizada and ciclos_finish_him > 0;
 }
 
@@ -75,7 +78,6 @@ void Pelea::render(){
 
 	if(!comenzo_round){
 		start();
-		comenzo_round = true;
 	}
 
 	//verifico el tiempo
@@ -103,6 +105,7 @@ void Pelea::render(){
 
 	_renderEstado();
 
+	_renderTextos();
 
 	if (partida_finalizada){
 		if (ciclos_finish_him >= 0){
@@ -112,7 +115,7 @@ void Pelea::render(){
 		}
 		else{
 			ciclos_finish_him = CICLOS_FINAL_ROUND;
-			pelea_terminada = true;
+			ciclos_render_texto = CICLOS_TEXTOS;
 		}
 	}
 	else if(round_finalizado){
@@ -218,6 +221,7 @@ bool Pelea::_partidaFinalizo(){
 		//si ya un personaje gano los dos rounds
 		if ((GanadorRound[0]  == 1 and GanadorRound[1]  == 1 ) || (GanadorRound[0]  == 2 and GanadorRound[1]  == 2 )){
 			partida_finalizada = true;
+			finish_him = true;
 			if (GanadorRound[0]  == 1){
 				ganador = m_personajeUno;
 			}else{
@@ -227,6 +231,7 @@ bool Pelea::_partidaFinalizo(){
 		}
 	}else if (NumeroRound >= 3){
 		partida_finalizada = true;
+		finish_him = true;
 		//si hay 3 round el que gano el ultimo es el ganador
 		if (GanadorRound[NumeroRound - 1] == 1){
 			ganador = m_personajeUno;
@@ -296,6 +301,7 @@ void Pelea::_resetRound(){
 	escenario->reset();
 	tiempo->reset();
 	ciclos_round_terminado = CICLOS_FINAL_ROUND;
+	ciclos_render_texto = CICLOS_FINISH_HIM;
 	round_finalizado = false;
 	comenzo_round = false;
 }
@@ -306,16 +312,18 @@ void Pelea::reset(){
 	partida_finalizada = false;
 	pelea_terminada = false;
 	fatality = false;
+	ciclos_finish_him = CICLOS_FINISH_HIM;
 }
 
 void Pelea::setFatality(){
-	//if (!fatality) fatality = true;
+	if (!fatality) fatality = true;
 	ciclos_finish_him = CICLOS_FATALITY;
 }
 
 void Pelea::setFinishHim(){
 	if (ModoDeJuego != MODO_ENTRENAMIENTO) return;
 	partida_finalizada = true;
+	finish_him = true;
 	ciclos_finish_him = CICLOS_FINISH_HIM;
 	m_personajeDos->finishHim();
 }
@@ -340,6 +348,24 @@ Personaje* Pelea::getContrincante(Personaje* un_personaje){
 	if (un_personaje == m_personajeUno)
 		return m_personajeDos;
 	else return m_personajeUno;
+}
+
+void Pelea::_renderTextos(){
+	if (ciclos_render_texto <=0 or !textosPelea) return;
+	if (finish_him){
+		textosPelea->renderFinishHim();
+		ciclos_render_texto--;
+	}
+	if (!round_finalizado){
+		textosPelea->renderFight();
+		ciclos_render_texto--;
+	}
+	if (fatality){
+		textosPelea->renderFatality();
+		ciclos_render_texto--;
+		if (ciclos_render_texto <= 0)
+			pelea_terminada = true;
+	}
 }
 
 Pelea::~Pelea() {
