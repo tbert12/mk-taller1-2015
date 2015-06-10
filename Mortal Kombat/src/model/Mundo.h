@@ -23,12 +23,15 @@
 #include <unistd.h>
 #include "logging.h"
 
+#define CANT_PELEAS_JVCPU 3
+
 class Mundo {
 private:
 	map<string, int>* mapa_comandos1;
 	map<string, int>* mapa_comandos2;
 	int ModoDeJuego;
 	int tiempoMax,tolerancia;
+	int cantidad_de_peleas;
 	std::vector<Personaje*> personajes;
 	std::vector<Escenario*> escenarios;
 	Escenario* escenario_actual;
@@ -43,9 +46,9 @@ private:
 	BotonesPantalla* botones_pantalla;
 	void start();
 	void _mostrar_ganador(string nombre);
+	void _verificarCambioDePelea();
 
 public:
-	bool partida_finalizada;
 	Mundo(Ventana* una_ventana,int tiempo_round,map<string, int>* mapaComan1,map<string, int>* mapaComan2,int tiempoMax,int tolerancia);
 	void addPersonaje(Personaje* un_personaje);
 	void addPersonajes(vector<Personaje*> nuevos_personajes);

@@ -17,10 +17,10 @@ Mundo::Mundo(Ventana* una_ventana, int tiempo , map<string, int>* mapaComan1,map
 	Personaje_uno = NULL;
 	Personaje_dos = NULL;
 	pelea = NULL;
+	cantidad_de_peleas = 1;
 	textosPelea = NULL;
 	tiempo_round = tiempo;
 	empezar = false;
-	partida_finalizada = false;
 	botones_pantalla = NULL;
 	ModoDeJuego = MODO_JUGADOR_VS_PC;
 	control = NULL;
@@ -37,7 +37,7 @@ void Mundo::start(){
 		p_dos = personajes[1];
 
 	if (escenarios[0]){
-		escenario_actual = escenarios[0];
+		escenario_actual = escenarios[rand() % escenarios.size()];
 		escenario_actual->addPersonajes(p_uno,p_dos);
 		pelea = new Pelea(ventana,escenario_actual,tiempo_round,ModoDeJuego,textosPelea);
 		//Creo el Controlador
@@ -86,8 +86,19 @@ bool Mundo::Quit(){
 bool Mundo::Fin(){
 	if (!empezar)
 		return false;
-	if(pelea)
-		return pelea->peleaFinalizada() || control->goToMenu();
+	if (ModoDeJuego == MODO_JUGADOR_VS_PC){
+
+		if (pelea->ganoCpu()) return true;
+
+		if(cantidad_de_peleas >= CANT_PELEAS_JVCPU){
+			if(pelea)
+				return pelea->peleaFinalizada();
+		}
+	}
+	else{
+		if(pelea)
+			return pelea->peleaFinalizada() || control->goToMenu();
+	}
 	return false;
 }
 
@@ -127,11 +138,6 @@ void Mundo::render(){
 
 	//limpio pantalla
 	ventana->clear();
-	
-	if(pelea->peleaFinalizada()){
-		//_mostrar_ganador();
-		partida_finalizada = true;
-	}
 
 	pelea->render();
 
@@ -139,8 +145,9 @@ void Mundo::render(){
 		botones_pantalla->render(control->get_stream_teclas(),control->checkCombo());
 	}
 
-
 	ventana->Refresh();
+
+	_verificarCambioDePelea();
 }
 
 void Mundo::_mostrar_ganador(string nombre){
@@ -150,6 +157,7 @@ void Mundo::_mostrar_ganador(string nombre){
 }
 
 int Mundo::getSleep(){
+	if (!control) return 50000;
 	return control->getSleep();
 }
 
@@ -169,9 +177,38 @@ void Mundo::reset(){
 		control = NULL;
 	}
 	empezar = false;
-	partida_finalizada = false;
 	ModoDeJuego = MODO_JUGADOR_VS_PC;
+	cantidad_de_peleas = 1;
 
+}
+
+void Mundo::_verificarCambioDePelea(){
+	if (ModoDeJuego != MODO_JUGADOR_VS_PC or !pelea)return;
+	if (!pelea->peleaFinalizada()) return;
+	if (pelea->ganoCpu()) return;
+
+	//finalizo pelea
+	cantidad_de_peleas++;
+	delete pelea;
+	if (control){
+		delete control;
+		control = NULL;
+	}
+	empezar = false;
+	Personaje* p_nuevo = NULL;
+
+	for (unsigned int i = 0; i < personajes.size();i++){
+		if (personajes[i]->getNombreDeCarga() != Personaje_dos->getNombreDeCarga())
+			p_nuevo = personajes[i];
+	}
+
+	if (p_nuevo == NULL){
+		p_nuevo = personajes[rand() % personajes.size()];
+		while (Personaje_dos == p_nuevo)
+			p_nuevo = personajes[rand() % personajes.size()];
+		Personaje_dos = p_nuevo;
+	}
+	else Personaje_dos = p_nuevo;
 }
 
 Mundo::~Mundo() {

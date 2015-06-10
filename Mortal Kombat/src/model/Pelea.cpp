@@ -97,8 +97,9 @@ void Pelea::render(){
 	escenario->Update();
 
 	//aca una vez actualizado to do chequeo las colisiones y demas.
-	if (!round_finalizado or partida_finalizada)
+	if (!round_finalizado and !partida_finalizada)
 		_verificarColisiones();
+
 
 	//renderizo las capas
 	escenario->render();
@@ -215,6 +216,10 @@ void Pelea::_roundFinalizado(){
 
 void Pelea::_avanzarRound(){
 	NumeroRound++;
+}
+
+bool Pelea::ganoCpu(){
+	return pelea_terminada and (ganador==m_personajeDos);
 }
 
 bool Pelea::_partidaFinalizo(){
@@ -370,7 +375,7 @@ void Pelea::_renderTextos(){
 }
 
 Pelea::~Pelea() {
-
+	reset();
 	GanadorRound.clear();
 	if(tiempo) delete tiempo;
 	if(BarraPersonajeUno) delete BarraPersonajeUno;

@@ -79,6 +79,7 @@ public:
 	Pelea(Ventana* la_ventana,Escenario* el_escenario,int un_tiempo, int modo_de_juego,TextosPelea* textos_pelea);
 	void start();
 	void render();
+	bool ganoCpu();
 	bool peleaFinalizada();
 	bool roundFinalizado();
 	bool inFinishHim();
