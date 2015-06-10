@@ -551,12 +551,18 @@ void Personaje::AvanzarSprite(){
 			}
 
 		} else {
-			m_velocidadActual = 0;
-			if (_estaCubriendose){
-				_cubrirseParado();
+			if (m_proximaVelocidad) m_velocidadActual = m_proximaVelocidad;
+			if (!m_velocidadActual){
+				if (_estaCubriendose){
+					_cubrirseParado();
+				} else {
+					_cambiarSprite(SPRITE_INICIAL);
+				}
 			} else {
-				_cambiarSprite(SPRITE_INICIAL);
+				setFlip(nextFlip);
+				_Caminar( (m_velocidadActual > 0) );
 			}
+
 		}
 		_recibioGolpe = false;
 	}
@@ -916,6 +922,7 @@ void Personaje::_patadaAltaAgachado() {
 //+++++++++++RECIBE-GOLPES+++++++++++++++++++++++++++++++++++++++++++
 
 bool Personaje::recibirGolpe(int CodigoGolpe, int Danio){
+	printf("RECIBE GOLPE\n");
 	if (getAccionDeAtaque() == SPRITE_FINISH) {
 		_estaMuerto = false;
 		morir();

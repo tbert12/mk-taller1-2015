@@ -977,30 +977,7 @@
 		"nombre":"patada agachado.png",
 		"sonido": "patadaAlta.wav",
 		"frames":[
-			{
-				"x":344,
-				"y":0,
-				"Alto":84,
-				"Ancho":92
-			},
-			{
-				"x":308,
-				"y":87,
-				"Alto":93,
-				"Ancho":84
-			},
-			{
-				"x":243,
-				"y":0,
-				"Alto":86,
-				"Ancho":100
-			},
-			{
-				"x":0,
-				"y":0,
-				"Alto":76,
-				"Ancho":125
-			},
+
 			{
 				"x":108,
 				"y":102,
@@ -1017,14 +994,14 @@
 				"x":0,
 				"y":77,
 				"Alto":100,
-				"Ancho":107
+				"Ancho":107,
+				"pong": true
 			},
 			{
 				"x":126,
 				"y":0,
 				"Alto":101,
-				"Ancho":116,
-				"pong": true
+				"Ancho":116
 			}
 		]
 	},
@@ -1054,7 +1031,8 @@
 				"x":0,
 				"y":0,
 				"Alto":76,
-				"Ancho":125
+				"Ancho":125,
+				"pong": true
 			},
 			{
 				"x":108,
@@ -1078,8 +1056,7 @@
 				"x":126,
 				"y":0,
 				"Alto":101,
-				"Ancho":116,
-				"pong": true
+				"Ancho":116
 			}
 		]
 	},
