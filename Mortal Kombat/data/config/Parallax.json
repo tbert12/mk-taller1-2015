@@ -63,6 +63,9 @@
 			"combos": [
 				"1335"
 			],
+			"fatalities": [
+				"22117"
+			],
 			"color-alternativo": {
 				"h-inicial": -30,
 				"h-final": 20,
@@ -80,6 +83,9 @@
 			"sonidos": "data/players/subzero/sound/",
 			"combos": [
 				"1335"
+			],
+			"fatalities": [
+				"11124"
 			],
 			"color-alternativo": {
 				"h-inicial": 180,

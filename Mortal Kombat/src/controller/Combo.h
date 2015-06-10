@@ -20,7 +20,7 @@ private:
 
 public:
 
-	Combo(string botones, bool fatality);
+	Combo(string botones, bool fatality = false);
 	virtual ~Combo();
 
 	string m_botones;

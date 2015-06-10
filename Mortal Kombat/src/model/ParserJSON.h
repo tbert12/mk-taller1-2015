@@ -42,7 +42,7 @@ public:
 	 Escenario* cargarEscenario(string nombre_escenario, Json::Value root, Ventana* ventana, float ventana_ancho);
 	 vector<Escenario*> cargarEscenarios(Json::Value root, Ventana* ventana, float ventana_ancho);
 	 vector<float> cargarColorAlternativo(Json::Value personaje);
-	 vector<Combo*> cargarCombos(Json::Value root);
+	 vector<Combo*> cargarCombos(Json::Value root, bool fatality = false);
 	 Personaje* cambiarColorPersonaje(Personaje* personaje);
 	 Json::Value obtenerRootDeArchivo(string ruta_archivo);
 

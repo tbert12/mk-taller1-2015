@@ -12,7 +12,7 @@
 
 const int DISTANCIA_PINA = 120;
 const int DISTANCIA_PATADA = 130;
-const int DISTANCIA_TOMA = 110;
+const int DISTANCIA_TOMA = 120;
 
 class JugadorCPU {
 public:

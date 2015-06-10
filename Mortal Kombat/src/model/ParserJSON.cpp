@@ -608,7 +608,7 @@ vector<Sprite*> ParserJSON::cargarSprites(string ruta_carpeta, string ruta_sonid
 
 }
 
-vector<Combo*> ParserJSON::cargarCombos(Json::Value root) {
+vector<Combo*> ParserJSON::cargarCombos(Json::Value root, bool fatality) {
 
 	vector<Combo*> combos;
 	log("Se inicia la carga de los combos del personaje.", LOG_DEBUG);
@@ -626,7 +626,7 @@ vector<Combo*> ParserJSON::cargarCombos(Json::Value root) {
 						break;
 				}
 				if (combo_valido) {
-					Combo* combo = new Combo(combostream);
+					Combo* combo = new Combo(combostream, fatality);
 					combos.push_back(combo);
 					log("El combo fue cargado correctamente. ", LOG_DEBUG);
 				} else {
@@ -640,6 +640,7 @@ vector<Combo*> ParserJSON::cargarCombos(Json::Value root) {
 	}
 	return combos;
 }
+
 
 int ParserJSON::cargarComando( Json::Value botones, const char* accion, int comando_default) {
 	int comando_accion;
@@ -920,6 +921,11 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 
 						// Cargo los combos del personaje.
 						vector<Combo*> combos = cargarCombos(root["personajes"][k]);
+
+						// Cargo las fatalities del personaje.
+						vector<Combo*> fatalities = cargarCombos(root["personajes"][k], true);
+						// Inserto las fatalities en el vector de combos.
+						combos.insert(combos.end(), fatalities.begin(), fatalities.end());
 
 						// Cargo los parametros para el cambio de color del personaje.
 						vector<float> colorAlternativo = cargarColorAlternativo(root["personajes"][k]);

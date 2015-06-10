@@ -15,7 +15,6 @@ JugadorCPU::JugadorCPU(Personaje* personaje_cpu, Personaje* personaje_1) {
 
 
 JugadorCPU::~JugadorCPU() {
-	// TODO Auto-generated destructor stub
 }
 
 bool JugadorCPU::reaccion(int probabilidad) {
@@ -209,6 +208,9 @@ bool JugadorCPU::hayQueLanzarPoder() {
 			} else {
 				return true;
 			}
+		} else if ( (dist > DISTANCIA_PATADA && dist < DISTANCIA_PATADA * 2)
+	&& m_personaje_1->estaAtacando() ) {
+			return true;
 		}
 	}
 	return false;
