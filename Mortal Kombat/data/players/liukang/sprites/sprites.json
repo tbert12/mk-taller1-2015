@@ -93,8 +93,7 @@
 				"y":48,
 				"Alto":131
 ,
-				"Ancho":74,
-				"playSound": true
+				"Ancho":74
 			},
 			{
 				"x":150,
@@ -122,7 +121,8 @@
 				"y":45,
 				"Alto":68
 ,
-				"Ancho":56
+				"Ancho":56,
+				"playSound": true
 			},
 			{
 				"x":221,
@@ -136,7 +136,8 @@
 				"y":0,
 				"Alto":47
 ,
-				"Ancho":77
+				"Ancho":77,
+				"freeze": 10
 			},
 			{
 				"x":150,
@@ -184,14 +185,15 @@
 	},
 	"caeYSeLevanta":{
 		"nombre":"caeYSeLevanta.png",
-		"sonido": "caeYSeLevanta.wav",
+		"sonido": "recibeGolpeFuerte.wav",
 		"frames":[
 			{
 				"x":241,
 				"y":181,
 				"Alto":126
 ,
-				"Ancho":58
+				"Ancho":58,
+				"playSound": true
 			},
 			{
 				"x":222,
@@ -220,8 +222,7 @@
 				"y":66,
 				"Alto":71
 ,
-				"Ancho":93,
-				"playSound": true
+				"Ancho":93
 			},
 			{
 				"x":97,

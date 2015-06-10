@@ -184,8 +184,10 @@ void Sprite::playSound() {
 	 * Esto evita que se reproduzca dos veces cuando hace pong
 	 */
 	if ( sonido and !reproducioSonido) {
+		if (frameActual == frameSound) {
 			sonido->play();
 			reproducioSonido = true;
+		}
 	}
 }
 

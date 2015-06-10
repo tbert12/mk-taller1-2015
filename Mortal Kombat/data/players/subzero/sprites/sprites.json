@@ -144,12 +144,14 @@
 	},
 	"patadaAlta":{
 		"nombre":"patadaAlta.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":103,
 				"y":123,
 				"Alto":130,
-				"Ancho":83
+				"Ancho":83,
+				"playSound": true
 			},
 			{
 				"x":198,
@@ -186,12 +188,14 @@
 	},
 	"saltar":{
 		"nombre":"saltar.png",
+		"sonido": "salto.wav",
 		"frames":[
 			{
 				"x":71,
 				"y":0,
 				"Alto":139,
-				"Ancho":68
+				"Ancho":68,
+				"playSound": true
 			},
 			{
 				"x":0,
@@ -210,12 +214,14 @@
 	},
 	"saltardiagonal":{
 		"nombre":"saltardiagonal.png",
+		"sonido": "salto.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":112,
 				"Alto":136,
-				"Ancho":71
+				"Ancho":71,
+				"playSound": true
 			},
 			{
 				"x":150,
@@ -263,13 +269,15 @@
 	},
 	"agachadoPatadaAlta":{
 		"nombre":"agachadoPatadaAlta.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
                 "x":62,
                 "y":81,
                 "Alto":77
 ,
-                "Ancho":60
+                "Ancho":60,
+                "playSound": true
             },
             {
                 "x":0,
@@ -297,13 +305,15 @@
 	},
 	"agachadoPatadaBaja":{
 		"nombre":"agachadoPatadaBaja.png",
+		"sonido": "patada.wav",
 		"frames":[
             {
                 "x":0,
                 "y":75,
                 "Alto":73
 ,
-                "Ancho":57
+                "Ancho":57,
+                "playSound": true
             },
             {
                 "x":103,
@@ -324,6 +334,7 @@
 	},
 	"caeEnZ":{
 		"nombre":"caeEnZ.png",
+		"sonido": "caeEnZ.wav",
 		"frames":[
 			{
 				"x":0,
@@ -351,7 +362,8 @@
 				"y":121,
 				"Alto":58
 ,
-				"Ancho":54
+				"Ancho":54,
+				"playSound": true
 			},
 			{
 				"x":72,
@@ -366,7 +378,7 @@
 				"Alto":35
 ,
 				"Ancho":65,
-				"freeze": 5
+				"freeze": 10
 			},
 			{
 				"x":158,
@@ -414,13 +426,15 @@
 	},
 	"caeYSeLevanta":{
 		"nombre":"caeySeLevanta.png",
+		"sonido": "recibeGolpeFuerte.wav",
 		"frames":[
 			{
 				"x":208,
 				"y":118,
 				"Alto":131
 ,
-				"Ancho":59
+				"Ancho":59,
+				"playSound": true
 			},
 			{
 				"x":346,
@@ -449,7 +463,8 @@
 				"Alto":69
 ,
 				"Ancho":102,
-				"frezee" : 3
+				"freeze" : 3,
+				"loop": true
 			},
 			{
 				"x":0,
@@ -593,13 +608,15 @@
 	},
 	"gancho":{
 		"nombre":"gancho.png",
+		"sonido": "gancho.wav",
 		"frames":[
             {
                 "x":0,
                 "y":126,
                 "Alto":75
 ,
-                "Ancho":75
+                "Ancho":75,
+                "playSound": true
             },
             {
                 "x":166,
@@ -683,13 +700,15 @@
 	},
 	"patadaBaja":{
 		"nombre":"patadaBaja.png",
+		"sonido": "patada.wav",
 		"frames":[
             {
                 "x":0,
                 "y":122,
                 "Alto":126
 ,
-                "Ancho":62
+                "Ancho":62,
+                "playSound": true
             },
             {
                 "x":199,
@@ -731,13 +750,15 @@
 	},
 	"patadaConGiro":{
 		"nombre":"PatadaConGiro.png",
+		"sonido": "patadaCircular.wav",
 		"frames":[
 			{
 				"x":226,
 				"y":0,
 				"Alto":110
 ,
-				"Ancho":59
+				"Ancho":59,
+				"playSound": true
 			},
 			{
 				"x":85,
@@ -792,13 +813,15 @@
 	},
 	"patadaEnSalto":{
 		"nombre":"PatadaEnSalto.png",
+		"sonido": "patada.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":96,
 				"Alto":72
 ,
-				"Ancho":51
+				"Ancho":51,
+				"playSound": true
 			},
 			{
 				"x":111,
@@ -819,13 +842,15 @@
 	},
 	"pinaAgachado":{
 		"nombre":"PinaAgachado.png",
+		"sonido": "pina.wav",
 		"frames":[
             {
                 "x":172,
                 "y":0,
                 "Alto":77
 ,
-                "Ancho":57
+                "Ancho":57,
+                "playSound": true
             },
             {
                 "x":100,
@@ -846,13 +871,15 @@
 	},
 	"pinaAlta":{
 		"nombre":"PinaAlta.png",
+		"sonido": "pina.wav",
 		"frames":[
             {
                 "x":137,
                 "y":134,
                 "Alto":128
 ,
-                "Ancho":52
+                "Ancho":52,
+                "playSound": true
             },
             {
                 "x":0,
@@ -873,13 +900,15 @@
 	},
 	"pinaBaja":{
 		"nombre":"PinaBaja.png",
+		"sonido": "pina.wav",
 		"frames":[
             {
                 "x":95,
                 "y":128,
                 "Alto":127
 ,
-                "Ancho":56
+                "Ancho":56,
+                "playSound": true
             },
             {
                 "x":298,
@@ -900,13 +929,15 @@
 	},
 	"pinaEnSalto":{
 		"nombre":"PinaEnSalto.png",
+		"sonido": "pina.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":96,
 				"Alto":92
 ,
-				"Ancho":56
+				"Ancho":56,
+				"playSound": true
 			},
 			{
 				"x":126,
@@ -927,13 +958,15 @@
 	},
 	"recibeGolpeAgachado":{
 		"nombre":"recibeGolpeAgachado.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":124,
 				"y":0,
 				"Alto":77
 ,
-				"Ancho":55
+				"Ancho":55,
+				"playSound":true
 			},
 			{
 				"x":65,
@@ -954,13 +987,15 @@
 	},
 	"recibeGolpeAlto":{
 		"nombre":"recibeGolpeAlto.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":121,
 				"y":0,
 				"Alto":128
 ,
-				"Ancho":54
+				"Ancho":54,
+				"playSound": true
 			},
 			{
 				"x":63,
@@ -981,13 +1016,15 @@
 	},
 	"recibeGolpeBajo":{
 		"nombre":"recibeGolpeBajo.png",
+		"sonido": "recibeGolpe.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":0,
 				"Alto":126
 ,
-				"Ancho":57
+				"Ancho":57,
+				"playSound": true
 			},
 			{
 				"x":115,
@@ -1008,13 +1045,15 @@
 	},
 	"recibeGolpeFuerte":{
 		"nombre":"recibeGolpeFuerte.png",
+		"sonido": "recibeGolpeFuerte.wav",
 		"frames":[
 			{
 				"x":0,
 				"y":145,
 				"Alto":123
 ,
-				"Ancho":64
+				"Ancho":64,
+				"playSound": true
 			},
 			{
 				"x":164,
@@ -1069,13 +1108,15 @@
 	},
 	"comboPinaBaja":{
 		"nombre":"PinaBaja.png",
+		"sonido": "comboPina.wav",
 		"frames":[
             {
                 "x":95,
                 "y":128,
                 "Alto":127
 ,
-                "Ancho":56
+                "Ancho":56,
+                "playSound": true
             },
             {
                 "x":298,
@@ -1586,13 +1627,15 @@
 	},
 	"comboPinaAlta":{
 		"nombre":"PinaAlta.png",
+		"sonido": "comboPina.wav",
 		"frames":[
            {
     	       "x":137,
                "y":134,
                "Alto":128
 ,
-                "Ancho":52
+                "Ancho":52,
+                "playSound": true
             },
             {
                 "x":0,
