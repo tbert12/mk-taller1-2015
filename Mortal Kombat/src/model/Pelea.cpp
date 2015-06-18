@@ -7,6 +7,14 @@
 
 #include "Pelea.h"
 
+template <typename T>
+  string ToString ( T Number )
+  {
+     ostringstream ss;
+     ss << Number;
+     return ss.str();
+  }
+
 Pelea::Pelea(Ventana* la_ventana,Escenario* un_escenario,int un_tiempo,int modo_de_juego,TextosPelea* textos_Pelea) {
 	ModoDeJuego = modo_de_juego;
 	escenario = un_escenario;
@@ -306,7 +314,7 @@ void Pelea::_mostarGanadorRound(){
 	else if (GanadorRound[NumeroRound - 1] == 2){
 		nombre = m_personajeDos->getNombre();
 	}
-	string texto = "Ganador Round: " + to_string(NumeroRound) + " " + nombre;
+	string texto = "Ganador Round: " + ToString(NumeroRound) + " " + nombre;
 	ventana->mostrarTexto(texto);
 }
 

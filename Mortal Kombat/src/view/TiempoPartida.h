@@ -11,6 +11,7 @@
 #include <string>
 #include "Ventana.h"
 #include "../model/Tiempo.h"
+#include <sstream>
 
 class TiempoPartida {
 private:

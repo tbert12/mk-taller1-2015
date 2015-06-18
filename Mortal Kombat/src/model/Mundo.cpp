@@ -141,7 +141,7 @@ void Mundo::render(){
 void Mundo::_mostrar_ganador(string nombre){
 	string texto = "Ganador de la partida " + nombre;
 	ventana->mostrarTexto(texto);
-	usleep(3000000);
+	SDL_Delay(3000);
 }
 
 int Mundo::getSleep(){

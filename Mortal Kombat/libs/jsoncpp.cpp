@@ -3966,7 +3966,7 @@ Value& Path::make(Value& root) const {
 #if defined(_MSC_VER) && _MSC_VER < 1500 // VC++ 8.0 and below
 #define snprintf _snprintf
 #else
-#define snprintf std::snprintf
+#define snprintf snprintf
 #endif
 
 #if defined(_MSC_VER) && _MSC_VER >= 1400 // VC++ 8.0

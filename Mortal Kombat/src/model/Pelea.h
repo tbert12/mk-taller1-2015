@@ -22,6 +22,7 @@
 #include <vector>
 #include <algorithm>
 #include <unistd.h>
+#include <sstream>
 
 #include "../view/TextosPelea.h"
 #include "logging.h"

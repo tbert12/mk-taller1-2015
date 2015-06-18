@@ -175,7 +175,7 @@ int main( int argc, char* args[] )
 					//si no esta en pausa
 					mundo->render();
 
-					usleep(mundo->getSleep());
+					SDL_Delay(mundo->getSleep()/1000);
 					//usleep(50000);
 				}
 				if (mundo->Fin()){
@@ -191,7 +191,7 @@ int main( int argc, char* args[] )
 				//si no esta en pausa
 				mundo->render();
 
-				usleep(mundo->getSleep());
+				SDL_Delay(mundo->getSleep()/1000);
 				//usleep(50000);
 			}
 		}

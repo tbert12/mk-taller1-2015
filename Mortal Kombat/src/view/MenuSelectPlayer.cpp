@@ -154,7 +154,7 @@ void MenuSelectPlayer::render(int opcion_actual1,int opcion_actual2,bool selectO
 
 	ventana->Refresh();
 
-	usleep(80000);
+	SDL_Delay(80);
 }
 
 void MenuSelectPlayer::_renderImagen(){

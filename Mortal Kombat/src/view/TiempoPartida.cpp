@@ -8,6 +8,14 @@
 #include "TiempoPartida.h"
 #define RUTA_FUENTE "data/font/mortalkombat1.ttf"
 
+template <typename T>
+  string ToString ( T Number )
+  {
+     ostringstream ss;
+     ss << Number;
+     return ss.str();
+  }
+
 TiempoPartida::TiempoPartida(Ventana* una_ventana, Tiempo* un_tiempo) {
 	m_tiempo = un_tiempo;
 	m_ventana = una_ventana;
@@ -60,7 +68,7 @@ bool TiempoPartida::loadFromRenderedText( std::string textureText){
 
 void TiempoPartida::render(){
 	int numero = m_tiempo->getTiempo();
-	loadFromRenderedText(to_string(numero));
+	loadFromRenderedText(ToString(numero));
 
 	int pos_x = ( (int)(m_ventana->obtenerAncho()*m_ventana->obtenerRatioX() + 0.5) - ancho ) / 2;
 	int pos_y =	(int)(m_ventana->obtenerAlto()*(0.03)*m_ventana->obtenerRatioY() + 0.5);

@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include "Combo.h"
+#include <sstream>
 
 
 using namespace std;

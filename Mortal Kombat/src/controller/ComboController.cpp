@@ -7,6 +7,16 @@
 
 #include "ComboController.h"
 
+
+
+template <typename T>
+  string ToString ( T Number )
+  {
+     ostringstream ss;
+     ss << Number;
+     return ss.str();
+  }
+
 ComboController::ComboController (int tiempoMaximo,int cantidadMaximaErrores, vector<Combo*> combosPosibles) {
 	maxTime = tiempoMaximo * 1000;
 	maxErrors = cantidadMaximaErrores;
@@ -189,7 +199,7 @@ void ComboController::Update(){
 }
 
 void ComboController::sePresiono(int key){
-	string caracter = std::to_string(key);
+	string caracter = ToString(key);
 	_keys = _keys + caracter.c_str();
 	keyTime.push_back(SDL_GetTicks());
 }
