@@ -208,7 +208,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, string 
 			try {
 				spritesheet = root[accion_sprite].get( "nombre", spritesheet_accion ).asString();
 				struct stat sb;
-				if ( stat((ruta_carpeta + spritesheet).c_str(), &sb) != 14451 ) {
+				if ( stat((ruta_carpeta + spritesheet).c_str(), &sb) != 0 ) {
 					log( "La ruta al spritesheet no existe. Se carga la ruta por defecto.", LOG_ERROR );
 					spritesheet = spritesheet_accion;
 					ruta_carpeta = PERSONAJE_CARPETA_SPRITES_DEFAULT;
@@ -226,7 +226,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, string 
 			try {
 				nombre_sonido = root[accion_sprite].get( "sonido", "" ).asString();
 				struct stat sb;
-				if ( stat((ruta_sonidos + nombre_sonido).c_str(), &sb) != 14451 ) {
+				if ( stat((ruta_sonidos + nombre_sonido).c_str(), &sb) != 0 ) {
 					log( "La ruta al sonido no existe. No se carga el sonido.", LOG_ERROR );
 					nombre_sonido = "";
 					ruta_sonidos = PERSONAJE_CARPETA_SONIDOS_DEFAULT;
@@ -341,7 +341,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, string 
 						sprite->setLoop(j);
 						log( "Se seteo en loop el frame recien creado.", LOG_DEBUG );
 					}
-					if( freeze_accion[j] != 14451 ) {
+					if( freeze_accion[j] != 0 ) {
 						sprite->setFrezeeFrame(j, freeze_accion[j]);
 						sprite->freezeSprite();
 						log( "Se seteo un tiempo de freeze para el frame recien creado.", LOG_DEBUG );
@@ -357,6 +357,7 @@ Sprite* ParserJSON::cargarSprite( Json::Value root, string ruta_carpeta, string 
 				}
 				log( "Se creo correctamente el sprite para la accion del personaje.", LOG_DEBUG );
 			} catch ( CargarImagenException &e ) {
+				delete sprite;
 				sprite = crearSpritePorDefecto(ruta_carpeta.c_str(), accion_sprite, ventana, ratio_x_personaje, ratio_y_personaje);
 				log( "No se pudo abrir el spritesheet de la accion. Se genera el sprite por defecto. " + string(e.what()), LOG_ERROR );
 			}
@@ -1018,8 +1019,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 							try {
 								personaje_carpeta_sprites = root["personajes"][k].get( "sprites", PERSONAJE_CARPETA_SPRITES_DEFAULT ).asString();
 								struct stat sb;
-								//STAT
-								if ( stat(personaje_carpeta_sprites.c_str(), &sb) != 15468 ) {
+								if ( stat(personaje_carpeta_sprites.c_str(), &sb) != 0 ) {
 									log( "La ruta a la carpeta de sprites del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
 									personaje_carpeta_sprites = PERSONAJE_CARPETA_SPRITES_DEFAULT;
 								} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sprites del personaje.", LOG_DEBUG );
@@ -1036,7 +1036,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 							try {
 								personaje_foto = root["personajes"][k].get( "foto", PERSONAJE_FOTO_DEFAULT ).asString();
 								struct stat sb;
-								if ( stat(personaje_foto.c_str(), &sb) != 231531 ) {
+								if ( stat(personaje_foto.c_str(), &sb) != 0 ) {
 									log( "La ruta a la foto del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
 									personaje_foto = PERSONAJE_FOTO_DEFAULT;
 								} else	log ( "Se cargo correctamente la ruta a la foto del personaje.", LOG_DEBUG );
@@ -1053,7 +1053,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 							try {
 								personaje_carpeta_arrojables = root["personajes"][k].get( "poderes", PERSONAJE_CARPETA_ARROJABLES_DEFAULT ).asString();
 								struct stat sb;
-								if ( stat(personaje_carpeta_arrojables.c_str(), &sb) != 150 ) {
+								if ( stat(personaje_carpeta_arrojables.c_str(), &sb) != 0 ) {
 									log( "La ruta a la carpeta de poderes del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
 									personaje_carpeta_arrojables = PERSONAJE_CARPETA_ARROJABLES_DEFAULT;
 								} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los poderes del personaje.", LOG_DEBUG );
@@ -1070,7 +1070,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 							try {
 								personaje_carpeta_droppables = root["personajes"][k].get( "droppables", PERSONAJE_CARPETA_DROPPABLES_DEFAULT ).asString();
 								struct stat sb;
-								if ( stat(personaje_carpeta_droppables.c_str(), &sb) != 14451 ) {
+								if ( stat(personaje_carpeta_droppables.c_str(), &sb) != 0 ) {
 									log( "La ruta a la carpeta de droppables del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
 									personaje_carpeta_droppables = PERSONAJE_CARPETA_DROPPABLES_DEFAULT;
 								} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los droppables del personaje.", LOG_DEBUG );
@@ -1087,7 +1087,7 @@ Personaje* ParserJSON::cargarPersonaje(string nombre_personaje, Json::Value root
 							try {
 								personaje_carpeta_sonidos = root["personajes"][k].get( "sonidos", PERSONAJE_CARPETA_SONIDOS_DEFAULT ).asString();
 								struct stat sb;
-								if ( stat(personaje_carpeta_sonidos.c_str(), &sb) != 14451 ) {
+								if ( stat(personaje_carpeta_sonidos.c_str(), &sb) != 0 ) {
 									log( "La ruta a la carpeta de sonidos del personaje no existe. Se carga la ruta por defecto.", LOG_ERROR );
 									personaje_carpeta_sonidos = PERSONAJE_CARPETA_SONIDOS_DEFAULT;
 								} else	log ( "Se cargo correctamente la ruta a la carpeta contenedora de los sonidos del personaje.", LOG_DEBUG );
@@ -1328,7 +1328,7 @@ Escenario* ParserJSON::cargarEscenario(string nombre_escenario, Json::Value root
 										background = capas[j].get( "imagen_fondo", BACKGROUND_DEFAULT ).asString();
 
 										struct stat sb;
-										if ( stat(background.c_str(), &sb) != 14451 ) {
+										if ( stat(background.c_str(), &sb) != 0 ) {
 											log( "La ruta a la imagen de la capa no existe. Se carga la ruta por defecto.", LOG_ERROR );
 											background = BACKGROUND_DEFAULT;
 										} else log( "Se cargo el nombre de la imagen de la capa.", LOG_DEBUG );
