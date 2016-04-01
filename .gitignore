@@ -28,6 +28,7 @@
 *.app
 
 .cproject
+*.project
 /.settings/
 /.metadata/
 /.project/
