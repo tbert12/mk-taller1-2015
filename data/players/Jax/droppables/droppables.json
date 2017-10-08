@@ -1,0 +1,227 @@
+{
+	"droppables": [
+
+		{
+		"objetoDroppable": {
+			"nombre":"cabeza.png",
+			"frames":[
+				{
+					"x":0,
+					"y":0,
+					"Alto":21,
+					"Ancho":19
+				}
+			]
+		},
+		"nombre": "Cabeza",
+		"velocidad": 10,
+		"ancho": 20,
+		"alto": 20
+		},
+
+		{
+		"objetoDroppable": {
+			"nombre":"sangre0.png",
+			"frames":[
+				{
+					"x":228,
+					"y":65,
+					"Alto":28,
+					"Ancho":25
+				},
+				{
+					"x":121,
+					"y":191,
+					"Alto":45,
+					"Ancho":44
+				},
+				{
+					"x":129,
+					"y":131,
+					"Alto":59,
+					"Ancho":70
+				},
+				{
+					"x":137,
+					"y":65,
+					"Alto":65,
+					"Ancho":90
+				},
+				{
+					"x":137,
+					"y":0,
+					"Alto":64,
+					"Ancho":104
+				},
+				{
+					"x":0,
+					"y":177,
+					"Alto":72,
+					"Ancho":120
+				},
+				{
+					"x":0,
+					"y":93,
+					"Alto":83,
+					"Ancho":128
+				},
+				{
+					"x":0,
+					"y":0,
+					"Alto":92,
+					"Ancho":136
+				}
+			]
+		},
+		"nombre": "Sangre 0",
+		"velocidad": 15,
+		"ancho": 25,
+		"alto": 20
+		},
+
+		{
+		"objetoDroppable": {
+			"nombre":"sangre1.png",
+			"frames":[
+				{
+					"x":64,
+					"y":42,
+					"Alto":29,
+					"Ancho":7
+				},
+				{
+					"x":63,
+					"y":0,
+					"Alto":20,
+					"Ancho":14
+				},
+				{
+					"x":0,
+					"y":56,
+					"Alto":24,
+					"Ancho":10
+				},
+				{
+					"x":72,
+					"y":42,
+					"Alto":27,
+					"Ancho":7
+				},
+				{
+					"x":25,
+					"y":26,
+					"Alto":13,
+					"Ancho":23
+				},
+				{
+					"x":0,
+					"y":12,
+					"Alto":13,
+					"Ancho":30
+				},
+				{
+					"x":0,
+					"y":0,
+					"Alto":11,
+					"Ancho":35
+				},
+				{
+					"x":11,
+					"y":56,
+					"Alto":23,
+					"Ancho":9
+				},
+				{
+					"x":64,
+					"y":21,
+					"Alto":20,
+					"Ancho":13
+				},
+				{
+					"x":45,
+					"y":40,
+					"Alto":19,
+					"Ancho":18
+				},
+				{
+					"x":0,
+					"y":26,
+					"Alto":14,
+					"Ancho":24
+				},
+				{
+					"x":31,
+					"y":12,
+					"Alto":8,
+					"Ancho":26
+				},
+				{
+					"x":36,
+					"y":0,
+					"Alto":11,
+					"Ancho":26
+				},
+				{
+					"x":0,
+					"y":41,
+					"Alto":14,
+					"Ancho":24
+				},
+				{
+					"x":25,
+					"y":40,
+					"Alto":18,
+					"Ancho":19
+				}
+			]
+		},
+		"nombre": "Sangre 1",
+		"velocidad": 15,
+		"ancho": 25,
+		"alto": 20
+		},
+
+		{
+		"objetoDroppable": {
+			"nombre":"sangre2.png",
+			"frames":[
+				{
+					"x":0,
+					"y":0,
+					"Alto":23,
+					"Ancho":27
+				},
+				{
+					"x":52,
+					"y":0,
+					"Alto":28,
+					"Ancho":20
+				},
+				{
+					"x":0,
+					"y":24,
+					"Alto":32,
+					"Ancho":25
+				},
+				{
+					"x":26,
+					"y":27,
+					"Alto":25,
+					"Ancho":23
+				},
+				{
+					"x":28,
+					"y":0,
+					"Alto":26,
+					"Ancho":23
+				}
+			]
+		},
+		"nombre": "Sangre 2",
+		"velocidad": 15,
+		"ancho": 25,
+		"alto": 20
+		}
+
+	]
+}

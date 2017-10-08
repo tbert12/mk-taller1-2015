@@ -1,0 +1,40 @@
+{
+
+	"loglvl": 2,
+	
+	"tiempo": 180,
+
+	"ventana": {
+		"ancho-px": 800,
+		"alto-px": 600,
+		"ancho": 445.68
+	},
+	
+	"escenario": {
+		"ancho": 1000,
+		"alto": 334.3,
+		"y-piso": 320
+	},
+	
+	"capas": [
+		{
+			"imagen_fondo": "data/img/background/Subway/TheSubway_0.png",
+			"ancho": 583,
+			"z-index": 0
+		},
+		{
+			"imagen_fondo": "data/img/background/Subway/TheSubway_1.png",
+			"ancho": 1000,
+			"z-index": 1
+		}
+	],
+	
+	"personaje": {
+		"ancho": 85,
+		"alto": 160,
+		"z-index": 2,
+		"sprites": "data/players/subzero/sprites/",
+		"nombre": "Sub-Zero",
+		"flipped": false
+	}
+}

@@ -1,39 +1,30 @@
-#Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-.cproject
-*.project
-/.settings/
-/.metadata/
-/.project/
-/Mortal Kombat/data/log/
-/Mortal Kombat/.project
-/Mortal Kombat/.externalToolBuilders
-/Mortal Kombat/.settings
 /Debug/
+/Default/
+/.autotools
+/Capa.gcno
+/CapaFondo.gcno
+/CapaPrincipal.gcno
+/DefaultSettings.gcno
+/Escenario.gcno
+/Frame.gcno
+/KeyboardControl.gcno
+/LTexture.gcno
+/Mundo.gcno
+/ParserJSON.gcno
+/Personaje.gcno
+/Sprite.gcno
+/TestLog.gcno
+/Tiempo.gcno
+/Ventana.gcno
+/jsoncpp.gcno
+/logging.gcno
+/main.gcno
+/Release/
+.project
+.cproject
+.autotools
+/.settings/org.eclipse.cdt.managedbuilder.core.prefs
+org.eclipse.cdt.managedbuilder.core.prefs
+.idea/
+cmake-build-debug/
+
